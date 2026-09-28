@@ -1,0 +1,467 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Anastasiia Petrenko — Portfolio 2026</title>
+<meta name="description" content="Anastasiia Petrenko — organic growth, content strategy and AI video production.">
+<style>
+@font-face{font-family:"Instrument Serif";src:url("assets/fonts/InstrumentSerif-Regular.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Instrument Serif";src:url("assets/fonts/InstrumentSerif-Italic.ttf") format("truetype");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"Instrument Sans";src:url("assets/fonts/InstrumentSans-Variable.ttf") format("truetype");font-weight:400 700;font-stretch:75% 100%;font-display:swap}
+
+:root{
+  --cream:#F5EFE5; --paper:#FBF8F2; --sand:#ECE3D4;
+  --red:#7A1C1C; --red-deep:#5E1414; --red-soft:#B98A80;
+  --ink:#1B1614; --muted:#6F655C; --line:#D9CEBE;
+  --serif:"Instrument Serif","Playfair Display",Georgia,serif;
+  --sans:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+  --wrap:1180px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 32px}
+.serif{font-family:var(--serif);font-weight:400}
+em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
+.eyebrow{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--red)}
+.ulink{text-decoration:none;border-bottom:1px solid var(--red);padding-bottom:2px;transition:color .2s,border-color .2s}
+.ulink:hover{color:var(--red)}
+
+/* top bar */
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;justify-content:space-between;align-items:center;height:64px;font-size:13px;color:var(--muted)}
+.mono{font-family:var(--serif);font-size:26px;color:var(--ink);letter-spacing:-.02em;text-decoration:none}
+.mono span{color:var(--red);font-style:italic}
+.status{display:flex;align-items:center;gap:8px}
+.status i{width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block}
+
+/* hero */
+.hero{padding:72px 0 88px}
+.hero-grid{display:grid;grid-template-columns:1.35fr .9fr;gap:64px;align-items:end}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(64px,10.5vw,152px);line-height:.86;letter-spacing:-.035em;margin:22px 0 30px}
+.hero h1 em{color:var(--red);display:block;padding-left:.55em}
+.role{font-size:15px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--red);margin-bottom:20px}
+.role b{color:var(--red-soft);font-weight:400;margin:0 .45em}
+.lede{font-size:21px;line-height:1.5;color:var(--muted);max-width:30ch}
+.lede strong{color:var(--ink);font-weight:500}
+.links{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:34px;font-size:15px}
+.portrait{position:relative}
+.portrait .arch{border-radius:999px 999px 18px 18px;overflow:hidden;aspect-ratio:3/4;background:var(--sand);box-shadow:0 30px 60px -30px rgba(94,20,20,.35)}
+.portrait .arch img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
+.portrait .tag{position:absolute;left:-28px;bottom:36px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:10px 18px;font-size:13px;box-shadow:0 10px 30px -15px rgba(0,0,0,.25)}
+.portrait .tag em{color:var(--red);font-size:17px}
+
+/* proof strip */
+.proof{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.proof .wrap{display:grid;grid-template-columns:repeat(3,1fr)}
+.stat{padding:44px 32px 40px;border-left:1px solid var(--line)}
+.stat:first-child{border-left:0;padding-left:0}
+.stat .n{font-family:var(--serif);font-size:clamp(56px,7vw,92px);line-height:.9;color:var(--red);letter-spacing:-.03em}
+.stat p{margin-top:12px;color:var(--muted);font-size:15px;max-width:24ch}
+.stat p strong{color:var(--ink);font-weight:600}
+
+/* section scaffolding */
+section.block{padding:120px 0}
+.sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:28px}
+.sec-head .num{font-family:var(--serif);font-style:italic;color:var(--red);font-size:22px}
+.sec-head .rule{flex:1;height:1px;background:var(--line)}
+h2{font-family:var(--serif);font-weight:400;font-size:clamp(44px,6.2vw,84px);line-height:.98;letter-spacing:-.025em;max-width:16ch}
+h2 em{color:var(--red)}
+.sub{font-size:20px;color:var(--muted);max-width:52ch;margin-top:24px;line-height:1.55}
+
+/* about */
+.about .statement{font-family:var(--serif);font-size:clamp(32px,4.2vw,54px);line-height:1.12;letter-spacing:-.015em;max-width:22ch;margin:0 auto;text-align:center}
+.about .statement em{color:var(--red)}
+.about-cols{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:48px;margin-top:88px;padding-top:40px;border-top:1px solid var(--ink)}
+.about-cols h3{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
+.scope{list-style:none;counter-reset:s}
+.scope li{counter-increment:s;display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
+.scope li::before{content:"0" counter(s);font-family:var(--serif);font-style:italic;color:var(--red);min-width:24px}
+.langs{list-style:none}
+.langs li{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
+.langs span{color:var(--muted)}
+.toolsline{font-size:16px;color:var(--muted);line-height:1.75}
+.toolsline strong{color:var(--ink);font-weight:600}
+
+/* strategy */
+.strategy{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.strat-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;margin-top:64px;align-items:start}
+.pillars{list-style:none;border-top:1px solid var(--ink)}
+.pillars li{display:grid;grid-template-columns:48px 1fr;gap:8px;padding:22px 0;border-bottom:1px solid var(--line)}
+.pillars .k{font-family:var(--serif);font-style:italic;color:var(--red);font-size:20px;line-height:1.3}
+.pillars b{display:block;font-weight:600;font-size:17px}
+.pillars small{display:block;color:var(--muted);font-size:15px;margin-top:4px}
+.callout{border-left:3px solid var(--red);padding:8px 0 8px 32px;position:sticky;top:40px}
+.callout .q{font-family:var(--serif);font-size:clamp(30px,3.4vw,44px);line-height:1.1;letter-spacing:-.015em}
+.callout .q em{color:var(--red)}
+.callout p{color:var(--muted);margin-top:20px;font-size:16px}
+.callout .nda{display:inline-block;margin-top:26px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--red);border:1px solid var(--red-soft);border-radius:999px;padding:6px 14px}
+
+/* content systems */
+.systems-top{display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:end}
+.flow{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:0;margin-top:72px;border-top:1px solid var(--ink)}
+.flow li{padding:24px 24px 0 0}
+.flow li + li{padding-left:24px;border-left:1px solid var(--line)}
+.flow .step{font-family:var(--serif);font-size:30px;line-height:1}
+.flow .step em{color:var(--red)}
+.flow p{color:var(--muted);font-size:15px;margin-top:10px}
+
+.planner{margin-top:80px;background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:32px;box-shadow:0 40px 80px -50px rgba(60,20,10,.35);position:relative}
+.planner-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:12px;margin-bottom:24px}
+.planner-head .t{font-family:var(--serif);font-size:30px}
+.planner-head .t em{color:var(--red)}
+.planner-head .ill{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:6px 12px}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:10px}
+.day{background:var(--cream);border-radius:14px;padding:12px;min-height:220px;display:flex;flex-direction:column;gap:8px}
+.day .d{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:4px}
+.chip{border-radius:10px;padding:8px 10px;font-size:12.5px;line-height:1.35;background:#fff;border:1px solid var(--line)}
+.chip b{display:block;font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:2px}
+.chip.reel b{color:var(--red)}
+.chip.reel{border-left:3px solid var(--red)}
+.chip.ai{background:var(--red);color:#fff;border-color:var(--red)}
+.chip.ai b{color:#F2D9D2}
+.chip.car{border-left:3px solid var(--ink)}
+.chip.story{border-left:3px solid var(--red-soft)}
+.chip.rev{background:transparent;border:1px dashed var(--red-soft);color:var(--muted)}
+.legend{display:flex;flex-wrap:wrap;gap:18px;margin-top:22px;font-size:13px;color:var(--muted)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+.planner-note{margin-top:16px;font-size:13px;color:var(--muted);font-style:italic}
+
+/* AI video */
+.video{background:var(--ink);color:var(--paper)}
+.video .sec-head .rule{background:#3a302b}
+.video .sec-head .num{color:#D89A8C}
+.video h2 em{color:#D89A8C}
+.video .sub{color:#B7ACA2}
+.reels{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;margin-top:72px;align-items:start}
+.reel:nth-child(2){margin-top:64px}
+.reel .frame{position:relative;aspect-ratio:9/16;border-radius:26px;overflow:hidden;background:#2a221f;cursor:pointer;border:1px solid #3a302b}
+.reel .frame img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.reel .frame:hover img{transform:scale(1.03)}
+.reel .frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+.reel .play{position:absolute;left:18px;bottom:18px;display:flex;align-items:center;gap:10px;background:rgba(251,248,242,.92);color:var(--ink);border:0;border-radius:999px;padding:9px 16px 9px 10px;font:600 13px var(--sans);cursor:pointer}
+.reel .play i{width:26px;height:26px;border-radius:50%;background:var(--red);display:grid;place-items:center}
+.reel .play i::after{content:"";border-left:8px solid #fff;border-top:5px solid transparent;border-bottom:5px solid transparent;margin-left:2px}
+.reel .idx{position:absolute;top:16px;left:18px;font-family:var(--serif);font-style:italic;font-size:22px;color:#fff;text-shadow:0 1px 8px rgba(0,0,0,.4)}
+.reel h3{font-family:var(--serif);font-weight:400;font-size:28px;margin-top:20px}
+.reel p{color:#B7ACA2;font-size:15px;margin-top:4px}
+.video-foot{display:grid;grid-template-columns:1.2fr 1fr;gap:64px;margin-top:88px;padding-top:36px;border-top:1px solid #3a302b}
+.video-foot h4{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#D89A8C;margin-bottom:14px}
+.video-foot p{color:#D9D0C6;font-size:17px}
+.pills{display:flex;flex-wrap:wrap;gap:10px}
+.pills span{border:1px solid #4a3e38;border-radius:999px;padding:8px 16px;font-size:14px;color:var(--paper)}
+
+/* tools */
+.tools-grid{display:grid;grid-template-columns:1fr 1.4fr;gap:64px;align-items:start}
+.stack{list-style:none;border-top:1px solid var(--ink)}
+.stack li{display:grid;grid-template-columns:180px 1fr;gap:16px;padding:18px 0;border-bottom:1px solid var(--line)}
+.stack .c{font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--red);padding-top:4px}
+.stack .v{font-size:17px}
+.stack .v em{color:var(--muted);font-size:18px}
+
+/* contact */
+.contact{background:var(--red);color:#fff;padding:130px 0 56px}
+.contact h2{color:#fff;font-size:clamp(56px,9vw,132px);max-width:12ch;line-height:.92}
+.contact h2 em{color:#F2C9BF}
+.contact .sub{color:#F1D9D3}
+.clist{margin-top:64px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;border-top:1px solid rgba(255,255,255,.3);padding-top:32px}
+.clist .l{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#F2C9BF;margin-bottom:8px}
+.clist a{font-size:20px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.8);padding-bottom:3px;word-break:break-word}
+.clist a:hover{border-bottom-color:#fff}
+.foot{margin-top:110px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px;font-size:14px;color:#E8C3BA}
+.foot .serif{font-size:20px;color:#fff}
+
+/* responsive */
+@media (max-width:960px){
+  .hero-grid,.strat-grid,.systems-top,.tools-grid,.video-foot{grid-template-columns:1fr;gap:44px}
+  .portrait{max-width:380px}
+  .portrait .tag{left:auto;right:-8px}
+  .about-cols{grid-template-columns:1fr 1fr}
+  .about-cols > div:first-child{grid-column:1/-1}
+  .callout{position:static}
+  .flow{grid-template-columns:1fr 1fr}
+  .flow li:nth-child(3){padding-left:0;border-left:0}
+  .flow li{padding-bottom:24px}
+  .week{grid-template-columns:repeat(4,1fr)}
+}
+@media (max-width:640px){
+  body{font-size:16px}
+  .wrap{padding:0 20px}
+  .top .status{display:none}
+  .hero{padding:44px 0 64px}
+  .hero h1 em{padding-left:.3em}
+  .lede{font-size:19px}
+  section.block{padding:84px 0}
+  .proof .wrap{grid-template-columns:1fr}
+  .stat{border-left:0;border-top:1px solid var(--line);padding:30px 0}
+  .stat:first-child{border-top:0}
+  .about .statement{text-align:left}
+  .about-cols{grid-template-columns:1fr;margin-top:56px}
+  .flow{grid-template-columns:1fr}
+  .flow li,.flow li + li{padding:20px 0;border-left:0;border-bottom:1px solid var(--line)}
+  .planner{padding:20px;border-radius:18px}
+  .week{grid-template-columns:1fr 1fr}
+  .day{min-height:auto}
+  .reels{grid-template-columns:1fr;max-width:340px;margin-left:auto;margin-right:auto}
+  .reel:nth-child(2){margin-top:0}
+  .stack li{grid-template-columns:1fr;gap:4px}
+  .clist{grid-template-columns:1fr}
+  .contact{padding:90px 0 44px}
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="mono" href="#">A<span>P</span></a>
+    <div>Portfolio 2026</div>
+    <div class="status"><i></i> Open to remote roles · EU</div>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Portfolio 2026</div>
+      <h1>Anastasiia <em>Petrenko</em></h1>
+      <div class="role">Organic Growth <b>·</b> Content Strategy <b>·</b> AI Video</div>
+      <p class="lede">I build <strong>organic growth strategies</strong> and the content systems behind them — then produce the visuals with <strong>AI video and image tools</strong>, fast and on-brand.</p>
+      <div class="links">
+        <a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a>
+        <a class="ulink" href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="ulink" href="tel:+48786521607">+48 786 521 607</a>
+      </div>
+    </div>
+    <div class="portrait">
+      <div class="arch"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko"></div>
+      <div class="tag"><em>Remote</em> · EU-based</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF STRIP -->
+<div class="proof">
+  <div class="wrap">
+    <div class="stat"><div class="n">1M+</div><p><strong>organic views</strong> across the accounts I've run</p></div>
+    <div class="stat"><div class="n">~75%</div><p><strong>less time spent posting</strong> after rolling out the content system</p></div>
+    <div class="stat"><div class="n">8–12</div><p><strong>people</strong> — size of the content team I led</p></div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section class="block about" id="about">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">About</span><span class="rule"></span></div>
+    <p class="statement">I find out what actually works in a market, turn it into a <em>repeatable content system</em>, and use AI to produce it at the speed social demands.</p>
+
+    <div class="about-cols">
+      <div>
+        <h3>Scope</h3>
+        <ul class="scope">
+          <li>Organic growth &amp; content strategy</li>
+          <li>Market &amp; competitor research</li>
+          <li>Retention &amp; CRM</li>
+          <li>Content systems &amp; workflows</li>
+          <li>AI video &amp; image production</li>
+        </ul>
+      </div>
+      <div>
+        <h3>Languages</h3>
+        <ul class="langs">
+          <li>Ukrainian <span>native</span></li>
+          <li>Russian <span>native</span></li>
+          <li>English <span>C1</span></li>
+          <li>German <span>~B1</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3>Tools</h3>
+        <p class="toolsline"><strong>Claude Opus 5.5</strong> (primary for AI ads / creative, research, briefs and copy), <strong>Higgsfield</strong> (Seedance 2.5, Nano Banana Pro), ComfyUI, Orca ADE, Grok Build, Cursor, Node.js basics.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STRATEGY -->
+<section class="block strategy" id="strategy">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">01 — Marketing strategy</span><span class="rule"></span></div>
+    <h2>Organic growth, <em>built on research</em> — not guesswork.</h2>
+    <p class="sub">End to end: study what's working in the market, define how the brand should sound, turn it into a publishing system, then measure, cut and scale.</p>
+
+    <div class="strat-grid">
+      <ul class="pillars">
+        <li><span class="k">i.</span><div><b>Market &amp; competitor research</b><small>Find the formats and angles that actually drive reach in a niche.</small></div></li>
+        <li><span class="k">ii.</span><div><b>Brand positioning &amp; tone of voice</b><small>A clear point of view and voice for every account.</small></div></li>
+        <li><span class="k">iii.</span><div><b>Content systems</b><small>Calendars, briefs and workflows a small team can run every week.</small></div></li>
+        <li><span class="k">iv.</span><div><b>Data-driven iteration</b><small>Kill what underperforms, scale what works.</small></div></li>
+        <li><span class="k">v.</span><div><b>Retention &amp; CRM</b><small>Keep the audience engaged after the first view.</small></div></li>
+      </ul>
+      <aside class="callout">
+        <div class="q"><em>1M+</em> organic views across accounts — and <em>~75%</em> less time spent posting once the content system was in place.</div>
+        <p>Results from my own work across multiple accounts. Clients and niches stay unnamed.</p>
+        <span class="nda">NDA-safe summary</span>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<!-- CONTENT SYSTEMS -->
+<section class="block systems" id="systems">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">02 — Content systems</span><span class="rule"></span></div>
+    <div class="systems-top">
+      <h2>Consistency is a <em>system</em>, not willpower.</h2>
+      <p class="sub" style="margin-top:0">I set up the calendar, the briefs and the hand-offs so a small team publishes every week without last-minute scrambles — and so every post feeds the next decision.</p>
+    </div>
+
+    <ol class="flow">
+      <li><div class="step"><em>Research</em></div><p>Trends, competitors and what's already performing in the niche.</p></li>
+      <li><div class="step"><em>Brief</em></div><p>Hook, format, tone and CTA written down before anyone films or generates.</p></li>
+      <li><div class="step"><em>Produce</em></div><p>Filmed or AI-generated, batched for the week, checked against the brand look.</p></li>
+      <li><div class="step"><em>Review</em></div><p>Weekly numbers: kill the weak formats, scale the winners.</p></li>
+    </ol>
+
+    <div class="planner" aria-label="Illustrative weekly content calendar">
+      <div class="planner-head">
+        <div class="t">Weekly content plan — <em>sample</em></div>
+        <div class="ill">Illustrative example · not client data</div>
+      </div>
+      <div class="week">
+        <div class="day"><div class="d">Mon</div>
+          <div class="chip rev"><b>Review</b>Last week's numbers · pick winners</div>
+          <div class="chip story"><b>Story</b>Poll: which look next?</div>
+        </div>
+        <div class="day"><div class="d">Tue</div>
+          <div class="chip reel"><b>Reel</b>Hook-first talking head</div>
+          <div class="chip story"><b>Story</b>Behind the scenes</div>
+        </div>
+        <div class="day"><div class="d">Wed</div>
+          <div class="chip ai"><b>AI clip</b>Outfit transition (trend format)</div>
+        </div>
+        <div class="day"><div class="d">Thu</div>
+          <div class="chip car"><b>Carousel</b>5 tips, saveable</div>
+          <div class="chip story"><b>Story</b>Q&amp;A box</div>
+        </div>
+        <div class="day"><div class="d">Fri</div>
+          <div class="chip reel"><b>Reel</b>Storytime, quote captions</div>
+        </div>
+        <div class="day"><div class="d">Sat</div>
+          <div class="chip ai"><b>AI clip</b>Lifestyle street walk</div>
+        </div>
+        <div class="day"><div class="d">Sun</div>
+          <div class="chip rev"><b>Batch</b>Briefs for next week</div>
+        </div>
+      </div>
+      <div class="legend">
+        <span style="--c:var(--red)">Reel</span>
+        <span style="--c:var(--ink)">Carousel</span>
+        <span style="--c:var(--red-soft)">Story</span>
+        <span style="--c:var(--red);opacity:.7">AI clip</span>
+      </div>
+      <p class="planner-note">Mock-up for illustration: shows the structure of a week, not a real client calendar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- AI VIDEO -->
+<section class="block video" id="video">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">03 — AI video</span><span class="rule"></span></div>
+    <h2>AI-produced video that <em>feels native</em> to the feed.</h2>
+    <p class="sub">Short vertical clips generated for organic social: a fast visual hook, natural camera movement and a consistent character look from clip to clip.</p>
+
+    <div class="reels">
+      <figure class="reel">
+        <div class="frame" data-drive="1FJ4pGuJEVYRKZz9soGZkkbZg5le8oLmu">
+          <img src="assets/img/street-walk.jpg" alt="AI-generated street walk clip, still frame" loading="lazy">
+          <span class="idx">i.</span>
+          <button class="play" type="button"><i></i>Play</button>
+        </div>
+        <h3>Street walk</h3>
+        <p>Lifestyle clip with natural camera movement.</p>
+      </figure>
+      <figure class="reel">
+        <div class="frame" data-drive="1AO8bV9p0WAGTbPpKDApJoQh5uQXzabZa">
+          <img src="assets/img/outfit-transition.jpg" alt="AI-generated outfit transition clip, still frame" loading="lazy">
+          <span class="idx">ii.</span>
+          <button class="play" type="button"><i></i>Play</button>
+        </div>
+        <h3>Outfit transition</h3>
+        <p>Trend-style transition, one of the strongest organic hooks.</p>
+      </figure>
+      <figure class="reel">
+        <div class="frame" data-drive="1nxVtmhBHpFSgJYEmKH4jtsEtBK864mqz">
+          <img src="assets/img/balcony-sunset.jpg" alt="AI-generated balcony at sunset clip, still frame" loading="lazy">
+          <span class="idx">iii.</span>
+          <button class="play" type="button"><i></i>Play</button>
+        </div>
+        <h3>Balcony at sunset</h3>
+        <p>Mood clip in warm golden-hour light.</p>
+      </figure>
+    </div>
+
+    <div class="video-foot">
+      <div>
+        <h4>What I can make</h4>
+        <p>Product, brand, lifestyle and ad-style AI visuals, fitted to a brand's look. The clips above show my most recent focus; niches I've worked in under soft NDA stay unnamed.</p>
+      </div>
+      <div>
+        <h4>Made with</h4>
+        <div class="pills"><span>Higgsfield · Seedance 2.5</span><span>Nano Banana Pro</span><span>ComfyUI</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section class="block tools" id="tools">
+  <div class="wrap tools-grid">
+    <div>
+      <div class="sec-head"><span class="num">04 — Tools &amp; stack</span><span class="rule"></span></div>
+      <h2>A small, <em>sharp</em> toolkit.</h2>
+    </div>
+    <ul class="stack">
+      <li><span class="c">AI assistant / creative</span><span class="v">Claude Opus 5.5 <em>— primary for AI ads, research, briefs and copy</em></span></li>
+      <li><span class="c">AI video &amp; image</span><span class="v">Higgsfield (Seedance 2.5, Nano Banana Pro), ComfyUI</span></li>
+      <li><span class="c">AI agents / build</span><span class="v">Orca ADE, Grok Build, Cursor</span></li>
+      <li><span class="c">Code</span><span class="v">Node.js basics</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <h2>Want to work <em>together?</em></h2>
+    <p class="sub">Open to remote roles in organic growth, content strategy and AI content production.</p>
+    <div class="clist">
+      <div><div class="l">E-mail</div><a href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div>
+      <div><div class="l">LinkedIn</div><a href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">anastasiia-petrenko-marketing</a></div>
+      <div><div class="l">Phone</div><a href="tel:+48786521607">+48 786 521 607</a></div>
+    </div>
+    <div class="foot"><span class="serif">Anastasiia Petrenko · Portfolio 2026</span><a href="#" style="text-decoration:none">Back to top ↑</a></div>
+  </div>
+</section>
+
+<script>
+document.querySelectorAll('.frame[data-drive]').forEach(function(f){
+  f.addEventListener('click',function(){
+    if(f.querySelector('iframe'))return;
+    var id=f.getAttribute('data-drive');
+    var ifr=document.createElement('iframe');
+    ifr.src='https://drive.google.com/file/d/'+id+'/preview';
+    ifr.allow='autoplay; fullscreen';
+    ifr.setAttribute('allowfullscreen','');
+    ifr.title=f.parentNode.querySelector('h3').textContent;
+    f.appendChild(ifr);
+  });
+});
+</script>
+</body>
+</html>
