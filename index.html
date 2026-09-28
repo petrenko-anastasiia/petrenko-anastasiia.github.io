@@ -163,12 +163,17 @@ h2 em{color:var(--red)}
 .spec .tags span{border:1px solid var(--line);background:var(--cream);border-radius:999px;padding:8px 16px;font-size:14px}
 .spec-video video{display:block;width:100%;aspect-ratio:9/16;border-radius:26px;background:var(--ink);box-shadow:0 40px 80px -40px rgba(60,20,10,.45)}
 .spec-video .cap{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:14px}
-.spec-board{margin-top:72px}
-.spec-board img{width:100%;border-radius:18px;border:1px solid var(--line)}
-.spec-board figcaption{font-size:13px;color:var(--muted);font-style:italic;margin-top:12px}
+.spec-lede{font-size:20px!important;color:var(--ink)!important;line-height:1.5}
+.spec-meta p.spec-hook-en{font-size:15px;margin-top:8px}
+.spec-ph{aspect-ratio:9/16;width:100%;border-radius:26px;background:linear-gradient(160deg,var(--paper) 0%,var(--sand) 100%);border:1px solid var(--line);box-shadow:0 40px 80px -40px rgba(60,20,10,.35);display:flex;flex-direction:column;justify-content:space-between;padding:26px}
+.spec-ph .wm{font-family:var(--sans);font-weight:700;font-size:20px;letter-spacing:-.04em}
+.spec-ph .mid{text-align:center}
+.spec-ph .mid b{display:block;font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.1}
+.spec-ph .mid b em{color:var(--red);display:block}
+.spec-ph .soon{display:inline-block;margin-top:18px;border:1px solid var(--red-soft);color:var(--red);border-radius:999px;padding:7px 14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
+.spec-ph .bar{height:3px;border-radius:3px;background:var(--line)}
 .spec-cta{display:inline-flex;align-items:center;gap:10px;margin-top:40px;background:var(--red);color:#fff;text-decoration:none;border-radius:999px;padding:14px 26px;font-size:15px;font-weight:600;transition:background .2s}
 .spec-cta:hover{background:var(--red-deep)}
-.spec-note{margin-top:18px;font-size:13px;color:var(--muted)}
 
 /* AI video */
 .video{background:var(--ink);color:var(--paper)}
@@ -252,7 +257,6 @@ h2 em{color:var(--red)}
   .reels{grid-template-columns:1fr;max-width:340px;margin-left:auto;margin-right:auto}
   .reel:nth-child(2){margin-top:0}
   .spec-video{max-width:340px;margin:0 auto;width:100%}
-  .spec-board{margin-top:48px}
   .stack li{grid-template-columns:1fr;gap:4px}
   .clist{grid-template-columns:1fr}
   .contact{padding:90px 0 44px}
@@ -452,29 +456,29 @@ h2 em{color:var(--red)}
 <section class="block spec" id="spec">
   <div class="wrap">
     <div class="sec-head"><span class="num">03 — Spec campaign</span><span class="rule"></span></div>
-    <h2>OFFLINE — <em>Less scroll. More you.</em></h2>
-    <span class="spec-label">Self-initiated spec work · fictional brand</span>
+    <h2>ZOLA — <em>Brows with attitude.</em></h2>
+    <span class="spec-label">Independent spec concept · not commissioned by ZOLA · no results claimed</span>
 
     <div class="spec-grid">
       <div class="spec-meta">
-        <h4>The brief</h4>
-        <p>Introduce a fictional focus app to students and early-career creatives who open their phones for one thing and get pulled into everything else. Encourage them to start one 25-minute session.</p>
+        <p class="spec-lede">A 15-second vertical ad for ZOLA Brow Soap Mini, written in Ukrainian for Ukrainian-speaking beauty shoppers — my own concept, with Ukrainian-language copy.</p>
         <h4>The hook · First 3 seconds</h4>
-        <p class="spec-hook">“You opened your phone for one thing.”</p>
-        <div class="tags"><span>15-second social ad</span><span>9:16 vertical</span><span>Motion design</span></div>
-        <a class="spec-cta" href="work/offline/">Read the full case study →</a>
-        <p class="spec-note">Fictional brand. Self-initiated spec work; concept interface. No affiliation or performance results claimed.</p>
+        <p class="spec-hook" lang="uk">«Брови з характером?»</p>
+        <p class="spec-hook-en">“Brows with attitude?”</p>
+        <div class="tags"><span>15-second ad</span><span>9:16 vertical</span><span>Ukrainian copy</span></div>
+        <a class="spec-cta" href="work/zola/">Read the full case study →</a>
       </div>
       <div class="spec-video">
-        <video controls playsinline muted loop preload="metadata" poster="work/offline/poster.jpg" src="work/offline/offline-ad.mp4" aria-label="OFFLINE 15-second silent spec ad"></video>
-        <div class="cap"><span>Final clip</span><span>15 sec · silent</span></div>
+        <!-- SWAP: zola-ad.mp4 + poster.jpg -->
+        <!-- <video controls playsinline muted preload="metadata" poster="work/zola/poster.jpg" src="work/zola/zola-ad.mp4"></video> -->
+        <div class="spec-ph" role="img" aria-label="15-second clip coming soon">
+          <div class="wm">ZOLA</div>
+          <div class="mid"><b lang="uk">Брови з <em>характером?</em></b><span class="soon">15-sec clip · coming soon</span></div>
+          <div class="bar"></div>
+        </div>
+        <div class="cap"><span>Final clip</span><span>15 sec · 9:16</span></div>
       </div>
     </div>
-
-    <figure class="spec-board">
-      <img src="work/offline/storyboard.jpg" alt="OFFLINE storyboard: four frames from hook to call to action" loading="lazy">
-      <figcaption>Storyboard: hook → noise → one task → “Start your first 25 minutes.”</figcaption>
-    </figure>
   </div>
 </section>
 
