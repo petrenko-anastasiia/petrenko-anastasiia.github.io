@@ -75,7 +75,7 @@ h2 em{color:var(--red)}
 /* about */
 .about .statement{font-family:var(--serif);font-size:clamp(32px,4.2vw,54px);line-height:1.12;letter-spacing:-.015em;max-width:22ch;margin:0 auto;text-align:center}
 .about .statement em{color:var(--red)}
-.about-cols{display:grid;grid-template-columns:1.3fr 1fr 1fr;gap:48px;margin-top:88px;padding-top:40px;border-top:1px solid var(--ink)}
+.about-cols{display:grid;grid-template-columns:1.4fr 1fr;gap:64px;margin-top:88px;padding-top:40px;border-top:1px solid var(--ink)}
 .about-cols h3{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
 .scope{list-style:none;counter-reset:s}
 .scope li{counter-increment:s;display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
@@ -83,8 +83,7 @@ h2 em{color:var(--red)}
 .langs{list-style:none}
 .langs li{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
 .langs span{color:var(--muted)}
-.toolsline{font-size:16px;color:var(--muted);line-height:1.75}
-.toolsline strong{color:var(--ink);font-weight:600}
+.lang-blurb{font-size:15px;color:var(--muted);line-height:1.55;margin-bottom:14px}
 
 /* strategy */
 .strategy{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -130,6 +129,29 @@ h2 em{color:var(--red)}
 .legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;background:var(--c)}
 .planner-note{margin-top:16px;font-size:13px;color:var(--muted);font-style:italic}
 
+/* content ops tool */
+.tool-mini{margin-top:88px;padding-top:48px;border-top:1px solid var(--ink)}
+.tool-mini-head{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:end;margin-bottom:36px}
+.tool-mini h3{font-family:var(--serif);font-weight:400;font-size:clamp(32px,4vw,48px);line-height:1.05;letter-spacing:-.02em;max-width:16ch}
+.tool-mini h3 em{color:var(--red)}
+.tool-mini .blurb{color:var(--muted);font-size:17px;line-height:1.55}
+.tool-mock{background:var(--paper);border:1px solid var(--line);border-radius:22px;padding:28px;box-shadow:0 40px 80px -50px rgba(60,20,10,.35)}
+.tool-mock-label{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.tool-mock-label .t{font-family:var(--serif);font-size:24px}
+.tool-mock-label .t em{color:var(--red)}
+.tool-mock-label .ill{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--line);border-radius:999px;padding:6px 12px}
+.tool-flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:14px;align-items:stretch}
+.tool-card{background:var(--cream);border:1px solid var(--line);border-radius:16px;padding:18px 16px;min-height:140px}
+.tool-card .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--red);margin-bottom:10px}
+.tool-card .title{font-weight:600;font-size:15px;margin-bottom:6px}
+.tool-card .body{font-size:13.5px;color:var(--muted);line-height:1.45}
+.tool-card .slot{display:inline-block;margin-top:10px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:6px 10px;font-size:12px;color:var(--ink)}
+.tool-card.publish{background:var(--red);color:#fff;border-color:var(--red)}
+.tool-card.publish .k{color:#F2D9D2}
+.tool-card.publish .body{color:#F1D9D3}
+.tool-arrow{display:grid;place-items:center;color:var(--red);font-family:var(--serif);font-size:28px;font-style:italic}
+.tool-note{margin-top:14px;font-size:13px;color:var(--muted);font-style:italic}
+
 /* AI video */
 .video{background:var(--ink);color:var(--paper)}
 .video .sec-head .rule{background:#3a302b}
@@ -167,7 +189,9 @@ h2 em{color:var(--red)}
 .contact h2{color:#fff;font-size:clamp(56px,9vw,132px);max-width:12ch;line-height:.92}
 .contact h2 em{color:#F2C9BF}
 .contact .sub{color:#F1D9D3}
-.clist{margin-top:64px;display:grid;grid-template-columns:repeat(3,1fr);gap:32px;border-top:1px solid rgba(255,255,255,.3);padding-top:32px}
+.btn-cv{display:inline-flex;align-items:center;gap:10px;margin-top:28px;background:var(--paper);color:var(--ink);text-decoration:none;border-radius:999px;padding:12px 22px;font-size:14px;font-weight:600;border:1px solid transparent;transition:background .2s,color .2s}
+.btn-cv:hover{background:transparent;color:#fff;border-color:rgba(255,255,255,.55)}
+.clist{margin-top:64px;display:grid;grid-template-columns:repeat(2,1fr);gap:32px;border-top:1px solid rgba(255,255,255,.3);padding-top:32px;max-width:640px}
 .clist .l{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:#F2C9BF;margin-bottom:8px}
 .clist a{font-size:20px;text-decoration:none;border-bottom:1px solid rgba(255,255,255,.8);padding-bottom:3px;word-break:break-word}
 .clist a:hover{border-bottom-color:#fff}
@@ -176,7 +200,9 @@ h2 em{color:var(--red)}
 
 /* responsive */
 @media (max-width:960px){
-  .hero-grid,.strat-grid,.systems-top,.tools-grid,.video-foot{grid-template-columns:1fr;gap:44px}
+  .hero-grid,.strat-grid,.systems-top,.tools-grid,.video-foot,.tool-mini-head{grid-template-columns:1fr;gap:44px}
+  .tool-flow{grid-template-columns:1fr;gap:10px}
+  .tool-arrow{transform:rotate(90deg);padding:4px 0}
   .portrait{max-width:380px}
   .portrait .tag{left:auto;right:-8px}
   .about-cols{grid-template-columns:1fr 1fr}
@@ -227,19 +253,17 @@ h2 em{color:var(--red)}
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <div class="eyebrow">Portfolio 2026</div>
       <h1>Anastasiia <em>Petrenko</em></h1>
       <div class="role">Organic Growth <b>·</b> Content Strategy <b>·</b> AI Video</div>
       <p class="lede">I build <strong>organic growth strategies</strong> and the content systems behind them — then produce the visuals with <strong>AI video and image tools</strong>, fast and on-brand.</p>
       <div class="links">
         <a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a>
         <a class="ulink" href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="ulink" href="tel:+48786521607">+48 786 521 607</a>
+        <a class="ulink" href="assets/Anastasiia_Petrenko_CV.pdf">Download CV</a>
       </div>
     </div>
     <div class="portrait">
       <div class="arch"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko"></div>
-      <div class="tag"><em>Remote</em> · EU-based</div>
     </div>
   </div>
 </section>
@@ -247,9 +271,10 @@ h2 em{color:var(--red)}
 <!-- PROOF STRIP -->
 <div class="proof">
   <div class="wrap">
-    <div class="stat"><div class="n">1M+</div><p><strong>organic views</strong> across the accounts I've run</p></div>
-    <div class="stat"><div class="n">~75%</div><p><strong>less time spent posting</strong> after rolling out the content system</p></div>
-    <div class="stat"><div class="n">8–12</div><p><strong>people</strong> — size of the content team I led</p></div>
+    <!-- strengthen 1M+ with timeframe/accounts when she replies -->
+    <div class="stat"><div class="n">1M+</div><p><strong>organic views</strong> across accounts I've run</p></div>
+    <div class="stat"><div class="n">~75%</div><p><strong>less posting time</strong> with a caption-and-scheduling tool I built in Cursor</p></div>
+    <div class="stat"><div class="n">8–12</div><p><strong>people</strong> on the content team I led as co-founder of Digital Content Innovations LLC</p></div>
   </div>
 </div>
 
@@ -271,17 +296,14 @@ h2 em{color:var(--red)}
         </ul>
       </div>
       <div>
-        <h3>Languages</h3>
+        <h3>Multilingual content &amp; localization</h3>
+        <p class="lang-blurb">I write and localize content for audiences across languages — not just speak them.</p>
         <ul class="langs">
           <li>Ukrainian <span>native</span></li>
           <li>Russian <span>native</span></li>
           <li>English <span>C1</span></li>
           <li>German <span>~B1</span></li>
         </ul>
-      </div>
-      <div>
-        <h3>Tools</h3>
-        <p class="toolsline"><strong>Claude Opus 5.5</strong> (primary for AI ads / creative, research, briefs and copy), <strong>Higgsfield</strong> (Seedance 2.5, Nano Banana Pro), ComfyUI, Orca ADE, Grok Build, Cursor, Node.js basics.</p>
       </div>
     </div>
   </div>
@@ -303,8 +325,9 @@ h2 em{color:var(--red)}
         <li><span class="k">v.</span><div><b>Retention &amp; CRM</b><small>Keep the audience engaged after the first view.</small></div></li>
       </ul>
       <aside class="callout">
-        <div class="q"><em>1M+</em> organic views across accounts — and <em>~75%</em> less time spent posting once the content system was in place.</div>
-        <p>Results from my own work across multiple accounts. Clients and niches stay unnamed.</p>
+        <!-- strengthen 1M+ with timeframe/accounts when she replies -->
+        <div class="q"><em>1M+</em> organic views across accounts — and <em>~75%</em> less posting time after I shipped a caption-and-scheduling tool built in Cursor.</div>
+        <p>Co-founded Digital Content Innovations LLC and led a content team of 8–12. Clients and niches stay unnamed.</p>
         <span class="nda">NDA-safe summary</span>
       </aside>
     </div>
@@ -366,6 +389,42 @@ h2 em{color:var(--red)}
       </div>
       <p class="planner-note">Mock-up for illustration: shows the structure of a week, not a real client calendar.</p>
     </div>
+
+    <div class="tool-mini" id="content-ops-tool">
+      <div class="tool-mini-head">
+        <h3>Caption &amp; schedule — <em>a tool I built</em></h3>
+        <p class="blurb">I built a caption-and-scheduling tool in Cursor and used it in production. Draft captions, pick a schedule slot, publish — the workflow that cut posting time by ~75%.</p>
+      </div>
+      <!-- REPLACE mock below with a real screenshot of the Caption & schedule tool when available:
+           <img src="assets/img/caption-schedule-tool.png" alt="Screenshot of Caption & schedule tool" style="width:100%;border-radius:18px;border:1px solid var(--line)"> -->
+      <div class="tool-mock" aria-label="Illustrative mock of Caption and schedule tool">
+        <div class="tool-mock-label">
+          <div class="t">Content ops tool — <em>illustrative</em></div>
+          <div class="ill">Illustrative mock · my tool, not client data</div>
+        </div>
+        <div class="tool-flow">
+          <div class="tool-card">
+            <div class="k">01 · Caption</div>
+            <div class="title">Draft caption</div>
+            <div class="body">Hook + body + CTA generated and edited in one place before anything goes live.</div>
+          </div>
+          <div class="tool-arrow" aria-hidden="true">→</div>
+          <div class="tool-card">
+            <div class="k">02 · Schedule</div>
+            <div class="title">Pick a slot</div>
+            <div class="body">Queue the post for the right day and time on the calendar.</div>
+            <span class="slot">Thu · 18:00</span>
+          </div>
+          <div class="tool-arrow" aria-hidden="true">→</div>
+          <div class="tool-card publish">
+            <div class="k">03 · Publish</div>
+            <div class="title">Go live</div>
+            <div class="body">One hand-off from draft to scheduled publish — no copy-paste across apps.</div>
+          </div>
+        </div>
+        <p class="tool-note">CSS mock for illustration until a real screenshot is ready. Built by me in Cursor · used in production.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -420,6 +479,7 @@ h2 em{color:var(--red)}
 </section>
 
 <!-- TOOLS -->
+<!-- ADD after user confirms: Meta BS, CapCut, Canva, analytics -->
 <section class="block tools" id="tools">
   <div class="wrap tools-grid">
     <div>
@@ -427,10 +487,9 @@ h2 em{color:var(--red)}
       <h2>A small, <em>sharp</em> toolkit.</h2>
     </div>
     <ul class="stack">
-      <li><span class="c">AI assistant / creative</span><span class="v">Claude Opus 5.5 <em>— primary for AI ads, research, briefs and copy</em></span></li>
+      <li><span class="c">AI creative &amp; copy</span><span class="v">Claude <em>— research, briefs and copy variants</em></span></li>
       <li><span class="c">AI video &amp; image</span><span class="v">Higgsfield (Seedance 2.5, Nano Banana Pro), ComfyUI</span></li>
-      <li><span class="c">AI agents / build</span><span class="v">Orca ADE, Grok Build, Cursor</span></li>
-      <li><span class="c">Code</span><span class="v">Node.js basics</span></li>
+      <li><span class="c">Build &amp; ops</span><span class="v">Cursor <em>— caption &amp; scheduling tool used in production</em></span></li>
     </ul>
   </div>
 </section>
@@ -440,12 +499,12 @@ h2 em{color:var(--red)}
   <div class="wrap">
     <h2>Want to work <em>together?</em></h2>
     <p class="sub">Open to remote roles in organic growth, content strategy and AI content production.</p>
+    <a class="btn-cv" href="assets/Anastasiia_Petrenko_CV.pdf">Download CV (PDF)</a>
     <div class="clist">
       <div><div class="l">E-mail</div><a href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div>
       <div><div class="l">LinkedIn</div><a href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">anastasiia-petrenko-marketing</a></div>
-      <div><div class="l">Phone</div><a href="tel:+48786521607">+48 786 521 607</a></div>
     </div>
-    <div class="foot"><span class="serif">Anastasiia Petrenko · Portfolio 2026</span><a href="#" style="text-decoration:none">Back to top ↑</a></div>
+    <div class="foot"><span class="serif">Anastasiia Petrenko</span><a href="#" style="text-decoration:none">Back to top ↑</a></div>
   </div>
 </section>
 
