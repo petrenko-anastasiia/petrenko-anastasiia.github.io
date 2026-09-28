@@ -4,105 +4,123 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>ZOLA — Brows with attitude</title>
-<meta name="description" content="Independent spec ad concept for ZOLA Brow Soap Mini — Ukrainian-language 15-second vertical ad.">
+<meta name="description" content="ZOLA Brow Soap Mini — 15-second English social ad case study by Anastasiia Petrenko.">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--ink:#1C171D;--body:#6C5660;--pink:#E82B6B;--pink-deep:#BD2357;--eyebrow:#4E2536;--pill:#E3B9CB;--rule:#EAD3DD}
-body{background:#fff;color:var(--ink);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
-main{max-width:1180px;margin:0 auto;padding:40px 36px 64px}
+:root{--bg:#FFF7FB;--ink:#1C171D;--body:#5E5359;--pink:#E82B6B;--pink-deep:#BD2357;--rule:#F0C9D9}
+body{background:var(--bg);color:var(--ink);font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+main{max-width:1180px;margin:0 auto;padding:32px 36px 64px}
 a{color:var(--pink)}
-.back{display:inline-block;margin-bottom:26px;font-size:13px;color:var(--eyebrow);text-decoration:none;border-bottom:1px solid var(--pill);padding-bottom:2px}
-.back:hover{color:var(--pink);border-color:var(--pink)}
-header{display:flex;justify-content:space-between;align-items:center;border-bottom:2px solid var(--ink);padding-bottom:26px}
-.wordmark{font-size:40px;font-weight:800;letter-spacing:-2px;line-height:1}
-.eyebrow{font-size:11px;font-weight:700;letter-spacing:2.4px;text-transform:uppercase;color:var(--eyebrow)}
-header .eyebrow{text-align:right;line-height:1.4}
-.layout{display:grid;grid-template-columns:1fr 340px;gap:80px;margin-top:50px;align-items:start}
-h1{font-size:68px;line-height:.98;letter-spacing:-3.5px;font-weight:800;margin:26px 0 26px}
+header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--rule);padding-bottom:24px}
+.wordmark{font-size:34px;font-weight:800;letter-spacing:-1.5px;line-height:1}
+.back{font-size:13px;color:var(--pink);text-decoration:none;border-bottom:1px solid var(--rule);padding-bottom:2px;font-weight:600}
+.back:hover{border-color:var(--pink)}
+.eyebrow,h2{font-size:11px;font-weight:700;letter-spacing:.6px;text-transform:uppercase;color:var(--pink)}
+.layout{display:grid;grid-template-columns:1fr 340px;gap:80px;margin-top:44px;align-items:start}
+h1{font-size:72px;line-height:1;letter-spacing:-2.5px;font-weight:800;margin:18px 0 20px}
 h1 span{color:var(--pink);display:block}
-p{font-size:16px;line-height:1.7;color:var(--body)}
-.tags{display:flex;gap:8px;flex-wrap:wrap;margin:24px 0 8px}
-.tags span{border:1px solid var(--pill);border-radius:999px;padding:9px 14px;font-size:12px;color:var(--ink)}
-h2{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2.4px;margin:34px 0 12px;color:var(--ink)}
-.hook{font-size:34px;line-height:1.15;font-weight:700;letter-spacing:-.8px;color:var(--ink)}
-.hook-en{font-size:13px;color:var(--ink);margin-top:8px}
-p strong{color:var(--body);font-weight:700}
-.ext{text-decoration:none;border-bottom:1px solid var(--pink);padding-bottom:1px}
-.ext:hover{color:var(--pink-deep);border-color:var(--pink-deep)}
-.note{font-size:13px;color:var(--body);margin-top:34px;line-height:1.6}
-.film{position:sticky;top:32px}
-.placeholder{aspect-ratio:9/16;width:100%;border-radius:22px;background:linear-gradient(160deg,#fff 0%,#FDF1F5 55%,#FBE3EC 100%);border:1px solid var(--rule);box-shadow:0 24px 60px -30px rgba(232,43,107,.35);display:flex;flex-direction:column;justify-content:space-between;padding:26px}
-.placeholder .wm{font-size:22px;font-weight:800;letter-spacing:-1px}
-.placeholder .mid{text-align:center}
-.placeholder .mid b{display:block;font-size:26px;letter-spacing:-.6px;line-height:1.15}
-.placeholder .mid b span{color:var(--pink)}
-.placeholder .soon{display:inline-block;margin-top:18px;border:1px solid var(--pink);color:var(--pink);border-radius:999px;padding:8px 16px;font-size:12px;letter-spacing:1.6px;text-transform:uppercase;font-weight:700}
-.placeholder .bar{height:3px;border-radius:3px;background:var(--rule)}
-.video-caption{display:flex;justify-content:space-between;font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-top:16px;color:var(--eyebrow)}
-footer{border-top:1px solid var(--rule);margin-top:56px;padding-top:24px;display:flex;gap:26px;font-size:14px}
+.meta{font-size:14px;color:var(--body)}
+.meta i{font-style:normal;color:var(--rule);margin:0 .5em}
+h2{margin:34px 0 10px}
+p{font-size:16px;line-height:1.7;color:var(--body);max-width:60ch}
+p strong{color:var(--ink);font-weight:700}
+.shop{font-weight:700;color:var(--ink);text-decoration:none;border-bottom:2px solid var(--pink);padding-bottom:1px}
+.shop:hover{color:var(--pink)}
+.film img,.film video{display:block;width:100%;aspect-ratio:9/16;object-fit:cover;border-radius:18px;box-shadow:0 30px 60px -30px rgba(232,43,107,.45);background:#fff}
+.caption{display:flex;justify-content:space-between;font-size:11px;letter-spacing:.6px;text-transform:uppercase;margin-top:14px;color:var(--pink);font-weight:700}
+.beats{margin-top:88px;padding-top:44px;border-top:1px solid var(--rule)}
+.beats h3{font-size:40px;font-weight:800;letter-spacing:-1.2px;line-height:1.05}
+.strip{margin-top:32px}
+.strip img{display:block;width:100%;height:auto;border-radius:10px}
+.caps{display:grid;grid-template-columns:repeat(5,1fr);gap:0;margin-top:14px;list-style:none}
+.caps li{padding-right:12px}
+.caps b{display:block;font-size:13px;color:var(--pink)}
+.caps span{font-size:13px;color:var(--body)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:64px;margin-top:40px}
+.two h2{margin-top:0}
+.source{display:flex;gap:28px;margin-top:40px;font-size:13px;color:var(--body);align-items:baseline}
+.source b{font-size:11px;letter-spacing:.6px;color:var(--pink);text-transform:uppercase}
+footer{border-top:1px solid var(--rule);margin-top:56px;padding-top:22px;font-size:14px}
 footer a{text-decoration:none;border-bottom:1px solid var(--pink);padding-bottom:1px}
 @media(max-width:860px){
-  main{padding:28px 22px 48px}
-  .layout{grid-template-columns:1fr;gap:40px;margin-top:32px}
-  h1{font-size:54px;letter-spacing:-2.5px}
-  .hook{font-size:28px}
-  .film{position:static;max-width:340px;width:100%;margin:0 auto}
-  header .eyebrow{max-width:150px}
+  main{padding:24px 20px 48px}
+  .layout{grid-template-columns:1fr;gap:40px;margin-top:30px}
+  h1{font-size:54px;letter-spacing:-2px}
+  .film{max-width:340px;width:100%;margin:0 auto}
+  .beats{margin-top:56px}
+  .beats h3{font-size:32px}
+  /* storyboard scrolls sideways on mobile; captions scroll with it */
+  .scroller{overflow-x:auto;-webkit-overflow-scrolling:touch;margin:0 -20px;padding:0 20px 8px;scroll-snap-type:x mandatory}
+  .scroller .inner{width:900px}
+  .scroll-hint{display:block!important;font-size:12px;color:var(--body);margin-top:10px}
+  .two{grid-template-columns:1fr;gap:28px}
+  .source{flex-direction:column;gap:6px}
 }
 </style>
 </head>
 <body>
 <main>
-  <a class="back" href="/">← Back to portfolio</a>
   <header>
     <div class="wordmark">ZOLA</div>
-    <div class="eyebrow">Independent ad<br>concept / 03</div>
+    <a class="back" href="/">← Back to portfolio</a>
   </header>
 
   <div class="layout">
     <section>
-      <div class="eyebrow">Real brand · Brow Soap Mini · 25 g</div>
+      <div class="eyebrow">Brow Soap Mini / English social ad</div>
       <h1>Brows with <span>attitude.</span></h1>
-      <p>A Ukrainian-language product ad about shape, direction, and personal expression.</p>
-      <div class="tags"><span>15-second ad</span><span>9:16 vertical</span><span>Ukrainian copy</span></div>
+      <p class="meta">15 seconds<i>/</i>9:16 vertical<i>/</i>Original instrumental</p>
 
       <h2>The brief</h2>
-      <p>Make ZOLA Brow Soap Mini recognizable to Ukrainian-speaking beauty shoppers and invite them to explore the product on the official store.</p>
+      <p>Introduce ZOLA Brow Soap Mini to English-speaking beauty shoppers. Make the product recognizable and invite viewers to explore it on the official store.</p>
 
-      <h2>The hook · First 3 seconds</h2>
-      <p class="hook" lang="uk">«Брови з характером?»</p>
-      <p class="hook-en">“Brows with attitude?”</p>
+      <h2>The hook</h2>
+      <p><strong>“Brows with attitude?”</strong> followed by <strong>“Give them direction.”</strong> The opening connects a familiar styling need with self-expression.</p>
 
-      <h2>The idea</h2>
-      <p><strong lang="uk">«Задай їм напрям.»</strong> — Give them direction.<br>Upward motion makes direction the visual motif. Pink, white, and black echo the official packaging. The story moves from personality to product to one clear action.</p>
-
-      <h2>The product</h2>
-      <p>ZOLA Brow Soap Mini, 25 g: a soap for styling brow hairs. The ad uses the official product photo and avoids fabricated before-and-after results.</p>
+      <h2>The creative decision</h2>
+      <p>Pair the official packshot with kinetic type, an abstract brush sweep, and a four-second generated brow-styling clip. Pink, black, and white echo the real packaging.</p>
 
       <h2>The next step</h2>
-      <p><strong lang="uk">«Відкрий Brow Soap»</strong> — Discover Brow Soap.<br><a class="ext" href="https://zola.ua/en/zola-mylo-dlja-brovejj-dlja-fiksacii-voloskov-mini-versija-25g-zola-mini-soap" target="_blank" rel="noopener">Visit the official product page ↗</a></p>
-
-      <h2>What I would test</h2>
-      <p>Test the personality-led hook against a mini-format product hook. Compare early retention and product-page click-through, keeping the rest of the ad fixed.</p>
-
+      <p><a class="shop" href="https://zola.ua/en/zola-mylo-dlja-brovejj-dlja-fiksacii-voloskov-mini-versija-25g-zola-mini-soap" target="_blank" rel="noopener">Discover Brow Soap → zola.ua</a><br>One product. One clear shopping invitation.</p>
     </section>
 
     <aside class="film">
-      <!-- SWAP: zola-ad.mp4 + poster.jpg -->
-      <!-- <video controls playsinline muted preload="metadata" poster="poster.jpg" src="zola-ad.mp4" style="display:block;width:100%;aspect-ratio:9/16;border-radius:22px;background:#111"></video> -->
-      <div class="placeholder" role="img" aria-label="15-second clip coming soon">
-        <div class="wm">ZOLA</div>
-        <div class="mid"><b lang="uk">Брови з<br><span>характером?</span></b><span class="soon">15-sec clip · coming soon</span></div>
-        <div class="bar"></div>
-      </div>
-      <div class="video-caption"><span>03 / Final clip</span><span>15 sec · silent</span></div>
+      <video controls playsinline muted preload="metadata" poster="poster.jpg" src="zola-ad.mp4" width="720" height="1280" aria-label="ZOLA Brow Soap 15-second ad"></video>
+      <div class="caption"><span>Final clip</span><span>15 sec · 9:16</span></div>
     </aside>
   </div>
 
-  <footer>
-    <a href="/">← Portfolio</a>
-    <!-- ADD when files are provided: <a href="zola-ad.mp4" download>Download clip ↗</a> <a href="brief.pdf">Download brief ↗</a> -->
-  </footer>
+  <section class="beats">
+    <h3>The story in five beats.</h3>
+    <div class="scroller">
+      <div class="inner">
+        <figure class="strip"><img src="storyboard.jpg" width="1800" height="640" loading="lazy" alt="Five-beat storyboard: hook and product entrance, graphic brush sweep, product close-up, generated styling clip, product and call to action"></figure>
+        <ol class="caps">
+          <li><b>0-2.6 s</b><span>Hook + product entrance</span></li>
+          <li><b>2.6-5.8 s</b><span>Graphic brush sweep</span></li>
+          <li><b>5.8-7.4 s</b><span>Product close-up</span></li>
+          <li><b>7.4-11.4 s</b><span>Generated styling clip</span></li>
+          <li><b>11.4-15 s</b><span>Product + call to action</span></li>
+        </ol>
+      </div>
+    </div>
+    <span class="scroll-hint" style="display:none">Swipe to see all five beats →</span>
+
+    <div class="two">
+      <div>
+        <h2>What I would test</h2>
+        <p>Compare the personality-led hook with a direct product introduction. Keep the rest of the edit fixed; assess early retention and product-page click-through. No campaign has run and no performance results are claimed.</p>
+      </div>
+      <div>
+        <h2>Production + transparency</h2>
+        <p>Official ZOLA product photo; animated graphics; AI-generated portrait and supplied generated styling video; original synthesized soundtrack. The styling scene is a concept visual, not verified evidence of product results.</p>
+      </div>
+    </div>
+
+    <p class="source"><b>Source</b><span>ZOLA official product page - Brow Soap Mini, 25 g</span></p>
+  </section>
+
+  <footer><a href="/">← Portfolio</a></footer>
 </main>
 </body>
 </html>

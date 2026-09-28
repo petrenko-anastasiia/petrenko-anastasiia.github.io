@@ -165,13 +165,7 @@ h2 em{color:var(--red)}
 .spec-video .cap{display:flex;justify-content:space-between;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:14px}
 .spec-lede{font-size:20px!important;color:var(--ink)!important;line-height:1.5}
 .spec-meta p.spec-hook-en{font-size:15px;margin-top:8px}
-.spec-ph{aspect-ratio:9/16;width:100%;border-radius:26px;background:linear-gradient(160deg,var(--paper) 0%,var(--sand) 100%);border:1px solid var(--line);box-shadow:0 40px 80px -40px rgba(60,20,10,.35);display:flex;flex-direction:column;justify-content:space-between;padding:26px}
-.spec-ph .wm{font-family:var(--sans);font-weight:700;font-size:20px;letter-spacing:-.04em}
-.spec-ph .mid{text-align:center}
-.spec-ph .mid b{display:block;font-family:var(--serif);font-weight:400;font-size:32px;line-height:1.1}
-.spec-ph .mid b em{color:var(--red);display:block}
-.spec-ph .soon{display:inline-block;margin-top:18px;border:1px solid var(--red-soft);color:var(--red);border-radius:999px;padding:7px 14px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600}
-.spec-ph .bar{height:3px;border-radius:3px;background:var(--line)}
+.spec-poster{display:block;width:100%;height:auto;aspect-ratio:9/16;object-fit:cover;border-radius:26px;border:1px solid var(--line);box-shadow:0 40px 80px -40px rgba(60,20,10,.45);background:var(--ink)}
 .spec-cta{display:inline-flex;align-items:center;gap:10px;margin-top:40px;background:var(--red);color:#fff;text-decoration:none;border-radius:999px;padding:14px 26px;font-size:15px;font-weight:600;transition:background .2s}
 .spec-cta:hover{background:var(--red-deep)}
 
@@ -460,21 +454,15 @@ h2 em{color:var(--red)}
 
     <div class="spec-grid">
       <div class="spec-meta">
-        <p class="spec-lede">A 15-second vertical ad for ZOLA Brow Soap Mini, written in Ukrainian for Ukrainian-speaking beauty shoppers — my own concept, with Ukrainian-language copy.</p>
-        <h4>The hook · First 3 seconds</h4>
-        <p class="spec-hook" lang="uk">«Брови з характером?»</p>
-        <p class="spec-hook-en">“Brows with attitude?”</p>
-        <div class="tags"><span>15-second ad</span><span>9:16 vertical</span><span>Ukrainian copy</span></div>
+        <p class="spec-lede">A 15-second vertical social ad introducing ZOLA Brow Soap Mini to English-speaking beauty shoppers.</p>
+        <h4>The hook</h4>
+        <p class="spec-hook">“Brows with attitude?”</p>
+        <p class="spec-hook-en">“Give them direction.”</p>
+        <div class="tags"><span>15 seconds</span><span>9:16 vertical</span><span>Original instrumental</span></div>
         <a class="spec-cta" href="work/zola/">Read the full case study →</a>
       </div>
       <div class="spec-video">
-        <!-- SWAP: zola-ad.mp4 + poster.jpg -->
-        <!-- <video controls playsinline muted preload="metadata" poster="work/zola/poster.jpg" src="work/zola/zola-ad.mp4"></video> -->
-        <div class="spec-ph" role="img" aria-label="15-second clip coming soon">
-          <div class="wm">ZOLA</div>
-          <div class="mid"><b lang="uk">Брови з <em>характером?</em></b><span class="soon">15-sec clip · coming soon</span></div>
-          <div class="bar"></div>
-        </div>
+        <video class="spec-poster" controls playsinline muted preload="metadata" poster="work/zola/poster.jpg" src="work/zola/zola-ad.mp4" width="720" height="1280" aria-label="ZOLA Brow Soap 15-second ad"></video>
         <div class="cap"><span>Final clip</span><span>15 sec · 9:16</span></div>
       </div>
     </div>
