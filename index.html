@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Anastasiia Petrenko — Portfolio 2026</title>
-<meta name="description" content="Anastasiia Petrenko — organic growth, content strategy and AI video production.">
+<meta name="description" content="Anastasiia Petrenko — paid social &amp; performance marketing (Meta, TikTok), AI ad creatives and organic content strategy.">
 <style>
 @font-face{font-family:"Instrument Serif";src:url("assets/fonts/InstrumentSerif-Regular.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
 @font-face{font-family:"Instrument Serif";src:url("assets/fonts/InstrumentSerif-Italic.ttf") format("truetype");font-weight:400;font-style:italic;font-display:swap}
@@ -39,16 +39,16 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .status i{width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block}
 
 /* hero */
-.hero{padding:72px 0 88px}
+.hero{padding:56px 0 72px}
 .hero-grid{display:grid;grid-template-columns:1.35fr .9fr;gap:64px;align-items:end}
-.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(64px,10.5vw,152px);line-height:.86;letter-spacing:-.035em;margin:22px 0 30px}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(40px,5.4vw,78px);line-height:.92;letter-spacing:-.03em;margin:8px 0 26px}
 .hero h1 em{color:var(--red);display:block;padding-left:.55em}
-.role{font-size:15px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--red);margin-bottom:20px}
+.role{font-size:16px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--red);margin-bottom:20px;line-height:1.5}
 .role b{color:var(--red-soft);font-weight:400;margin:0 .45em}
-.lede{font-size:21px;line-height:1.5;color:var(--muted);max-width:30ch}
+.lede{font-size:21px;line-height:1.5;color:var(--muted);max-width:34ch}
 .lede strong{color:var(--ink);font-weight:500}
 .links{display:flex;flex-wrap:wrap;gap:12px 28px;margin-top:34px;font-size:15px}
-.portrait{position:relative}
+.portrait{position:relative;width:100%;max-width:400px;justify-self:end}
 .portrait .arch{border-radius:999px 999px 18px 18px;overflow:hidden;aspect-ratio:3/4;background:var(--sand);box-shadow:0 30px 60px -30px rgba(94,20,20,.35)}
 .portrait .arch img{width:100%;height:100%;object-fit:cover;object-position:50% 20%}
 .portrait .tag{position:absolute;left:-28px;bottom:36px;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:10px 18px;font-size:13px;box-shadow:0 10px 30px -15px rgba(0,0,0,.25)}
@@ -56,10 +56,10 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 
 /* proof strip */
 .proof{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
-.proof .wrap{display:grid;grid-template-columns:repeat(3,1fr)}
-.stat{padding:44px 32px 40px;border-left:1px solid var(--line)}
+.proof .wrap{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:44px 28px 40px;border-left:1px solid var(--line)}
 .stat:first-child{border-left:0;padding-left:0}
-.stat .n{font-family:var(--serif);font-size:clamp(56px,7vw,92px);line-height:.9;color:var(--red);letter-spacing:-.03em}
+.stat .n{font-family:var(--serif);font-size:clamp(48px,5.4vw,76px);line-height:.9;color:var(--red);letter-spacing:-.03em;white-space:nowrap}
 .stat p{margin-top:12px;color:var(--muted);font-size:15px;max-width:24ch}
 .stat p strong{color:var(--ink);font-weight:600}
 
@@ -84,6 +84,38 @@ h2 em{color:var(--red)}
 .langs li{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
 .langs span{color:var(--muted)}
 .lang-blurb{font-size:15px;color:var(--muted);line-height:1.55;margin-bottom:14px}
+
+/* paid social */
+.paid-top{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:end}
+.metrics{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:64px}
+.metric{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:28px 26px 26px;box-shadow:0 30px 60px -45px rgba(60,20,10,.4)}
+.metric .ml{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--muted)}
+.metric .mv{font-family:var(--serif);font-size:clamp(44px,4.6vw,64px);line-height:1;color:var(--red);letter-spacing:-.025em;margin-top:14px;white-space:nowrap}
+.metric .mv small{font-size:.5em;color:var(--ink);letter-spacing:0}
+.ar{font-family:var(--sans);font-style:normal;font-size:.62em;margin:0 .22em;vertical-align:.12em}
+.metric p{color:var(--muted);font-size:15px;margin-top:12px}
+.metric p strong{color:var(--ink);font-weight:600}
+.paid-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;margin-top:72px;align-items:start}
+.paid-case{background:var(--red);color:#fff;border-radius:22px;padding:32px}
+.paid-case .mc-label{color:#F2C9BF}
+.paid-case .mc-head{font-size:clamp(30px,3.2vw,40px)}
+.paid-case .mc-head em{color:#F2C9BF}
+.paid-case p{color:#F1D9D3;margin-top:14px;font-size:16px}
+.paid-case .pills{margin-top:22px}
+.paid-case .pills span{border-color:rgba(255,255,255,.4);color:#fff}
+.creatives{margin-top:88px;padding-top:40px;border-top:1px solid var(--ink)}
+.creatives-head{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:12px;margin-bottom:28px}
+.creatives-head h3{font-family:var(--serif);font-weight:400;font-size:clamp(30px,3.6vw,44px);line-height:1.05;letter-spacing:-.02em}
+.creatives-head h3 em{color:var(--red)}
+.creatives-head p{color:var(--muted);font-size:15px;max-width:44ch}
+.cr-row{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.cr{display:block;text-decoration:none;color:inherit}
+.cr .cf{position:relative;aspect-ratio:9/16;border-radius:20px;overflow:hidden;background:var(--sand);border:1px solid var(--line);box-shadow:0 30px 60px -40px rgba(60,20,10,.45)}
+.cr .cf img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
+.cr:hover .cf img{transform:scale(1.03)}
+.cr .tg-k{position:absolute;left:10px;top:10px;bottom:auto}
+.cr b{display:block;font-weight:600;font-size:15px;margin-top:12px}
+.cr small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
 
 /* strategy */
 .strategy{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -219,7 +251,11 @@ h2 em{color:var(--red)}
 
 /* responsive */
 @media (max-width:960px){
-  .hero-grid,.strat-grid,.systems-top,.tools-grid,.video-foot,.tool-mini-head,.spec-grid{grid-template-columns:1fr;gap:44px}
+  .hero-grid,.strat-grid,.systems-top,.tools-grid,.video-foot,.tool-mini-head,.spec-grid,.paid-top,.paid-grid{grid-template-columns:1fr;gap:44px}
+  .proof .wrap{grid-template-columns:1fr 1fr}
+  .stat:nth-child(3){border-left:0;padding-left:0}
+  .stat:nth-child(n+3){border-top:1px solid var(--line)}
+  .cr-row{grid-template-columns:1fr 1fr}
   .tool-gallery{grid-template-columns:1fr}
   .tg-row{grid-template-columns:repeat(3,1fr);gap:10px}
   .portrait{max-width:380px}
@@ -240,8 +276,14 @@ h2 em{color:var(--red)}
   .hero h1 em{padding-left:.3em}
   .lede{font-size:19px}
   section.block{padding:84px 0}
+  .hero{padding:36px 0 56px}
+  .hero h1{margin:4px 0 20px}
+  .role{font-size:14px}
   .proof .wrap{grid-template-columns:1fr}
   .stat{border-left:0;border-top:1px solid var(--line);padding:30px 0}
+  .metrics{grid-template-columns:1fr;margin-top:44px}
+  .paid-case{padding:24px}
+  .cr-row{gap:12px}
   .stat:first-child{border-top:0}
   .about .statement{text-align:left}
   .about-cols{grid-template-columns:1fr;margin-top:56px}
@@ -266,7 +308,7 @@ h2 em{color:var(--red)}
   <div class="wrap">
     <a class="mono" href="#">A<span>P</span></a>
     <div>Portfolio 2026</div>
-    <div class="status"><i></i> Open to remote roles · EU</div>
+    <div class="status"><i></i> Open to remote paid social roles · EU</div>
   </div>
 </header>
 
@@ -275,8 +317,8 @@ h2 em{color:var(--red)}
   <div class="wrap hero-grid">
     <div>
       <h1>Anastasiia <em>Petrenko</em></h1>
-      <div class="role">Organic Growth <b>·</b> Content Strategy <b>·</b> AI Video</div>
-      <p class="lede">I build <strong>organic growth strategies</strong> and the content systems behind them — then produce the visuals with <strong>AI video and image tools</strong>, fast and on-brand.</p>
+      <div class="role">Paid Social &amp; Performance Marketing <b>·</b> AI Ad Creatives</div>
+      <p class="lede">I run <strong>paid social on Meta and TikTok</strong> with a structured creative-testing loop, produce the <strong>ad creatives with AI video and image tools</strong>, and back it with organic content systems.</p>
       <div class="links">
         <a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a>
         <a class="ulink" href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">LinkedIn</a>
@@ -292,8 +334,9 @@ h2 em{color:var(--red)}
 <!-- PROOF STRIP -->
 <div class="proof">
   <div class="wrap">
+    <div class="stat"><div class="n">2.5–4.0x</div><p><strong>ROAS</strong> on Meta/TikTok, typical budgets $5–8k/month</p></div>
+    <div class="stat"><div class="n">~$22</div><p><strong>CPA</strong> on a Meta campaign, down from ~$48 in 6 weeks</p></div>
     <div class="stat"><div class="n">1M+</div><p><strong>organic views</strong> in one month across up to 3 accounts</p></div>
-    <div class="stat"><div class="n">~75%</div><p><strong>less posting time</strong> with a caption-and-scheduling tool I built in Cursor</p></div>
     <div class="stat"><div class="n">8–12</div><p><strong>people</strong> on the content team I led as co-founder of Digital Content Innovations LLC</p></div>
   </div>
 </div>
@@ -302,14 +345,15 @@ h2 em{color:var(--red)}
 <section class="block about" id="about">
   <div class="wrap">
     <div class="sec-head"><span class="num">About</span><span class="rule"></span></div>
-    <p class="statement">I find out what actually works in a market, turn it into a <em>repeatable content system</em>, and use AI to produce it at the speed social demands.</p>
+    <p class="statement">I find out what actually works — in the feed and in the ad account — turn it into a <em>repeatable testing system</em>, and use AI to produce creatives at the speed social demands.</p>
 
     <div class="about-cols">
       <div>
         <h3>Scope</h3>
         <ul class="scope">
+          <li>Paid social — Meta &amp; TikTok</li>
+          <li>Creative testing by hook type</li>
           <li>Organic growth &amp; content strategy</li>
-          <li>Market &amp; competitor research</li>
           <li>Content systems &amp; workflows</li>
           <li>AI video &amp; image production</li>
         </ul>
@@ -318,11 +362,56 @@ h2 em{color:var(--red)}
         <h3>Multilingual content &amp; localization</h3>
         <p class="lang-blurb">I write and localize content for audiences across languages — not just speak them.</p>
         <ul class="langs">
+          <li>English <span>C1</span></li>
           <li>Ukrainian <span>native</span></li>
           <li>Russian <span>native</span></li>
-          <li>English <span>C1</span></li>
           <li>German <span>B2</span></li>
         </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PAID SOCIAL -->
+<section class="block paid" id="paid">
+  <div class="wrap">
+    <div class="sec-head"><span class="num">01 — Paid social &amp; performance</span><span class="rule"></span></div>
+    <div class="paid-top">
+      <h2>Paid social that <em>earns its budget.</em></h2>
+      <p class="sub" style="margin-top:0">Four years running a content and paid-social business for creator-economy accounts: Meta creative testing, short-form production for TikTok and Reels, and a team of creators behind it.</p>
+    </div>
+
+    <div class="metrics">
+      <div class="metric"><div class="ml">Monthly budgets</div><div class="mv">$5–8k</div><p><strong>Typical Meta/TikTok budgets</strong> per month for creator-economy and subscription accounts</p></div>
+      <div class="metric"><div class="ml">ROAS</div><div class="mv">2.5–4.0<small>x</small></div><p><strong>Return on ad spend</strong> across paid social on Meta and TikTok</p></div>
+      <div class="metric"><div class="ml">CPA drop</div><div class="mv">~$48<span class="ar">→</span>~$22</div><p><strong>Cost per acquisition</strong> on a Meta campaign, over 6 weeks</p></div>
+    </div>
+
+    <div class="paid-grid">
+      <ul class="pillars">
+        <li><span class="k">i.</span><div><b>Hypotheses first</b><small>Every test starts with a written hypothesis, not a hunch.</small></div></li>
+        <li><span class="k">ii.</span><div><b>Hook &amp; format variants</b><small>Creative testing in Meta Ads Manager, with variants built per hook and format.</small></div></li>
+        <li><span class="k">iii.</span><div><b>Kill / scale by hook type</b><small>Cut the losing hooks, put the budget behind the winners.</small></div></li>
+        <li><span class="k">iv.</span><div><b>Creatives on demand</b><small>Concept → brief → TikTok/Reels, with AI video tools and Claude for copy variants.</small></div></li>
+      </ul>
+      <div class="paid-case">
+        <div class="mc-label">Meta performance · Subscription creator account</div>
+        <div class="mc-head">CPA <em>~$48<span class="ar">→</span>~$22</em> in 6 weeks</div>
+        <p>Shifted the ad hooks from lifestyle to product demo, tested the variants in Meta Ads Manager, and scaled the hook type that converted.</p>
+        <div class="pills"><span>Meta Ads Manager</span><span>TikTok Ads</span><span>Creative testing</span></div>
+      </div>
+    </div>
+
+    <div class="creatives">
+      <div class="creatives-head">
+        <h3>Ad <em>creatives</em></h3>
+        <p>Vertical ad creatives I produce with AI video and image tools. Client campaigns stay under NDA, so these are spec and sample work.</p>
+      </div>
+      <div class="cr-row">
+        <a class="cr" href="#spec"><div class="cf"><img src="work/zola/poster.jpg" alt="ZOLA Brow Soap 15-second spec ad, poster frame" loading="lazy"><span class="tg-k">Spec ad · 15s</span></div><b>ZOLA — Brows with attitude</b><small>Product ad, 9:16</small></a>
+        <a class="cr" href="#video"><div class="cf"><img src="assets/img/outfit-transition.jpg" alt="AI-generated outfit transition clip, still frame" loading="lazy"><span class="tg-k">Hook · Transition</span></div><b>Outfit transition</b><small>Trend-format hook</small></a>
+        <a class="cr" href="#video"><div class="cf"><img src="assets/img/street-walk.jpg" alt="AI-generated street walk clip, still frame" loading="lazy"><span class="tg-k">Lifestyle</span></div><b>Street walk</b><small>Lifestyle creative</small></a>
+        <a class="cr" href="#video"><div class="cf"><img src="assets/img/balcony-sunset.jpg" alt="AI-generated balcony at sunset clip, still frame" loading="lazy"><span class="tg-k">Mood</span></div><b>Balcony at sunset</b><small>Golden-hour mood clip</small></a>
       </div>
     </div>
   </div>
@@ -331,7 +420,7 @@ h2 em{color:var(--red)}
 <!-- STRATEGY -->
 <section class="block strategy" id="strategy">
   <div class="wrap">
-    <div class="sec-head"><span class="num">01 — Marketing strategy</span><span class="rule"></span></div>
+    <div class="sec-head"><span class="num">02 — Organic strategy</span><span class="rule"></span></div>
     <h2>Organic growth, <em>built on research</em> — not guesswork.</h2>
     <p class="sub">End to end: study what's working in the market, define how the brand should sound, turn it into a publishing system, then measure, cut and scale.</p>
 
@@ -360,7 +449,7 @@ h2 em{color:var(--red)}
 <!-- CONTENT SYSTEMS -->
 <section class="block systems" id="systems">
   <div class="wrap">
-    <div class="sec-head"><span class="num">02 — Content systems</span><span class="rule"></span></div>
+    <div class="sec-head"><span class="num">03 — Content systems</span><span class="rule"></span></div>
     <div class="systems-top">
       <h2>Consistency is a <em>system</em>, not willpower.</h2>
       <p class="sub" style="margin-top:0">I set up the calendar, the briefs and the hand-offs so a small team publishes every week without last-minute scrambles — and so every post feeds the next decision.</p>
@@ -448,7 +537,7 @@ h2 em{color:var(--red)}
 <!-- SPEC CAMPAIGN -->
 <section class="block spec" id="spec">
   <div class="wrap">
-    <div class="sec-head"><span class="num">03 — Spec campaign</span><span class="rule"></span></div>
+    <div class="sec-head"><span class="num">04 — Spec campaign</span><span class="rule"></span></div>
     <h2>ZOLA — <em>Brows with attitude.</em></h2>
 
     <div class="spec-grid">
@@ -471,9 +560,9 @@ h2 em{color:var(--red)}
 <!-- AI VIDEO -->
 <section class="block video" id="video">
   <div class="wrap">
-    <div class="sec-head"><span class="num">04 — AI video</span><span class="rule"></span></div>
+    <div class="sec-head"><span class="num">05 — AI video</span><span class="rule"></span></div>
     <h2>AI-produced video that <em>feels native</em> to the feed.</h2>
-    <p class="sub">Short vertical clips generated for organic social: a fast visual hook, natural camera movement and a consistent character look from clip to clip.</p>
+    <p class="sub">Short vertical clips generated for paid and organic social: a fast visual hook, natural camera movement and a consistent character look from clip to clip.</p>
 
     <div class="reels">
       <figure class="reel">
@@ -522,13 +611,14 @@ h2 em{color:var(--red)}
 <section class="block tools" id="tools">
   <div class="wrap tools-grid">
     <div>
-      <div class="sec-head"><span class="num">05 — Tools &amp; stack</span><span class="rule"></span></div>
+      <div class="sec-head"><span class="num">06 — Tools &amp; stack</span><span class="rule"></span></div>
       <h2>A small, <em>sharp</em> toolkit.</h2>
     </div>
     <ul class="stack">
       <li><span class="c">AI creative &amp; copy</span><span class="v">Claude <em>— research, briefs and copy variants</em></span></li>
       <li><span class="c">AI video &amp; image</span><span class="v">Higgsfield (Seedance 2.5, Nano Banana Pro), ComfyUI</span></li>
       <li><span class="c">Build &amp; ops</span><span class="v">Cursor <em>— caption &amp; scheduling tool used in production</em></span></li>
+      <li><span class="c">Paid social</span><span class="v">Meta Ads Manager, TikTok Ads</span></li>
       <li><span class="c">Social &amp; scheduling</span><span class="v">Meta Business Suite</span></li>
       <li><span class="c">Edit &amp; design</span><span class="v">CapCut, Canva</span></li>
       <li><span class="c">Analytics</span><span class="v">Google Analytics, Looker Studio</span></li>
@@ -541,7 +631,7 @@ h2 em{color:var(--red)}
 <section class="contact" id="contact">
   <div class="wrap">
     <h2>Want to work <em>together?</em></h2>
-    <p class="sub">Open to remote roles in organic growth, content strategy and AI content production.</p>
+    <p class="sub">Open to remote roles in paid social, performance marketing, content strategy and AI ad creatives.</p>
     <a class="btn-cv" href="assets/Anastasiia_Petrenko_CV.pdf">Download CV (PDF)</a>
     <div class="clist">
       <div><div class="l">E-mail</div><a href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div>
