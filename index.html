@@ -113,13 +113,12 @@ h2 em{color:var(--red)}
 .paid-case p{color:#F1D9D3;margin-top:14px;font-size:16px}
 .paid-case .pills{margin-top:22px}
 .paid-case .pills span{border-color:rgba(255,255,255,.4);color:#fff}
-.creatives{margin-top:88px;padding-top:40px;border-top:1px solid var(--ink);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,560px);gap:64px;align-items:start}
-.creatives-head{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
+.creatives{margin-top:88px;padding-top:40px;border-top:1px solid var(--ink);display:flex;flex-direction:column;align-items:center;text-align:center}
+.creatives-head{margin-bottom:28px}
 .creatives-head h3{font-family:var(--serif);font-weight:400;font-size:clamp(30px,3.6vw,44px);line-height:1.05;letter-spacing:-.02em}
 .creatives-head h3 em{color:var(--red)}
-.creatives-head p{color:var(--muted);font-size:15px;max-width:44ch}
-.cr-row{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;width:100%;max-width:560px;justify-self:end}
-@media(max-width:860px){.creatives{grid-template-columns:1fr;gap:0}.cr-row{justify-self:start}}
+.cr-note{color:var(--muted);font-size:15px;max-width:44ch;margin:24px auto 0;text-align:center}
+.cr-row{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;width:100%;max-width:560px;text-align:left}
 .cr{display:block;text-decoration:none;color:inherit}
 .cr .cf{position:relative;aspect-ratio:9/16;border-radius:20px;overflow:hidden;background:var(--sand);border:1px solid var(--line);box-shadow:0 30px 60px -40px rgba(60,20,10,.45)}
 .cr .cf img{width:100%;height:100%;object-fit:cover;transition:transform .6s}
@@ -414,12 +413,12 @@ h2 em{color:var(--red)}
     <div class="creatives">
       <div class="creatives-head">
         <h3>Ad creatives</h3>
-        <p>Vertical ad creatives I made with AI video and image tools. The ZOLA ad is spec work.</p>
       </div>
       <div class="cr-row">
         <a class="cr" href="work/zola/"><div class="cf"><img src="work/zola/poster.jpg" alt="ZOLA Brow Soap 15-second spec ad, poster frame" loading="lazy"><span class="tg-k">Spec ad · 15s</span></div><b>ZOLA Brow Soap Mini</b><small>Product ad, 9:16</small></a>
         <a class="cr" href="#video"><div class="cf"><img src="assets/img/outfit-transition.jpg" alt="AI-generated outfit transition clip, still frame" loading="lazy"><span class="tg-k">Hook · Transition</span></div><b>Outfit transition</b><small>Trend-format hook</small></a>
       </div>
+      <p class="cr-note">Vertical ad creatives I made with AI video and image tools. The ZOLA ad is spec work.</p>
     </div>
   </div>
 </section>
