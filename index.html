@@ -105,7 +105,10 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .top-nav a{color:var(--ink);text-decoration:none;font-size:14px}
 .top-nav a:hover{color:var(--red)}
 @media (max-width:640px){.top-nav{gap:14px}.top-nav a{font-size:13px}.top-name{font-size:13px}}
-@media (max-width:420px){.top-nav a[href="#strategy"]{display:none}}
+.pill-cta{display:inline-flex;align-items:center;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:999px;padding:12px 22px;font-weight:600;transition:background .2s}
+.pill-cta:hover{background:var(--red)}
+.lanes{align-items:center}
+.hero-about .stack{border:0!important;padding-top:0!important;font-family:var(--sans);font-size:14px;line-height:1.5;color:var(--muted);margin-top:12px;letter-spacing:0}
 .lanes{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:26px;font-size:15px;font-weight:600}
 .portrait{position:relative;width:100%;max-width:300px;justify-self:end}
 .portrait .arch{border-radius:22px;overflow:hidden;aspect-ratio:1/1;background:var(--sand);box-shadow:0 30px 60px -30px rgba(94,20,20,.35)}
@@ -363,9 +366,9 @@ h2 em{color:var(--red)}
 
 <header class="top">
   <div class="wrap">
-    <a class="top-name" href="#">&copy;Anastasiia Petrenko</a>
+    <a class="top-name" href="#">Anastasiia Petrenko</a>
     <div class="status"><i></i> Open to remote roles · EU</div>
-    <nav class="top-nav"><a href="#paid">Paid</a><a href="#strategy">Organic</a><a href="#content-ops-tool">Tool</a><a href="#contact">Contact</a></nav>
+    <nav class="top-nav"><a href="#paid">Work</a><a href="#content-ops-tool">AI tool</a><a href="#contact">Contact</a></nav>
   </div>
 </header>
 
@@ -375,14 +378,15 @@ h2 em{color:var(--red)}
     <div class="hero-col">
       <h1>Creative <em>strategist</em></h1>
       <p class="hook" data-fill="load">I decode what makes top-performing ads convert&mdash;and build the creative systems to scale them.</p>
-      <div class="lanes" style="margin:0 0 26px"><a class="ulink" href="#paid">See paid social work</a><a class="ulink" href="#strategy">See organic work</a><a class="ulink" href="#content-ops-tool">See the tool I built</a></div>
+      <div class="lanes" style="margin:0 0 26px"><a class="pill-cta" href="#paid">See paid social work</a><a class="ulink" href="#strategy">See organic work</a><a class="ulink" href="#content-ops-tool">See the tool I built</a></div>
       <div class="hero-side">
         <div class="portrait">
           <div class="arch"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko"></div>
         </div>
         <div class="hero-about">
           <h3>About</h3>
-          <p>I study what performs in a niche, turn it into a weekly content plan a team can follow, and use AI to produce more of it.</p>
+          <p>Four years running paid social and content for lifestyle creator brands on Meta and TikTok: ~54% lower CPA on Meta, 1M+ organic views in a month, and a content team of 8–12 that I led.</p>
+          <p class="stack">Claude for briefs and copy, Gemini for research, Higgsfield for AI video, Cursor and Claude Code for my own tools.</p>
         </div>
       </div>
       <div class="role"><span>Paid social <b>·</b></span> <span>Organic short-form <b>·</b></span> <span>AI production</span></div>
@@ -601,7 +605,7 @@ h2 em{color:var(--red)}
       <div><div class="l">E-mail</div><a href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div>
       <div><div class="l">LinkedIn</div><a href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">anastasiia-petrenko-marketing</a></div>
     </div>
-    <div class="foot"><span class="serif">Anastasiia Petrenko</span><a href="#" style="text-decoration:none">Back to top ↑</a></div>
+    <div class="foot"><span>&copy; 2026 Anastasiia Petrenko</span><a href="#" style="text-decoration:none">Back to top ↑</a></div>
   </div>
 </section>
 
