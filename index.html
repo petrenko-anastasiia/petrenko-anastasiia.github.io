@@ -387,6 +387,31 @@ ul.skills li{border:1px solid rgba(122,28,28,.28);background:rgba(122,28,28,.04)
   ul.skills{font-size:11px!important}
 }
 .portrait .arch{border:1px solid rgba(30,30,28,.1)}
+
+/* Desktop + mobile split (30 Oct) */
+@media (max-width:899px){
+  .hero-main,.hero-aside{display:contents}
+  .hero-col h1{order:1}.hero-col .hook{order:2}.hero-col .hero-ctas{order:3}
+  .hero-col .hero-side{order:4}.hero-col ul.skills{order:5}.hero-col .links{order:6}.hero-col .tool-callout{order:7}
+}
+@media (min-width:900px){
+  .hero{padding:110px 0 96px}
+  .hero-col{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center;text-align:left!important}
+  .hero-main{display:flex;flex-direction:column;align-items:flex-start}
+  .hero-main h1{font-size:clamp(72px,7.4vw,118px);margin:0 0 26px}
+  .hero-main .hook{margin:0 0 36px!important;max-width:22ch;font-size:clamp(28px,2.7vw,38px);text-wrap:pretty}
+  .hero-ctas{flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:18px 30px!important;margin:0!important}
+  .hero-ctas .sec-links{justify-content:flex-start}
+  .hero-main .links{justify-content:flex-start!important;margin-top:40px}
+  .hero-aside{display:flex;flex-direction:column;align-items:stretch;padding-left:52px;border-left:1px solid var(--line)}
+  .hero-aside .hero-side{grid-template-columns:132px minmax(0,1fr)!important;gap:26px!important;max-width:none;margin:0 0 22px;align-items:end}
+  .hero-aside .hero-about .stack{display:none}
+  .hero-aside .hero-stack{display:block!important}
+  .hero-aside .hero-side .portrait{max-width:132px!important}
+  .hero-aside ul.skills{justify-content:flex-start;margin:0 0 28px}
+  .hero-stack{font-size:15px;line-height:1.55;color:var(--muted);margin:0 0 18px}
+  .hero-aside .tool-callout{margin-top:0;max-width:none}
+}
 </style>
 </head>
 <body>
@@ -403,9 +428,17 @@ ul.skills li{border:1px solid rgba(122,28,28,.28);background:rgba(122,28,28,.04)
 <section class="hero">
   <div class="wrap hero-grid">
     <div class="hero-col">
+      <div class="hero-main">
       <h1>Creative <em>strategist</em></h1>
       <p class="hook" data-fill="load">I decode what makes top-performing ads convert&mdash;and build the creative systems to scale them.</p>
       <div class="lanes hero-ctas"><a class="pill-cta" href="#paid">See paid social <span aria-hidden="true">&darr;</span></a><div class="sec-links"><a class="ulink" href="#strategy">See organic work <span aria-hidden="true">&darr;</span></a><a class="ulink" href="#content-ops-tool">See the tool I built <span aria-hidden="true">&darr;</span></a></div></div>
+      <div class="links">
+        <a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a>
+        <a class="ulink" href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="ulink" href="assets/Anastasiia_Petrenko_Resume.pdf">CV (PDF)</a>
+      </div>
+      </div>
+      <div class="hero-aside">
       <div class="hero-side">
         <div class="portrait">
           <div class="arch"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko"></div>
@@ -416,17 +449,14 @@ ul.skills li{border:1px solid rgba(122,28,28,.28);background:rgba(122,28,28,.04)
           <p class="stack">I pair creative testing with an AI-native stack: Claude for briefs and copy, Gemini for research, Higgsfield for AI video, and Cursor for custom workflow tools.</p>
         </div>
       </div>
+      <p class="hero-stack" style="display:none">I pair creative testing with an AI-native stack: Claude for briefs and copy, Gemini for research, Higgsfield for AI video, and Cursor for custom workflow tools.</p>
       <ul class="role skills"><li>Paid social</li><li>Organic short-form</li><li>AI production</li></ul>
-      <div class="links">
-        <a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a>
-        <a class="ulink" href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="ulink" href="assets/Anastasiia_Petrenko_Resume.pdf">CV (PDF)</a>
-      </div>
       <a class="tool-callout" data-view href="work/postroom/">
         <span class="tc-k">Built in Cursor</span>
         <span class="tc-t">My own caption, scheduling and Instagram API publishing tool, used in production. It cut posting time by about 75%.</span>
         <span class="tc-cta">Try the interactive demo &rarr;</span>
       </a>
+      </div>
     </div>
   </div>
 </section>
