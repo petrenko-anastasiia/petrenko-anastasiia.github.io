@@ -100,6 +100,12 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .vbox.open{display:flex}
 .vbox video{max-height:88vh;max-width:92vw;aspect-ratio:9/16;border-radius:18px;background:#000}
 .vbox button{position:absolute;top:18px;right:18px;width:48px;height:48px;border-radius:50%;border:0;background:#fff;color:#1a1412;font-size:22px;cursor:pointer}
+.top-name{font-size:14px;font-weight:500;color:var(--ink);text-decoration:none;letter-spacing:.01em}
+.top-nav{display:flex;gap:24px}
+.top-nav a{color:var(--ink);text-decoration:none;font-size:14px}
+.top-nav a:hover{color:var(--red)}
+@media (max-width:640px){.top-nav{gap:14px}.top-nav a{font-size:13px}.top-name{font-size:13px}}
+@media (max-width:420px){.top-nav a[href="#strategy"]{display:none}}
 .lanes{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:26px;font-size:15px;font-weight:600}
 .portrait{position:relative;width:100%;max-width:300px;justify-self:end}
 .portrait .arch{border-radius:22px;overflow:hidden;aspect-ratio:1/1;background:var(--sand);box-shadow:0 30px 60px -30px rgba(94,20,20,.35)}
@@ -357,8 +363,9 @@ h2 em{color:var(--red)}
 
 <header class="top">
   <div class="wrap">
-    <a class="mono" href="#">A<span>P</span></a>
-    <div class="status"><i></i> Open to remote paid social and organic content roles · EU</div>
+    <a class="top-name" href="#">&copy;Anastasiia Petrenko</a>
+    <div class="status"><i></i> Open to remote roles · EU</div>
+    <nav class="top-nav"><a href="#paid">Paid</a><a href="#strategy">Organic</a><a href="#content-ops-tool">Tool</a><a href="#contact">Contact</a></nav>
   </div>
 </header>
 
