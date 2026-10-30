@@ -41,8 +41,9 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 /* hero */
 .hero{padding:56px 0 72px}
 .hero-grid{display:grid;grid-template-columns:1.35fr .9fr;gap:64px;align-items:end}
-.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(40px,5.4vw,78px);line-height:.92;letter-spacing:-.03em;margin:8px 0 26px}
-.hero h1 em{color:var(--red);display:block;padding-left:.55em}
+.name{font-family:var(--serif);font-size:clamp(22px,2.4vw,30px);letter-spacing:-.01em;white-space:nowrap;color:var(--ink);margin-bottom:10px}
+.hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(48px,6.6vw,96px);line-height:.92;letter-spacing:-.03em;margin:0 0 22px}
+.hero h1 em{color:var(--red)}
 .role{font-size:16px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--red);margin-bottom:20px;line-height:1.5}
 .role span{white-space:nowrap}
 .role b{color:var(--red-soft);font-weight:400;margin:0 .45em}
@@ -255,11 +256,11 @@ h2 em{color:var(--red)}
   .wrap{padding:0 20px}
   .top .status{display:none}
   .hero{padding:44px 0 64px}
-  .hero h1 em{padding-left:.3em}
   .lede{font-size:19px}
   section.block{padding:84px 0}
   .hero{padding:36px 0 56px}
-  .hero h1{margin:4px 0 20px}
+  .hero h1{font-size:clamp(44px,13vw,60px);margin:0 0 18px}
+  .name{font-size:22px}
   .role{font-size:14px}
   .proof .wrap{grid-template-columns:1fr}
   .stat{border-left:0;border-top:1px solid var(--line);padding:30px 0}
@@ -277,6 +278,18 @@ h2 em{color:var(--red)}
   .stack li{grid-template-columns:1fr;gap:4px}
   .clist{grid-template-columns:1fr}
   .contact{padding:90px 0 44px}
+  html,body{overflow-x:hidden}
+  .hero-grid{gap:32px}
+  .portrait{max-width:300px;justify-self:start}
+  .links{gap:10px 22px;margin-top:26px}
+  .tool-steps{flex-direction:column;align-items:flex-start;gap:6px}
+  .tool-steps li+li::before{content:"↓";margin:0 10px 0 2px;font-size:18px}
+  section.block{padding:64px 0}
+  h2{font-size:clamp(38px,11vw,48px)}
+  .sub{font-size:18px;margin-top:16px}
+  .about .statement{font-size:clamp(26px,8vw,34px)}
+  .creatives{margin-top:56px;padding-top:28px}
+  .cr b,.cr small{display:block}
 }
 </style>
 </head>
@@ -293,7 +306,8 @@ h2 em{color:var(--red)}
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <h1>Anastasiia <em>Petrenko</em></h1>
+      <p class="name">Anastasiia Petrenko</p>
+      <h1>Creative <em>strategist</em></h1>
       <div class="role"><span>Paid social <b>·</b></span> <span>Organic short-form <b>·</b></span> <span>AI production</span></div>
       <div class="hero-langs">EN C1 <b>·</b> DE B1 <b>·</b> UA/RU native</div>
       <p class="lede">I plan hooks and content systems for brands and creators, test them on Meta and TikTok, and use AI tools to make more of what works, in paid and organic.</p>
@@ -301,8 +315,7 @@ h2 em{color:var(--red)}
       <div class="links">
         <a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a>
         <a class="ulink" href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="ulink" href="assets/Anastasiia_Petrenko_CV_paid.pdf">CV · paid social</a>
-<a class="ulink" href="assets/Anastasiia_Petrenko_CV_organic.pdf">CV · organic</a>
+        <a class="ulink" href="assets/Anastasiia_Petrenko_Resume.pdf">CV (PDF)</a>
       </div>
     </div>
     <div class="portrait">
@@ -388,7 +401,7 @@ h2 em{color:var(--red)}
         <p>Vertical ad creatives I made with AI video and image tools. The ZOLA ad is spec work.</p>
       </div>
       <div class="cr-row">
-        <a class="cr" href="#spec"><div class="cf"><img src="work/zola/poster.jpg" alt="ZOLA Brow Soap 15-second spec ad, poster frame" loading="lazy"><span class="tg-k">Spec ad · 15s</span></div><b>ZOLA Brow Soap Mini</b><small>Product ad, 9:16</small></a>
+        <a class="cr" href="work/zola/"><div class="cf"><img src="work/zola/poster.jpg" alt="ZOLA Brow Soap 15-second spec ad, poster frame" loading="lazy"><span class="tg-k">Spec ad · 15s</span></div><b>ZOLA Brow Soap Mini</b><small>Product ad, 9:16</small></a>
         <a class="cr" href="#video"><div class="cf"><img src="assets/img/outfit-transition.jpg" alt="AI-generated outfit transition clip, still frame" loading="lazy"><span class="tg-k">Hook · Transition</span></div><b>Outfit transition</b><small>Trend-format hook</small></a>
       </div>
     </div>
@@ -473,33 +486,10 @@ h2 em{color:var(--red)}
   </div>
 </section>
 
-<!-- SPEC CAMPAIGN -->
-<section class="block spec" id="spec">
-  <div class="wrap">
-    <div class="sec-head"><span class="num">04</span><span class="rule"></span></div>
-    <h2>ZOLA spec ad</h2>
-
-    <div class="spec-grid">
-      <div class="spec-meta">
-        <p class="spec-lede">A 15-second vertical social ad introducing ZOLA Brow Soap Mini to English-speaking beauty shoppers.</p>
-        <h4>The hook</h4>
-        <p class="spec-hook">“Brows with attitude?”</p>
-        <p class="spec-hook-en">“Give them direction.”</p>
-        <div class="tags"><span>15 seconds</span><span>9:16 vertical</span><span>Original instrumental</span></div>
-        <a class="spec-cta" href="work/zola/">Read the full case study</a>
-      </div>
-      <div class="spec-video">
-        <video class="spec-poster" controls playsinline muted preload="metadata" poster="work/zola/poster.jpg" src="work/zola/zola-ad.mp4" width="720" height="1280" aria-label="ZOLA Brow Soap 15-second ad"></video>
-        <div class="cap"><span>Final clip</span><span>15 sec · 9:16</span></div>
-      </div>
-    </div>
-  </div>
-</section>
-
 <!-- AI VIDEO -->
 <section class="block video" id="video">
   <div class="wrap">
-    <div class="sec-head"><span class="num">05</span><span class="rule"></span></div>
+    <div class="sec-head"><span class="num">04</span><span class="rule"></span></div>
     <h2>AI video</h2>
     <p class="sub">I use AI video to make short vertical clips for paid and organic posts, with a quick visual hook and the same character look across clips.</p>
 
@@ -518,7 +508,7 @@ h2 em{color:var(--red)}
     <div class="video-foot">
       <div>
         <h4>What I can make</h4>
-        <p>Product, brand, lifestyle and ad-style AI visuals that match a brand's look. The ZOLA case above shows the full process from brief to final clip.</p>
+        <p>Product, brand, lifestyle and ad-style AI visuals that match a brand's look. The ZOLA spec ad in the paid social section shows the full process from brief to final clip.</p>
       </div>
       <div>
         <h4>Made with</h4>
@@ -533,7 +523,7 @@ h2 em{color:var(--red)}
 <section class="block tools" id="tools">
   <div class="wrap tools-grid">
     <div>
-      <div class="sec-head"><span class="num">06</span><span class="rule"></span></div>
+      <div class="sec-head"><span class="num">05</span><span class="rule"></span></div>
       <h2>Tools</h2>
     </div>
     <ul class="stack">
@@ -554,8 +544,7 @@ h2 em{color:var(--red)}
   <div class="wrap">
     <h2>Want to work together?</h2>
     <p class="sub">Open to remote roles in paid social, organic short-form content and content strategy.</p>
-    <a class="btn-cv" href="assets/Anastasiia_Petrenko_CV_paid.pdf">CV · paid social (PDF)</a>
-<a class="btn-cv" href="assets/Anastasiia_Petrenko_CV_organic.pdf">CV · organic (PDF)</a>
+    <a class="btn-cv" href="assets/Anastasiia_Petrenko_Resume.pdf">CV (PDF)</a>
     <div class="clist">
       <div><div class="l">E-mail</div><a href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div>
       <div><div class="l">LinkedIn</div><a href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">anastasiia-petrenko-marketing</a></div>
