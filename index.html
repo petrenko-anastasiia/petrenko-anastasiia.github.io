@@ -57,6 +57,11 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .tc-k{font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:#D89A8C}
 .tc-t{font-family:var(--serif);font-size:20px;line-height:1.3}
 .tc-cta{font-size:14px;font-weight:600;margin-top:4px;text-decoration:underline;text-underline-offset:4px}
+.hero-col{display:flex;flex-direction:column;align-items:center;text-align:center}
+.hero-col .lanes,.hero-col .links{justify-content:center}
+.hero-col .hero-side{justify-self:auto;text-align:left}
+.hero-col .lede{margin-left:auto;margin-right:auto}
+.hero-col .tool-callout{text-align:left}
 .lanes{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:26px;font-size:15px;font-weight:600}
 .portrait{position:relative;width:100%;max-width:300px;justify-self:end}
 .portrait .arch{border-radius:22px;overflow:hidden;aspect-ratio:1/1;background:var(--sand);box-shadow:0 30px 60px -30px rgba(94,20,20,.35)}
@@ -320,7 +325,7 @@ h2 em{color:var(--red)}
 <!-- HERO -->
 <section class="hero">
   <div class="wrap hero-grid">
-    <div>
+    <div class="hero-col">
       <p class="name">Anastasiia Petrenko</p>
       <h1>Creative <em>strategist</em></h1>
       <div class="lanes" style="margin:0 0 26px"><a class="ulink" href="#paid">See paid social work</a><a class="ulink" href="#strategy">See organic work</a><a class="ulink" href="#content-ops-tool">See the tool I built</a></div>
