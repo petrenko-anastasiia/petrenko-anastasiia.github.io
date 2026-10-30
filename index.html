@@ -128,9 +128,10 @@ h2 em{color:var(--red)}
 .creatives-head h3{font-family:var(--serif);font-weight:400;font-size:clamp(30px,3.6vw,44px);line-height:1.05;letter-spacing:-.02em}
 .creatives-head h3 em{color:var(--red)}
 .cr-note{color:var(--muted);font-size:15px;max-width:44ch;margin:24px auto 0;text-align:center}
-.cr-row{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;width:100%;max-width:560px;text-align:left}
+.cr-row{display:grid;grid-template-columns:repeat(5,1fr);gap:16px;width:100%;max-width:1080px;text-align:left}
 .cr{display:block;text-decoration:none;color:inherit}
 .cr .cf{position:relative;aspect-ratio:9/16;border-radius:20px;overflow:hidden;background:var(--sand);border:1px solid var(--line);box-shadow:0 30px 60px -40px rgba(60,20,10,.45)}
+.cr .cf video{background:#000}
 .cr .cf img,.cr .cf video{display:block;width:100%;height:100%;object-fit:cover;transition:transform .6s}
 .cr:hover .cf img{transform:scale(1.03)}
 .cr .tg-k{position:absolute;left:10px;top:10px;bottom:auto}
@@ -254,7 +255,7 @@ h2 em{color:var(--red)}
   .proof .wrap{grid-template-columns:1fr 1fr}
   .stat:nth-child(3){border-left:0;padding-left:0}
   .stat:nth-child(n+3){border-top:1px solid var(--line)}
-  .cr-row{grid-template-columns:1fr 1fr}
+  .cr-row{grid-template-columns:repeat(3,1fr)}
   .tool-gallery{grid-template-columns:1fr}
   .tg-row{grid-template-columns:repeat(3,1fr);gap:10px}
   .portrait{max-width:280px}
@@ -282,7 +283,7 @@ h2 em{color:var(--red)}
   .stat{border-left:0;border-top:1px solid var(--line);padding:30px 0}
   .metrics{grid-template-columns:1fr;margin-top:44px}
   .paid-case{padding:24px}
-  .cr-row{gap:12px}
+  .cr-row{gap:12px;grid-template-columns:1fr 1fr}
   .stat:first-child{border-top:0}
   .about .statement{text-align:left}
   .about-cols{grid-template-columns:1fr;margin-top:56px}
@@ -432,8 +433,11 @@ h2 em{color:var(--red)}
       <div class="cr-row">
         <a class="cr" href="work/zola/"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="work/zola/poster.jpg" src="assets/video/zola-loop.mp4" aria-label="ZOLA Brow Soap 15-second spec ad"></video><span class="tg-k">Spec ad · 15s</span></div><b>ZOLA Brow Soap Mini</b><small>Product ad, 9:16</small></a>
         <a class="cr" href="https://drive.google.com/file/d/1AO8bV9p0WAGTbPpKDApJoQh5uQXzabZa/view" target="_blank" rel="noopener"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/outfit-transition.jpg" src="assets/video/outfit-loop.mp4" aria-label="AI-generated outfit transition clip"></video><span class="tg-k">Hook · Transition</span></div><b>Outfit transition</b><small>Trend-format hook</small></a>
+        <a class="cr" href="assets/video/ltheanine.mp4" target="_blank" rel="noopener"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/ltheanine-poster.jpg" src="assets/video/ltheanine-loop.mp4" aria-label="L-Theanine drink spec ad"></video><span class="tg-k">Hook · Scene switch</span></div><b>L-Theanine drink</b><small>Spec ad, 9:16</small></a>
+        <a class="cr" href="assets/video/lumi.mp4" target="_blank" rel="noopener"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/lumi-poster.jpg" src="assets/video/lumi-loop.mp4" aria-label="LUMI hyaluronic serum spec ad"></video><span class="tg-k">Hook · Close-up</span></div><b>LUMI serum</b><small>Spec ad, 9:16</small></a>
+        <a class="cr" href="work/postroom/"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/postroom-poster.jpg" src="assets/video/postroom-loop.mp4" aria-label="AI promo for Postroom, the publishing tool she built"></video><span class="tg-k">Promo · My tool</span></div><b>Postroom promo</b><small>Ad for my own tool</small></a>
       </div>
-      <p class="cr-note">Vertical ad creatives I made with AI video and image tools. The ZOLA ad is spec work.</p>
+      <p class="cr-note">Vertical ad creatives I made with AI video and image tools. ZOLA, L-Theanine and LUMI are spec ads, and Postroom is a promo for the tool I built.</p>
     </div>
   </div>
 </section>
