@@ -422,6 +422,32 @@ ul.skills li{border:1px solid rgba(122,28,28,.28);background:rgba(122,28,28,.04)
 }
 section.block.about{padding:64px 0 96px}
 @media (min-width:900px){section.block.about{padding-bottom:20px}section.block.paid{padding-top:56px}}
+
+/* Desktop spacing rhythm (30 Oct) - 8px scale, desktop only */
+@media (min-width:900px){
+  section.block{padding:88px 0}
+  section.block.about{padding:64px 0 20px}
+  section.block.paid{padding:56px 0 40px}
+  .sec-head{margin-bottom:24px}
+  .metrics{margin-top:32px}
+  .paid-grid{margin-top:40px}
+  .strat-grid{margin-top:40px}
+  .flow{margin-top:40px}
+  .tool-mini{margin-top:56px;padding-top:40px}
+  .tool-mini-head{margin-bottom:32px}
+  .mini-case{margin-top:32px}
+  .contact{padding:96px 0 48px}
+  .clist{margin-top:48px}
+  .foot{margin-top:64px}
+  section.block{padding:80px 0}
+  section.block.about{padding:64px 0 20px}
+  section.block.paid{padding:56px 0 32px}
+  /* pinned strip: stick area fits its content (no 100vh dead band under the arrows) */
+  .cr-pin.pinned{margin-top:48px}
+  .cr-pin.pinned .cr-stick{height:auto;display:block;top:max(0px,calc((100vh - min(533px,100vh - 300px) - 230px) / 2))}
+  .cr-pin.pinned .creatives{padding-bottom:0}
+  .cr-pin.pinned .cr-row{padding-bottom:12px}
+}
 </style>
 </head>
 <body>
