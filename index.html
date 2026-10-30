@@ -396,15 +396,17 @@ ul.skills li{border:1px solid rgba(122,28,28,.28);background:rgba(122,28,28,.04)
 }
 @media (min-width:900px){
   .hero{padding:110px 0 96px}
-  .hero-col{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:64px;align-items:center;text-align:left!important}
+  .hero-col{display:grid!important;grid-template-columns:minmax(0,.92fr) minmax(0,1.08fr);gap:56px;align-items:center;text-align:left!important}
   .hero-main{display:flex;flex-direction:column;align-items:flex-start}
   .hero-main h1{font-size:clamp(72px,7.4vw,118px);margin:0 0 26px}
   .hero-main .hook{margin:0 0 36px!important;max-width:22ch;font-size:clamp(28px,2.7vw,38px);text-wrap:pretty}
   .hero-ctas{flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:18px 30px!important;margin:0!important}
   .hero-ctas .sec-links{justify-content:flex-start}
   .hero-main .links{justify-content:flex-start!important;margin-top:40px}
-  .hero-aside{display:flex;flex-direction:column;align-items:stretch;padding-left:52px;border-left:1px solid var(--line)}
-  .hero-aside .hero-side{grid-template-columns:132px minmax(0,1fr)!important;gap:26px!important;max-width:none;margin:0 0 22px;align-items:end}
+  .hero-aside{display:flex;flex-direction:column;align-items:stretch;padding-left:48px;border-left:1px solid var(--line)}
+  .hero-aside .hero-side{grid-template-columns:minmax(0,1fr) 132px!important;gap:44px!important;max-width:none;margin:0 0 22px;align-items:center}
+  .hero-aside .hero-side .portrait{order:2}
+  .hero-aside .hero-about p{font-size:16px!important}
   .hero-aside .hero-about .stack{display:none}
   .hero-aside .hero-stack{display:block!important}
   .hero-aside .hero-side .portrait{max-width:132px!important}
