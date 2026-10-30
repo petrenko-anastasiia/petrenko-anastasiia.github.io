@@ -40,7 +40,7 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 
 /* hero */
 .hero{padding:56px 0 72px}
-.hero-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:64px;align-items:end}
+.hero-grid{display:grid;grid-template-columns:1fr;gap:64px;align-items:end}
 .name{font-family:var(--serif);font-size:clamp(22px,2.4vw,30px);letter-spacing:-.01em;white-space:nowrap;color:var(--ink);margin-bottom:10px}
 .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(48px,6.6vw,96px);line-height:.92;letter-spacing:-.03em;margin:0 0 22px}
 .hero h1 em{color:var(--red)}
@@ -78,7 +78,7 @@ h2 em{color:var(--red)}
 .sub{font-size:20px;color:var(--muted);max-width:52ch;margin-top:24px;line-height:1.55}
 
 /* about */
-.hero-side{align-items:center;display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr);gap:28px;align-items:end;justify-self:end;width:100%}
+.hero-side{display:grid;grid-template-columns:minmax(0,180px) minmax(0,1fr);gap:28px;align-items:center;justify-self:start;width:100%;max-width:640px;margin:8px 0 30px}
 .hero-side .portrait{max-width:180px;justify-self:stretch}
 .hero-about h3{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:12px}
 .hero-about p{font-family:var(--serif);font-size:clamp(19px,1.7vw,24px);line-height:1.3;letter-spacing:-.01em}
@@ -318,6 +318,15 @@ h2 em{color:var(--red)}
     <div>
       <p class="name">Anastasiia Petrenko</p>
       <h1>Creative <em>strategist</em></h1>
+      <div class="hero-side">
+        <div class="portrait">
+          <div class="arch"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko"></div>
+        </div>
+        <div class="hero-about">
+          <h3>About</h3>
+          <p>I study what performs in a niche, turn it into a weekly content plan a team can follow, and use AI to produce more of it.</p>
+        </div>
+      </div>
       <div class="role"><span>Paid social <b>·</b></span> <span>Organic short-form <b>·</b></span> <span>AI production</span></div>
       <div class="hero-langs">EN C1 <b>·</b> DE B1 <b>·</b> UA/RU native</div>
       <p class="lede">I plan hooks and content systems for brands and creators, test them on Meta and TikTok, and use AI tools to make more of what works, in paid and organic.</p>
@@ -326,15 +335,6 @@ h2 em{color:var(--red)}
         <a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a>
         <a class="ulink" href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">LinkedIn</a>
         <a class="ulink" href="assets/Anastasiia_Petrenko_Resume.pdf">CV (PDF)</a>
-      </div>
-    </div>
-    <div class="hero-side">
-      <div class="portrait">
-        <div class="arch"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko"></div>
-      </div>
-      <div class="hero-about">
-        <h3>About</h3>
-        <p>I study what performs in a niche, turn it into a weekly content plan a team can follow, and use AI to produce more of it.</p>
       </div>
     </div>
   </div>
