@@ -103,9 +103,10 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
   .cr-pin.pinned{position:relative}
   .cr-pin.pinned .cr-stick{position:sticky;top:0;height:100vh;display:flex;align-items:center;overflow:hidden}
   .cr-pin.pinned .creatives{margin-top:0;width:100%}
-  .cr-pin.pinned .cr-row{max-width:none;overflow:hidden;scroll-snap-type:none;cursor:default}
+  .cr-pin.pinned .cr-row{max-width:none;overflow:hidden;scroll-snap-type:none;cursor:grab}
+  .cr-pin.pinned .cr-row.dragging{cursor:grabbing}
   .cr-pin.pinned .cr{flex-basis:min(300px,calc((100vh - 300px) * 9 / 16))}
-  .cr-pin.pinned .cr-nav{display:none}
+  .cr-pin.pinned .cr-nav{margin-top:-6px}
 }
 .vbox{position:fixed;inset:0;z-index:1000;background:rgba(20,14,12,.92);display:none;align-items:center;justify-content:center;padding:24px}
 .vbox.open{display:flex}
@@ -749,6 +750,19 @@ document.querySelectorAll('.frame[data-drive]').forEach(function(f){
     var p=total>0?Math.min(1,Math.max(0,-r.top/total)):0;
     row.scrollLeft=p*dist();
   }
+  function pinnedNow(){return pin.classList.contains('pinned')}
+  function toX(dx){var d=dist();if(!d)return;var total=pin.offsetHeight-window.innerHeight;window.scrollBy(0,dx*total/d)}
+  row.addEventListener('wheel',function(e){
+    if(!pinnedNow())return;
+    var dx=Math.abs(e.deltaX)>Math.abs(e.deltaY)?e.deltaX:(e.shiftKey?e.deltaY:0);
+    if(!dx)return;e.preventDefault();toX(dx);
+  },{passive:false});
+  var dn=false,lx=0,mv=false;
+  row.addEventListener('mousedown',function(e){if(!pinnedNow()||e.button!==0)return;dn=true;mv=false;lx=e.clientX;row.classList.add('dragging');e.preventDefault()});
+  window.addEventListener('mousemove',function(e){if(!dn)return;var d=e.clientX-lx;if(Math.abs(d)>3)mv=true;lx=e.clientX;toX(-d)});
+  window.addEventListener('mouseup',function(){if(dn){dn=false;row.classList.remove('dragging')}});
+  row.addEventListener('click',function(e){if(mv){e.preventDefault();e.stopPropagation();mv=false}},true);
+  document.querySelectorAll('[data-cr]').forEach(function(b){b.addEventListener('click',function(e){if(!pinnedNow())return;e.stopImmediatePropagation();toX((+b.dataset.cr)*320)},true)});
   window.addEventListener('scroll',tick,{passive:true});
   window.addEventListener('resize',setup);
   window.addEventListener('load',setup);setup();
