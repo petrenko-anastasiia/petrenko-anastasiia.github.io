@@ -66,6 +66,12 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .result-line span{display:inline-block;margin-right:10px;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--red)}
 .result-line em{font-style:normal;font-weight:600;color:var(--red)}
 .hook{font-family:var(--serif);font-size:clamp(22px,2.4vw,32px);line-height:1.2;letter-spacing:-.01em;max-width:34ch;text-wrap:balance;margin:-4px auto 26px}
+.fw{transition:color .25s}
+[data-fill].fill-on .fw{color:rgba(26,20,18,.18)}
+[data-fill].fill-on .fw.lit{color:inherit}
+[data-fill].fill-on em .fw{color:rgba(140,30,30,.22)}
+[data-fill].fill-on em .fw.lit{color:var(--red)}
+@media (prefers-reduced-motion:reduce){[data-fill].fill-on .fw{color:inherit!important}}
 .lanes{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:26px;font-size:15px;font-weight:600}
 .portrait{position:relative;width:100%;max-width:300px;justify-self:end}
 .portrait .arch{border-radius:22px;overflow:hidden;aspect-ratio:1/1;background:var(--sand);box-shadow:0 30px 60px -30px rgba(94,20,20,.35)}
@@ -333,7 +339,7 @@ h2 em{color:var(--red)}
     <div class="hero-col">
       <p class="name">Anastasiia Petrenko</p>
       <h1>Creative <em>strategist</em></h1>
-      <p class="hook">I find the ads that sell, and build the systems that make more of them.</p>
+      <p class="hook" data-fill="load">I find the ads that sell, and build the systems that make more of them.</p>
       <div class="lanes" style="margin:0 0 26px"><a class="ulink" href="#paid">See paid social work</a><a class="ulink" href="#strategy">See organic work</a><a class="ulink" href="#content-ops-tool">See the tool I built</a></div>
       <div class="hero-side">
         <div class="portrait">
@@ -407,7 +413,7 @@ h2 em{color:var(--red)}
     <div class="sec-head"><span class="num">01</span><span class="rule"></span></div>
     <div class="paid-top">
       <h2>Paid social</h2>
-      <p class="sub" style="margin-top:0">For four years I ran content and paid social for lifestyle creator and influencer accounts. That meant creative testing on Meta and TikTok, short-form production for TikTok and Reels, and a content team behind it.</p>
+      <p class="sub" data-fill style="margin-top:0">For four years I ran content and paid social for lifestyle creator and influencer accounts. That meant creative testing on Meta and TikTok, short-form production for TikTok and Reels, and a content team behind it.</p>
     </div>
 
     <div class="metrics">
@@ -462,7 +468,7 @@ h2 em{color:var(--red)}
         <li><span class="k">iv.</span><div><b>Data-driven iteration</b><small>I drop what underperforms and do more of what works.</small></div></li>
       </ul>
       <aside class="callout">
-        <div class="q"><em>1M+</em> organic views in one month across up to 3 accounts, and <em>~75%</em> less posting time after I built a caption and publishing tool in Cursor.</div>
+        <div class="q" data-fill><em>1M+</em> organic views in one month across up to 3 accounts, and <em>~75%</em> less posting time after I built a caption and publishing tool in Cursor.</div>
         <p>I co-founded Digital Content Innovations LLC and led a content team of 8–12 working on lifestyle creator and influencer accounts. Client accounts are private, so I show results, not handles.</p>
 
         <div class="mini-case">
@@ -573,6 +579,44 @@ document.querySelectorAll('.frame[data-drive]').forEach(function(f){
     f.appendChild(ifr);
   });
 });
+</script>
+<script>
+(function(){
+  if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+  function split(el){
+    var w=document.createTreeWalker(el,NodeFilter.SHOW_TEXT),n,list=[];
+    while(n=w.nextNode())list.push(n);
+    list.forEach(function(t){
+      var f=document.createDocumentFragment();
+      t.textContent.split(/(\s+)/).forEach(function(p){
+        if(!p)return;
+        if(/^\s+$/.test(p)){f.appendChild(document.createTextNode(p));return;}
+        var s=document.createElement('span');s.className='fw';s.textContent=p;f.appendChild(s);
+      });
+      t.parentNode.replaceChild(f,t);
+    });
+    el.classList.add('fill-on');
+    return el.querySelectorAll('.fw');
+  }
+  var scrollEls=[];
+  document.querySelectorAll('[data-fill]').forEach(function(el){
+    var words=split(el);
+    if(el.getAttribute('data-fill')==='load'){
+      words.forEach(function(w,i){setTimeout(function(){w.classList.add('lit')},300+i*90)});
+    }else scrollEls.push({el:el,words:words});
+  });
+  function upd(){
+    var vh=window.innerHeight;
+    scrollEls.forEach(function(o){
+      var r=o.el.getBoundingClientRect();
+      var p=(vh*0.85-r.top)/(vh*0.85-vh*0.35+r.height*0.5);
+      p=Math.max(0,Math.min(1,p));
+      var k=Math.round(p*o.words.length);
+      o.words.forEach(function(w,i){w.classList.toggle('lit',i<k)});
+    });
+  }
+  window.addEventListener('scroll',upd,{passive:true});window.addEventListener('resize',upd);upd();
+})();
 </script>
 </body>
 </html>
