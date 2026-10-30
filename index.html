@@ -360,6 +360,25 @@ h2 em{color:var(--red)}
   .creatives{margin-top:56px;padding-top:28px}
   .cr b,.cr small{display:block}
 }
+
+/* 30 Oct polish */
+.hero-ctas{flex-direction:column;align-items:center;gap:18px;margin:6px 0 44px!important}
+.hero-ctas .sec-links{display:flex;flex-wrap:wrap;justify-content:center;gap:10px 28px}
+.pill-cta{background:var(--red)!important;color:var(--cream)!important;padding:14px 26px!important;gap:10px;box-shadow:0 12px 26px -14px rgba(94,20,20,.6)}
+.pill-cta:hover{background:var(--red-deep)!important}
+.hero-about p{font-family:var(--sans)!important;font-size:17px!important;line-height:1.55!important;letter-spacing:0!important}
+.portrait .arch img{filter:sepia(.22) saturate(.92) brightness(1.03) contrast(.97)}
+.portrait .arch{position:relative}
+.portrait .arch::after{content:"";position:absolute;inset:0;background:rgba(214,170,130,.12);mix-blend-mode:multiply;pointer-events:none}
+ul.skills{list-style:none;display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:0;margin:0 0 18px;font-size:12px!important;letter-spacing:.14em}
+ul.skills li{border:1px solid rgba(122,28,28,.28);border-radius:999px;padding:7px 14px;line-height:1.2;white-space:nowrap}
+@media (max-width:700px){
+  .hero-side{grid-template-columns:1fr!important;justify-items:center;text-align:center!important;gap:20px!important}
+  .hero-side .portrait{max-width:150px!important;justify-self:center!important}
+  .hero-about{max-width:34ch}
+  .hero-about p{font-size:16px!important}
+  ul.skills{font-size:11px!important}
+}
 </style>
 </head>
 <body>
@@ -378,7 +397,7 @@ h2 em{color:var(--red)}
     <div class="hero-col">
       <h1>Creative <em>strategist</em></h1>
       <p class="hook" data-fill="load">I decode what makes top-performing ads convert&mdash;and build the creative systems to scale them.</p>
-      <div class="lanes" style="margin:0 0 26px"><a class="pill-cta" href="#paid">See paid social work</a><a class="ulink" href="#strategy">See organic work</a><a class="ulink" href="#content-ops-tool">See the tool I built</a></div>
+      <div class="lanes hero-ctas"><a class="pill-cta" href="#paid">See paid social work <span aria-hidden="true">&darr;</span></a><div class="sec-links"><a class="ulink" href="#strategy">See organic work <span aria-hidden="true">&darr;</span></a><a class="ulink" href="#content-ops-tool">See the tool I built <span aria-hidden="true">&darr;</span></a></div></div>
       <div class="hero-side">
         <div class="portrait">
           <div class="arch"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko"></div>
@@ -389,7 +408,7 @@ h2 em{color:var(--red)}
           <p class="stack">Claude for briefs and copy, Gemini for research, Higgsfield for AI video, Cursor and Claude Code for my own tools.</p>
         </div>
       </div>
-      <div class="role"><span>Paid social <b>·</b></span> <span>Organic short-form <b>·</b></span> <span>AI production</span></div>
+      <ul class="role skills"><li>Paid social</li><li>Organic short-form</li><li>AI production</li></ul>
       <div class="hero-langs">EN C1 <b>·</b> DE B1 <b>·</b> UA/RU native</div>
       <p class="lede">I plan hooks and content systems for brands and creators, test them on Meta and TikTok, and use AI tools to make more of what works, in paid and organic.</p>
       <div class="links">
