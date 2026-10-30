@@ -42,7 +42,8 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 /* top bar */
 .top{border-bottom:1px solid var(--line)}
 .top .wrap{display:flex;justify-content:space-between;align-items:center;height:64px;font-size:13px;color:var(--muted)}
-.mono{font-family:var(--serif);font-size:26px;color:var(--ink);letter-spacing:-.02em;text-decoration:none}
+.mono{white-space:nowrap;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;letter-spacing:-.01em;color:var(--ink);padding:6px 11px;border:1px solid var(--line);border-radius:7px;background:rgba(255,255,255,.45);-webkit-font-smoothing:antialiased}
+.hs-k{display:block;flex:0 0 100%;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:2px}
 .mono span{color:var(--red);font-style:italic}
 .status{display:flex;align-items:center;gap:8px}
 .status i{width:7px;height:7px;border-radius:50%;background:var(--red);display:inline-block}
@@ -152,7 +153,7 @@ h2 em{color:var(--red)}
 .about-cols{margin-top:0!important}
 .about .statement{font-family:var(--serif);font-size:clamp(32px,4.2vw,54px);line-height:1.12;letter-spacing:-.015em;max-width:22ch;margin:0 auto;text-align:center}
 .about .statement em{color:var(--red)}
-.about-cols{display:grid;grid-template-columns:1.4fr 1fr;gap:64px;margin-top:88px;padding-top:40px;border-top:1px solid var(--ink)}
+.about-cols{display:grid;grid-template-columns:1.4fr 1fr;gap:64px;margin-top:88px;padding-top:0;border-top:0}
 .about-cols h3{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
 .scope{list-style:none;counter-reset:s}
 .scope li{counter-increment:s;display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
@@ -393,6 +394,7 @@ ul.skills li{border:1px solid rgba(122,28,28,.28);background:rgba(122,28,28,.04)
 @media (max-width:899px){
   .hero-main,.hero-aside{display:contents}
   .hero-col h1{order:1}.hero-col .hook{order:2}.hero-col .hero-ctas{order:3}
+  .hero-col .hero-stack{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0 0 20px;order:4}
   .hero-col .hero-side{order:4}.hero-col ul.skills{order:5}.hero-col .links{order:6}.hero-col .tool-callout{order:7}
 }
 @media (min-width:900px){
@@ -413,11 +415,11 @@ ul.skills li{border:1px solid rgba(122,28,28,.28);background:rgba(122,28,28,.04)
   .hero-aside ul.skills{justify-content:flex-start;margin:0 0 28px}
   .hero-aside .hero-stack{display:flex!important;flex-wrap:wrap!important;max-width:100%;min-width:0;align-items:center;gap:8px;margin:0 0 22px}
   .hs-k{flex:0 0 100%;display:block;width:100%;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:2px}
-  .mono{white-space:nowrap;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;letter-spacing:-.01em;color:var(--ink);padding:6px 11px;border:1px solid var(--line);border-radius:7px;background:rgba(255,255,255,.45)}
   .tc-row{display:flex!important;align-items:center;justify-content:space-between;gap:12px}
   .tc-pill{display:inline-block!important;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#F5EFE5;padding:4px 10px;border:1px solid rgba(216,154,140,.55);border-radius:999px;background:rgba(216,154,140,.14)}
   .hero-aside .tool-callout{margin-top:0;max-width:none}
 }
+section.block.about{padding:64px 0 96px}
 </style>
 </head>
 <body>
@@ -452,12 +454,11 @@ ul.skills li{border:1px solid rgba(122,28,28,.28);background:rgba(122,28,28,.04)
         <div class="hero-about">
           <h3>About</h3>
           <p>Four years leading paid social, short-form strategy and an 8–12 person content team for lifestyle creator brands across Meta and TikTok.</p>
-          <p class="stack">I pair creative testing with an AI-native stack: Claude for briefs and copy, Gemini for research, Higgsfield for AI video, and Cursor for custom workflow tools.</p>
         </div>
       </div>
-      <div class="hero-stack" style="display:none"><span class="hs-k">AI-native stack</span><span class="mono">Claude · briefs &amp; copy</span><span class="mono">Gemini · research</span><span class="mono">Higgsfield · AI video</span><span class="mono">Cursor · workflow tools</span></div>
+      <div class="hero-stack"><span class="hs-k">AI-native stack</span><span class="mono">Claude · briefs &amp; copy</span><span class="mono">Gemini · research</span><span class="mono">Higgsfield · AI video</span><span class="mono">Cursor · workflow tools</span></div>
       <ul class="role skills"><li>Paid social</li><li>Organic short-form</li><li>AI production</li></ul>
-      <a class="tool-callout" data-view href="work/postroom/">
+      <a class="tool-callout" href="work/postroom/">
         <span class="tc-row"><span class="tc-k">Built in Cursor</span><span class="tc-pill">&minus;75% posting time</span></span>
         <span class="tc-t">My own caption, scheduling and Instagram API publishing tool, used in production. It cut posting time by about 75%.</span>
         <span class="tc-cta">Try the interactive demo &rarr;</span>
@@ -737,7 +738,7 @@ document.querySelectorAll('.frame[data-drive]').forEach(function(f){
   var mq=window.matchMedia('(min-width:900px) and (hover:hover) and (pointer:fine)');
   function dist(){return Math.max(0,row.scrollWidth-row.clientWidth)}
   function setup(){
-    if(mq.matches){pin.classList.add('pinned');pin.style.height=(window.innerHeight+dist()*1.4)+'px';}
+    if(mq.matches && dist() > 24){pin.classList.add('pinned');pin.style.height=(window.innerHeight+dist()*1.4)+'px';}
     else{pin.classList.remove('pinned');pin.style.height='';}
     tick();
   }
