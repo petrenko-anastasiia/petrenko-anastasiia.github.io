@@ -96,6 +96,10 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
   .cr-pin.pinned .cr{flex-basis:min(300px,calc((100vh - 300px) * 9 / 16))}
   .cr-pin.pinned .cr-nav{display:none}
 }
+.vbox{position:fixed;inset:0;z-index:1000;background:rgba(20,14,12,.92);display:none;align-items:center;justify-content:center;padding:24px}
+.vbox.open{display:flex}
+.vbox video{max-height:88vh;max-width:92vw;aspect-ratio:9/16;border-radius:18px;background:#000}
+.vbox button{position:absolute;top:18px;right:18px;width:48px;height:48px;border-radius:50%;border:0;background:#fff;color:#1a1412;font-size:22px;cursor:pointer}
 .lanes{display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:26px;font-size:15px;font-weight:600}
 .portrait{position:relative;width:100%;max-width:300px;justify-self:end}
 .portrait .arch{border-radius:22px;overflow:hidden;aspect-ratio:1/1;background:var(--sand);box-shadow:0 30px 60px -30px rgba(94,20,20,.35)}
@@ -469,9 +473,9 @@ h2 em{color:var(--red)}
       </div>
       <div class="cr-row">
         <a class="cr" data-view href="work/zola/"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="work/zola/poster.jpg" src="assets/video/zola-loop.mp4" aria-label="ZOLA Brow Soap 15-second spec ad"></video><span class="tg-k">Spec ad · 15s</span></div><b>ZOLA Brow Soap Mini</b><small>Product ad, 9:16</small></a>
-        <a class="cr" data-view href="https://drive.google.com/file/d/1AO8bV9p0WAGTbPpKDApJoQh5uQXzabZa/view" target="_blank" rel="noopener"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/outfit-transition.jpg" src="assets/video/outfit-loop.mp4" aria-label="AI-generated outfit transition clip"></video><span class="tg-k">Hook · Transition</span></div><b>Outfit transition</b><small>Trend-format hook</small></a>
-        <a class="cr" data-view href="assets/video/ltheanine.mp4" target="_blank" rel="noopener"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/ltheanine-poster.jpg" src="assets/video/ltheanine-loop.mp4" aria-label="L-Theanine drink spec ad"></video><span class="tg-k">Hook · Scene switch</span></div><b>L-Theanine drink</b><small>Spec ad, 9:16</small></a>
-        <a class="cr" data-view href="assets/video/lumi.mp4" target="_blank" rel="noopener"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/lumi-poster.jpg" src="assets/video/lumi-loop.mp4" aria-label="LUMI hyaluronic serum spec ad"></video><span class="tg-k">Hook · Close-up</span></div><b>LUMI serum</b><small>Spec ad, 9:16</small></a>
+        <a class="cr" data-view data-video="assets/video/outfit.mp4" href="assets/video/outfit.mp4"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/outfit-transition.jpg" src="assets/video/outfit-loop.mp4" aria-label="AI-generated outfit transition clip"></video><span class="tg-k">Hook · Transition</span></div><b>Outfit transition</b><small>Trend-format hook</small></a>
+        <a class="cr" data-view data-video="assets/video/ltheanine.mp4" href="assets/video/ltheanine.mp4"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/ltheanine-poster.jpg" src="assets/video/ltheanine-loop.mp4" aria-label="L-Theanine drink spec ad"></video><span class="tg-k">Hook · Scene switch</span></div><b>L-Theanine drink</b><small>Spec ad, 9:16</small></a>
+        <a class="cr" data-view data-video="assets/video/lumi.mp4" href="assets/video/lumi.mp4"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/lumi-poster.jpg" src="assets/video/lumi-loop.mp4" aria-label="LUMI hyaluronic serum spec ad"></video><span class="tg-k">Hook · Close-up</span></div><b>LUMI serum</b><small>Spec ad, 9:16</small></a>
         <a class="cr" data-view href="work/postroom/"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/postroom-poster.jpg" src="assets/video/postroom-loop.mp4" aria-label="AI promo for Postroom, the publishing tool she built"></video><span class="tg-k">Promo · My tool</span></div><b>Postroom promo</b><small>Ad for my own tool</small></a>
       </div>
       <div class="cr-nav"><button type="button" data-cr="-1" aria-label="Previous">&larr;</button><button type="button" data-cr="1" aria-label="Next">&rarr;</button></div>
@@ -687,6 +691,24 @@ document.querySelectorAll('.frame[data-drive]').forEach(function(f){
   window.addEventListener('scroll',tick,{passive:true});
   window.addEventListener('resize',setup);
   window.addEventListener('load',setup);setup();
+})();
+</script>
+<div class="vbox" id="vbox" aria-hidden="true"><button type="button" aria-label="Close">&times;</button><video controls playsinline></video></div>
+<script>
+(function(){
+  var box=document.getElementById('vbox'),v=box.querySelector('video');
+  function close(){v.pause();v.removeAttribute('src');v.load();box.classList.remove('open');document.body.style.overflow='';}
+  document.querySelectorAll('[data-video]').forEach(function(a){
+    a.addEventListener('click',function(e){
+      if(e.defaultPrevented)return;
+      e.preventDefault();v.src=a.dataset.video;box.classList.add('open');document.body.style.overflow='hidden';
+      var c=document.querySelector('.view-cur');if(c)c.classList.remove('on');
+      v.play().catch(function(){});
+    });
+  });
+  box.querySelector('button').addEventListener('click',close);
+  box.addEventListener('click',function(e){if(e.target===box)close()});
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&box.classList.contains('open'))close()});
 })();
 </script>
 </body>
