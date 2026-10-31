@@ -153,18 +153,6 @@ h2 em{color:var(--red)}
 .hero-side .portrait{max-width:180px;justify-self:stretch}
 .hero-about h3{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:12px}
 .hero-about p{font-family:var(--serif);font-size:clamp(19px,1.7vw,24px);line-height:1.3;letter-spacing:-.01em}
-.about-cols{margin-top:0!important}
-.about .statement{font-family:var(--serif);font-size:clamp(32px,4.2vw,54px);line-height:1.12;letter-spacing:-.015em;max-width:22ch;margin:0 auto;text-align:center}
-.about .statement em{color:var(--red)}
-.about-cols{display:grid;grid-template-columns:1.4fr 1fr;gap:64px;margin-top:88px;padding-top:0;border-top:0}
-.about-cols h3{font-size:12px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;margin-bottom:18px}
-.scope{list-style:none;counter-reset:s}
-.scope li{counter-increment:s;display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
-.scope li::before{content:"0" counter(s);font-family:var(--serif);font-style:italic;color:var(--red);min-width:24px}
-.about-cols{grid-template-columns:1fr!important;gap:0!important}
-.about-cols .scope{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:56px}
-@media (max-width:999px){.about-cols .scope{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px}}
-@media (max-width:640px){.about-cols .scope{grid-template-columns:1fr}}
 
 /* paid social */
 .paid-top{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:end}
@@ -334,8 +322,6 @@ h2 em{color:var(--red)}
   .tg-row{grid-template-columns:repeat(3,1fr);gap:10px}
   .portrait{max-width:280px}
   .portrait .tag{left:auto;right:-8px}
-  .about-cols{grid-template-columns:1fr 1fr}
-  .about-cols > div{grid-column:1/-1}
   .callout{position:static}
   .flow{grid-template-columns:1fr 1fr}
   .flow li:nth-child(3){padding-left:0;border-left:0}
@@ -359,8 +345,6 @@ h2 em{color:var(--red)}
   .cr-row{gap:14px}
   .cr{flex-basis:68vw}
   .stat:first-child{border-top:0}
-  .about .statement{text-align:left}
-  .about-cols{grid-template-columns:1fr;margin-top:56px}
   .flow{grid-template-columns:1fr}
   .flow li,.flow li + li{padding:20px 0;border-left:0;border-bottom:1px solid var(--line)}
   .reels{grid-template-columns:1fr;max-width:340px;margin-left:auto;margin-right:auto}
@@ -382,7 +366,6 @@ h2 em{color:var(--red)}
   section.block{padding:64px 0}
   h2{font-size:clamp(38px,11vw,48px)}
   .sub{font-size:18px;margin-top:16px}
-  .about .statement{font-size:clamp(26px,8vw,34px)}
   .creatives{margin-top:56px;padding-top:28px}
   .cr b,.cr small{display:block}
 }
@@ -434,13 +417,12 @@ ul.skills li{border:1px solid rgba(122,28,28,.28);background:rgba(122,28,28,.04)
   .tc-pill{display:inline-block!important;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-size:12px;color:#F5EFE5;padding:4px 10px;border:1px solid rgba(216,154,140,.55);border-radius:999px;background:rgba(216,154,140,.14)}
   .hero-aside .tool-callout{margin-top:0;max-width:none}
 }
-section.block.about{padding:64px 0 96px}
-@media (min-width:900px){section.block.about{padding-bottom:20px}section.block.paid{padding-top:56px}}
+@media (min-width:900px){section.block.paid{padding-top:56px}}
+@media (max-width:899px){section.block.paid{padding-top:64px}}
 
 /* Desktop spacing rhythm (30 Oct) - 8px scale, desktop only */
 @media (min-width:900px){
   section.block{padding:88px 0}
-  section.block.about{padding:64px 0 20px}
   section.block.paid{padding:56px 0 40px}
   .metrics{margin-top:32px}
   .paid-grid{margin-top:40px}
@@ -453,7 +435,6 @@ section.block.about{padding:64px 0 96px}
   .clist{margin-top:48px}
   .foot{margin-top:64px}
   section.block{padding:80px 0}
-  section.block.about{padding:64px 0 20px}
   section.block.paid{padding:56px 0 32px}
   /* pinned strip: stick area fits its content (no 100vh dead band under the arrows) */
   .cr-pin.pinned{margin-top:48px}
@@ -463,7 +444,6 @@ section.block.about{padding:64px 0 96px}
 }
 @media (min-width:900px){.tools-grid{grid-template-columns:1fr;gap:32px}.tools .stack{display:grid;grid-template-columns:1fr 1fr;column-gap:56px;grid-auto-flow:column;grid-template-rows:repeat(4,auto);border-top:0}.tools .stack li:nth-child(4n+1){border-top:1px solid var(--ink)}}
 @media (min-width:900px){.paid-top,.systems-top{align-items:center}.strat-grid{align-items:stretch}.strat-grid .pillars{display:flex;flex-direction:column}.strat-grid .pillars li{flex:1 1 auto;align-content:center}.callout{position:static}}
-.scope li::before{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-style:normal;font-variant-numeric:tabular-nums;letter-spacing:.04em;font-size:13px;padding-top:3px}
 .pillars .k{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-style:normal;font-variant-numeric:tabular-nums;letter-spacing:.04em;font-size:14px;line-height:1.7}
 .reel .idx{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-style:normal;font-variant-numeric:tabular-nums;letter-spacing:.04em;font-size:15px}
 </style>
@@ -519,26 +499,6 @@ section.block.about{padding:64px 0 96px}
     <div class="stat"><div class="n" data-count>8–12</div><p><strong>people</strong> on the content team I led as co-founder of Digital Content Innovations LLC</p></div>
   </div>
 </div>
-
-<!-- ABOUT -->
-<section class="block about" id="about">
-  <div class="wrap">
-
-    <div class="about-cols">
-      <div>
-        <h3>Scope</h3>
-        <ul class="scope">
-          <li>Paid social acquisition (Meta &amp; TikTok)</li>
-          <li>Modular hook &amp; creative testing systems</li>
-          <li>AI-native video &amp; static ad production</li>
-          <li>Creator roster direction &amp; UGC briefing</li>
-          <li>Organic short-form growth strategy</li>
-          <li>Custom AI workflow &amp; ops automation</li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</section>
 
 <!-- PAID SOCIAL -->
 <section class="block paid" id="paid">
