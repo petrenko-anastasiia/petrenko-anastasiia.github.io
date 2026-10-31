@@ -105,8 +105,13 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
   .cr-pin.pinned .creatives{margin-top:0;width:100%}
   .cr-pin.pinned .cr-row{max-width:none;overflow:hidden;scroll-snap-type:none;cursor:grab}
   .cr-pin.pinned .cr-row.dragging{cursor:grabbing}
-  .cr-pin.pinned .cr{flex-basis:min(300px,calc((100vh - 300px) * 9 / 16))}
-  .cr-pin.pinned .cr-nav{margin-top:-6px}
+  .cr-pin.pinned .cr{flex-basis:min(300px,calc((100vh - 440px) * 9 / 16))}
+  .cr-pin.pinned .cr-nav{margin-top:-8px}
+  .cr-pin.pinned .creatives{padding-top:18px}
+  .cr-pin.pinned .creatives-head{margin-bottom:12px}
+  .cr-pin.pinned .creatives-head h3{font-size:clamp(26px,2.6vw,36px)}
+  .cr-pin.pinned .cr b{margin-top:8px}
+  .cr-pin.pinned .cr-row{padding-bottom:12px}
 }
 .vbox{position:fixed;inset:0;z-index:1000;background:rgba(20,14,12,.92);display:none;align-items:center;justify-content:center;padding:24px}
 .vbox.open{display:flex}
@@ -196,6 +201,30 @@ h2 em{color:var(--red)}
 .cr .tg-k{position:absolute;left:10px;top:10px;bottom:auto}
 .cr b{display:block;font-weight:600;font-size:15px;margin-top:12px}
 .cr small{display:block;color:var(--muted);font-size:13px;margin-top:2px}
+
+
+/* hook lab cards */
+.cr{display:flex;flex-direction:column}
+.cr .cf .cr-mute{position:absolute;right:10px;bottom:10px;z-index:3;width:38px;height:38px;border-radius:50%;background:rgba(251,248,242,.96);border:1px solid var(--line);color:var(--red);display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 6px 16px -6px rgba(30,15,10,.5);transition:background .2s,color .2s,transform .2s}
+.cr .cf .cr-mute:hover{background:var(--red);color:#fff;transform:scale(1.06)}
+.cr .cf .cr-mute:focus-visible{outline:2px solid var(--red);outline-offset:2px}
+.cr-mute .i-on{display:none}.cr-mute[aria-pressed="true"] .i-on{display:block}.cr-mute[aria-pressed="true"] .i-off{display:none}
+.cr-mute[aria-pressed="true"]{background:var(--red);color:#fff}
+.cr-bd{flex:1;display:flex;flex-direction:column;margin-top:8px;padding:9px 11px 10px;border:1px solid var(--line);border-radius:12px;background:var(--paper);font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-size:11px;line-height:1.45;color:var(--ink);letter-spacing:-.01em;text-align:left}
+.cr-bd .cr-lab{font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--red);font-weight:600;margin-bottom:4px;opacity:.7}
+.cr-bd p{margin:0 0 4px}
+.cr-bd i{font-style:normal;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--red);font-weight:600}
+.cr-bd .cr-btn{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--red);border-radius:999px;color:var(--red);font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:background .2s,color .2s}
+.cr:hover .cr-btn,.cr:focus-visible .cr-btn{background:var(--red);color:#fff}
+.cr-bd p+.cr-btn{margin-top:auto}
+.tool-strip{padding:28px 0 0}
+.tool-strip .tool-callout{margin:0 auto;max-width:none;text-align:left}
+@media (min-width:900px){
+  .tool-strip .tool-callout{grid-template-columns:minmax(0,1fr) auto;column-gap:40px;align-items:center;padding:20px 28px}
+  .tool-strip .tc-row{grid-column:1;justify-content:flex-start;gap:16px}
+  .tool-strip .tc-t{grid-column:1}
+  .tool-strip .tc-cta{grid-column:2;grid-row:1/3;margin:0;font-size:15px}
+}
 
 /* strategy */
 .strategy{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -444,7 +473,7 @@ section.block.about{padding:64px 0 96px}
   section.block.paid{padding:56px 0 32px}
   /* pinned strip: stick area fits its content (no 100vh dead band under the arrows) */
   .cr-pin.pinned{margin-top:48px}
-  .cr-pin.pinned .cr-stick{height:auto;display:block;top:max(0px,calc((100vh - min(533px,100vh - 300px) - 230px) / 2))}
+  .cr-pin.pinned .cr-stick{height:auto;display:block;top:0}
   .cr-pin.pinned .creatives{padding-bottom:0}
   .cr-pin.pinned .cr-row{padding-bottom:12px}
 }
@@ -462,7 +491,7 @@ section.block.about{padding:64px 0 96px}
   <div class="wrap">
     <a class="top-name" href="#">Anastasiia Petrenko</a>
     <div class="status"><i></i> Open to remote roles &amp; freelance · EU</div>
-    <nav class="top-nav"><a href="#paid">Work</a><a href="#content-ops-tool">Tool</a><a href="#contact">Contact</a></nav>
+    <nav class="top-nav"><a href="#paid">Work</a><a href="#strategy">Organic</a><a href="#content-ops-tool">Tool</a><a href="#contact">Contact</a></nav>
   </div>
 </header>
 
@@ -487,16 +516,11 @@ section.block.about{padding:64px 0 96px}
         </div>
         <div class="hero-about">
           <h3>About</h3>
-          <p>Four years leading paid social, short-form strategy and an 8–12 person content team for lifestyle creator brands across Meta and TikTok.</p>
+          <p>Four years leading paid social, short-form strategy and an 8–12 person content team for DTC lifestyle subscriptions &amp; creator-led brands across Meta and TikTok.</p>
         </div>
       </div>
       <div class="hero-stack"><span class="hs-k">AI-native stack</span><span class="mono">Claude · briefs &amp; copy</span><span class="mono">Gemini · research</span><span class="mono">Higgsfield · AI video</span><span class="mono">Cursor · workflow tools</span></div>
       <ul class="role skills"><li>Paid social</li><li>Organic short-form</li><li>AI production</li></ul>
-      <a class="tool-callout" href="work/postroom/">
-        <span class="tc-row"><span class="tc-k">Built in Cursor</span><span class="tc-pill">&minus;75% posting time</span></span>
-        <span class="tc-t">My own caption, scheduling and Instagram API publishing tool, used in production. It cut posting time by about 75%.</span>
-        <span class="tc-cta">Try the interactive demo &rarr;</span>
-      </a>
       </div>
     </div>
   </div>
@@ -505,12 +529,21 @@ section.block.about{padding:64px 0 96px}
 <!-- PROOF STRIP -->
 <div class="proof">
   <div class="wrap">
-    <div class="stat"><div class="n" data-count>2.5–4.0x</div><p><strong>ROAS</strong> on Meta and TikTok for lifestyle creator brands</p></div>
-    <div class="stat"><div class="n" data-count>~54%</div><p><strong>lower CPA</strong> on Meta, from ~$48 to ~$22 over 6 weeks</p></div>
+    <div class="stat"><div class="n" data-count>2.5–4.0x</div><p><strong>ROAS</strong> on Meta and TikTok for DTC lifestyle subscriptions &amp; creator-led brands</p></div>
+    <div class="stat"><div class="n" data-count>~54%</div><p><strong>lower CPA</strong> per paid subscription checkout on Meta, from ~$48 to ~$22 over 6 weeks</p></div>
     <div class="stat"><div class="n" data-count data-k>1M+</div><p><strong>organic views</strong> in one month across up to 3 accounts</p></div>
     <div class="stat"><div class="n" data-count>8–12</div><p><strong>people</strong> on the content team I led as co-founder of Digital Content Innovations LLC</p></div>
   </div>
 </div>
+
+<!-- POSTROOM CALLOUT -->
+<div class="tool-strip"><div class="wrap">
+<a class="tool-callout" href="work/postroom/">
+        <span class="tc-row"><span class="tc-k">Built in Cursor</span><span class="tc-pill">&minus;75% posting time</span></span>
+        <span class="tc-t">My own caption, scheduling and Instagram API publishing tool, used in production. It cut posting time by about 75%.</span>
+        <span class="tc-cta">Try the interactive demo &rarr;</span>
+      </a>
+</div></div>
 
 <!-- ABOUT -->
 <section class="block about" id="about">
@@ -547,12 +580,12 @@ section.block.about{padding:64px 0 96px}
     <div class="sec-head"><span class="num">01</span><span class="rule"></span></div>
     <div class="paid-top">
       <h2>Paid social</h2>
-      <p class="sub" data-fill style="margin-top:0">For four years I ran content and paid social for lifestyle creator and influencer accounts. That meant creative testing on Meta and TikTok, short-form production for TikTok and Reels, and a content team behind it.</p>
+      <p class="sub" data-fill style="margin-top:0">For four years I ran content and paid social for DTC lifestyle subscriptions &amp; creator-led brands. That meant creative testing on Meta and TikTok, short-form production for TikTok and Reels, and a content team behind it.</p>
     </div>
 
     <div class="metrics">
-      <div class="metric"><div class="ml">Ownership</div><div class="mv" style="font-size:clamp(34px,3.4vw,46px)">End-to-end</div><p><strong>Budget, creative and testing</strong> owned on Meta and TikTok for lifestyle creator and influencer accounts</p></div>
-      <div class="metric"><div class="ml">Accounts</div><div class="mv">50+</div><p><strong>Lifestyle creator and influencer accounts</strong> run on paid social across Meta and TikTok</p></div>
+      <div class="metric"><div class="ml">Ownership</div><div class="mv" style="font-size:clamp(34px,3.4vw,46px)">End-to-end</div><p><strong>Budget, creative and testing</strong> owned on Meta and TikTok for DTC lifestyle subscriptions &amp; creator-led brands</p></div>
+      <div class="metric"><div class="ml">Accounts</div><div class="mv">50+</div><p><strong>DTC lifestyle subscriptions &amp; creator-led brands</strong> run on paid social across Meta and TikTok</p></div>
       <div class="metric"><div class="ml">Creative testing</div><div class="mv">8–10</div><p><strong>New ad creatives tested a week</strong>, covering hooks, angles and UGC-style variations</p></div>
     </div>
 
@@ -564,9 +597,9 @@ section.block.about{padding:64px 0 96px}
         <li><span class="k">04</span><div><b>Creative production</b><small>Concept, brief, then TikTok or Reels video. I use AI video tools for visuals and Claude for copy variants.</small></div></li>
       </ul>
       <div class="paid-case">
-        <div class="mc-label">Meta campaign · Lifestyle creator account</div>
+        <div class="mc-label">Meta campaign · DTC lifestyle subscription brand</div>
         <div class="mc-head">~54% lower CPA in 6 weeks</div>
-        <p>CPA went from ~$48 to ~$22. I moved the ad hooks from lifestyle to product demo, tested the variants in Meta Ads Manager, and scaled the hook type that converted.</p>
+        <p>CPA per paid subscription checkout went from ~$48 to ~$22 over 6 weeks. I moved the ad hooks from lifestyle to product demo, tested the variants in Meta Ads Manager, and scaled the hook type that converted.</p>
         <div class="pills"><span>Meta Ads Manager</span><span>TikTok Ads</span><span>Creative testing</span></div>
       </div>
     </div>
@@ -574,16 +607,16 @@ section.block.about{padding:64px 0 96px}
     <div class="cr-pin"><div class="cr-stick">
     <div class="creatives">
       <div class="creatives-head">
-        <h3>Ad creatives</h3>
+        <h3>AI Production &amp; Hook Lab (Spec &amp; Architecture)</h3>
       </div>
       <div class="cr-row">
-        <a class="cr" data-view data-video="assets/video/outfit.mp4" href="assets/video/outfit.mp4"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/outfit-transition.jpg" src="assets/video/outfit-loop.mp4" aria-label="AI-generated outfit transition clip"></video><span class="tg-k">Hook · Transition</span></div><b>Outfit transition</b><small>Trend-format hook</small></a>
-        <a class="cr" data-view href="work/argo/"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/argo-video-poster.jpg" src="assets/video/argo-loop.mp4" aria-label="ARGŌ golden body oil spec ad, AI-generated: a drop of gold oil lands in a miniature golden pool"></video><span class="tg-k">Spec ad · AI</span></div><b>ARGŌ golden body oil</b><small>Miniature-world spec ad, 9:16</small></a>
-        <a class="cr" data-view href="work/zola/"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="work/zola/poster.jpg" src="assets/video/zola-loop.mp4" aria-label="ZOLA Brow Soap 15-second spec ad"></video><span class="tg-k">Spec ad · 15s</span></div><b>ZOLA Brow Soap Mini</b><small>Product ad, 9:16</small></a>
-        <a class="cr" data-view data-video="assets/video/ltheanine.mp4" href="assets/video/ltheanine.mp4"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/ltheanine-poster.jpg" src="assets/video/ltheanine-loop.mp4" aria-label="L-Theanine drink spec ad"></video><span class="tg-k">Hook · Scene switch</span></div><b>L-Theanine drink</b><small>Spec ad, 9:16</small></a>
-        <a class="cr" data-view data-video="assets/video/nur.mp4?v=2" href="assets/video/nur.mp4?v=2"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/nur-poster.jpg" src="assets/video/nur-loop.mp4?v=2" aria-label="NŪR barrier cream spec ad, AI-generated"></video><span class="tg-k">Spec ad · AI</span></div><b>NŪR barrier cream</b><small>De-influencing skincare spec ad</small></a>
-        <a class="cr" data-view data-video="assets/video/solene.mp4" href="assets/video/solene.mp4"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/solene-poster.jpg" src="assets/video/solene-loop.mp4" aria-label="SOLÈNE fig fragrance spec ad, AI-generated"></video><span class="tg-k">Spec ad · AI</span></div><b>SOLÈNE fragrance</b><small>Luxury spec ad, 16:9</small></a>
-        <a class="cr" data-view href="work/postroom/"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/postroom-poster.jpg" src="assets/video/postroom-loop.mp4" aria-label="AI promo for Postroom, the publishing tool she built"></video><span class="tg-k">Promo · My tool</span></div><b>Postroom promo</b><small>Ad for my own tool</small></a>
+        <a class="cr" data-view data-video="assets/video/outfit.mp4" href="assets/video/outfit.mp4"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/outfit-transition.jpg" src="assets/video/outfit-loop.mp4" aria-label="AI-generated outfit transition clip"></video><span class="tg-k">Hook · Transition</span><span class="cr-mute" role="button" tabindex="0" aria-label="Unmute preview" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></span></div><b>Outfit transition</b><small>Trend-format hook</small><div class="cr-bd"><span class="cr-lab">Trend-format hook</span><p><i>Hook:</i> Visual: white dress, then a black chained look on the beat at ~3s.</p><p><i>Hook Type:</i> Before/After Transition</p><p><i>AI Stack &amp; Turnaround:</i> Higgsfield (Seedance 2.5)<!-- turnaround: TBD --></p><p><i>Strategic Angle:</i> A plain look in a crimson set builds a change viewers wait for.</p><span class="cr-btn">Watch with Audio <span aria-hidden="true">&#9654;</span></span></div></a>
+        <a class="cr" data-view href="work/argo/"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/argo-video-poster.jpg" src="assets/video/argo-loop.mp4" aria-label="ARGŌ golden body oil spec ad, AI-generated: a drop of gold oil lands in a miniature golden pool"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Unmute preview" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></span></div><b>ARGŌ golden body oil</b><small>Miniature-world spec ad, 9:16</small><div class="cr-bd"><span class="cr-lab">Spec ad · AI</span><p><i>Hook:</i> Visual: macro of a gold oil drop swelling, then a hard cut to the splash.</p><p><i>Hook Type:</i> Macro Texture Reveal</p><p><i>AI Stack &amp; Turnaround:</i> Nano Banana · Veo · ffmpeg edit · Claude · no shoot<!-- turnaround: TBD --></p><p><i>Strategic Angle:</i> One glittering drop in extreme macro sells texture and builds tension.</p><span class="cr-btn">Read Case Study <span aria-hidden="true">&rarr;</span></span></div></a>
+        <a class="cr" data-view href="work/zola/"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="work/zola/poster.jpg" src="assets/video/zola-loop.mp4" aria-label="ZOLA Brow Soap 15-second spec ad"></video><span class="tg-k">Spec ad · 15s</span><span class="cr-mute" role="button" tabindex="0" aria-label="Unmute preview" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></span></div><b>ZOLA Brow Soap Mini</b><small>Product ad, 9:16</small><div class="cr-bd"><span class="cr-lab">Spec ad · AI</span><p><i>Hook:</i> “Brows with attitude?” (on-screen)</p><p><i>Hook Type:</i> Question Hook</p><p><i>AI Stack &amp; Turnaround:</i> Higgsfield · animated graphics · synthesized soundtrack · no shoot<!-- turnaround: TBD --></p><p><i>Strategic Angle:</i> A bold question in giant type, with the product already in frame.</p><span class="cr-btn">Read Case Study <span aria-hidden="true">&rarr;</span></span></div></a>
+        <a class="cr" data-view data-video="assets/video/ltheanine.mp4" href="assets/video/ltheanine.mp4"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/ltheanine-poster.jpg" src="assets/video/ltheanine-loop.mp4" aria-label="L-Theanine drink spec ad"></video><span class="tg-k">Hook · Scene switch</span><span class="cr-mute" role="button" tabindex="0" aria-label="Unmute preview" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></span></div><b>L-Theanine drink</b><small>Spec ad, 9:16</small><div class="cr-bd"><span class="cr-lab">Spec ad · AI</span><p><i>Hook:</i> “What 200mg of L-Theanine actually feels like.” (on-screen)</p><p><i>Hook Type:</i> Before/After Scene Switch</p><p><i>AI Stack &amp; Turnaround:</i> Higgsfield · no shoot<!-- turnaround: TBD --></p><p><i>Strategic Angle:</i> An office desk flips to a calm garden in about 2s, so the swap is the payoff.</p><span class="cr-btn">Watch with Audio <span aria-hidden="true">&#9654;</span></span></div></a>
+        <a class="cr" data-view data-video="assets/video/nur.mp4?v=2" href="assets/video/nur.mp4?v=2"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/nur-poster.jpg" src="assets/video/nur-loop.mp4?v=2" aria-label="NŪR barrier cream spec ad, AI-generated"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Unmute preview" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></span></div><b>NŪR barrier cream</b><small>De-influencing skincare spec ad</small><div class="cr-bd"><span class="cr-lab">Spec ad · AI</span><p><i>Hook:</i> Visual: a hand sweeps a pile of serums off the counter, leaving one NŪR tube.</p><p><i>Hook Type:</i> De-influencing</p><p><i>AI Stack &amp; Turnaround:</i> Higgsfield · no shoot<!-- turnaround: TBD --></p><p><i>Strategic Angle:</i> Clearing the shelf makes a “less is more” point before any copy.</p><span class="cr-btn">Watch with Audio <span aria-hidden="true">&#9654;</span></span></div></a>
+        <a class="cr" data-view data-video="assets/video/solene.mp4" href="assets/video/solene.mp4"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/solene-poster.jpg" src="assets/video/solene-loop.mp4" aria-label="SOLÈNE fig fragrance spec ad, AI-generated"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Unmute preview" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></span></div><b>SOLÈNE fragrance</b><small>Luxury spec ad, 16:9</small><div class="cr-bd"><span class="cr-lab">Spec ad · AI</span><p><i>Hook:</i> Visual: mist sprays from an amber bottle, then a cut to dewy figs.</p><p><i>Hook Type:</i> Sensory Reveal</p><p><i>AI Stack &amp; Turnaround:</i> Higgsfield · no shoot<!-- turnaround: TBD --></p><p><i>Strategic Angle:</i> Visible mist in warm light lets a silent scroller imagine the scent.</p><span class="cr-btn">Watch with Audio <span aria-hidden="true">&#9654;</span></span></div></a>
+        <a class="cr" data-view href="work/postroom/"><div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="assets/img/postroom-poster.jpg" src="assets/video/postroom-loop.mp4" aria-label="AI promo for Postroom, the publishing tool she built"></video><span class="tg-k">Promo · My tool</span><span class="cr-mute" role="button" tabindex="0" aria-label="Unmute preview" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M17 9l5 6M22 9l-5 6"/></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"/></svg></span></div><b>Postroom promo</b><small>Ad for my own tool</small><div class="cr-bd"><span class="cr-lab">Promo · My own product</span><p><i>Hook:</i> “75% less posting time.” (on-screen)</p><p><i>Hook Type:</i> Outcome Claim</p><p><i>AI Stack &amp; Turnaround:</i> Higgsfield (AI-generated promo) · tool built in Cursor<!-- turnaround: TBD --></p><p><i>Strategic Angle:</i> Leads with the outcome in big type over a dashboard.</p><span class="cr-btn">Read Case Study <span aria-hidden="true">&rarr;</span></span></div></a>
       </div>
       <div class="cr-nav"><button type="button" data-cr="-1" aria-label="Previous">&larr;</button><button type="button" data-cr="1" aria-label="Next">&rarr;</button></div>
     </div>
@@ -607,10 +640,10 @@ section.block.about{padding:64px 0 96px}
       </ul>
       <aside class="callout">
         <div class="q" data-fill><em>1M+</em> organic views in one month across up to 3 accounts, and <em>~75%</em> less posting time after I built a caption and publishing tool in Cursor.</div>
-        <p>I co-founded Digital Content Innovations LLC and led a content team of 8–12 working on lifestyle creator and influencer accounts. Client accounts are private, so I show results, not handles.</p>
+        <p>I co-founded Digital Content Innovations LLC and led a content team of 8–12 working on DTC lifestyle subscriptions &amp; creator-led brands. Client accounts are private, so I show results, not handles.</p>
 
         <div class="mini-case">
-          <div class="mc-label">Mini case · Lifestyle creator account</div>
+          <div class="mc-label">Mini case · Creator-led lifestyle brand</div>
           <div class="mc-head"><em>0 → 5k</em> followers in about a month</div>
           <p>I narrowed the niche around what made her distinctive, raised content quality and posted more of the formats that converted. That became the plan for her regular feed.</p>
         </div>
@@ -761,7 +794,7 @@ document.querySelectorAll('.frame[data-drive]').forEach(function(f){
   var c=document.createElement('div');c.className='view-cur';c.textContent='VIEW';document.body.appendChild(c);
   window.addEventListener('mousemove',function(e){c.style.left=e.clientX+'px';c.style.top=e.clientY+'px'});
   document.querySelectorAll('[data-view]').forEach(function(el){
-    el.addEventListener('mouseenter',function(){c.classList.add('on')});
+    el.addEventListener('mouseenter',function(){c.textContent=el.hasAttribute('data-video')?'PLAY':'READ';c.classList.add('on')});
     el.addEventListener('mouseleave',function(){c.classList.remove('on')});
   });
 })();
@@ -773,8 +806,12 @@ document.querySelectorAll('.frame[data-drive]').forEach(function(f){
   var mq=window.matchMedia('(min-width:900px) and (hover:hover) and (pointer:fine)');
   function dist(){return Math.max(0,row.scrollWidth-row.clientWidth)}
   function setup(){
-    if(mq.matches && dist() > 24){pin.classList.add('pinned');pin.style.height=(window.innerHeight+dist()*1.4)+'px';}
-    else{pin.classList.remove('pinned');pin.style.height='';}
+    var st=pin.querySelector('.cr-stick');
+    if(mq.matches && dist() > 24){pin.classList.add('pinned');pin.style.height=(window.innerHeight+dist()*1.4)+'px';
+      st.style.top='0px';var H=st.offsetHeight,vh=window.innerHeight;
+      if(H>vh+40){pin.classList.remove('pinned');pin.style.height='';st.style.top=''}
+      else{st.style.top=(H<=vh?(vh-H)/2:(vh-H))+'px'}}
+    else{pin.classList.remove('pinned');pin.style.height='';st.style.top=''}
     tick();
   }
   function tick(){
@@ -799,6 +836,31 @@ document.querySelectorAll('.frame[data-drive]').forEach(function(f){
   window.addEventListener('scroll',tick,{passive:true});
   window.addEventListener('resize',setup);
   window.addEventListener('load',setup);setup();
+})();
+</script>
+<script>
+(function(){
+  var vids=[].slice.call(document.querySelectorAll('.cr .cf video'));
+  function setMute(btn,on){btn.setAttribute('aria-pressed',on?'true':'false');btn.setAttribute('aria-label',on?'Mute preview':'Unmute preview')}
+  function muteAll(except){
+    document.querySelectorAll('.cr-mute').forEach(function(b){
+      var v=b.closest('.cf').querySelector('video');
+      if(b!==except){v.muted=true;setMute(b,false)}
+    });
+  }
+  function toggle(btn){
+    var v=btn.closest('.cf').querySelector('video');
+    if(v.muted){muteAll(btn);v.muted=false;v.volume=1;setMute(btn,true);v.play().catch(function(){})}
+    else{v.muted=true;setMute(btn,false)}
+  }
+  document.querySelectorAll('.cr-mute').forEach(function(b){
+    b.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();toggle(b)});
+    b.addEventListener('mousedown',function(e){e.stopPropagation()});
+    b.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();e.stopPropagation();toggle(b)}});
+    b.addEventListener('mouseenter',function(){var c=document.querySelector('.view-cur');if(c)c.classList.remove('on')});
+    b.addEventListener('mouseleave',function(){var c=document.querySelector('.view-cur');if(c&&b.closest('.cr').matches(':hover'))c.classList.add('on')});
+  });
+  document.querySelectorAll('[data-video]').forEach(function(a){a.addEventListener('click',function(){muteAll(null)})});
 })();
 </script>
 <div class="vbox" id="vbox" aria-hidden="true"><button type="button" aria-label="Close">&times;</button><video controls playsinline></video></div>
