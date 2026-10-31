@@ -162,7 +162,9 @@ h2 em{color:var(--red)}
 .scope li{counter-increment:s;display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
 .scope li::before{content:"0" counter(s);font-family:var(--serif);font-style:italic;color:var(--red);min-width:24px}
 .about-cols{grid-template-columns:1fr!important;gap:0!important}
-@media (min-width:801px){.about-cols .scope{columns:2;column-gap:64px}.about-cols .scope li{break-inside:avoid}}
+.about-cols .scope{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:56px}
+@media (max-width:999px){.about-cols .scope{grid-template-columns:repeat(2,minmax(0,1fr));column-gap:40px}}
+@media (max-width:640px){.about-cols .scope{grid-template-columns:1fr}}
 
 /* paid social */
 .paid-top{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:end}
@@ -211,14 +213,6 @@ h2 em{color:var(--red)}
 .cr-bd .cr-btn{margin-top:auto;align-self:flex-start;display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border:1px solid var(--red);border-radius:999px;color:var(--red);font-size:10.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;transition:background .2s,color .2s}
 .cr:hover .cr-btn,.cr:focus-visible .cr-btn{background:var(--red);color:#fff}
 .cr-bd p+.cr-btn{margin-top:auto}
-.tool-strip{padding:28px 0 0}
-.tool-strip .tool-callout{margin:0 auto;max-width:none;text-align:left}
-@media (min-width:900px){
-  .tool-strip .tool-callout{grid-template-columns:minmax(0,1fr) auto;column-gap:40px;align-items:center;padding:20px 28px}
-  .tool-strip .tc-row{grid-column:1;justify-content:flex-start;gap:16px}
-  .tool-strip .tc-t{grid-column:1}
-  .tool-strip .tc-cta{grid-column:2;grid-row:1/3;margin:0;font-size:15px}
-}
 
 /* strategy */
 .strategy{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
@@ -508,7 +502,7 @@ section.block.about{padding:64px 0 96px}
           <p>Four years leading paid social, short-form strategy and an 8–12 person content team for DTC lifestyle subscriptions &amp; creator-led brands across Meta and TikTok.</p>
         </div>
       </div>
-      <div class="hero-stack"><span class="hs-k">AI-native stack</span><span class="mono">Claude · briefs &amp; copy</span><span class="mono">Gemini · research</span><span class="mono">Higgsfield · AI video</span><span class="mono">Cursor · workflow tools</span></div>
+      <div class="hero-stack"><span class="hs-k">AI-native stack</span><span class="mono">Claude · briefs &amp; copy</span><span class="mono">Gemini · research</span><span class="mono">Higgsfield &amp; ComfyUI · AI video</span><span class="mono">Cursor · workflow tools</span></div>
       <div class="hero-stack hero-langs2"><span class="hs-k">Languages</span><span class="mono">English · C1</span><span class="mono">German · B1</span><span class="mono">Ukrainian · native</span><span class="mono">Russian · native</span></div>
       <ul class="role skills"><li>Paid social</li><li>Organic short-form</li><li>AI production</li></ul>
       </div>
@@ -526,15 +520,6 @@ section.block.about{padding:64px 0 96px}
   </div>
 </div>
 
-<!-- POSTROOM CALLOUT -->
-<div class="tool-strip"><div class="wrap">
-<a class="tool-callout" href="work/postroom/">
-        <span class="tc-row"><span class="tc-k">Built in Cursor</span><span class="tc-pill">&minus;75% posting time</span></span>
-        <span class="tc-t">My own caption, scheduling and Instagram API publishing tool, used in production. It cut posting time by about 75%.</span>
-        <span class="tc-cta">Try the interactive demo &rarr;</span>
-      </a>
-</div></div>
-
 <!-- ABOUT -->
 <section class="block about" id="about">
   <div class="wrap">
@@ -543,11 +528,12 @@ section.block.about{padding:64px 0 96px}
       <div>
         <h3>Scope</h3>
         <ul class="scope">
-          <li>Paid social on Meta and TikTok</li>
-          <li>Creative testing by hook type</li>
-          <li>Organic short-form content and strategy</li>
-          <li>Content plans and workflows</li>
-          <li>AI video and image production</li>
+          <li>Paid social acquisition (Meta &amp; TikTok)</li>
+          <li>Modular hook &amp; creative testing systems</li>
+          <li>AI-native video &amp; static ad production</li>
+          <li>Creator roster direction &amp; UGC briefing</li>
+          <li>Organic short-form growth strategy</li>
+          <li>Custom AI workflow &amp; ops automation</li>
         </ul>
       </div>
     </div>
