@@ -164,10 +164,14 @@ h2 em{color:var(--red)}
 .scope{list-style:none;counter-reset:s}
 .scope li{counter-increment:s;display:flex;gap:16px;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
 .scope li::before{content:"0" counter(s);font-family:var(--serif);font-style:italic;color:var(--red);min-width:24px}
-.langs{list-style:none}
-.langs li{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:16px}
-.langs span{color:var(--muted)}
-.lang-blurb{font-size:15px;color:var(--muted);line-height:1.55;margin-bottom:14px}
+.about-cols{grid-template-columns:1fr!important;gap:28px!important}
+.about-cols .scope{max-width:720px}
+.langs-card{max-width:720px;padding:18px 22px 20px;border:1px solid var(--line);border-radius:18px;background:var(--paper)}
+.about-cols .langs-card h3{margin-bottom:8px}
+.lang-blurb{font-size:15px;color:var(--muted);line-height:1.55;margin-bottom:12px}
+.lang-chips{display:flex;flex-wrap:wrap;gap:8px;list-style:none}
+.lang-chips li{padding:6px 14px;border:1px solid var(--line);border-radius:999px;font-size:14px;background:rgba(255,255,255,.5);white-space:nowrap}
+.lang-chips li b{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-weight:600;font-size:12px;letter-spacing:.04em;color:var(--red);margin-left:6px}
 
 /* paid social */
 .paid-top{display:grid;grid-template-columns:1.1fr 1fr;gap:64px;align-items:end}
@@ -349,7 +353,6 @@ h2 em{color:var(--red)}
   .portrait .tag{left:auto;right:-8px}
   .about-cols{grid-template-columns:1fr 1fr}
   .about-cols > div{grid-column:1/-1}
-  .langs,.lang-blurb{max-width:none}
   .callout{position:static}
   .flow{grid-template-columns:1fr 1fr}
   .flow li:nth-child(3){padding-left:0;border-left:0}
@@ -559,14 +562,14 @@ section.block.about{padding:64px 0 96px}
           <li>AI video and image production</li>
         </ul>
       </div>
-      <div>
+      <div class="langs-card">
         <h3>Languages</h3>
         <p class="lang-blurb">I create and adapt content in English, Ukrainian and Russian, and work in German at B1.</p>
-        <ul class="langs">
-          <li>English <span>C1</span></li>
-          <li>German <span>B1</span></li>
-          <li>Ukrainian <span>native</span></li>
-          <li>Russian <span>native</span></li>
+        <ul class="lang-chips">
+          <li>English<b>C1</b></li>
+          <li>German<b>B1</b></li>
+          <li>Ukrainian<b>native</b></li>
+          <li>Russian<b>native</b></li>
         </ul>
       </div>
     </div>
