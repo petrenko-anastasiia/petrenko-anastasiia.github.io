@@ -144,9 +144,6 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 
 /* section scaffolding */
 section.block{padding:120px 0}
-.sec-head{display:flex;align-items:baseline;gap:18px;margin-bottom:28px}
-.sec-head .num{font-family:var(--serif);font-style:italic;color:var(--red);font-size:22px}
-.sec-head .rule{flex:1;height:1px;background:var(--line)}
 h2{font-family:var(--serif);font-weight:400;font-size:clamp(44px,6.2vw,84px);line-height:.98;letter-spacing:-.025em;max-width:16ch}
 h2 em{color:var(--red)}
 .sub{font-size:20px;color:var(--muted);max-width:52ch;margin-top:24px;line-height:1.55}
@@ -290,8 +287,6 @@ h2 em{color:var(--red)}
 
 /* AI video */
 .video{background:var(--ink);color:var(--paper)}
-.video .sec-head .rule{background:#3a302b}
-.video .sec-head .num{color:#D89A8C}
 .video h2 em{color:#D89A8C}
 .video .sub{color:#B7ACA2}
 .video-body{display:grid;grid-template-columns:340px 1fr;gap:80px;margin-top:72px;align-items:end}
@@ -453,7 +448,6 @@ section.block.about{padding:64px 0 96px}
   section.block{padding:88px 0}
   section.block.about{padding:64px 0 20px}
   section.block.paid{padding:56px 0 40px}
-  .sec-head{margin-bottom:24px}
   .metrics{margin-top:32px}
   .paid-grid{margin-top:40px}
   .strat-grid{margin-top:40px}
@@ -475,7 +469,6 @@ section.block.about{padding:64px 0 96px}
 }
 @media (min-width:900px){.tools-grid{grid-template-columns:1fr;gap:32px}.tools .stack{display:grid;grid-template-columns:1fr 1fr;column-gap:56px;grid-auto-flow:column;grid-template-rows:repeat(4,auto);border-top:0}.tools .stack li:nth-child(4n+1){border-top:1px solid var(--ink)}}
 @media (min-width:900px){.paid-top,.systems-top{align-items:center}.strat-grid{align-items:stretch}.strat-grid .pillars{display:flex;flex-direction:column}.strat-grid .pillars li{flex:1 1 auto;align-content:center}.callout{position:static}}
-.sec-head .num{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-style:normal;font-variant-numeric:tabular-nums;letter-spacing:.04em;font-size:15px}
 .scope li::before{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-style:normal;font-variant-numeric:tabular-nums;letter-spacing:.04em;font-size:13px;padding-top:3px}
 .pillars .k{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-style:normal;font-variant-numeric:tabular-nums;letter-spacing:.04em;font-size:14px;line-height:1.7}
 .reel .idx{font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-style:normal;font-variant-numeric:tabular-nums;letter-spacing:.04em;font-size:15px}
@@ -564,7 +557,6 @@ section.block.about{padding:64px 0 96px}
 <!-- PAID SOCIAL -->
 <section class="block paid" id="paid">
   <div class="wrap">
-    <div class="sec-head"><span class="num">01</span><span class="rule"></span></div>
     <div class="paid-top">
       <h2>Paid social</h2>
       <p class="sub" data-fill style="margin-top:0">For four years I ran content and paid social for DTC lifestyle subscriptions &amp; creator-led brands. That meant creative testing on Meta and TikTok, short-form production for TikTok and Reels, and a content team behind it.</p>
@@ -614,7 +606,6 @@ section.block.about{padding:64px 0 96px}
 <!-- STRATEGY -->
 <section class="block strategy" id="strategy">
   <div class="wrap">
-    <div class="sec-head"><span class="num">02</span><span class="rule"></span></div>
     <h2>Organic growth</h2>
     <p class="sub">I research what works in the market, define how the brand should sound, turn it into a publishing plan, then check the numbers and adjust.</p>
 
@@ -642,7 +633,6 @@ section.block.about{padding:64px 0 96px}
 <!-- POSTROOM -->
 <section class="block systems" id="tool">
   <div class="wrap">
-    <div class="sec-head"><span class="num">03</span><span class="rule"></span></div>
     <div class="systems-top">
       <h2>AI workflow tool</h2>
       <div><p class="sub" style="margin-top:0">To remove publishing bottlenecks across multiple accounts, I built <strong>Postroom</strong> in Cursor. It brings AI caption generation, approval, scheduling and direct Instagram API publishing into one workspace.</p>
@@ -683,7 +673,6 @@ section.block.about{padding:64px 0 96px}
 <section class="block tools" id="tools">
   <div class="wrap tools-grid">
     <div>
-      <div class="sec-head"><span class="num">04</span><span class="rule"></span></div>
       <h2>Tools</h2>
     </div>
     <ul class="stack">
