@@ -50,8 +50,7 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
 /* hero */
 .hero{display:flex;flex-direction:column;gap:clamp(28px,3.4vw,52px);padding:clamp(40px,4.6vw,72px) var(--gut) 0}
 .hero-top{display:flex;align-items:flex-end;justify-content:space-between;gap:clamp(24px,4vw,64px)}
-.hero-h{flex:1;min-width:0;font-size:clamp(42px,6.5vw,104px);line-height:.95;letter-spacing:-.04em;text-wrap:balance;max-width:none;animation:rise .8s var(--ease) both}
-.hero-pic{flex:none;width:clamp(150px,15vw,220px);height:auto;background:var(--ph)}
+.hero-h{flex:1;min-width:0;font-size:clamp(42px,7.3vw,120px);line-height:.95;letter-spacing:-.04em;text-wrap:balance;max-width:none;animation:rise .8s var(--ease) both}
 .nw{white-space:nowrap}
 @keyframes rise{from{opacity:0;transform:translateY(.25em)}to{opacity:1;transform:none}}
 .hero-tags{display:flex;justify-content:space-between;gap:8px 16px;flex-wrap:wrap}
@@ -59,8 +58,16 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
 /* numbers */
 .numbers{padding-top:clamp(56px,6vw,88px)}
 .num-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 clamp(20px,2.4vw,40px);padding:clamp(24px,3vw,40px) var(--gut) 0}
-.num{border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:8px}
-.num strong{font-weight:400;font-size:clamp(56px,8.6vw,140px);line-height:.92;letter-spacing:-.045em;font-variant-numeric:tabular-nums;margin-bottom:10px}
+.num{position:relative;border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:8px}
+.num::before{content:"";position:absolute;left:0;top:-1px;height:2px;width:100%;background:var(--hover);transform:scaleX(0);transform-origin:left;transition:transform .5s var(--ease)}
+.num .n-l,.num p{transition:transform .45s var(--ease),color .25s}
+@media (hover:hover){
+  .num:hover::before{transform:scaleX(1)}
+  .num:hover strong{transform:translateX(.05em);color:#fff}
+  .num:hover .n-l{transform:translateX(6px)}
+  .num:hover p{color:var(--ink);transform:translateX(6px)}
+}
+.num strong{white-space:nowrap;display:block;transition:transform .45s var(--ease),color .25s;font-weight:400;font-size:clamp(56px,8.6vw,140px);line-height:.92;letter-spacing:-.045em;font-variant-numeric:tabular-nums;margin-bottom:10px}
 .n-l{font-weight:500;font-size:16px}
 .num p{color:var(--muted);font-size:15px;max-width:30ch;text-wrap:pretty}
 .num p .ar{vertical-align:-.1em}
@@ -133,9 +140,16 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
 .case{border-left:1px solid var(--ink);padding-left:18px}
 .case .mono{margin-bottom:4px}
 .case .ar{vertical-align:-.1em}
-.about{display:grid;grid-template-columns:132px minmax(0,1fr);gap:24px;align-items:start}
-.about img{width:132px;height:auto;aspect-ratio:3/4;object-fit:cover;object-position:50% 25%;background:var(--ph)}
 .about>div{display:flex;flex-direction:column;gap:18px}
+
+/* tools + portrait */
+.tools{padding-top:var(--vr)}
+.tools-h{padding:clamp(24px,3vw,40px) var(--gut) clamp(32px,4vw,64px);font-size:clamp(52px,9.6vw,156px);line-height:.92;letter-spacing:-.045em}
+.tools-grid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;align-items:start;padding:0 var(--gut)}
+.tools-pic{grid-column:1 / span 3;width:100%;height:auto;background:var(--ph)}
+.tools-list{grid-column:5 / span 8;border-top:1px solid var(--line)}
+.tools-list .tools-l li:first-child{border-top:0}
+.tools-l li{font-size:17px}
 
 /* contact */
 .contact{padding:var(--vr) 0 32px;margin-top:var(--vr);border-top:1px solid var(--line)}
@@ -165,6 +179,8 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
   .t-side .steps{flex:1;max-width:360px}
   .num-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:40px}
   .acc-in{margin-left:0}
+  .tools-pic{grid-column:1 / span 4}
+  .tools-list{grid-column:6 / span 7}
 }
 @media (max-width:720px){
   html{scroll-padding-top:52px}
@@ -174,12 +190,11 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
   .hero{padding-top:36px;gap:28px}
   .hero-top{flex-direction:column;align-items:flex-start;gap:28px}
   .hero-h{font-size:clamp(40px,12.2vw,56px)}
-  .hero-pic{width:132px}
-  .hero-tags{flex-direction:column}
+    .hero-tags{flex-direction:column}
   .numbers{padding-top:48px}
   .tool,.work,.how{padding-top:80px}
   .num-grid{column-gap:20px;row-gap:32px}
-  .num strong{font-size:52px}
+  .num strong{white-space:nowrap;display:block;transition:transform .45s var(--ease),color .25s;font-size:52px}
   .num p{font-size:14px}
   .t-main h2{font-size:64px}
   .t-side{flex-direction:column;align-items:stretch;gap:24px}
@@ -194,9 +209,12 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
   .how-lead{font-size:36px;padding-bottom:40px}
   .acc-title{font-size:34px}
   .acc-in{font-size:16px}
+  .tools{padding-top:80px}
+  .tools-h{font-size:56px;padding-bottom:28px}
+  .tools-grid{display:flex;flex-direction:column;gap:28px}
+  .tools-pic{width:min(62%,240px)}
+  .tools-list{width:100%}
   .tools-l li{grid-template-columns:1fr;gap:2px}
-  .about{grid-template-columns:96px minmax(0,1fr);gap:16px}
-  .about img{width:96px}
   .c-grid{grid-template-columns:1fr;gap:20px;padding-top:48px}
   .contact{margin-top:80px;padding-top:80px}
   .cta{padding-top:28px}
@@ -218,7 +236,6 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
 <section class="hero">
   <div class="hero-top">
     <h1 class="hero-h">I make <span class="nw">scroll-stopping</span> ads for DTC lifestyle subscriptions &amp; creator-led brands.</h1>
-    <img class="hero-pic" src="../assets/img/portrait.jpg" width="720" height="987" alt="Portrait of Anastasiia Petrenko" fetchpriority="high">
   </div>
   <div class="hero-tags mono"><span>[ Creative Strategist ]</span><span class="avail">[ Open to work · Remote · EU ]</span></div>
 </section>
@@ -226,10 +243,10 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
 <section class="numbers" aria-label="In numbers">
   <div class="sec-head"><span class="mono lbl">[ In numbers ]</span></div>
   <div class="num-grid">
-    <div class="num"><strong>~54%</strong><span class="n-l">Lower CPA</span><p>$48 <svg class="ar" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h17M14 6l6 6-6 6"/></svg> $22 per paid subscription checkout over 6 weeks (~54% lower).</p></div>
-    <div class="num"><strong>1M+</strong><span class="n-l">Organic views</span><p>In one month across up to 3 accounts.</p></div>
-    <div class="num"><strong>8–12</strong><span class="n-l">People</span><p>On the content team I led as co-founder of Digital Content Innovations LLC.</p></div>
-    <div class="num"><strong>~75%</strong><span class="n-l">Less posting time</span><p>After I built Postroom, used in production.</p></div>
+    <div class="num"><strong class="fig" role="img" aria-label="~54%" data-final="~54%">~54%</strong><span class="n-l">Lower CPA</span><p>$48 <svg class="ar" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12h17M14 6l6 6-6 6"/></svg> $22 per paid subscription checkout over 6 weeks (~54% lower).</p></div>
+    <div class="num"><strong class="fig" role="img" aria-label="1M+" data-final="1M+">1M+</strong><span class="n-l">Organic views</span><p>In one month across up to 3 accounts.</p></div>
+    <div class="num"><strong class="fig" role="img" aria-label="8–12" data-final="8–12">8–12</strong><span class="n-l">People</span><p>On the content team I led as co-founder of Digital Content Innovations LLC.</p></div>
+    <div class="num"><strong class="fig" role="img" aria-label="~75%" data-final="~75%">~75%</strong><span class="n-l">Less posting time</span><p>After I built Postroom, used in production.</p></div>
   </div>
 </section>
 
@@ -369,24 +386,29 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
       </div>
       <div class="acc-row">
         <button class="acc-btn" type="button" aria-expanded="false" aria-controls="acc-p4" id="acc-b4"><span class="acc-title">About</span><span class="acc-sign mono" aria-hidden="true">+</span></button>
-        <div class="acc-panel" id="acc-p4" role="region" aria-labelledby="acc-b4"><div class="acc-body"><div class="acc-in"><div class="about"><img src="../assets/img/portrait.jpg" width="720" height="987" alt="Portrait of Anastasiia Petrenko" loading="lazy"><div>
+        <div class="acc-panel" id="acc-p4" role="region" aria-labelledby="acc-b4"><div class="acc-body"><div class="acc-in"><div class="about"><div>
 <p>I lead paid social, short-form strategy and an 8–12 person content team for DTC lifestyle subscriptions &amp; creator-led brands across Meta and TikTok. I co-founded Digital Content Innovations LLC.</p>
 <p class="meta-line"><span class="mono">Languages</span>English · C1 &nbsp;/&nbsp; German · B1 &nbsp;/&nbsp; Ukrainian · native &nbsp;/&nbsp; Russian · native</p>
 </div></div></div></div></div>
       </div>
-      <div class="acc-row">
-        <button class="acc-btn" type="button" aria-expanded="false" aria-controls="acc-p5" id="acc-b5"><span class="acc-title">Tools</span><span class="acc-sign mono" aria-hidden="true">+</span></button>
-        <div class="acc-panel" id="acc-p5" role="region" aria-labelledby="acc-b5"><div class="acc-body"><div class="acc-in"><ul class="plain tools-l"><li><span class="mono">AI creative &amp; copy</span>Claude (briefs and copy variants)</li>
+  </div>
+</section>
+<section class="tools" id="tools">
+  <div class="sec-head"><span class="mono lbl">[ Tools ]</span></div>
+  <h2 class="tools-h">Tools.</h2>
+  <div class="tools-grid">
+    <img class="tools-pic" src="../assets/img/portrait.jpg" width="720" height="987" alt="Portrait of Anastasiia Petrenko" loading="lazy">
+    <div class="tools-list"><ul class="plain tools-l"><li><span class="mono">AI creative &amp; copy</span>Claude (briefs and copy variants)</li>
 <li><span class="mono">AI video &amp; image</span>Higgsfield (Seedance 2.5, Nano Banana Pro), ComfyUI</li>
 <li><span class="mono">Build &amp; ops</span>Claude Code, Cursor (caption, scheduling and publishing tool used in production)</li>
 <li><span class="mono">Paid social</span>Meta Ads Manager, TikTok Ads</li>
 <li><span class="mono">Social &amp; scheduling</span>Meta Business Suite</li>
 <li><span class="mono">Edit &amp; design</span>CapCut, Canva</li>
 <li><span class="mono">Analytics</span>Google Analytics, Looker Studio</li>
-<li><span class="mono">Workspace</span>Notion</li></ul></div></div></div>
-      </div>
+<li><span class="mono">Workspace</span>Notion</li></ul></div>
   </div>
 </section>
+
 </main>
 
 <footer class="contact" id="contact">
@@ -412,6 +434,37 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
     }catch(e){clock.textContent='EU'}
   }
   tick();setInterval(tick,30000);
+
+  /* numbers: count up once when the strip scrolls into view (final text is always the original value) */
+  (function(){
+    var figs=[].slice.call(document.querySelectorAll('.num .fig'));if(!figs.length)return;
+    var fmt=[
+      function(p){return '~'+Math.round(54*p)+'%'},
+      function(p){var k=Math.round(1000*p);return k>=1000?'1M+':k+'K'},
+      function(p){return Math.round(8*p)+'\u2013'+Math.round(12*p)},
+      function(p){return '~'+Math.round(75*p)+'%'}
+    ];
+    function final(){figs.forEach(function(f){f.textContent=f.getAttribute('data-final')})}
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches||!('IntersectionObserver' in window)||figs.length!==fmt.length){return}
+    figs.forEach(function(f,i){f.textContent=fmt[i](0)});
+    var DUR=1600,STAG=120,ran=false;
+    function ease(t){return 1-Math.pow(1-t,3)}
+    function run(){
+      if(ran)return;ran=true;var t0=performance.now();
+      function frame(now){
+        var done=true;
+        figs.forEach(function(f,i){
+          var t=(now-t0-i*STAG)/DUR;
+          if(t<1){done=false;f.textContent=fmt[i](t<=0?0:ease(t))}
+          else f.textContent=f.getAttribute('data-final');
+        });
+        if(!done)requestAnimationFrame(frame);
+      }
+      requestAnimationFrame(frame);
+    }
+    var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){io.disconnect();run()}})},{threshold:.35});
+    io.observe(document.querySelector('.num-grid'));
+  })();
 
   /* accordions */
   document.querySelectorAll('.acc-btn').forEach(function(b){
