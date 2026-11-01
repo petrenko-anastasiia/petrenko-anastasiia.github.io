@@ -48,14 +48,16 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
 .sec-head{display:flex;justify-content:space-between;gap:6px 24px;flex-wrap:wrap;padding:0 var(--gut)}
 
 /* hero */
-.hero{min-height:calc(100svh - 54px);display:flex;flex-direction:column;justify-content:space-between;gap:48px;padding:clamp(40px,6vw,96px) var(--gut) clamp(24px,3vw,40px)}
-.hero-h{margin:auto 0;font-size:clamp(42px,7.7vw,128px);line-height:.95;letter-spacing:-.04em;text-wrap:balance;max-width:none;animation:rise .8s var(--ease) both}
+.hero{display:flex;flex-direction:column;gap:clamp(28px,3.4vw,52px);padding:clamp(40px,4.6vw,72px) var(--gut) 0}
+.hero-top{display:flex;align-items:flex-end;justify-content:space-between;gap:clamp(24px,4vw,64px)}
+.hero-h{flex:1;min-width:0;font-size:clamp(42px,6.5vw,104px);line-height:.95;letter-spacing:-.04em;text-wrap:balance;max-width:none;animation:rise .8s var(--ease) both}
+.hero-pic{flex:none;width:clamp(150px,15vw,220px);height:auto;background:var(--ph)}
 .nw{white-space:nowrap}
 @keyframes rise{from{opacity:0;transform:translateY(.25em)}to{opacity:1;transform:none}}
 .hero-tags{display:flex;justify-content:space-between;gap:8px 16px;flex-wrap:wrap}
 
 /* numbers */
-.numbers{padding-top:var(--vr)}
+.numbers{padding-top:clamp(56px,6vw,88px)}
 .num-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0 clamp(20px,2.4vw,40px);padding:clamp(24px,3vw,40px) var(--gut) 0}
 .num{border-top:1px solid var(--line);padding-top:18px;display:flex;flex-direction:column;gap:8px}
 .num strong{font-weight:400;font-size:clamp(56px,8.6vw,140px);line-height:.92;letter-spacing:-.045em;font-variant-numeric:tabular-nums;margin-bottom:10px}
@@ -87,25 +89,25 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
 
 /* work */
 .work{padding-top:var(--vr)}
-.work-h{padding:clamp(24px,3vw,40px) var(--gut) clamp(48px,6vw,96px);font-size:clamp(52px,9.6vw,156px);line-height:.92;letter-spacing:-.045em;max-width:14ch}
-.row{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));column-gap:24px;padding:clamp(40px,5vw,72px) var(--gut);border-top:1px solid var(--line);align-items:stretch}
-.r-idx{grid-column:1 / span 2;color:var(--muted);font-size:15px}
-.r-media{grid-column:3 / span 4}
-.r-info{grid-column:8 / span 5;display:flex;flex-direction:column;justify-content:space-between;gap:40px;min-width:0}
-.r-top h3{font-size:clamp(34px,4.8vw,76px);line-height:.98;letter-spacing:-.04em}
-.r-line{margin-top:16px;color:var(--muted);max-width:34ch;text-wrap:pretty}
-.cr{display:block;width:min(100%,380px)}
+.work-h{padding:clamp(24px,3vw,40px) var(--gut) clamp(40px,4.5vw,72px);font-size:clamp(52px,9.6vw,156px);line-height:.92;letter-spacing:-.045em;max-width:14ch}
+.rows{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:0 clamp(14px,1.4vw,22px);padding:0 var(--gut)}
+.row{display:flex;flex-direction:column;min-width:0;border-top:1px solid var(--line);padding-top:14px}
+.r-idx{color:var(--muted);font-size:15px;margin-bottom:12px}
+.row h3{margin-top:16px;font-size:clamp(20px,1.75vw,26px);line-height:1.05;letter-spacing:-.03em}
+.r-line{margin-top:8px;color:var(--muted);font-size:14px;line-height:1.4;text-wrap:pretty}
+.cr{display:block;width:100%}
 .cf{position:relative;aspect-ratio:9/16;background:var(--ph);overflow:hidden}
 .cf video{width:100%;height:100%;object-fit:cover}
 .tg-k,.cr-mute{position:absolute;left:0;background:var(--bg);color:var(--ink);padding:6px 10px;font-size:13px;line-height:1.2}
 .tg-k{top:0}
 .cr-mute{bottom:0;cursor:pointer;user-select:none;transition:color .18s}
 .cr-mute:hover{color:var(--hover)}
-.spec{border-bottom:1px solid var(--line)}
-.spec>div{display:grid;grid-template-columns:110px minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px solid var(--line)}
-.spec dt{color:var(--muted);font-size:15px}
-.spec dd{font-size:16px;text-wrap:pretty}
-.r-info .view{align-self:flex-start;margin-top:auto}
+.spec{margin-top:16px;border-bottom:1px solid var(--line)}
+.spec>div{display:flex;flex-direction:column;gap:2px;padding:9px 0;border-top:1px solid var(--line)}
+.spec dt{color:var(--muted);font-size:12.5px}
+.spec dd{font-size:13.5px;line-height:1.35;text-wrap:pretty}
+.row .view{align-self:flex-start;margin-top:auto;padding-top:16px;font-size:20px;letter-spacing:-.02em;line-height:1;gap:.3em}
+.row .view .arr{width:.8em;height:.8em}
 
 /* how */
 .how{padding-top:var(--vr)}
@@ -152,13 +154,15 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
 .vbox button{position:absolute;top:18px;right:18px;width:44px;height:44px;border:0;background:var(--ink);color:var(--bg);font-size:24px;cursor:pointer;transition:background .18s,color .18s}
 .vbox button:hover{background:var(--hover);color:#0E0F11}
 
+@media (max-width:1180px){
+  .rows{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-left:var(--gut);gap:20px;-webkit-overflow-scrolling:touch;padding-bottom:8px;scrollbar-width:thin;scrollbar-color:var(--line) transparent}
+  .row{flex:0 0 clamp(220px,28vw,280px);scroll-snap-align:start}
+  .row h3{font-size:24px}
+}
 @media (max-width:1000px){
   .t-main{grid-column:1 / span 12}
   .t-side{grid-column:1 / span 12;margin-top:36px;flex-direction:row;align-items:flex-end;justify-content:space-between}
   .t-side .steps{flex:1;max-width:360px}
-  .r-idx{grid-column:1 / span 12;margin-bottom:20px}
-  .r-media{grid-column:1 / span 6}
-  .r-info{grid-column:7 / span 6}
   .num-grid{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:40px}
   .acc-in{margin-left:0}
 }
@@ -167,10 +171,13 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
   .hdr{grid-template-columns:1fr auto;padding:14px var(--gut)}
   .hdr-clock,.hdr-nav a:nth-child(1),.hdr-nav a:nth-child(3){display:none}
   .hdr-nav{gap:20px}
-  .hero{min-height:70svh;padding-top:44px;gap:48px;justify-content:flex-start}
-  .hero-h{font-size:clamp(40px,12.2vw,56px);max-width:none;margin:0}
-  .hero-tags{margin-top:auto;flex-direction:column}
-  .numbers,.tool,.work,.how{padding-top:80px}
+  .hero{padding-top:36px;gap:28px}
+  .hero-top{flex-direction:column;align-items:flex-start;gap:28px}
+  .hero-h{font-size:clamp(40px,12.2vw,56px)}
+  .hero-pic{width:132px}
+  .hero-tags{flex-direction:column}
+  .numbers{padding-top:48px}
+  .tool,.work,.how{padding-top:80px}
   .num-grid{column-gap:20px;row-gap:32px}
   .num strong{font-size:52px}
   .num p{font-size:14px}
@@ -180,14 +187,9 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
   .view-s{font-size:30px}
   .shots{scroll-padding-left:var(--gut);overflow-x:auto;scroll-snap-type:x mandatory;gap:12px;padding-bottom:4px;-webkit-overflow-scrolling:touch}
   .shots a{flex:0 0 auto;width:calc(var(--ar) * 190px);scroll-snap-align:start}
-  .row{display:flex;flex-direction:column;gap:0;padding-top:32px;padding-bottom:44px}
-  .r-idx{margin-bottom:14px}
-  .r-media{margin-bottom:24px}
-  .cr{width:min(100%,300px)}
-  .r-info{gap:24px}
-  .r-top h3{font-size:38px}
-  .spec>div{grid-template-columns:92px minmax(0,1fr);gap:12px}
-  .r-info .view{font-size:76px}
+  .rows{gap:16px}
+  .row{flex-basis:min(74vw,290px)}
+  .row h3{font-size:26px}
   .work-h{font-size:56px;padding-bottom:36px}
   .how-lead{font-size:36px;padding-bottom:40px}
   .acc-title{font-size:34px}
@@ -214,7 +216,10 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
 
 <main id="top">
 <section class="hero">
-  <h1 class="hero-h">I make <span class="nw">scroll-stopping</span> ads for DTC lifestyle subscriptions &amp; creator-led brands.</h1>
+  <div class="hero-top">
+    <h1 class="hero-h">I make <span class="nw">scroll-stopping</span> ads for DTC lifestyle subscriptions &amp; creator-led brands.</h1>
+    <img class="hero-pic" src="../assets/img/portrait.jpg" width="720" height="987" alt="Portrait of Anastasiia Petrenko" fetchpriority="high">
+  </div>
   <div class="hero-tags mono"><span>[ Creative Strategist ]</span><span class="avail">[ Open to work · Remote · EU ]</span></div>
 </section>
 
@@ -256,123 +261,87 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
   <div class="rows">
     <article class="row" id="argo">
       <div class="r-idx mono">(01)</div>
-      <div class="r-media">
-        <a class="cr" data-view href="../work/argo/" aria-label="ARGŌ golden body oil: open case study">
-          <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../assets/img/argo-video-poster.jpg?v=5" src="../assets/video/argo-loop.mp4?v=5" data-sound="../assets/video/argo-loop-audio.mp4?v=5" aria-label="ARGŌ golden body oil spec ad, AI-generated: a drop of gold oil lands in a miniature golden pool"></video><span class="tg-k mono">Spec ad · AI</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
-        </a>
-      </div>
-      <div class="r-info">
-        <div class="r-top">
-          <h3>ARGŌ golden body oil</h3>
-          <p class="r-line">One glittering drop in extreme macro sells texture and builds tension.</p>
-        </div>
-        <dl class="spec">
-          <div><dt class="mono">Hook</dt><dd>Macro of a gold oil drop swelling, then a hard cut to the splash.</dd></div>
-          <div><dt class="mono">Format</dt><dd>Macro texture reveal · 9:16 · 10 s</dd></div>
-          <div><dt class="mono">Made with</dt><dd>Nano Banana · Veo · ffmpeg edit · Claude · no shoot</dd></div>
-        </dl>
-        <a class="view" href="../work/argo/" aria-label="View ARGŌ golden body oil">View <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
-      </div>
+      <a class="cr" data-view href="../work/argo/" aria-label="ARGŌ golden body oil: open case study">
+        <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../assets/img/argo-video-poster.jpg?v=5" src="../assets/video/argo-loop.mp4?v=5" data-sound="../assets/video/argo-loop-audio.mp4?v=5" aria-label="ARGŌ golden body oil spec ad, AI-generated: a drop of gold oil lands in a miniature golden pool"></video><span class="tg-k mono">Spec ad · AI</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
+      </a>
+      <h3>ARGŌ golden body oil</h3>
+      <p class="r-line">One glittering drop in extreme macro sells texture and builds tension.</p>
+      <dl class="spec">
+        <div><dt class="mono">Hook</dt><dd>Macro of a gold oil drop swelling, then a hard cut to the splash.</dd></div>
+        <div><dt class="mono">Format</dt><dd>Macro texture reveal · 9:16 · 10 s</dd></div>
+        <div><dt class="mono">Made with</dt><dd>Nano Banana · Veo · ffmpeg edit · Claude · no shoot</dd></div>
+      </dl>
+      <a class="view" href="../work/argo/" aria-label="View ARGŌ golden body oil">View <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
     </article>
     <article class="row" id="zola">
       <div class="r-idx mono">(02)</div>
-      <div class="r-media">
-        <a class="cr" data-view href="../work/zola/" aria-label="ZOLA Brow Soap Mini: open case study">
-          <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../work/zola/poster.jpg" src="../assets/video/zola-loop.mp4" data-sound="../assets/video/zola-loop-audio.mp4?v=3" aria-label="ZOLA Brow Soap 15-second spec ad"></video><span class="tg-k mono">Spec ad · 15s</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
-        </a>
-      </div>
-      <div class="r-info">
-        <div class="r-top">
-          <h3>ZOLA Brow Soap Mini</h3>
-          <p class="r-line">A bold question in giant type, with the product already in frame.</p>
-        </div>
-        <dl class="spec">
-          <div><dt class="mono">Hook</dt><dd>“Brows with attitude?” (on-screen)</dd></div>
-          <div><dt class="mono">Format</dt><dd>Question hook · product ad · 9:16 · 15 s</dd></div>
-          <div><dt class="mono">Made with</dt><dd>Higgsfield · animated graphics · synthesized soundtrack · no shoot</dd></div>
-        </dl>
-        <a class="view" href="../work/zola/" aria-label="View ZOLA Brow Soap Mini">View <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
-      </div>
+      <a class="cr" data-view href="../work/zola/" aria-label="ZOLA Brow Soap Mini: open case study">
+        <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../work/zola/poster.jpg" src="../assets/video/zola-loop.mp4" data-sound="../assets/video/zola-loop-audio.mp4?v=3" aria-label="ZOLA Brow Soap 15-second spec ad"></video><span class="tg-k mono">Spec ad · 15s</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
+      </a>
+      <h3>ZOLA Brow Soap Mini</h3>
+      <p class="r-line">A bold question in giant type, with the product already in frame.</p>
+      <dl class="spec">
+        <div><dt class="mono">Hook</dt><dd>“Brows with attitude?” (on-screen)</dd></div>
+        <div><dt class="mono">Format</dt><dd>Question hook · product ad · 9:16 · 15 s</dd></div>
+        <div><dt class="mono">Made with</dt><dd>Higgsfield · animated graphics · synthesized soundtrack · no shoot</dd></div>
+      </dl>
+      <a class="view" href="../work/zola/" aria-label="View ZOLA Brow Soap Mini">View <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
     </article>
     <article class="row" id="outfit">
       <div class="r-idx mono">(03)</div>
-      <div class="r-media">
-        <a class="cr" data-view data-video="../assets/video/outfit.mp4" href="../assets/video/outfit.mp4" aria-label="Outfit transition: play video">
-          <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../assets/img/outfit-transition.jpg" src="../assets/video/outfit-loop.mp4" data-sound="../assets/video/outfit-loop-audio.mp4?v=3" aria-label="AI-generated outfit transition clip"></video><span class="tg-k mono">Hook · Transition</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
-        </a>
-      </div>
-      <div class="r-info">
-        <div class="r-top">
-          <h3>Outfit transition</h3>
-          <p class="r-line">A plain look in a crimson set builds a change viewers wait for.</p>
-        </div>
-        <dl class="spec">
-          <div><dt class="mono">Hook</dt><dd>White dress, then a black chained look on the beat at ~3s.</dd></div>
-          <div><dt class="mono">Format</dt><dd>Before/after transition · trend-format hook</dd></div>
-          <div><dt class="mono">Made with</dt><dd>ComfyUI</dd></div>
-        </dl>
-        <a class="view" data-video="../assets/video/outfit.mp4" href="../assets/video/outfit.mp4" aria-label="Play Outfit transition">Play <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
-      </div>
+      <a class="cr" data-view data-video="../assets/video/outfit.mp4" href="../assets/video/outfit.mp4" aria-label="Outfit transition: play video">
+        <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../assets/img/outfit-transition.jpg" src="../assets/video/outfit-loop.mp4" data-sound="../assets/video/outfit-loop-audio.mp4?v=3" aria-label="AI-generated outfit transition clip"></video><span class="tg-k mono">Hook · Transition</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
+      </a>
+      <h3>Outfit transition</h3>
+      <p class="r-line">A plain look in a crimson set builds a change viewers wait for.</p>
+      <dl class="spec">
+        <div><dt class="mono">Hook</dt><dd>White dress, then a black chained look on the beat at ~3s.</dd></div>
+        <div><dt class="mono">Format</dt><dd>Before/after transition · trend-format hook</dd></div>
+        <div><dt class="mono">Made with</dt><dd>ComfyUI</dd></div>
+      </dl>
+      <a class="view" data-video="../assets/video/outfit.mp4" href="../assets/video/outfit.mp4" aria-label="Play Outfit transition">Play <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
     </article>
     <article class="row" id="ltheanine">
       <div class="r-idx mono">(04)</div>
-      <div class="r-media">
-        <a class="cr" data-view data-video="../assets/video/ltheanine.mp4" href="../assets/video/ltheanine.mp4" aria-label="L-Theanine drink: play video">
-          <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../assets/img/ltheanine-poster.jpg" src="../assets/video/ltheanine-loop.mp4" data-sound="../assets/video/ltheanine-loop-audio.mp4?v=3" aria-label="L-Theanine drink spec ad"></video><span class="tg-k mono">Spec ad · AI</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
-        </a>
-      </div>
-      <div class="r-info">
-        <div class="r-top">
-          <h3>L-Theanine drink</h3>
-          <p class="r-line">An office desk flips to a calm garden in about 2s, so the swap is the payoff.</p>
-        </div>
-        <dl class="spec">
-          <div><dt class="mono">Hook</dt><dd>“What 200mg of L-Theanine actually feels like.” (on-screen)</dd></div>
-          <div><dt class="mono">Format</dt><dd>Before/after scene switch · spec ad · 9:16</dd></div>
-          <div><dt class="mono">Made with</dt><dd>Higgsfield · no shoot</dd></div>
-        </dl>
-        <a class="view" data-video="../assets/video/ltheanine.mp4" href="../assets/video/ltheanine.mp4" aria-label="Play L-Theanine drink">Play <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
-      </div>
+      <a class="cr" data-view data-video="../assets/video/ltheanine.mp4" href="../assets/video/ltheanine.mp4" aria-label="L-Theanine drink: play video">
+        <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../assets/img/ltheanine-poster.jpg" src="../assets/video/ltheanine-loop.mp4" data-sound="../assets/video/ltheanine-loop-audio.mp4?v=3" aria-label="L-Theanine drink spec ad"></video><span class="tg-k mono">Spec ad · AI</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
+      </a>
+      <h3>L-Theanine drink</h3>
+      <p class="r-line">An office desk flips to a calm garden in about 2s, so the swap is the payoff.</p>
+      <dl class="spec">
+        <div><dt class="mono">Hook</dt><dd>“What 200mg of L-Theanine actually feels like.” (on-screen)</dd></div>
+        <div><dt class="mono">Format</dt><dd>Before/after scene switch · spec ad · 9:16</dd></div>
+        <div><dt class="mono">Made with</dt><dd>Higgsfield · no shoot</dd></div>
+      </dl>
+      <a class="view" data-video="../assets/video/ltheanine.mp4" href="../assets/video/ltheanine.mp4" aria-label="Play L-Theanine drink">Play <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
     </article>
     <article class="row" id="solene">
       <div class="r-idx mono">(05)</div>
-      <div class="r-media">
-        <a class="cr" data-view data-video="../assets/video/solene.mp4" href="../assets/video/solene.mp4" aria-label="SOLÈNE fragrance: play video">
-          <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../assets/img/solene-poster.jpg" src="../assets/video/solene-loop.mp4" data-sound="../assets/video/solene-loop-audio.mp4?v=3" aria-label="SOLÈNE fig fragrance spec ad, AI-generated"></video><span class="tg-k mono">Spec ad · AI</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
-        </a>
-      </div>
-      <div class="r-info">
-        <div class="r-top">
-          <h3>SOLÈNE fragrance</h3>
-          <p class="r-line">Visible mist in warm light lets a silent scroller imagine the scent.</p>
-        </div>
-        <dl class="spec">
-          <div><dt class="mono">Hook</dt><dd>Mist sprays from an amber bottle, then a cut to dewy figs.</dd></div>
-          <div><dt class="mono">Format</dt><dd>Sensory reveal · luxury spec ad · 16:9</dd></div>
-          <div><dt class="mono">Made with</dt><dd>Higgsfield · no shoot</dd></div>
-        </dl>
-        <a class="view" data-video="../assets/video/solene.mp4" href="../assets/video/solene.mp4" aria-label="Play SOLÈNE fragrance">Play <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
-      </div>
+      <a class="cr" data-view data-video="../assets/video/solene.mp4" href="../assets/video/solene.mp4" aria-label="SOLÈNE fragrance: play video">
+        <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../assets/img/solene-poster.jpg" src="../assets/video/solene-loop.mp4" data-sound="../assets/video/solene-loop-audio.mp4?v=3" aria-label="SOLÈNE fig fragrance spec ad, AI-generated"></video><span class="tg-k mono">Spec ad · AI</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
+      </a>
+      <h3>SOLÈNE fragrance</h3>
+      <p class="r-line">Visible mist in warm light lets a silent scroller imagine the scent.</p>
+      <dl class="spec">
+        <div><dt class="mono">Hook</dt><dd>Mist sprays from an amber bottle, then a cut to dewy figs.</dd></div>
+        <div><dt class="mono">Format</dt><dd>Sensory reveal · luxury spec ad · 16:9</dd></div>
+        <div><dt class="mono">Made with</dt><dd>Higgsfield · no shoot</dd></div>
+      </dl>
+      <a class="view" data-video="../assets/video/solene.mp4" href="../assets/video/solene.mp4" aria-label="Play SOLÈNE fragrance">Play <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
     </article>
     <article class="row" id="postroom-promo">
       <div class="r-idx mono">(06)</div>
-      <div class="r-media">
-        <a class="cr" data-view href="../work/postroom/" aria-label="Postroom promo: open case study">
-          <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../assets/img/postroom-poster.jpg" src="../assets/video/postroom-loop.mp4" data-sound="../assets/video/postroom-loop-audio.mp4?v=3" aria-label="AI promo for Postroom, the publishing tool she built"></video><span class="tg-k mono">Promo · My tool</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
-        </a>
-      </div>
-      <div class="r-info">
-        <div class="r-top">
-          <h3>Postroom promo</h3>
-          <p class="r-line">Leads with the outcome in big type over a dashboard.</p>
-        </div>
-        <dl class="spec">
-          <div><dt class="mono">Hook</dt><dd>“75% less posting time.” (on-screen)</dd></div>
-          <div><dt class="mono">Format</dt><dd>Outcome claim · ad for my own tool</dd></div>
-          <div><dt class="mono">Made with</dt><dd>Higgsfield (AI-generated promo) · tool built in Cursor</dd></div>
-        </dl>
-        <a class="view" href="../work/postroom/" aria-label="View Postroom promo">View <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
-      </div>
+      <a class="cr" data-view href="../work/postroom/" aria-label="Postroom promo: open case study">
+        <div class="cf"><video autoplay loop muted playsinline preload="metadata" poster="../assets/img/postroom-poster.jpg" src="../assets/video/postroom-loop.mp4" data-sound="../assets/video/postroom-loop-audio.mp4?v=3" aria-label="AI promo for Postroom, the publishing tool she built"></video><span class="tg-k mono">Promo · My tool</span><span class="cr-mute mono" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false">Sound off</span></div>
+      </a>
+      <h3>Postroom promo</h3>
+      <p class="r-line">Leads with the outcome in big type over a dashboard.</p>
+      <dl class="spec">
+        <div><dt class="mono">Hook</dt><dd>“75% less posting time.” (on-screen)</dd></div>
+        <div><dt class="mono">Format</dt><dd>Outcome claim · ad for my own tool</dd></div>
+        <div><dt class="mono">Made with</dt><dd>Higgsfield (AI-generated promo) · tool built in Cursor</dd></div>
+      </dl>
+      <a class="view" href="../work/postroom/" aria-label="View Postroom promo">View <svg class="arr" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 19 19 5M8 5h11v11"/></svg></a>
     </article>
   </div>
 </section>
