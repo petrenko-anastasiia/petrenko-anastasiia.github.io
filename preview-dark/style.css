@@ -100,7 +100,7 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
 .row .view .arr{width:.8em;height:.8em}
 
 /* how */
-.how{--bg:#EDEDEA;--ink:#0E0F11;--muted:#55565A;--line:#D3D3CE;--hover:#D93100;background:var(--bg);color:var(--ink);margin-top:var(--vr);padding:clamp(56px,6vw,96px) 0 clamp(56px,6vw,96px)}
+.how{padding-top:var(--vr)}
 .how-lead{padding:clamp(24px,3vw,40px) var(--gut) clamp(48px,6vw,104px);font-size:clamp(34px,5.2vw,86px);line-height:1;letter-spacing:-.04em;max-width:17ch;text-wrap:balance}
 .acc{border-top:1px solid var(--line);margin:0 var(--gut)}
 .acc-row{border-bottom:1px solid var(--line)}
@@ -181,8 +181,7 @@ h1,h2,h3{font-weight:400;letter-spacing:-.035em}
   .hero-pic{width:132px}
     .hero-tags{flex-direction:column}
   .numbers{padding-top:48px}
-  .tool,.work{padding-top:80px}
-  .how{margin-top:80px;padding-top:56px;padding-bottom:56px}
+  .tool,.work,.how{padding-top:80px}
   .num-grid{column-gap:20px;row-gap:32px}
   .num strong{white-space:nowrap;display:block;transition:transform .45s var(--ease),color .25s;font-size:52px}
   .num p{font-size:14px}
