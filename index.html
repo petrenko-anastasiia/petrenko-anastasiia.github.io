@@ -745,14 +745,14 @@ ul.skills li {
       font-family: var(--sans);
       border-top: 1px solid #232c3d;
       border-bottom: 1px solid #232c3d;
-      line-height: 1.6;
+      line-height: 1.5;
     }
     .ap-top-grid {
       display: grid;
       grid-template-columns: 1.1fr 1fr;
-      gap: 64px;
+      gap: 48px;
       align-items: center;
-      margin-bottom: 40px;
+      margin-bottom: 28px;
     }
     .ap-top-grid h2 {
       max-width: none !important;
@@ -761,63 +761,61 @@ ul.skills li {
     .ap-top-grid .sub {
       margin-top: 0;
       max-width: 52ch;
-    }
-    @media (max-width: 960px) {
-      .ap-top-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-      }
+      font-size: 18px;
     }
     .ap-hero-kpis {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-      gap: 16px;
-      margin-bottom: 28px;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 14px;
+      margin-bottom: 20px;
     }
     .ap-kpi-card {
       background: #121721;
       border: 1px solid #232c3d;
-      border-radius: 10px;
-      padding: 20px;
+      border-radius: 14px;
+      padding: 16px 18px;
     }
     .ap-kpi-label {
-      font-size: 11px;
+      font-size: 10.5px;
       text-transform: uppercase;
-      letter-spacing: 0.07em;
+      letter-spacing: 0.1em;
       color: #94a3b8;
       margin-bottom: 6px;
-      font-family: "JetBrains Mono", monospace;
+      font-weight: 600;
     }
     .ap-kpi-val {
-      font-size: 26px;
+      font-size: clamp(22px, 2.2vw, 28px);
       font-weight: 700;
-      font-family: "JetBrains Mono", monospace;
+      font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
       color: #f8fafc;
+      line-height: 1.1;
     }
     .ap-kpi-sub {
-      font-size: 13px;
+      font-size: 12.5px;
       color: #10b981;
       margin-top: 6px;
     }
     .ap-tabs {
-      display: flex;
-      flex-wrap: wrap;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 8px;
-      margin-bottom: 24px;
-      border-bottom: 1px solid #232c3d;
-      padding-bottom: 14px;
+      margin-bottom: 16px;
     }
     .ap-tab-btn {
       background: #121721;
       color: #94a3b8;
       border: 1px solid #232c3d;
-      border-radius: 6px;
-      padding: 10px 16px;
-      font-size: 13px;
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12.5px;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.15s ease;
       font-family: inherit;
+      text-align: center;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
     .ap-tab-btn:hover {
       color: #f1f5f9;
@@ -832,16 +830,18 @@ ul.skills li {
       display: none;
       background: #121721;
       border: 1px solid #232c3d;
-      border-radius: 12px;
-      padding: 28px;
+      border-radius: 16px;
+      padding: 22px 24px;
     }
     .ap-panel.active {
       display: block;
     }
     .ap-section-head {
-      font-size: 18px;
+      font-size: 16px;
       font-weight: 600;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid #232c3d;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -849,26 +849,35 @@ ul.skills li {
       gap: 8px;
     }
     .ap-mono {
-      font-family: "JetBrains Mono", "SFMono-Regular", Consolas, monospace;
-      font-size: 13px;
+      font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12.5px;
       color: #94a3b8;
     }
+    .ap-split-view {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 28px;
+      align-items: center;
+      margin-bottom: 20px;
+    }
     .ap-bar-group {
-      margin-bottom: 18px;
+      margin-bottom: 12px;
+    }
+    .ap-bar-group:last-child {
+      margin-bottom: 0;
     }
     .ap-bar-header {
       display: flex;
       justify-content: space-between;
       align-items: baseline;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 600;
-      margin-bottom: 8px;
-      gap: 12px;
-      flex-wrap: wrap;
+      margin-bottom: 5px;
+      gap: 8px;
     }
     .ap-bar-track {
       width: 100%;
-      height: 10px;
+      height: 8px;
       background: #1e2638;
       border-radius: 999px;
       overflow: hidden;
@@ -880,276 +889,278 @@ ul.skills li {
     .ap-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 24px;
-      font-size: 14px;
+      font-size: 13px;
     }
     .ap-table th {
       text-align: left;
       color: #94a3b8;
-      font-weight: 500;
-      padding: 12px 10px;
+      font-weight: 600;
+      padding: 8px 8px;
       border-bottom: 1px solid #232c3d;
-      font-size: 12px;
+      font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 0.05em;
     }
     .ap-table td {
-      padding: 14px 10px;
+      padding: 9px 8px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      font-family: "JetBrains Mono", monospace;
-      font-size: 13px;
+      font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
+      font-size: 12.5px;
     }
     .ap-table td:first-child {
-      font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+      font-family: var(--sans);
       font-weight: 500;
-      font-size: 14px;
+      font-size: 13px;
     }
     .ap-explain-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-      margin-top: 24px;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-top: 16px;
     }
     .ap-explain-card {
       background: #161d2a;
       border: 1px solid #232c3d;
-      border-radius: 10px;
-      padding: 20px;
+      border-radius: 12px;
+      padding: 14px 16px;
       display: flex;
-      gap: 16px;
+      gap: 12px;
       align-items: flex-start;
     }
     .ap-explain-num {
-      width: 28px;
-      height: 28px;
+      width: 22px;
+      height: 22px;
       border-radius: 50%;
-      background: #38bdf8;
-      color: #000;
+      background: rgba(56, 189, 248, 0.15);
+      border: 1px solid #38bdf8;
+      color: #38bdf8;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
       flex-shrink: 0;
-      margin-top: 2px;
+      margin-top: 1px;
     }
     .ap-explain-content h4 {
-      color: #38bdf8;
-      font-size: 16px;
-      margin: 0 0 6px 0;
+      color: #f8fafc;
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0 0 4px 0;
     }
     .ap-explain-content p {
-      color: #cbd5e1;
-      font-size: 14px;
-      margin: 0 0 8px 0;
+      color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.45;
+      margin: 0;
     }
-    .ap-explain-content ul {
-      list-style: none;
-      margin: 10px 0;
-      padding-left: 0;
-    }
-    .ap-explain-content li {
-      font-size: 14px;
-      color: #cbd5e1;
-      margin-bottom: 6px;
+    .ap-explain-content strong {
+      color: #e2e8f0;
     }
     .ap-takeaway-box {
-      margin-top: 20px;
+      margin-top: 14px;
       background: rgba(16, 185, 129, 0.08);
-      border-left: 4px solid #10b981;
+      border-left: 3px solid #10b981;
       border-radius: 6px;
-      padding: 18px 20px;
-      font-size: 14px;
-      color: #e2e8f0;
+      padding: 12px 16px;
+      font-size: 13px;
+      color: #cbd5e1;
+      line-height: 1.5;
     }
     .ap-takeaway-box strong {
       color: #10b981;
     }
+    @media (max-width: 960px) {
+      .ap-top-grid, .ap-split-view, .ap-explain-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .ap-hero-kpis, .ap-tabs {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
     @media (max-width: 640px) {
-      .ap-bar-header { flex-direction: column; gap: 4px; }
-      .ap-panel { padding: 18px; }
+      .ap-hero-kpis, .ap-tabs {
+        grid-template-columns: 1fr;
+      }
+      .ap-bar-header { flex-direction: column; gap: 2px; }
+      .ap-panel { padding: 16px; }
     }
   </style>
 
   <div class="wrap">
     <div class="ap-top-grid">
       <h2>D2C <em>scale</em></h2>
-      <p class="sub">Full-funnel revenue architecture, post-acquisition CRM microtransaction expansion, and high-velocity organic distribution across 444 automated social channels.</p>
+      <p class="sub">Full-funnel revenue architecture, post-acquisition CRM microtransaction expansion, and automated organic distribution across 444 social channels.</p>
     </div>
 
     <!-- Top-Level Summary KPIs -->
     <div class="ap-hero-kpis">
       <div class="ap-kpi-card">
         <div class="ap-kpi-label">All-Time Gross Volume</div>
-        <div class="ap-kpi-val">$470,149.20</div>
-        <div class="ap-kpi-sub">$376,114.90 Realized Net Revenue</div>
+        <div class="ap-kpi-val">$470,149</div>
+        <div class="ap-kpi-sub">$376,115 Realized Net</div>
       </div>
       <div class="ap-kpi-card">
         <div class="ap-kpi-label">LTV Expansion Multiplier</div>
         <div class="ap-kpi-val">6.94x</div>
-        <div class="ap-kpi-sub">85.59% Backend Monetization Share</div>
+        <div class="ap-kpi-sub">85.6% Backend Share</div>
       </div>
       <div class="ap-kpi-card">
-        <div class="ap-kpi-label">Automated Distribution Fleet</div>
+        <div class="ap-kpi-label">Automated Distribution</div>
         <div class="ap-kpi-val">20M Views/Day</div>
-        <div class="ap-kpi-sub">444 Live Pages | 23,000 Clicks/Day</div>
+        <div class="ap-kpi-sub">444 Pages · 23K Clicks/Day</div>
       </div>
       <div class="ap-kpi-card">
-        <div class="ap-kpi-label">Top-5 Campaign Blended CVR</div>
+        <div class="ap-kpi-label">Top-5 Blended CVR</div>
         <div class="ap-kpi-val">9.35%</div>
-        <div class="ap-kpi-sub">9,081 Active Paid Members Acquired</div>
+        <div class="ap-kpi-sub">9,081 Paid Members</div>
       </div>
     </div>
 
-    <!-- Interactive Navigation Tabs -->
+    <!-- Interactive Navigation Tabs (Single Row of 4) -->
     <div class="ap-tabs">
-      <button type="button" class="ap-tab-btn active" onclick="switchApTab(0)">1. Revenue Architecture ($470K Gross)</button>
-      <button type="button" class="ap-tab-btn" onclick="switchApTab(1)">2. SpmPnel Engine (20M Views/Day)</button>
-      <button type="button" class="ap-tab-btn" onclick="switchApTab(2)">3. Attribution &amp; Tier-1 Geo Reach (9.35% CVR)</button>
-      <button type="button" class="ap-tab-btn" onclick="switchApTab(3)">4. 2026 Monthly P&amp;L Velocity ($33.4K Peak)</button>
+      <button type="button" class="ap-tab-btn active" onclick="switchApTab(0)">01 · Revenue Architecture</button>
+      <button type="button" class="ap-tab-btn" onclick="switchApTab(1)">02 · SpmPnel Engine (20M/Day)</button>
+      <button type="button" class="ap-tab-btn" onclick="switchApTab(2)">03 · Attribution &amp; Tier-1 Geo</button>
+      <button type="button" class="ap-tab-btn" onclick="switchApTab(3)">04 · 2026 Monthly P&amp;L</button>
     </div>
 
-    <!-- TAB 1: Revenue Architecture -->
+    <!-- TAB 1: Revenue Architecture (Compact Side-by-Side + 2x2 Grid) -->
     <div class="ap-panel active" id="ap-panel-0">
       <div class="ap-section-head">
         <span>D2C Revenue Architecture &amp; Backend Monetization Split</span>
-        <span class="ap-mono">Oct 2, 2024 – Nov 2, 2026</span>
+        <span class="ap-mono">Oct 2024 – Nov 2026</span>
       </div>
 
-      <div class="ap-bar-group">
-        <div class="ap-bar-header">
-          <span>Conversational Upsells (Direct-to-User Microtransactions) — 77.11% Share</span>
-          <span class="ap-mono">$362,552.90 Gross | $290,037.82 Net</span>
+      <div class="ap-split-view">
+        <!-- Left: Visual Bars -->
+        <div>
+          <div class="ap-bar-group">
+            <div class="ap-bar-header">
+              <span>Conversational Upsells (Direct CRM)</span>
+              <span class="ap-mono">77.11% ($362.6K)</span>
+            </div>
+            <div class="ap-bar-track">
+              <div class="ap-bar-fill" style="width: 77.11%; background: #3b82f6;"></div>
+            </div>
+          </div>
+
+          <div class="ap-bar-group">
+            <div class="ap-bar-header">
+              <span>Recurring Memberships (Entry MRR)</span>
+              <span class="ap-mono">14.41% ($67.7K)</span>
+            </div>
+            <div class="ap-bar-track">
+              <div class="ap-bar-fill" style="width: 14.41%; background: #10b981;"></div>
+            </div>
+          </div>
+
+          <div class="ap-bar-group">
+            <div class="ap-bar-header">
+              <span>Premium Service Add-Ons (Custom)</span>
+              <span class="ap-mono">8.45% ($39.7K)</span>
+            </div>
+            <div class="ap-bar-track">
+              <div class="ap-bar-fill" style="width: 8.45%; background: #8b5cf6;"></div>
+            </div>
+          </div>
+
+          <div class="ap-bar-group">
+            <div class="ap-bar-header">
+              <span>Gated Feed Drops (One-Off Releases)</span>
+              <span class="ap-mono">0.02% ($110)</span>
+            </div>
+            <div class="ap-bar-track">
+              <div class="ap-bar-fill" style="width: 1%; background: #38bdf8;"></div>
+            </div>
+          </div>
         </div>
-        <div class="ap-bar-track">
-          <div class="ap-bar-fill" style="width: 77.11%; background: #3b82f6;"></div>
+
+        <!-- Right: Compact Summary Table -->
+        <div>
+          <table class="ap-table">
+            <thead>
+              <tr>
+                <th>Stream</th>
+                <th style="text-align: right;">Gross</th>
+                <th style="text-align: right;">Net (Post-Fee)</th>
+                <th style="text-align: right;">Share</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Conversational CRM</td>
+                <td style="text-align: right;">$362,553</td>
+                <td style="text-align: right;">$290,038</td>
+                <td style="text-align: right;">77.11%</td>
+              </tr>
+              <tr>
+                <td>Recurring MRR</td>
+                <td style="text-align: right;">$67,750</td>
+                <td style="text-align: right;">$54,200</td>
+                <td style="text-align: right;">14.41%</td>
+              </tr>
+              <tr>
+                <td>Premium Add-Ons</td>
+                <td style="text-align: right;">$39,737</td>
+                <td style="text-align: right;">$31,789</td>
+                <td style="text-align: right;">8.45%</td>
+              </tr>
+              <tr>
+                <td>Gated Feed Drops</td>
+                <td style="text-align: right;">$110</td>
+                <td style="text-align: right;">$88</td>
+                <td style="text-align: right;">0.02%</td>
+              </tr>
+              <tr style="border-top: 1px solid #232c3d; font-weight: 700; color: #f8fafc;">
+                <td>Total Volume</td>
+                <td style="text-align: right;">$470,149</td>
+                <td style="text-align: right;">$376,115</td>
+                <td style="text-align: right;">100.0%</td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
 
-      <div class="ap-bar-group">
-        <div class="ap-bar-header">
-          <span>Recurring Memberships (Front-End MRR Entry) — 14.41% Share</span>
-          <span class="ap-mono">$67,749.75 Gross | $54,199.86 Net</span>
-        </div>
-        <div class="ap-bar-track">
-          <div class="ap-bar-fill" style="width: 14.41%; background: #10b981;"></div>
-        </div>
-      </div>
-
-      <div class="ap-bar-group">
-        <div class="ap-bar-header">
-          <span>Premium Service Add-Ons (Custom Requests &amp; Micro-Monetization) — 8.45% Share</span>
-          <span class="ap-mono">$39,736.66 Gross | $31,789.33 Net</span>
-        </div>
-        <div class="ap-bar-track">
-          <div class="ap-bar-fill" style="width: 8.45%; background: #8b5cf6;"></div>
-        </div>
-      </div>
-
-      <div class="ap-bar-group">
-        <div class="ap-bar-header">
-          <span>Gated Feed Drops (One-Off Digital Releases) — 0.02% Share</span>
-          <span class="ap-mono">$109.89 Gross | $87.89 Net</span>
-        </div>
-        <div class="ap-bar-track">
-          <div class="ap-bar-fill" style="width: 0.5%; background: #3b82f6;"></div>
-        </div>
-      </div>
-
-      <table class="ap-table">
-        <thead>
-          <tr>
-            <th>Revenue Stream</th>
-            <th style="text-align: right;">Gross USD</th>
-            <th style="text-align: right;">Net USD (Post-Platform Fee)</th>
-            <th style="text-align: right;">Share of Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Conversational Upsells (Direct/CRM)</td>
-            <td style="text-align: right;">$362,552.90</td>
-            <td style="text-align: right;">$290,037.82</td>
-            <td style="text-align: right;">77.11%</td>
-          </tr>
-          <tr>
-            <td>Recurring Memberships (Front-End MRR)</td>
-            <td style="text-align: right;">$67,749.75</td>
-            <td style="text-align: right;">$54,199.86</td>
-            <td style="text-align: right;">14.41%</td>
-          </tr>
-          <tr>
-            <td>Premium Service Add-Ons (Custom Requests)</td>
-            <td style="text-align: right;">$39,736.66</td>
-            <td style="text-align: right;">$31,789.33</td>
-            <td style="text-align: right;">8.45%</td>
-          </tr>
-          <tr>
-            <td>Gated Feed Drops (One-Off Releases)</td>
-            <td style="text-align: right;">$109.89</td>
-            <td style="text-align: right;">$87.89</td>
-            <td style="text-align: right;">0.02%</td>
-          </tr>
-          <tr style="border-top: 2px solid #232c3d; font-weight: 700;">
-            <td>Total Realized Volume</td>
-            <td style="text-align: right;">$470,149.20</td>
-            <td style="text-align: right;">$376,114.90</td>
-            <td style="text-align: right;">100.00%</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <!-- Cards 1-4: Executive Breakdown -->
+      <!-- Compact 2x2 Grid for Cards 1-4 -->
       <div class="ap-explain-grid">
         <div class="ap-explain-card">
           <div class="ap-explain-num">1</div>
           <div class="ap-explain-content">
-            <h4>All-Time Gross ($470,149.20) vs. Net ($376,114.90)</h4>
-            <p>
-              <strong>Gross ($470,149.20)</strong> represents total transaction volume processed across the flagship D2C property between Oct 2, 2024 and Nov 2, 2026. 
-              <strong>Net ($376,114.90)</strong> reflects realized post-platform revenue after standard 20% payment processing and infrastructure fees ($470,149.20 &times; 80% = $376,114.90).
-            </p>
+            <h4>Gross ($470.1K) vs. Realized Net ($376.1K)</h4>
+            <p>Total transaction volume processed Oct 2024 – Nov 2026, netting <strong>$376,114.90</strong> after standard 20% platform &amp; payment processing fees.</p>
           </div>
         </div>
 
         <div class="ap-explain-card">
           <div class="ap-explain-num">2</div>
           <div class="ap-explain-content">
-            <h4>Recurring Memberships = "The Entry Ticket" ($67,749.75 Gross | 14.41% Share)</h4>
-            <p>
-              Only <strong>14.41%</strong> of total revenue ($67,749.75 Gross / $54,199.86 Net) came from the initial front-end membership fee users paid to join the community—intentionally structured as a low-friction acquisition gate.
-            </p>
+            <h4>Front-End Entry Gate (14.41% Share)</h4>
+            <p>Initial memberships (<strong>$67,749.75 Gross</strong>) were intentionally priced as a low-friction acquisition gate to maximize top-of-funnel member velocity.</p>
           </div>
         </div>
 
         <div class="ap-explain-card">
           <div class="ap-explain-num">3</div>
           <div class="ap-explain-content">
-            <h4>Backend Monetization Share = "In-Funnel Expansion" (85.59% | $402,399.45 Gross)</h4>
-            <p>Once active members entered the ecosystem, <strong>85.59% of all revenue</strong> came from automated backend upsells:</p>
-            <ul>
-              <li>&bull; <strong>Conversational Upsells ($362,552.90 Gross / $290,037.82 Net — 77.11%):</strong> Segmented direct-to-user CRM microtransactions.</li>
-              <li>&bull; <strong>Premium Service Add-Ons ($39,736.66 Gross / $31,789.33 Net — 8.45%):</strong> High-intent custom requests and bespoke tier add-ons.</li>
-              <li>&bull; <strong>Gated Feed Drops ($109.89 Gross / $87.89 Net — 0.02%):</strong> One-off pay-to-unlock digital releases.</li>
-            </ul>
-            <p>Adding all three backend streams ($362,552.90 + $39,736.66 + $109.89) delivers <strong>$402,399.45 Gross ($321,915.04 Net)</strong>.</p>
+            <h4>In-Funnel Backend Expansion (85.59% Share)</h4>
+            <p>Automated CRM microtransactions (<strong>$362.6K</strong>) and custom add-ons (<strong>$39.7K</strong>) generated <strong>$402,399 Gross</strong> inside the ecosystem.</p>
           </div>
         </div>
 
         <div class="ap-explain-card">
           <div class="ap-explain-num">4</div>
           <div class="ap-explain-content">
-            <h4>LTV Expansion Multiplier (6.94x)</h4>
-            <p>
-              Calculated by dividing Total Gross Revenue (<strong>$470,149.20</strong>) by Front-End Membership Gross Revenue (<strong>$67,749.75</strong>) = <strong>6.94x</strong>. 
-              In plain terms: for every <strong>$1.00</strong> a member spends at initial signup, the backend conversational CRM system expands it into <strong>$6.94</strong> in total realized revenue.
-            </p>
+            <h4>6.94x LTV Expansion Multiplier</h4>
+            <p>Every <strong>$1.00</strong> captured at initial membership checkout expanded into <strong>$6.94</strong> in total realized revenue ($470,149 &divide; $67,750).</p>
           </div>
         </div>
       </div>
 
       <div class="ap-takeaway-box">
-        <strong>Executive Takeaway:</strong> "On our flagship D2C property, front-end recurring memberships were just 14.4% of revenue. I engineered our backend conversational monetization funnel so that post-acquisition CRM workflows generated 85.6% of total volume—turning every $1.00 of initial entry spend into $6.94 in realized LTV."
+        <strong>Executive Takeaway:</strong> Front-end recurring memberships accounted for just 14.4% of volume; our post-acquisition conversational CRM funnel generated 85.6% of revenue—multiplying initial checkout value by 6.94x.
       </div>
     </div>
 
@@ -1157,7 +1168,7 @@ ul.skills li {
     <div class="ap-panel" id="ap-panel-1">
       <div class="ap-section-head">
         <span>SpmPnel Automated Distribution Infrastructure</span>
-        <span class="ap-mono">444 Active Channels | 600M Monthly View Run-Rate</span>
+        <span class="ap-mono">444 Active Channels · 600M Monthly View Run-Rate</span>
       </div>
       <table class="ap-table">
         <thead>
@@ -1198,88 +1209,93 @@ ul.skills li {
     <!-- TAB 3: Attribution & Tier-1 Geo Reach -->
     <div class="ap-panel" id="ap-panel-2">
       <div class="ap-section-head">
-        <span>Top-5 Acquisition Tracking Links &amp; Tier-1 Audience Geography</span>
-        <span class="ap-mono">86 Active Tracking Links | 9,081 Paid Members</span>
+        <span>Top-5 Acquisition Tracking Links &amp; Tier-1 Geography</span>
+        <span class="ap-mono">86 Tracking Links · 9,081 Paid Members</span>
       </div>
-      <table class="ap-table">
-        <thead>
-          <tr>
-            <th>Campaign / Tracking Source</th>
-            <th style="text-align: right;">Unique Clicks</th>
-            <th style="text-align: right;">New Paid Members</th>
-            <th style="text-align: right;">Conversion Rate (CVR)</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>IG Social Funnel (Primary Bio Matrix)</td>
-            <td style="text-align: right;">47,338</td>
-            <td style="text-align: right;">4,998</td>
-            <td style="text-align: right;">10.56%</td>
-          </tr>
-          <tr>
-            <td>SpmPnel Automated Distribution Fleet</td>
-            <td style="text-align: right;">26,600</td>
-            <td style="text-align: right;">1,853</td>
-            <td style="text-align: right;">6.97%</td>
-          </tr>
-          <tr>
-            <td>IG Reels Organic Hook Testing</td>
-            <td style="text-align: right;">3,180</td>
-            <td style="text-align: right;">329</td>
-            <td style="text-align: right;">10.35%</td>
-          </tr>
-          <tr>
-            <td>Viral Curiosity Hook Variant ("Oopsie")</td>
-            <td style="text-align: right;">3,180</td>
-            <td style="text-align: right;">296</td>
-            <td style="text-align: right;">9.31%</td>
-          </tr>
-          <tr>
-            <td>High-Intent Direct Placement (#571782)</td>
-            <td style="text-align: right;">64</td>
-            <td style="text-align: right;">37</td>
-            <td style="text-align: right;">57.81%</td>
-          </tr>
-        </tbody>
-      </table>
-
-      <table class="ap-table" style="margin-top: 28px;">
-        <thead>
-          <tr>
-            <th>Tier-1 Geographic Market (Oct 3 – Nov 2, 2026)</th>
-            <th style="text-align: right;">Unique Visitors</th>
-            <th style="text-align: right;">Share of Traffic</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>United States</td>
-            <td style="text-align: right;">68,087</td>
-            <td style="text-align: right;">71.06%</td>
-          </tr>
-          <tr>
-            <td>Canada</td>
-            <td style="text-align: right;">5,639</td>
-            <td style="text-align: right;">5.89%</td>
-          </tr>
-          <tr>
-            <td>United Kingdom</td>
-            <td style="text-align: right;">4,316</td>
-            <td style="text-align: right;">4.50%</td>
-          </tr>
-          <tr>
-            <td>Rest of World (EU / ANZ / Global)</td>
-            <td style="text-align: right;">17,771</td>
-            <td style="text-align: right;">18.55%</td>
-          </tr>
-          <tr style="border-top: 2px solid #232c3d; font-weight: 700;">
-            <td>Total 30-Day Funnel Visitors (81.45% Tier-1 English Markets)</td>
-            <td style="text-align: right;">95,813</td>
-            <td style="text-align: right;">100.00%</td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="ap-split-view" style="margin-bottom: 0;">
+        <div>
+          <table class="ap-table">
+            <thead>
+              <tr>
+                <th>Campaign Source</th>
+                <th style="text-align: right;">Clicks</th>
+                <th style="text-align: right;">Members</th>
+                <th style="text-align: right;">CVR</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>IG Social Funnel (Primary)</td>
+                <td style="text-align: right;">47,338</td>
+                <td style="text-align: right;">4,998</td>
+                <td style="text-align: right;">10.56%</td>
+              </tr>
+              <tr>
+                <td>SpmPnel Automated Fleet</td>
+                <td style="text-align: right;">26,600</td>
+                <td style="text-align: right;">1,853</td>
+                <td style="text-align: right;">6.97%</td>
+              </tr>
+              <tr>
+                <td>IG Reels Hook Testing</td>
+                <td style="text-align: right;">3,180</td>
+                <td style="text-align: right;">329</td>
+                <td style="text-align: right;">10.35%</td>
+              </tr>
+              <tr>
+                <td>Curiosity Hook ("Oopsie")</td>
+                <td style="text-align: right;">3,180</td>
+                <td style="text-align: right;">296</td>
+                <td style="text-align: right;">9.31%</td>
+              </tr>
+              <tr>
+                <td>Direct Placement (#571782)</td>
+                <td style="text-align: right;">64</td>
+                <td style="text-align: right;">37</td>
+                <td style="text-align: right;">57.81%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <table class="ap-table">
+            <thead>
+              <tr>
+                <th>Tier-1 Market (30d)</th>
+                <th style="text-align: right;">Visitors</th>
+                <th style="text-align: right;">Share</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>United States</td>
+                <td style="text-align: right;">68,087</td>
+                <td style="text-align: right;">71.06%</td>
+              </tr>
+              <tr>
+                <td>Canada</td>
+                <td style="text-align: right;">5,639</td>
+                <td style="text-align: right;">5.89%</td>
+              </tr>
+              <tr>
+                <td>United Kingdom</td>
+                <td style="text-align: right;">4,316</td>
+                <td style="text-align: right;">4.50%</td>
+              </tr>
+              <tr>
+                <td>Rest of World (EU/ANZ)</td>
+                <td style="text-align: right;">17,771</td>
+                <td style="text-align: right;">18.55%</td>
+              </tr>
+              <tr style="border-top: 1px solid #232c3d; font-weight: 700; color: #f8fafc;">
+                <td>Total (81.5% Tier-1)</td>
+                <td style="text-align: right;">95,813</td>
+                <td style="text-align: right;">100.0%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- TAB 4: 2026 Monthly P&L Velocity -->
@@ -1293,7 +1309,7 @@ ul.skills li {
           <tr>
             <th>Month (2026)</th>
             <th style="text-align: right;">Gross USD</th>
-            <th style="text-align: right;">Net USD (Post-Platform Fee)</th>
+            <th style="text-align: right;">Net USD (Post-Fee)</th>
             <th style="text-align: right;">Key Operational Driver</th>
           </tr>
         </thead>
