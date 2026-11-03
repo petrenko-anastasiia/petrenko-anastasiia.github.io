@@ -774,6 +774,24 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .top-cv{font-size:12px;font-weight:600;color:var(--ink);text-decoration:none;letter-spacing:.04em}
 @media (max-width:899px){.top-left{gap:8px}}
 
+/* === reorder pass: compact growth case, hero proof row === */
+.hero-k{font-family:var(--mono);font-size:12px;letter-spacing:.08em;color:var(--red);font-weight:600;margin:0 0 14px}
+.hero-proof{display:none;list-style:none;margin:22px 0 0;padding:14px 0 0;border-top:1px solid var(--line);gap:14px 20px;flex-wrap:wrap;justify-content:center}
+.hero-proof li{display:flex;flex-direction:column;align-items:center;font-size:12px;color:var(--muted);text-align:center;min-width:88px}
+.hero-proof .num{font-size:22px;color:var(--ink);line-height:1.1;margin-bottom:2px}
+.hero-proof li:first-child .num{color:var(--red)}
+@media (max-width:899px){.hero-col .hero-k{order:0}.hero-proof{display:flex;order:3}.hero-col .hero-ctas{margin-bottom:0!important}.hero-col .hero-side{margin-top:28px}}
+.growth-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:48px;align-items:start}
+.growth-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:26px 28px}
+.growth-n{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.growth-n .num{font-size:40px;color:var(--ink);letter-spacing:-.04em;line-height:1}
+.growth-n span:last-child{font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.growth-card p{font-size:16px;line-height:1.55;color:var(--muted)}
+.growth-card p strong{color:var(--ink);font-weight:600}
+.growth-note{margin-top:14px;font-size:13px;font-style:italic}
+@media (max-width:960px){.growth-grid{grid-template-columns:1fr;gap:24px}}
+@media (max-width:640px){.growth-card{padding:20px}.growth-n .num{font-size:32px}}
+
 </style>
 </head>
 <body>
@@ -782,7 +800,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
   <div class="wrap">
     <div class="top-left"><a class="top-cv" href="assets/Anastasiia_Petrenko_Resume.pdf">CV</a><a class="top-name" href="#">Anastasiia Petrenko</a></div>
     <div class="status"><i></i> Open to remote roles &amp; freelance · EU</div>
-    <nav class="top-nav"><a href="#ap-growth-case-study">Growth case</a><a href="#tool">Postroom</a><a href="#paid">Paid Social</a><a href="#hooklab">Hook Lab</a><a href="#strategy">Brand incubation</a><a href="#contact">Contact</a></nav>
+    <nav class="top-nav"><a href="#paid">Paid social</a><a href="#hooklab">Hook Lab</a><a href="#tool">Postroom</a><a href="#ap-growth-case-study">Growth case</a><a href="#strategy">Brand incubation</a><a href="#contact">Contact</a></nav>
   </div>
 </header>
 
@@ -791,9 +809,11 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
   <div class="wrap hero-grid">
     <div class="hero-col">
       <div class="hero-main">
+      <p class="hero-k">Anastasiia Petrenko · paid social · AI production</p>
       <h1>Creative <em>strategist</em></h1>
       <p class="hook">I decode what makes top-performing ads convert—and build the creative systems to scale them.</p>
-      <div class="lanes hero-ctas"><a class="pill-cta" href="#tool">See the work <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
+      <div class="lanes hero-ctas"><a class="pill-cta" href="#paid">See the work <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
+      <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue</li><li><span class="num">~75%</span>faster publishing</li></ul>
       </div>
       <div class="hero-aside">
       <div class="hero-side">
@@ -821,676 +841,18 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
       <a class="ulink" href="#paid">How I did it <span aria-hidden="true">↓</span></a>
     </div>
     <ul class="stat-list">
-      <li><span class="num">$471K</span><span><strong>gross revenue</strong> on the agency's flagship creator account — <strong>86%</strong> of it earned after the subscription</span></li>
+      <li><span class="num">$471K</span><span><strong>gross revenue</strong> on a subscription business I co-founded — <strong>86%</strong> from lifecycle and CRM after sign-up</span></li>
       <li><span class="num">~75%</span><span><strong>faster publishing</strong> after building <strong>Postroom</strong> in Cursor</span></li>
       <li><span class="num">50+</span><span><strong>accounts</strong> run on paid social across Meta and TikTok, with an 8–12 person team</span></li>
     </ul>
   </div>
 </div>
 
-<!-- =========================================================================
-     START: SUBSCRIPTION GROWTH CASE STUDY (platform statements, Oct 2024 – Nov 2026)
-     ========================================================================= -->
-<section id="ap-growth-case-study" class="block ap-portfolio-wrap ap-collapsed">
-  <style>
-    .ap-portfolio-wrap {
-      background-color: #0b0e14;
-      color: #f1f5f9;
-      font-family: var(--sans);
-      border-top: 1px solid #232c3d;
-      border-bottom: 1px solid #232c3d;
-      line-height: 1.5;
-    }
-    .ap-top-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 1fr;
-      gap: 48px;
-      align-items: center;
-      margin-bottom: 28px;
-    }
-    .ap-top-grid h2 {
-      max-width: none !important;
-      margin: 0;
-    }
-    .ap-top-grid .sub {
-      margin-top: 0;
-      max-width: 52ch;
-      font-size: 18px;
-    }
-    .ap-hero-kpis {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 14px;
-      margin-bottom: 20px;
-    }
-    .ap-kpi-card {
-      background: #121721;
-      border: 1px solid #232c3d;
-      border-radius: 14px;
-      padding: 16px 18px;
-    }
-    .ap-kpi-label {
-      font-size: 10.5px;
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      color: #94a3b8;
-      margin-bottom: 6px;
-      font-weight: 600;
-    }
-    .ap-kpi-val {
-      font-size: clamp(22px, 2.2vw, 28px);
-      font-weight: 700;
-      font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
-      color: #f8fafc;
-      line-height: 1.1;
-    }
-    .ap-kpi-sub {
-      font-size: 12.5px;
-      color: #10b981;
-      margin-top: 6px;
-    }
-    .ap-tabs {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      margin-bottom: 16px;
-    }
-    .ap-tab-btn {
-      background: #121721;
-      color: #94a3b8;
-      border: 1px solid #232c3d;
-      border-radius: 8px;
-      padding: 10px 12px;
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      font-family: inherit;
-      text-align: center;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    .ap-tab-btn:hover {
-      color: #f1f5f9;
-      border-color: #38bdf8;
-    }
-    .ap-tab-btn.active {
-      background: rgba(56, 189, 248, 0.14);
-      color: #38bdf8;
-      border-color: #38bdf8;
-    }
-    .ap-panel {
-      display: none;
-      background: #121721;
-      border: 1px solid #232c3d;
-      border-radius: 16px;
-      padding: 22px 24px;
-    }
-    .ap-panel.active {
-      display: block;
-    }
-    .ap-section-head {
-      font-size: 16px;
-      font-weight: 600;
-      margin-bottom: 18px;
-      padding-bottom: 12px;
-      border-bottom: 1px solid #232c3d;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .ap-mono {
-      font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 12.5px;
-      color: #94a3b8;
-    }
-    .ap-split-view {
-      display: grid;
-      grid-template-columns: 1.05fr 0.95fr;
-      gap: 28px;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-    .ap-bar-group {
-      margin-bottom: 12px;
-    }
-    .ap-bar-group:last-child {
-      margin-bottom: 0;
-    }
-    .ap-bar-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 5px;
-      gap: 8px;
-    }
-    .ap-bar-track {
-      width: 100%;
-      height: 8px;
-      background: #1e2638;
-      border-radius: 999px;
-      overflow: hidden;
-    }
-    .ap-bar-fill {
-      height: 100%;
-      border-radius: 999px;
-    }
-    .ap-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 13px;
-    }
-    .ap-table th {
-      text-align: left;
-      color: #94a3b8;
-      font-weight: 600;
-      padding: 8px 8px;
-      border-bottom: 1px solid #232c3d;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .ap-table td {
-      padding: 9px 8px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-      font-family: ui-monospace, "SF Mono", SFMono-Regular, Menlo, Consolas, monospace;
-      font-size: 12.5px;
-    }
-    .ap-table td:first-child {
-      font-family: var(--sans);
-      font-weight: 500;
-      font-size: 13px;
-    }
-    .ap-explain-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      margin-top: 16px;
-    }
-    .ap-explain-card {
-      background: #161d2a;
-      border: 1px solid #232c3d;
-      border-radius: 12px;
-      padding: 14px 16px;
-      display: flex;
-      gap: 12px;
-      align-items: flex-start;
-    }
-    .ap-explain-num {
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      background: rgba(56, 189, 248, 0.15);
-      border: 1px solid #38bdf8;
-      color: #38bdf8;
-      font-weight: 700;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 1px;
-    }
-    .ap-explain-content h4 {
-      color: #f8fafc;
-      font-size: 14px;
-      font-weight: 600;
-      margin: 0 0 4px 0;
-    }
-    .ap-explain-content p {
-      color: #94a3b8;
-      font-size: 13px;
-      line-height: 1.45;
-      margin: 0;
-    }
-    .ap-explain-content strong {
-      color: #e2e8f0;
-    }
-    .ap-takeaway-box {
-      margin-top: 14px;
-      background: rgba(16, 185, 129, 0.08);
-      border-left: 3px solid #10b981;
-      border-radius: 6px;
-      padding: 12px 16px;
-      font-size: 13px;
-      color: #cbd5e1;
-      line-height: 1.5;
-    }
-    .ap-takeaway-box strong {
-      color: #10b981;
-    }
-    @media (max-width: 960px) {
-      .ap-top-grid, .ap-split-view, .ap-explain-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
-      }
-      .ap-hero-kpis, .ap-tabs {
-        grid-template-columns: repeat(2, 1fr);
-      }
-    }
-    @media (max-width: 640px) {
-      .ap-hero-kpis, .ap-tabs {
-        grid-template-columns: 1fr;
-      }
-      .ap-bar-header { flex-direction: column; gap: 2px; }
-      .ap-panel { padding: 16px; }
-    }
-  </style>
-
-  <div class="wrap">
-    <div class="ap-top-grid">
-      <div><p class="sec-k">01 · Growth case</p><h2>Subscription <em>growth</em></h2></div>
-      <p class="sub">Co-founded an agency managing creators on a subscription platform: recruited and managed the talent roster, hired and led an 8–12 person chat, content and ops team, and owned pricing, the 1:1 chat upsell funnel and retention. Figures are from the platform's own statements for the flagship account, Oct 2024 – Nov 2026.</p>
-    </div>
-
-    <!-- Top-Level Summary KPIs -->
-    <div class="ap-hero-kpis">
-      <div class="ap-kpi-card">
-        <div class="ap-kpi-label">All-time gross revenue</div>
-        <div class="ap-kpi-val">$471,694</div>
-        <div class="ap-kpi-sub">$377,350 net after platform fee</div>
-      </div>
-      <div class="ap-kpi-card">
-        <div class="ap-kpi-label">Earned after the subscription</div>
-        <div class="ap-kpi-val">86%</div>
-        <div class="ap-kpi-sub">6.96x on subscription revenue</div>
-      </div>
-      <div class="ap-kpi-card">
-        <div class="ap-kpi-label">Last 30 days · profile visitors</div>
-        <div class="ap-kpi-val">98,036</div>
-        <div class="ap-kpi-sub">+90% vs prior 30 days · 2,581 new subscribers</div>
-      </div>
-      <div class="ap-kpi-card">
-        <div class="ap-kpi-label">Platform rank</div>
-        <div class="ap-kpi-val">Top 2%</div>
-        <div class="ap-kpi-sub">of accounts · 0% chargeback ratio</div>
-      </div>
-    </div>
-
-    <button class="ap-toggle" type="button" aria-expanded="false" aria-controls="ap-detail"><span class="ap-toggle-open">See the breakdown</span><span class="ap-toggle-close">Hide the breakdown</span> <i aria-hidden="true">↓</i></button>
-
-    <!-- Interactive Navigation Tabs -->
-    <div class="ap-tabs" id="ap-detail">
-      <button type="button" class="ap-tab-btn active" onclick="switchApTab(0)">01 · Revenue mix</button>
-      <button type="button" class="ap-tab-btn" onclick="switchApTab(1)">02 · Funnel &amp; audience</button>
-      <button type="button" class="ap-tab-btn" onclick="switchApTab(2)">03 · 2026 by month</button>
-    </div>
-
-    <!-- TAB 1: Revenue mix -->
-    <div class="ap-panel active" id="ap-panel-0">
-      <div class="ap-section-head">
-        <span>Where the revenue came from</span>
-        <span class="ap-mono">Oct 2024 – Nov 2026 · platform statements</span>
-      </div>
-
-      <div class="ap-split-view">
-        <div>
-          <div class="ap-bar-group">
-            <div class="ap-bar-header">
-              <span>1:1 chat upsells (conversational commerce)</span>
-              <span class="ap-mono">77.2% ($364.1K)</span>
-            </div>
-            <div class="ap-bar-track">
-              <div class="ap-bar-fill" style="width: 77.2%; background: #3b82f6;"></div>
-            </div>
-          </div>
-
-          <div class="ap-bar-group">
-            <div class="ap-bar-header">
-              <span>Subscriptions (entry)</span>
-              <span class="ap-mono">14.4% ($67.7K)</span>
-            </div>
-            <div class="ap-bar-track">
-              <div class="ap-bar-fill" style="width: 14.4%; background: #10b981;"></div>
-            </div>
-          </div>
-
-          <div class="ap-bar-group">
-            <div class="ap-bar-header">
-              <span>Add-on purchases (one-off)</span>
-              <span class="ap-mono">8.4% ($39.7K)</span>
-            </div>
-            <div class="ap-bar-track">
-              <div class="ap-bar-fill" style="width: 8.4%; background: #8b5cf6;"></div>
-            </div>
-          </div>
-
-          <div class="ap-bar-group">
-            <div class="ap-bar-header">
-              <span>Premium content (one-off)</span>
-              <span class="ap-mono">0.02% ($110)</span>
-            </div>
-            <div class="ap-bar-track">
-              <div class="ap-bar-fill" style="width: 1%; background: #38bdf8;"></div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <table class="ap-table">
-            <thead>
-              <tr>
-                <th>Stream</th>
-                <th style="text-align: right;">Gross</th>
-                <th style="text-align: right;">Net</th>
-                <th style="text-align: right;">Share</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Chat upsells</td>
-                <td style="text-align: right;">$364,092</td>
-                <td style="text-align: right;">$291,269</td>
-                <td style="text-align: right;">77.2%</td>
-              </tr>
-              <tr>
-                <td>Subscriptions</td>
-                <td style="text-align: right;">$67,750</td>
-                <td style="text-align: right;">$54,200</td>
-                <td style="text-align: right;">14.4%</td>
-              </tr>
-              <tr>
-                <td>Add-ons</td>
-                <td style="text-align: right;">$39,742</td>
-                <td style="text-align: right;">$31,794</td>
-                <td style="text-align: right;">8.4%</td>
-              </tr>
-              <tr>
-                <td>Premium content</td>
-                <td style="text-align: right;">$110</td>
-                <td style="text-align: right;">$88</td>
-                <td style="text-align: right;">0.02%</td>
-              </tr>
-              <tr style="border-top: 1px solid #232c3d; font-weight: 700; color: #f8fafc;">
-                <td>Total</td>
-                <td style="text-align: right;">$471,694</td>
-                <td style="text-align: right;">$377,350</td>
-                <td style="text-align: right;">100%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="ap-explain-grid">
-        <div class="ap-explain-card">
-          <div class="ap-explain-num">1</div>
-          <div class="ap-explain-content">
-            <h4>Gross $471.7K → net $377.4K</h4>
-            <p>Total processed Oct 2024 – Nov 2026; the platform keeps a flat <strong>20%</strong>, so net is what the business actually received.</p>
-          </div>
-        </div>
-
-        <div class="ap-explain-card">
-          <div class="ap-explain-num">2</div>
-          <div class="ap-explain-content">
-            <h4>Subscription as the entry gate (14%)</h4>
-            <p>The subscription (<strong>$67.7K</strong>) was priced low on purpose and moved to free in 2026, so the job of the front end was fan velocity, not revenue.</p>
-          </div>
-        </div>
-
-        <div class="ap-explain-card">
-          <div class="ap-explain-num">3</div>
-          <div class="ap-explain-content">
-            <h4>Revenue made in the conversation (86%)</h4>
-            <p>Chat upsells (<strong>$364.1K</strong>) and add-on purchases (<strong>$39.7K</strong>) — <strong>$403.9K</strong> — were earned after sign-up by the chat team running scripted, segmented upsell sequences.</p>
-          </div>
-        </div>
-
-        <div class="ap-explain-card">
-          <div class="ap-explain-num">4</div>
-          <div class="ap-explain-content">
-            <h4>6.96x on subscription revenue</h4>
-            <p>Every <strong>$1.00</strong> of subscription revenue became <strong>$6.96</strong> in total revenue ($471,694 ÷ $67,750) — the retention and lifecycle work is the business.</p>
-          </div>
-        </div>
-      </div>
-
-      <div class="ap-takeaway-box">
-        <strong>Takeaway:</strong> the subscription was 14% of revenue; the 1:1 chat funnel and the team running it generated 86%. This was a lifecycle and CRM (customer relationship management) operation, not a pricing play.
-      </div>
-    </div>
-
-    <!-- TAB 2: Funnel & audience -->
-    <div class="ap-panel" id="ap-panel-1">
-      <div class="ap-section-head">
-        <span>Funnel and audience, last 30 days</span>
-        <span class="ap-mono">Oct 4 – Nov 3, 2026 · platform statistics</span>
-      </div>
-      <div class="ap-split-view" style="margin-bottom: 0;">
-        <div>
-          <table class="ap-table">
-            <thead>
-              <tr>
-                <th>Funnel step</th>
-                <th style="text-align: right;">30 days</th>
-                <th style="text-align: right;">Note</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>Profile visitors</td>
-                <td style="text-align: right;">98,036</td>
-                <td style="text-align: right;">+90.2% vs prior 30d</td>
-              </tr>
-              <tr>
-                <td>New subscribers</td>
-                <td style="text-align: right;">2,581</td>
-                <td style="text-align: right;">2.6% of visitors</td>
-              </tr>
-              <tr>
-                <td>Active subscribers</td>
-                <td style="text-align: right;">3,421</td>
-                <td style="text-align: right;">+123.4%</td>
-              </tr>
-              <tr>
-                <td>Gross revenue</td>
-                <td style="text-align: right;">$16,619</td>
-                <td style="text-align: right;">98.7% from chat upsells</td>
-              </tr>
-              <tr style="border-top: 1px solid #232c3d; font-weight: 700; color: #f8fafc;">
-                <td>Chargeback ratio</td>
-                <td style="text-align: right;">0%</td>
-                <td style="text-align: right;">current</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div>
-          <table class="ap-table">
-            <thead>
-              <tr>
-                <th>Market (30d)</th>
-                <th style="text-align: right;">Visitors</th>
-                <th style="text-align: right;">Share</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>United States</td>
-                <td style="text-align: right;">69,247</td>
-                <td style="text-align: right;">70.6%</td>
-              </tr>
-              <tr>
-                <td>Canada</td>
-                <td style="text-align: right;">5,890</td>
-                <td style="text-align: right;">6.0%</td>
-              </tr>
-              <tr>
-                <td>United Kingdom</td>
-                <td style="text-align: right;">4,783</td>
-                <td style="text-align: right;">4.9%</td>
-              </tr>
-              <tr>
-                <td>Others</td>
-                <td style="text-align: right;">18,116</td>
-                <td style="text-align: right;">18.5%</td>
-              </tr>
-              <tr style="border-top: 1px solid #232c3d; font-weight: 700; color: #f8fafc;">
-                <td>Total (81.5% US/CA/UK)</td>
-                <td style="text-align: right;">98,036</td>
-                <td style="text-align: right;">100%</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
-      <div class="ap-takeaway-box">
-        <strong>Takeaway:</strong> with the subscription free, the front end is a traffic-and-conversion problem (visitors → subscribers at 2.6%) and the revenue is a retention problem — the same two levers as a DTC subscription brand. 81.5% of the audience is US, Canada and UK.
-      </div>
-    </div>
-
-    <!-- TAB 3: 2026 by month -->
-    <div class="ap-panel" id="ap-panel-2">
-      <div class="ap-section-head">
-        <span>2026 revenue by month</span>
-        <span class="ap-mono">Peak: $33,400 gross (May 2026) · 2026 to date: $184,457 gross</span>
-      </div>
-      <table class="ap-table">
-        <thead>
-          <tr>
-            <th>Month (2026)</th>
-            <th style="text-align: right;">Gross USD</th>
-            <th style="text-align: right;">Net USD</th>
-            <th style="text-align: right;">vs prior month</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>March</td>
-            <td style="text-align: right;">$9,067</td>
-            <td style="text-align: right;">$7,254</td>
-            <td style="text-align: right;">—</td>
-          </tr>
-          <tr>
-            <td>April</td>
-            <td style="text-align: right;">$14,202</td>
-            <td style="text-align: right;">$11,361</td>
-            <td style="text-align: right;">+56.6%</td>
-          </tr>
-          <tr style="color: #10b981; font-weight: 600;">
-            <td>May (peak)</td>
-            <td style="text-align: right;">$33,400</td>
-            <td style="text-align: right;">$26,720</td>
-            <td style="text-align: right;">+135.2%</td>
-          </tr>
-          <tr>
-            <td>June</td>
-            <td style="text-align: right;">$25,200</td>
-            <td style="text-align: right;">$20,160</td>
-            <td style="text-align: right;">−24.5%</td>
-          </tr>
-          <tr>
-            <td>July</td>
-            <td style="text-align: right;">$24,479</td>
-            <td style="text-align: right;">$19,583</td>
-            <td style="text-align: right;">−2.9%</td>
-          </tr>
-          <tr>
-            <td>August</td>
-            <td style="text-align: right;">$16,276</td>
-            <td style="text-align: right;">$13,021</td>
-            <td style="text-align: right;">−33.5%</td>
-          </tr>
-          <tr>
-            <td>September</td>
-            <td style="text-align: right;">$6,325</td>
-            <td style="text-align: right;">$5,060</td>
-            <td style="text-align: right;">−61.1%</td>
-          </tr>
-          <tr style="color: #38bdf8; font-weight: 600;">
-            <td>October</td>
-            <td style="text-align: right;">$14,671</td>
-            <td style="text-align: right;">$11,737</td>
-            <td style="text-align: right;">+131.9%</td>
-          </tr>
-        </tbody>
-      </table>
-      <div class="ap-takeaway-box">
-        <strong>Takeaway:</strong> revenue tracks the funnel work, not the calendar — the May peak followed a viral reel plus a rebuilt chat upsell sequence, and October's rebound came with a 90% rise in profile visitors and a 123% rise in subscribers (see Funnel &amp; audience).
-      </div>
-    </div>
-  </div>
-
-  <script>
-    (function(){
-      var wrap=document.getElementById('ap-growth-case-study');
-      var btn=wrap&&wrap.querySelector('.ap-toggle');
-      if(!btn) return;
-      btn.addEventListener('click',function(){
-        var open=wrap.classList.toggle('ap-collapsed')===false;
-        btn.setAttribute('aria-expanded',open?'true':'false');
-        if(!open){ wrap.scrollIntoView({behavior:'smooth',block:'start'}); }
-      });
-    })();
-    function switchApTab(idx) {
-      var wrap = document.getElementById('ap-growth-case-study');
-      if (!wrap) return;
-      var btns = wrap.querySelectorAll('.ap-tab-btn');
-      var panels = wrap.querySelectorAll('.ap-panel');
-      for (var i = 0; i < btns.length; i++) {
-        btns[i].classList.toggle('active', i === idx);
-      }
-      for (var j = 0; j < panels.length; j++) {
-        panels[j].classList.toggle('active', j === idx);
-      }
-    }
-  </script>
-</section>
-<!-- =========================================================================
-     END: SUBSCRIPTION GROWTH CASE STUDY
-     ========================================================================= -->
-
-<!-- POSTROOM -->
-<section class="block systems" id="tool">
-  <div class="wrap">
-    <div class="systems-top">
-      <div><p class="sec-k">02 · Tool I built</p><h2>Postroom</h2></div>
-      <div><p class="sub" style="margin-top:0">To remove publishing bottlenecks across multiple accounts, I built <strong>Postroom</strong> in Cursor. It brings AI caption generation, approval, scheduling and direct Instagram API publishing into one workspace.</p>
-      <p class="result-line"><span>Result</span> Used in production, cutting end-to-end posting time by <em>~75%</em>.</p></div>
-    </div>
-
-    <div class="tool-mini" id="content-ops-tool">
-      <ol class="tool-steps" aria-label="Workflow">
-        <li>Brief</li><li>AI caption options</li><li>Edit and approve</li><li>Schedule</li><li>Publish through Instagram API</li>
-      </ol>
-      <div class="tool-gallery">
-        <a class="tg-main" href="assets/img/tool/01-ai-caption-options.jpg" target="_blank" rel="noopener">
-          <img src="assets/img/tool/01-ai-caption-options.jpg" width="1500" height="1759" loading="lazy" alt="AI caption options, caption editor and live Instagram preview">
-          <span class="tg-k">01 · AI caption options</span>
-        </a>
-        <div class="tg-row">
-          <a href="assets/img/tool/02-instagram-schedule.jpg" target="_blank" rel="noopener">
-            <img src="assets/img/tool/02-instagram-schedule.jpg" width="1400" height="1104" loading="lazy" alt="Picking a posting slot with the Instagram API as destination">
-            <span class="tg-k">02 · Schedule</span>
-          </a>
-          <a href="assets/img/tool/03-approve-and-publish.jpg" target="_blank" rel="noopener">
-            <img src="assets/img/tool/03-approve-and-publish.jpg" width="1400" height="1099" loading="lazy" alt="Approving the final caption before scheduled delivery">
-            <span class="tg-k">03 · Approve</span>
-          </a>
-          <a href="assets/img/tool/04-api-published.jpg" target="_blank" rel="noopener">
-            <img src="assets/img/tool/04-api-published.jpg" width="1400" height="1126" loading="lazy" alt="Post published through the Instagram API">
-            <span class="tg-k">04 · Published via Instagram API</span>
-          </a>
-        </div>
-      </div>
-      <a class="tg-more" href="work/postroom/">3 more screens in the interactive demo <span aria-hidden="true">→</span></a>
-      <p class="tool-note">Screens recreated without client data.</p>
-      <a class="tool-cta" href="work/postroom/">Try the interactive demo</a>
-    </div>
-  </div>
-</section>
-
 <!-- PAID SOCIAL -->
 <section class="block paid" id="paid">
   <div class="wrap">
     <div class="paid-top">
-      <div><p class="sec-k">03 · Paid social</p><h2>Paid social</h2></div>
+      <div><p class="sec-k">01 · Paid social</p><h2>Paid social</h2></div>
       <p class="sub" data-fill="" style="margin-top:0">For four years I ran content and paid social for DTC lifestyle subscriptions &amp; creator-led brands. That meant creative testing on Meta and TikTok, short-form production for TikTok and Reels, and a content team behind it.</p>
     </div>
 
@@ -1542,14 +904,14 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
     <div class="cr-pin"><div class="cr-stick">
     <div class="creatives">
       <div class="creatives-head">
-        <p class="sec-k">04 · Hook Lab</p>
+        <p class="sec-k">02 · Hook Lab</p>
         <h3>Six pieces, one <em>hook type</em> each</h3>
         <p class="cr-sub">AI-produced, no shoot. Tap <span class="cr-spec-demo">Details</span> on a card for the hook, stack and strategic angle.</p>
       </div>
       <div class="cr-row">
         <a class="cr" data-view="" data-video="assets/video/outfit.mp4" href="assets/video/outfit.mp4"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="assets/img/outfit-transition.jpg" src="assets/video/outfit-loop.mp4" data-sound="assets/video/outfit-loop-audio.mp4?v=3" aria-label="AI-generated outfit transition clip"></video><span class="tg-k">Hook · Transition</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>Outfit transition</b><small>Trend-format hook</small><div class="cr-tags"><span>Before/After Transition</span><span>ComfyUI</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><div class="cr-bd"><p><i>Hook:</i> Visual: white dress, then a black chained look on the beat at ~3s.</p><p><i>Hook Type:</i> Before/After Transition</p><p><i>AI Stack &amp; Production:</i> ComfyUI</p><p><i>Strategic Angle:</i> A plain look in a crimson set builds a change viewers wait for.</p></div></a>
         <a class="cr" data-view="" href="work/argo/"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="assets/img/argo-video-poster.jpg?v=5" src="assets/video/argo-loop.mp4?v=5" data-sound="assets/video/argo-loop-audio.mp4?v=5" aria-label="ARGŌ golden body oil spec ad, AI-generated: a drop of gold oil lands in a miniature golden pool"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>ARGŌ golden body oil</b><small>Miniature-world spec ad, 9:16</small><div class="cr-tags"><span>Macro Texture Reveal</span><span>Nano Banana · Veo</span><button class="cr-spec" type="button" aria-expanded="false">Details</button><span class="cr-btn">Read Case Study <span aria-hidden="true">→</span></span></div><div class="cr-bd"><p><i>Hook:</i> Visual: macro of a gold oil drop swelling, then a hard cut to the splash.</p><p><i>Hook Type:</i> Macro Texture Reveal</p><p><i>AI Stack &amp; Production:</i> Nano Banana · Veo · ffmpeg edit · Claude · no shoot</p><p><i>Strategic Angle:</i> One glittering drop in extreme macro sells texture and builds tension.</p></div></a>
-        <a class="cr" data-view="" href="work/zola/"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="work/zola/poster.jpg" src="assets/video/zola-loop.mp4" data-sound="assets/video/zola-loop-audio.mp4?v=3" aria-label="ZOLA Brow Soap 15-second spec ad"></video><span class="tg-k">Spec ad · 15s</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>ZOLA Brow Soap Mini</b><small>Product ad, 9:16</small><div class="cr-tags"><span>Question Hook</span><span>Higgsfield · animated graphics</span><button class="cr-spec" type="button" aria-expanded="false">Details</button><span class="cr-btn">Read Case Study <span aria-hidden="true">→</span></span></div><div class="cr-bd"><p><i>Hook:</i> “Brows with attitude?” (on-screen)</p><p><i>Hook Type:</i> Question Hook</p><p><i>AI Stack &amp; Production:</i> Higgsfield · animated graphics · synthesized soundtrack · no shoot</p><p><i>Strategic Angle:</i> A bold question in giant type, with the product already in frame.</p></div></a>
+        <a class="cr" data-view="" href="work/zola/"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="work/zola/poster.jpg" src="assets/video/zola-loop.mp4" data-sound="assets/video/zola-loop-audio.mp4?v=3" aria-label="ZOLA Brow Soap 15-second spec ad"></video><span class="tg-k">Spec ad · 15s</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>ZOLA Brow Soap Mini</b><small>Unofficial spec ad, 9:16</small><div class="cr-tags"><span>Question Hook</span><span>Higgsfield · animated graphics</span><button class="cr-spec" type="button" aria-expanded="false">Details</button><span class="cr-btn">Read Case Study <span aria-hidden="true">→</span></span></div><div class="cr-bd"><p><i>Hook:</i> “Brows with attitude?” (on-screen)</p><p><i>Hook Type:</i> Question Hook</p><p><i>AI Stack &amp; Production:</i> Higgsfield · animated graphics · synthesized soundtrack · no shoot</p><p><i>Strategic Angle:</i> A bold question in giant type, with the product already in frame.</p></div></a>
         <a class="cr" data-view="" data-video="assets/video/ltheanine.mp4" href="assets/video/ltheanine.mp4"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="assets/img/ltheanine-poster.jpg" src="assets/video/ltheanine-loop.mp4" data-sound="assets/video/ltheanine-loop-audio.mp4?v=3" aria-label="L-Theanine drink spec ad"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>L-Theanine drink</b><small>Spec ad, 9:16</small><div class="cr-tags"><span>Before/After Scene Switch</span><span>Higgsfield</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><div class="cr-bd"><p><i>Hook:</i> “What 200mg of L-Theanine actually feels like.” (on-screen)</p><p><i>Hook Type:</i> Before/After Scene Switch</p><p><i>AI Stack &amp; Production:</i> Higgsfield · no shoot</p><p><i>Strategic Angle:</i> An office desk flips to a calm garden in about 2s, so the swap is the payoff.</p></div></a>
         <a class="cr" data-view="" data-video="assets/video/solene.mp4" href="assets/video/solene.mp4"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="assets/img/solene-poster.jpg" src="assets/video/solene-loop.mp4" data-sound="assets/video/solene-loop-audio.mp4?v=3" aria-label="SOLÈNE fig fragrance spec ad, AI-generated"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>SOLÈNE fragrance</b><small>Luxury spec ad, 16:9</small><div class="cr-tags"><span>Sensory Reveal</span><span>Higgsfield</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><div class="cr-bd"><p><i>Hook:</i> Visual: mist sprays from an amber bottle, then a cut to dewy figs.</p><p><i>Hook Type:</i> Sensory Reveal</p><p><i>AI Stack &amp; Production:</i> Higgsfield · no shoot</p><p><i>Strategic Angle:</i> Visible mist in warm light lets a silent scroller imagine the scent.</p></div></a>
         <a class="cr" data-view="" href="work/postroom/"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="assets/img/postroom-poster.jpg" src="assets/video/postroom-loop.mp4" data-sound="assets/video/postroom-loop-audio.mp4?v=3" aria-label="AI promo for Postroom, the publishing tool she built"></video><span class="tg-k">Promo · My tool</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>Postroom promo</b><small>Ad for my own tool</small><div class="cr-tags"><span>Outcome Claim</span><span>Higgsfield (AI-generated promo) · tool built in Cursor</span><button class="cr-spec" type="button" aria-expanded="false">Details</button><span class="cr-btn">Read Case Study <span aria-hidden="true">→</span></span></div><div class="cr-bd"><p><i>Hook:</i> “75% less posting time.” (on-screen)</p><p><i>Hook Type:</i> Outcome Claim</p><p><i>AI Stack &amp; Production:</i> Higgsfield (AI-generated promo) · tool built in Cursor</p><p><i>Strategic Angle:</i> Leads with the outcome in big type over a dashboard.</p></div></a>
@@ -1559,6 +921,65 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
     </div></div>
   </div>
 </section>
+
+<!-- POSTROOM -->
+<section class="block systems" id="tool">
+  <div class="wrap">
+    <div class="systems-top">
+      <div><p class="sec-k">03 · Tool I built</p><h2>Postroom</h2></div>
+      <div><p class="sub" style="margin-top:0">To remove publishing bottlenecks across multiple accounts, I built <strong>Postroom</strong> in Cursor. It brings AI caption generation, approval, scheduling and direct Instagram API publishing into one workspace.</p>
+      <p class="result-line"><span>Result</span> Used in production, cutting end-to-end posting time by <em>~75%</em>.</p></div>
+    </div>
+
+    <div class="tool-mini" id="content-ops-tool">
+      <ol class="tool-steps" aria-label="Workflow">
+        <li>Brief</li><li>AI caption options</li><li>Edit and approve</li><li>Schedule</li><li>Publish through Instagram API</li>
+      </ol>
+      <div class="tool-gallery">
+        <a class="tg-main" href="assets/img/tool/01-ai-caption-options.jpg" target="_blank" rel="noopener">
+          <img src="assets/img/tool/01-ai-caption-options.jpg" width="1500" height="1759" loading="lazy" alt="AI caption options, caption editor and live Instagram preview">
+          <span class="tg-k">01 · AI caption options</span>
+        </a>
+        <div class="tg-row">
+          <a href="assets/img/tool/02-instagram-schedule.jpg" target="_blank" rel="noopener">
+            <img src="assets/img/tool/02-instagram-schedule.jpg" width="1400" height="1104" loading="lazy" alt="Picking a posting slot with the Instagram API as destination">
+            <span class="tg-k">02 · Schedule</span>
+          </a>
+          <a href="assets/img/tool/03-approve-and-publish.jpg" target="_blank" rel="noopener">
+            <img src="assets/img/tool/03-approve-and-publish.jpg" width="1400" height="1099" loading="lazy" alt="Approving the final caption before scheduled delivery">
+            <span class="tg-k">03 · Approve</span>
+          </a>
+          <a href="assets/img/tool/04-api-published.jpg" target="_blank" rel="noopener">
+            <img src="assets/img/tool/04-api-published.jpg" width="1400" height="1126" loading="lazy" alt="Post published through the Instagram API">
+            <span class="tg-k">04 · Published via Instagram API</span>
+          </a>
+        </div>
+      </div>
+      <a class="tg-more" href="work/postroom/">3 more screens in the interactive demo <span aria-hidden="true">→</span></a>
+      <p class="tool-note">Screens recreated without client data.</p>
+      <a class="tool-cta" href="work/postroom/">Try the interactive demo</a>
+    </div>
+  </div>
+</section>
+
+<!-- GROWTH CASE (compact) -->
+<section id="ap-growth-case-study" class="block growth">
+  <div class="wrap">
+    <div class="growth-grid">
+      <div><p class="sec-k">04 · Growth case</p><h2>Subscription <em>growth</em></h2></div>
+      <div class="growth-card">
+        <div class="growth-n"><span class="num">$471K</span><span>gross revenue · Oct 2024 – Nov 2026</span></div>
+        <p>Co-founded and ran the revenue side of a subscription business: pricing, the post-purchase lifecycle and CRM (customer relationship management) funnel, and retention. <strong>86%</strong> of revenue came after sign-up through lifecycle and CRM, with a <strong>0%</strong> chargeback ratio; the flagship account ranked in the <strong>top 2%</strong> on its platform. Hired and led the 8–12 person team behind it.</p>
+        <p class="growth-note">Figures from the platform's own statements. Full breakdown available on request.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+
+
 
 <!-- STRATEGY -->
 <section class="block strategy" id="strategy">
@@ -1575,7 +996,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
         <li><span class="k">04</span><div><b>Data-driven iteration</b><small>I drop what underperforms and do more of what works.</small></div></li>
       </ul>
       <aside class="callout">
-        <div class="q" data-fill=""><em>1M+</em> organic views in one month across up to 3 accounts, and <em>~75%</em> less posting time after I built a caption and publishing tool in Cursor.</div>
+        <div class="q" data-fill=""><em>~1M</em> organic views in one month across up to 3 accounts, and <em>~75%</em> less posting time after I built a caption and publishing tool in Cursor.</div>
         <p>I co-founded Digital Content Innovations LLC and led a content team of 8–12 working on DTC lifestyle subscriptions &amp; creator-led brands. Client accounts are private, so I show results, not handles.</p>
 
         <div class="mini-case">
@@ -1593,7 +1014,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
   <div class="wrap">
     <p class="cta-k">[ Open to work ]</p>
     <a class="big-cta" href="mailto:apetrenko597@gmail.com?subject=Let%27s%20work%20together"><h2>Let's scale your growth engine <span class="arr">→</span></h2></a>
-    <p class="sub">Open to remote full-time roles and retainers across Growth &amp; AI Product Management, Paid Social, and Creative Strategy.</p>
+    <p class="sub">Open to remote full-time roles and retainers in creative strategy, paid social and AI production.</p>
     <a class="btn-cv" href="assets/Anastasiia_Petrenko_Resume.pdf">CV (PDF)</a>
     <div class="clist">
       <div><div class="l">E-mail</div><a href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div>
