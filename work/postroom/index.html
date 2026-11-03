@@ -4,12 +4,20 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'self' 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src 'self' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src 'self' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>Postroom: AI Captions &amp; Instagram Publishing</title>
-<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;height:calc(100vh - 4.5rem);margin:0 auto;border:0}.pr-back{display:inline-block;margin:0 0 .75rem;font:600 14px/1.4 -apple-system,BlinkMacSystemFont,"Helvetica Neue",Arial,sans-serif;color:#7A1C1C;text-decoration:none;border-bottom:1px solid #7A1C1C}</style>
+<link rel="stylesheet" href="../../assets/case.css">
+<style>html,body{margin:0;background:#0b0e14}body{box-sizing:border-box;padding:0}.pr-wrap{padding:16px 16px 24px}iframe{display:block;width:100%;height:calc(100vh - 64px - 40px);margin:0 auto;border:1px solid #232c3d;border-radius:16px;background:#fff}.pr-note{max-width:1180px;margin:0 auto 12px;font:12px/1.5 ui-monospace,"SF Mono",Menlo,Consolas,monospace;color:#94a3b8;letter-spacing:.04em}</style>
 </head>
 <body>
-<a class="pr-back" href="../../">&larr; Back to portfolio</a>
+<header class="top">
+  <div class="wrap">
+    <a class="top-name" href="/"><img class="top-avatar" src="../../assets/img/portrait.jpg" alt="" width="40" height="40">Anastasiia Petrenko</a>
+    <nav class="top-nav"><a href="/#tool">Postroom on the portfolio</a><a href="/#contact">Contact</a><a class="back" href="/">← Portfolio</a></nav>
+  </div>
+</header>
+<div class="pr-wrap">
+<p class="pr-note">Interactive reconstruction · AI captions → approve → schedule → publish via Instagram API · no client data</p>
 <iframe id="codex-visualization" sandbox="allow-scripts" referrerpolicy="no-referrer" title="Postroom: AI Captions &amp; Instagram Publishing" data-srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot; data-visualize-standalone&gt;
 &lt;head&gt;
@@ -1951,5 +1959,6 @@ q(&#x27;#pr-generate&#x27;).onclick=()=&gt;{state.brief=q(&#x27;#pr-brief&#x27;)
 })();
 </script>
 <script data-goatcounter="https://petrenko-anastasiia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
+</div>
 </body>
 </html>
