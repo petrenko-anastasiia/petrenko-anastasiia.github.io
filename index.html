@@ -27,7 +27,7 @@
   --wrap:1180px;
 }
 *{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
 body{background:var(--cream);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased}
 img{max-width:100%;display:block}
 a{color:inherit}
@@ -39,7 +39,7 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .ulink:hover{color:var(--red)}
 
 /* top bar */
-.top{border-bottom:1px solid var(--line)}
+.top{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:900;background:rgba(11,14,20,.88);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
 .top .wrap{display:flex;justify-content:space-between;align-items:center;height:64px;font-size:13px;color:var(--muted)}
 .mono{white-space:nowrap;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;letter-spacing:-.01em;color:var(--ink);padding:6px 11px;border:1px solid var(--line);border-radius:7px;background:rgba(255,255,255,.45);-webkit-font-smoothing:antialiased}
 .hs-k{display:block;flex:0 0 100%;font-size:11px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:2px}
@@ -120,7 +120,14 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .top-nav{display:flex;gap:24px}
 .top-nav a{color:var(--ink);text-decoration:none;font-size:14px;opacity:.8;transition:opacity .15s,color .15s}
 .top-nav a:hover{color:var(--red);opacity:1}
-@media (max-width:640px){.top-nav{gap:14px}.top-nav a{font-size:13px}.top-name{font-size:13px}}
+@media (max-width:899px){
+  .top .status{display:none}
+  .top .wrap{height:56px;gap:16px}
+  .top-name{flex:0 0 auto;font-size:13px;white-space:nowrap}
+  .top-nav{flex:1 1 auto;min-width:0;gap:18px;overflow-x:auto;white-space:nowrap;justify-content:flex-start;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:4px 0;mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent);-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 28px),transparent)}
+  .top-nav::-webkit-scrollbar{display:none}
+  .top-nav a{font-size:13px;flex:0 0 auto}
+}
 .pill-cta{display:inline-flex;align-items:center;background:var(--ink);color:var(--paper);text-decoration:none;border-radius:999px;padding:12px 22px;font-weight:600;transition:background .2s}
 .pill-cta:hover{background:var(--red)}
 .lanes{align-items:center}
