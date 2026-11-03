@@ -754,6 +754,14 @@ section.block.hooklab#hooklab{padding-top:0!important}
 .ba-before .ba-art-t{color:var(--ink)}
 .ba-prod{display:none}
 
+/* before/after frames are links */
+a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
+.ba-art img{transition:transform .5s}
+.ba-art:hover img{transform:scale(1.04)}
+.ba-art .ba-art-k{display:none}
+.ba-go{position:absolute;top:10px;left:10px;z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:rgba(11,14,20,.65);border:1px solid rgba(56,189,248,.55);color:var(--red);border-radius:999px;padding:3px 8px;transition:background .15s,color .15s,border-color .15s}
+.ba-art:hover .ba-go{background:var(--accent-2);border-color:var(--accent-2);color:#0b0e14}
+
 </style>
 </head>
 <body>
@@ -1478,7 +1486,7 @@ section.block.hooklab#hooklab{padding-top:0!important}
 
     <div class="ba">
       <figure class="ba-frame">
-        <div class="ba-art ba-before"><img src="assets/img/outfit-transition.jpg" alt="Stand-in frame: a person in a setting, no product in view" loading="lazy"><span class="ba-art-k">0:00</span><span class="ba-art-t">Person &amp; setting first</span><span class="ba-art-s">product arrives later</span></div>
+        <a class="ba-art ba-before" href="assets/video/outfit.mp4" data-video="assets/video/outfit.mp4" aria-label="Watch the Outfit transition spec ad"><img src="assets/img/outfit-transition.jpg" alt="Stand-in frame: a person in a setting, no product in view" loading="lazy"><span class="ba-art-k">0:00</span><span class="ba-go">▶ Watch</span><span class="ba-art-t">Person &amp; setting first</span><span class="ba-art-s">product arrives later</span></a>
         <figcaption>
           <span class="ba-k">Before · example of a lifestyle hook</span>
           <span class="ba-n">~$48 <small>CPA</small></span>
@@ -1487,7 +1495,7 @@ section.block.hooklab#hooklab{padding-top:0!important}
       </figure>
       <div class="ba-arrow" aria-hidden="true"><span>6 weeks</span>→</div>
       <figure class="ba-frame">
-        <div class="ba-art ba-after"><img src="assets/img/argo-video-poster.jpg?v=5" alt="Stand-in frame: the product in extreme close-up from the first second" loading="lazy"><span class="ba-art-k">0:00</span><span class="ba-art-t">Product in frame from the first second</span><span class="ba-art-s">benefit shown, not told</span></div>
+        <a class="ba-art ba-after" href="work/argo/" aria-label="Open the ARGŌ case study with the test plan"><img src="assets/img/argo-video-poster.jpg?v=5" alt="Stand-in frame: the product in extreme close-up from the first second" loading="lazy"><span class="ba-art-k">0:00</span><span class="ba-go">Case study →</span><span class="ba-art-t">Product in frame from the first second</span><span class="ba-art-s">benefit shown, not told</span></a>
         <figcaption>
           <span class="ba-k">After · example of a product-demo hook</span>
           <span class="ba-n">~$22 <small>CPA</small></span>
