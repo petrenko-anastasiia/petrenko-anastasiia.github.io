@@ -762,15 +762,27 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .ba-go{position:absolute;top:10px;left:10px;z-index:2;font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;background:rgba(11,14,20,.65);border:1px solid rgba(56,189,248,.55);color:var(--red);border-radius:999px;padding:3px 8px;transition:background .15s,color .15s,border-color .15s}
 .ba-art:hover .ba-go{background:var(--accent-2);border-color:var(--accent-2);color:#0b0e14}
 
+/* hook lab: no overlay pill on the videos (subtitle + Spec chip already say it) */
+.cr .cf .tg-k{display:none}
+
+.ba-lead{margin-top:22px;font-size:18px;line-height:1.5;color:var(--ink);max-width:60ch}
+.ba-lead+.ba{margin-top:18px}
+.ba-arrow span{white-space:nowrap}
+
+/* header: CV pill left of the name, no avatar */
+.top-left{display:inline-flex;align-items:center;gap:12px;flex:0 0 auto}
+.top-cv{font-size:12px;font-weight:600;color:var(--ink);text-decoration:none;letter-spacing:.04em}
+@media (max-width:899px){.top-left{gap:8px}}
+
 </style>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
-    <a class="top-name" href="#"><img class="top-avatar" src="assets/img/portrait.jpg" alt="" width="44" height="44">Anastasiia Petrenko</a>
+    <div class="top-left"><a class="top-cv" href="assets/Anastasiia_Petrenko_Resume.pdf">CV</a><a class="top-name" href="#">Anastasiia Petrenko</a></div>
     <div class="status"><i></i> Open to remote roles &amp; freelance · EU</div>
-    <nav class="top-nav"><a href="#ap-growth-case-study">Growth case</a><a href="#tool">Postroom</a><a href="#paid">Paid Social</a><a href="#hooklab">Hook Lab</a><a href="#strategy">Brand incubation</a><a href="#contact">Contact</a><a class="top-cv" href="assets/Anastasiia_Petrenko_Resume.pdf">CV</a></nav>
+    <nav class="top-nav"><a href="#ap-growth-case-study">Growth case</a><a href="#tool">Postroom</a><a href="#paid">Paid Social</a><a href="#hooklab">Hook Lab</a><a href="#strategy">Brand incubation</a><a href="#contact">Contact</a></nav>
   </div>
 </header>
 
@@ -1484,6 +1496,8 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 
     <p class="paid-facts">Budget, creative and testing owned end-to-end · 50+ accounts on Meta and TikTok · 8–10 new creatives tested a week</p>
 
+    <p class="ba-lead">Over six weeks the hooks were A/B-tested from lifestyle openers to product-demo openers — and CPA went from ~$48 to ~$22.</p>
+
     <div class="ba">
       <figure class="ba-frame">
         <a class="ba-art ba-before" href="assets/video/outfit.mp4" data-video="assets/video/outfit.mp4" aria-label="Watch the Outfit transition spec ad"><img src="assets/img/outfit-transition.jpg" alt="Stand-in frame: a person in a setting, no product in view" loading="lazy"><span class="ba-art-k">0:00</span><span class="ba-go">▶ Watch</span><span class="ba-art-t">Person &amp; setting first</span><span class="ba-art-s">product arrives later</span></a>
@@ -1493,7 +1507,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
           <p>Opens on a person in a setting; the product and the benefit come after the scroll decision has already been made.</p>
         </figcaption>
       </figure>
-      <div class="ba-arrow" aria-hidden="true"><span>6 weeks</span>→</div>
+      <div class="ba-arrow" aria-hidden="true"><span>6-week A/B test</span>→</div>
       <figure class="ba-frame">
         <a class="ba-art ba-after" href="work/argo/" aria-label="Open the ARGŌ case study with the test plan"><img src="assets/img/argo-video-poster.jpg?v=5" alt="Stand-in frame: the product in extreme close-up from the first second" loading="lazy"><span class="ba-art-k">0:00</span><span class="ba-go">Case study →</span><span class="ba-art-t">Product in frame from the first second</span><span class="ba-art-s">benefit shown, not told</span></a>
         <figcaption>
