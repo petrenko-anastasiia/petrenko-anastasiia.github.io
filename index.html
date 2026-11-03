@@ -721,6 +721,21 @@ section.block.hooklab#hooklab{padding-top:0!important}
 .ap-tab-btn:hover{color:var(--accent-2)!important}
 @media (max-width:640px){.ap-tab-btn{font-size:11px!important;padding:8px 4px!important}}
 
+/* === collapse growth-case detail; trim Postroom gallery on phones === */
+.ap-toggle{display:inline-flex;align-items:center;gap:8px;margin:4px 0 18px;padding:10px 16px;border:1px solid var(--line);border-radius:999px;background:var(--paper);color:var(--ink);font:600 13px var(--sans);cursor:pointer;transition:border-color .15s,color .15s}
+.ap-toggle:hover{border-color:var(--accent-2);color:var(--accent-2)}
+.ap-toggle i{font-style:normal;color:var(--red);transition:transform .2s}
+.ap-toggle .ap-toggle-close{display:none}
+.ap-portfolio-wrap:not(.ap-collapsed) .ap-toggle .ap-toggle-open{display:none}
+.ap-portfolio-wrap:not(.ap-collapsed) .ap-toggle .ap-toggle-close{display:inline}
+.ap-portfolio-wrap:not(.ap-collapsed) .ap-toggle i{transform:rotate(180deg)}
+.ap-portfolio-wrap.ap-collapsed .ap-tabs,.ap-portfolio-wrap.ap-collapsed .ap-panel{display:none!important}
+.ap-portfolio-wrap.ap-collapsed .ap-toggle{margin-bottom:0}
+.tg-more{display:none;align-items:center;gap:8px;margin-top:14px;font-size:14px;font-weight:600;color:var(--ink);text-decoration:none;border-bottom:1px solid var(--red);padding-bottom:2px;align-self:flex-start;width:max-content}
+.tg-more:hover{color:var(--accent-2);border-color:var(--accent-2)}
+@media (max-width:899px){.tg-row{display:none!important}.tg-more{display:inline-flex}}
+@media (max-width:640px){.ap-hero-kpis{grid-template-columns:repeat(2,1fr)!important;gap:10px}.ap-kpi-card{padding:14px 14px}.ap-kpi-val{font-size:20px}.ap-kpi-label{font-size:10px}.ap-kpi-sub{font-size:11.5px}}
+
 </style>
 </head>
 <body>
@@ -775,7 +790,7 @@ section.block.hooklab#hooklab{padding-top:0!important}
 <!-- =========================================================================
      START: SUBSCRIPTION GROWTH CASE STUDY (platform statements, Oct 2024 – Nov 2026)
      ========================================================================= -->
-<section id="ap-growth-case-study" class="block ap-portfolio-wrap">
+<section id="ap-growth-case-study" class="block ap-portfolio-wrap ap-collapsed">
   <style>
     .ap-portfolio-wrap {
       background-color: #0b0e14;
@@ -1056,8 +1071,10 @@ section.block.hooklab#hooklab{padding-top:0!important}
       </div>
     </div>
 
+    <button class="ap-toggle" type="button" aria-expanded="false" aria-controls="ap-detail"><span class="ap-toggle-open">See the breakdown</span><span class="ap-toggle-close">Hide the breakdown</span> <i aria-hidden="true">↓</i></button>
+
     <!-- Interactive Navigation Tabs -->
-    <div class="ap-tabs">
+    <div class="ap-tabs" id="ap-detail">
       <button type="button" class="ap-tab-btn active" onclick="switchApTab(0)">01 · Revenue mix</button>
       <button type="button" class="ap-tab-btn" onclick="switchApTab(1)">02 · Funnel &amp; audience</button>
       <button type="button" class="ap-tab-btn" onclick="switchApTab(2)">03 · 2026 by month</button>
@@ -1360,6 +1377,16 @@ section.block.hooklab#hooklab{padding-top:0!important}
   </div>
 
   <script>
+    (function(){
+      var wrap=document.getElementById('ap-growth-case-study');
+      var btn=wrap&&wrap.querySelector('.ap-toggle');
+      if(!btn) return;
+      btn.addEventListener('click',function(){
+        var open=wrap.classList.toggle('ap-collapsed')===false;
+        btn.setAttribute('aria-expanded',open?'true':'false');
+        if(!open){ wrap.scrollIntoView({behavior:'smooth',block:'start'}); }
+      });
+    })();
     function switchApTab(idx) {
       var wrap = document.getElementById('ap-growth-case-study');
       if (!wrap) return;
@@ -1411,6 +1438,7 @@ section.block.hooklab#hooklab{padding-top:0!important}
           </a>
         </div>
       </div>
+      <a class="tg-more" href="work/postroom/">3 more screens in the interactive demo <span aria-hidden="true">→</span></a>
       <p class="tool-note">Screens recreated without client data.</p>
       <a class="tool-cta" href="work/postroom/">Try the interactive demo</a>
     </div>
