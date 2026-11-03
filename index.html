@@ -792,6 +792,13 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 @media (max-width:960px){.growth-grid{grid-template-columns:1fr;gap:24px}}
 @media (max-width:640px){.growth-card{padding:20px}.growth-n .num{font-size:32px}}
 
+.paid-scale{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px;padding:0}
+.paid-scale li{display:flex;flex-direction:column;gap:4px;padding:14px 0 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);line-height:1.4}
+.paid-scale .num{font-size:24px;color:var(--ink);line-height:1}
+.paid-scale li:nth-child(3) .num{color:var(--red)}
+.paid-case p strong{color:var(--ink)!important;font-weight:600}
+@media (max-width:900px){.paid-scale{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body>
@@ -856,9 +863,14 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
       <p class="sub" data-fill="" style="margin-top:0">For four years I ran content and paid social for DTC lifestyle subscriptions &amp; creator-led brands. That meant creative testing on Meta and TikTok, short-form production for TikTok and Reels, and a content team behind it.</p>
     </div>
 
-    <p class="paid-facts">Budget, creative and testing owned end-to-end · 50+ accounts on Meta and TikTok · 8–10 new creatives tested a week</p>
+    <ul class="paid-scale">
+      <li><span class="num">$40K+</span><span>monthly paid spend across the roster (Oct 2026: ~$43K)</span></li>
+      <li><span class="num">8</span><span>creator accounts, ~41K active subscribers</span></li>
+      <li><span class="num">~$1.15</span><span>per new subscriber, against ~$3 revenue per new subscriber on the day (≈2.7×)</span></li>
+      <li><span class="num">8–10</span><span>new creatives tested a week, cut or scaled by hook type</span></li>
+    </ul>
 
-    <p class="ba-lead">Over six weeks the hooks were A/B-tested from lifestyle openers to product-demo openers — and CPA went from ~$48 to ~$22.</p>
+    <p class="ba-lead">Over six weeks the hooks were A/B-tested from lifestyle openers to product-demo openers — and CPA per paid subscription checkout went from ~$48 to ~$22 at a sustained 2.5–4.0× ROAS.</p>
 
     <div class="ba">
       <figure class="ba-frame">
@@ -891,7 +903,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
       <div class="paid-case">
         <div class="mc-label">Meta campaign · DTC lifestyle subscription brand</div>
         <div class="mc-head"><em>~54%</em> lower CPA in 6 weeks</div>
-        <p>CPA per paid subscription checkout went from ~$48 to ~$22 over 6 weeks. I moved the ad hooks from lifestyle to product demo, tested the variants in Meta Ads Manager, and scaled the hook type that converted.</p>
+        <p><strong>Setup.</strong> Meta Ads Manager, subscription brand, same audiences and budgets on both sides; ad sets split by hook type, 8–10 new variants a week. Every variant started from a written hypothesis.<br><strong>Decision.</strong> Losers were cut on CPA per paid checkout; budget moved to the product-demo hook type, then scaled.<br><strong>Result.</strong> CPA ~$48 → ~$22 over six weeks (~54%), ROAS held at 2.5–4.0×.</p>
         <div class="pills"><span>Meta Ads Manager</span><span>TikTok Ads</span><span>Creative testing</span></div>
       </div>
     </div>
