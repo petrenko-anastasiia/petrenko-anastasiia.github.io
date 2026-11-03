@@ -568,15 +568,92 @@ ul.skills li {
   border-color: #38bdf8 !important;
 }
 
+/* === 3 Nov design pass: hierarchy, rhythm, one component vocabulary === */
+:root{--mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;--r:16px;--accent-2:#fbbf24}
+.num{font-family:var(--mono);font-weight:600;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+
+/* header avatar */
+.top-name{display:inline-flex;align-items:center;gap:12px}
+.top-avatar{width:40px;height:40px;border-radius:50%;object-fit:cover;object-position:50% 22%;border:1px solid var(--line);background:var(--sand)}
+.top-cv{border:1px solid var(--line);border-radius:999px;padding:5px 12px;opacity:1!important}
+@media (max-width:899px){.top-avatar{width:32px;height:32px}.top-name{gap:9px}.top-cv{padding:4px 10px}}
+
+/* hero without portrait */
+.hero-side{grid-template-columns:1fr!important;gap:0!important;max-width:none}
+.hero-aside .hero-side{grid-template-columns:1fr!important;gap:0!important}
+.hero-aside .hero-about p{font-size:17px!important;max-width:48ch}
+.hero-ctas{margin:0 0 8px!important}
+.hero-ctas .sec-links{font-size:15px}
+@media (max-width:700px){.hero-about{max-width:40ch;text-align:center}}
+@media (max-width:899px){.hero-col .hero-ctas{margin:0 0 36px!important}}
+
+/* proof strip: one lead stat, quiet row */
+.proof{border:0!important}
+.proof .proof-grid{display:grid;grid-template-columns:1.15fr 1fr;gap:56px;align-items:center;padding-top:48px;padding-bottom:48px}
+.proof .stat{border:0;padding:0}
+.proof .stat.lead .ml{font-size:11px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:14px}
+.proof .stat.lead .n{font-family:var(--mono);font-size:clamp(64px,8.5vw,120px);line-height:.95;color:var(--red);letter-spacing:-.06em}
+.proof .stat.lead p{margin-top:16px;font-size:17px;max-width:40ch;color:var(--muted)}
+.proof .stat.lead p strong{color:var(--ink)}
+.proof .stat.lead .ulink{display:inline-block;margin-top:18px;font-size:15px;font-weight:600}
+.stat-list{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.stat-list li{display:grid;grid-template-columns:104px 1fr;gap:18px;align-items:baseline;padding:16px 0;border-bottom:1px solid var(--line);font-size:14.5px;color:var(--muted);line-height:1.45}
+.stat-list li strong{color:var(--ink);font-weight:600}
+.stat-list .num{font-size:22px;color:var(--ink);white-space:nowrap}
+@media (max-width:960px){.proof .proof-grid{grid-template-columns:1fr!important;gap:32px;padding-top:40px;padding-bottom:40px}}
+@media (max-width:640px){.proof .proof-grid{padding-top:32px;padding-bottom:32px}.proof .stat.lead .n{font-size:clamp(64px,19vw,84px)}.stat-list li{grid-template-columns:84px 1fr;gap:14px}.stat-list .num{font-size:19px}}
+
+/* rhythm: tighter sections, no divider lines */
+section.block{padding:64px 0!important}
+section.block.paid{padding:48px 0 32px!important}
+section.block.paid#paid{padding-bottom:0!important}
+section.block.hooklab#hooklab{padding-top:0!important}
+.strategy,.ap-portfolio-wrap,.spec{border-top:0!important;border-bottom:0!important}
+.contact{border-top:0!important;padding:72px 0 40px!important}
+.creatives{margin-top:48px;padding-top:32px;border-top:1px solid var(--line)}
+.tool-mini{margin-top:40px;padding-top:32px;border-top:1px solid var(--line)}
+.strat-grid,.paid-grid{margin-top:40px}
+.metrics{margin-top:32px}
+.foot{margin-top:48px}
+@media (min-width:900px){.hero{padding:56px 0}}
+@media (max-width:640px){section.block{padding:52px 0!important}.hero{padding:32px 0 44px}.creatives{margin-top:40px;padding-top:24px}.tool-mini{margin-top:32px;padding-top:24px}.contact{padding:56px 0 36px!important}}
+
+/* one card, one tag, one numbered step */
+.metric,.paid-case,.mini-case,.ap-kpi-card,.cr-bd,.tool-gallery a,.cr .cf,.spec-poster,.spec-video video{border-radius:var(--r)!important}
+.metric .mv{font-family:var(--mono);font-weight:600;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.mc-head em,.callout .q em,.result-line em{font-family:var(--mono);font-style:normal;font-weight:600;letter-spacing:-.03em}
+.callout{border-left:0;padding:0}
+.mono,ul.skills li,.pills span,.spec .tags span,.ap-tab-btn,.tg-k,.spec-label{border-radius:999px!important}
+.mono{font-size:12px;padding:6px 12px;background:var(--paper)!important}
+.tool-steps{counter-reset:step;display:grid;grid-template-columns:repeat(5,1fr);gap:16px;margin:0 0 28px;padding-top:0;font-size:15px}
+.tool-steps li{display:block;counter-increment:step;font-weight:500}
+.tool-steps li::before,.tool-steps li+li::before{content:counter(step,decimal-leading-zero);display:block;font-family:var(--mono);font-size:14px;letter-spacing:.04em;color:var(--red);margin:0 0 4px;font-style:normal}
+@media (max-width:640px){.tool-steps{grid-template-columns:1fr 1fr;gap:14px 20px;flex-direction:row}}
+
+/* second accent for interaction */
+.ulink:hover{color:var(--accent-2);border-color:var(--accent-2)}
+.top-nav a:hover{color:var(--accent-2)}
+.top-cv:hover{border-color:var(--accent-2)}
+.pill-cta:hover,.tool-cta:hover,.spec-cta:hover{background:var(--accent-2)!important;color:#0b0e14!important;box-shadow:0 12px 26px -14px rgba(251,191,36,.5)!important}
+.btn-cv:hover{color:var(--accent-2)!important;border-color:var(--accent-2)!important}
+.cr:hover .cr-btn,.cr:focus-visible .cr-btn{background:var(--accent-2)!important;border-color:var(--accent-2)!important;color:#0b0e14!important}
+.cr .cf .cr-mute:hover{background:var(--accent-2)!important;color:#0b0e14!important}
+.cr-nav button:hover{background:var(--accent-2);border-color:var(--accent-2);color:#0b0e14}
+.tool-gallery a:hover{border-color:var(--accent-2)}
+.big-cta:hover{color:var(--accent-2)}
+.big-cta:hover .arr{color:var(--accent-2)}
+.clist a:hover{border-bottom-color:var(--accent-2);color:var(--accent-2)}
+.ap-tab-btn:hover{border-color:var(--accent-2)!important;color:var(--accent-2)!important}
+
 </style>
 </head>
 <body>
 
 <header class="top">
   <div class="wrap">
-    <a class="top-name" href="#">Anastasiia Petrenko</a>
+    <a class="top-name" href="#"><img class="top-avatar" src="assets/img/portrait.jpg" alt="" width="44" height="44">Anastasiia Petrenko</a>
     <div class="status"><i></i> Open to remote roles &amp; freelance · EU</div>
-    <nav class="top-nav"><a href="#ap-growth-case-study">D2C Scale</a><a href="#tool">Postroom</a><a href="#paid">Paid Social</a><a href="#hooklab">Hook Lab</a><a href="#strategy">Organic</a><a href="#contact">Contact</a></nav>
+    <nav class="top-nav"><a href="#ap-growth-case-study">D2C Scale</a><a href="#tool">Postroom</a><a href="#paid">Paid Social</a><a href="#hooklab">Hook Lab</a><a href="#strategy">Organic</a><a href="#contact">Contact</a><a class="top-cv" href="assets/Anastasiia_Petrenko_Resume.pdf">CV</a></nav>
   </div>
 </header>
 
@@ -587,18 +664,10 @@ ul.skills li {
       <div class="hero-main">
       <h1>Creative <em>strategist</em></h1>
       <p class="hook">I decode what makes top-performing ads convert—and build the creative systems to scale them.</p>
-      <div class="lanes hero-ctas"><a class="pill-cta" href="#ap-growth-case-study">See D2C scale ($470K+) <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="#tool">See Postroom <span aria-hidden="true">↓</span></a><a class="ulink" href="#paid">See paid social <span aria-hidden="true">↓</span></a><a class="ulink" href="#hooklab">See Hook Lab <span aria-hidden="true">↓</span></a></div></div>
-      <div class="links">
-        <a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a>
-        <a class="ulink" href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">LinkedIn</a>
-        <a class="ulink" href="assets/Anastasiia_Petrenko_Resume.pdf">CV (PDF)</a>
-      </div>
+      <div class="lanes hero-ctas"><a class="pill-cta" href="#tool">See the work <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
       </div>
       <div class="hero-aside">
       <div class="hero-side">
-        <div class="portrait">
-          <div class="arch"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko"></div>
-        </div>
         <div class="hero-about">
           <h3>About</h3>
           <p>Four years leading paid social, short-form strategy and an 8–12 person content team for DTC lifestyle subscriptions &amp; creator-led brands across Meta and TikTok.</p>
@@ -606,20 +675,25 @@ ul.skills li {
       </div>
       <div class="hero-stack"><span class="hs-k">AI &amp; growth stack</span><span class="mono">Claude &amp; Claude Code</span><span class="mono">Cursor · workflow tools</span><span class="mono">Higgsfield &amp; ComfyUI · AI video</span><span class="mono">Meta &amp; TikTok Ads</span><span class="mono">GA4 &amp; Looker Studio</span><span class="mono">CapCut · Canva · Notion</span></div>
       <div class="hero-stack hero-langs2"><span class="hs-k">Languages</span><span class="mono">English · C1</span><span class="mono">German · B1</span><span class="mono">Ukrainian · native</span><span class="mono">Russian · native</span></div>
-      <ul class="role skills"><li>D2C growth &amp; CRM</li><li>Paid social</li><li>AI product &amp; video</li></ul>
       </div>
     </div>
   </div>
 </section>
 
 <!-- PROOF STRIP -->
-<!-- Updated Proof Strip inside index-v9.html -->
 <div class="proof">
-  <div class="wrap">
-    <div class="stat"><div class="n" data-count="">$470K+</div><p><strong>D2C gross volume</strong> ($376K net) on our flagship subscription property with a <strong>6.94x LTV</strong> expansion multiplier</p></div>
-    <div class="stat"><div class="n" data-count="">20M/day</div><p><strong>organic views</strong> (~600M/mo run-rate) across <strong>444 automated pages</strong>, outputting 9,700 posts/day at $0 ad spend</p></div>
-    <div class="stat"><div class="n" data-count="">~54%</div><p><strong>lower CPA</strong> per paid subscription checkout on Meta, from ~$48 to ~$22 over 6 weeks (2.5–4.0x ROAS)</p></div>
-    <div class="stat"><div class="n" data-count="">~75%</div><p><strong>faster publishing</strong> after building <strong>Postroom</strong> in Cursor, leading an 8–12 person content &amp; ops team</p></div>
+  <div class="wrap proof-grid">
+    <div class="stat lead">
+      <div class="ml">Meta · DTC subscription brand · 6 weeks</div>
+      <div class="n num">−54%</div>
+      <p><strong>lower CPA</strong> (cost per acquisition) per paid subscription checkout — from ~$48 to ~$22, at 2.5–4.0x ROAS.</p>
+      <a class="ulink" href="#paid">How I did it <span aria-hidden="true">↓</span></a>
+    </div>
+    <ul class="stat-list">
+      <li><span class="num">$470K+</span><span><strong>D2C gross volume</strong> on our flagship subscription property, <strong>6.94x</strong> LTV expansion</span></li>
+      <li><span class="num">~75%</span><span><strong>faster publishing</strong> after building <strong>Postroom</strong> in Cursor</span></li>
+      <li><span class="num">50+</span><span><strong>accounts</strong> run on paid social across Meta and TikTok, with an 8–12 person team</span></li>
+    </ul>
   </div>
 </div>
 
@@ -1337,7 +1411,7 @@ ul.skills li {
       </ul>
       <div class="paid-case">
         <div class="mc-label">Meta campaign · DTC lifestyle subscription brand</div>
-        <div class="mc-head">~54% lower CPA in 6 weeks</div>
+        <div class="mc-head"><em>~54%</em> lower CPA in 6 weeks</div>
         <p>CPA per paid subscription checkout went from ~$48 to ~$22 over 6 weeks. I moved the ad hooks from lifestyle to product demo, tested the variants in Meta Ads Manager, and scaled the hook type that converted.</p>
         <div class="pills"><span>Meta Ads Manager</span><span>TikTok Ads</span><span>Creative testing</span></div>
       </div>
