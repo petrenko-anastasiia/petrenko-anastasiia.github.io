@@ -359,7 +359,7 @@ h2 em{color:var(--red)}
   .stack li{grid-template-columns:1fr;gap:4px}
   .clist{grid-template-columns:1fr}
   .contact{padding:90px 0 44px}
-  html,body{overflow-x:hidden}
+  html,body{overflow-x:clip}
   .hero-grid{gap:32px}
   .portrait{max-width:220px;justify-self:start}
   .hero-side{grid-template-columns:110px 1fr;gap:18px;justify-self:stretch;align-items:center}
@@ -747,6 +747,14 @@ section.block.hooklab#hooklab{padding-top:0!important}
   .tg-row a{height:calc((540px - 32px) / 3);overflow:hidden;position:relative}
   .tg-row img{height:100%;width:100%;object-fit:cover;object-position:50% 38%}
 }
+
+/* before/after: real stand-in frames */
+.ba-art img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 30%}
+.ba-art::before{content:"";position:absolute;inset:0;background:linear-gradient(to top,rgba(11,14,20,.92) 0%,rgba(11,14,20,.55) 38%,rgba(11,14,20,0) 70%);z-index:1}
+.ba-art .ba-art-k,.ba-art .ba-art-t,.ba-art .ba-art-s{position:relative;z-index:2}
+.ba-art .ba-art-k{position:absolute;background:rgba(11,14,20,.6)}
+.ba-before .ba-art-t{color:var(--ink)}
+.ba-prod{display:none}
 
 </style>
 </head>
@@ -1469,7 +1477,7 @@ section.block.hooklab#hooklab{padding-top:0!important}
 
     <div class="ba">
       <figure class="ba-frame">
-        <div class="ba-art ba-before" aria-hidden="true"><span class="ba-art-k">0:00</span><span class="ba-art-t">Person &amp; setting first</span><span class="ba-art-s">product arrives later</span></div>
+        <div class="ba-art ba-before"><img src="assets/img/outfit-transition.jpg" alt="Stand-in frame: a person in a setting, no product in view" loading="lazy"><span class="ba-art-k">0:00</span><span class="ba-art-t">Person &amp; setting first</span><span class="ba-art-s">product arrives later</span></div>
         <figcaption>
           <span class="ba-k">Before · lifestyle hook</span>
           <span class="ba-n">~$48 <small>CPA</small></span>
@@ -1478,7 +1486,7 @@ section.block.hooklab#hooklab{padding-top:0!important}
       </figure>
       <div class="ba-arrow" aria-hidden="true"><span>6 weeks</span>→</div>
       <figure class="ba-frame">
-        <div class="ba-art ba-after" aria-hidden="true"><span class="ba-art-k">0:00</span><i class="ba-prod"></i><span class="ba-art-t">Product in frame from the first second</span><span class="ba-art-s">benefit shown, not told</span></div>
+        <div class="ba-art ba-after"><img src="assets/img/argo-video-poster.jpg?v=5" alt="Stand-in frame: the product in extreme close-up from the first second" loading="lazy"><span class="ba-art-k">0:00</span><span class="ba-art-t">Product in frame from the first second</span><span class="ba-art-s">benefit shown, not told</span></div>
         <figcaption>
           <span class="ba-k">After · product-demo hook</span>
           <span class="ba-n">~$22 <small>CPA</small></span>
@@ -1486,7 +1494,7 @@ section.block.hooklab#hooklab{padding-top:0!important}
         </figcaption>
       </figure>
     </div>
-    <p class="ba-note">Frames are illustrative — client creatives are private. CPA = cost per acquisition (paid subscription checkout on Meta).</p>
+    <p class="ba-note">Frames are stand-ins from my Hook Lab spec ads — the campaign creatives are private. CPA = cost per acquisition (paid subscription checkout on Meta).</p>
 
     <div class="paid-grid">
       <ul class="pillars">
