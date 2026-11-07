@@ -896,15 +896,14 @@ html.room-3d .works{height:170vh}
 .hero-about{display:flex!important;flex-direction:column;align-items:stretch;gap:12px;width:100%;max-width:none!important;text-align:left!important}
 .about-copy h3{margin:0 0 8px}
 .about-copy p{margin:0;max-width:46ch}
-.about-board{position:relative;background:#0b0e14;border:1px solid rgba(56,189,248,.28);border-radius:16px;padding:12px;overflow:hidden}
-.word-grid{display:grid;grid-template-columns:repeat(var(--cols,12),minmax(0,1fr));gap:3px;width:100%;touch-action:pan-y;user-select:none;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
+.about-board{position:relative;background:#0b0e14;border:1px solid rgba(56,189,248,.28);border-radius:16px;padding:16px 18px 18px;overflow:hidden}
+.word-grid{display:grid;grid-template-columns:repeat(var(--cols,12),minmax(0,1fr));gap:6px;width:100%;touch-action:pan-y;user-select:none;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace}
 .word-grid .cell{aspect-ratio:1;display:grid;place-items:center;min-width:0;color:rgba(148,163,184,.42);font-size:clamp(10px,2.6vw,13px);font-weight:600;line-height:1;letter-spacing:0}
 .word-grid .cell.on{background:#38bdf8;color:#0b0e14;border-radius:3px;transform:rotate(var(--tilt,2deg)) skewX(var(--skew,1deg))}
 .word-grid.is-seq .cell.on.pop{animation:tile-drop .34s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0ms)}
 @keyframes tile-drop{
-  0%{opacity:0;transform:translateY(-46%) scale(.55) rotate(0deg)}
-  70%{opacity:1;transform:translateY(6%) scale(1.05) rotate(var(--tilt,2deg)) skewX(var(--skew,1deg))}
-  100%{opacity:1;transform:translateY(0) scale(1) rotate(var(--tilt,2deg)) skewX(var(--skew,1deg))}
+  0%{opacity:0;transform:translateY(-28%) scale(.86) rotate(0deg)}
+  100%{opacity:1;transform:translateY(0) scale(1) rotate(var(--tilt,1deg)) skewX(var(--skew,.4deg))}
 }
 .about-photo{position:absolute;z-index:2;right:8px;bottom:8px;width:68px;height:68px;object-fit:cover;object-position:50% 20%;border-radius:8px;border:2px solid #0b0e14;box-shadow:0 0 0 1px rgba(125,211,252,.55);pointer-events:none}
 .skill-legend{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
@@ -913,7 +912,10 @@ html.room-3d .works{height:170vh}
 .skill-legend button:focus-visible{outline:2px solid #7dd3fc;outline-offset:2px}
 .word-grid.is-static:has(.hot) .cell.on:not(.hot){opacity:.4}
 .word-grid.is-static .cell.on.hot{background:#7dd3fc}
-@media (max-width:420px){.about-photo{width:52px;height:52px}}
+@media (max-width:420px){
+  .about-board{padding:14px 16px 16px}
+  .about-photo{width:52px;height:52px;right:10px;bottom:10px}
+}
 @media (min-width:900px){
   .hero-col{align-items:start!important}
   .word-grid .cell{font-size:13px}
@@ -1079,7 +1081,7 @@ html.room-3d .works{height:170vh}
   // keep the size key stable so a resize that does not change columns does not rebuild
   function sizeKey(m){return m.cols+'x'+m.rows+':'+m.rc;}
   function metrics(){
-    var inner=Math.max(160,board.clientWidth-24);
+    var inner=Math.max(160, gridEl.clientWidth||board.clientWidth-36);
     var cols=inner<340?8:inner<460?10:inner<640?12:14;
     var cell=inner/cols;
     var photo=inner<420?52:68;
@@ -1105,9 +1107,9 @@ html.room-3d .works{height:170vh}
       for(var x=0;x<g[0].length;x++){
         var cell=document.createElement('span');
         cell.className='cell';
-        var tilt=((x*3+y*5)%7)-3; if(tilt===0)tilt=2;
+        var tilt=((x*3+y*5)%5)-2; if(tilt===0)tilt=1;
         cell.style.setProperty('--tilt',tilt+'deg');
-        cell.style.setProperty('--skew',(tilt*0.45).toFixed(2)+'deg');
+        cell.style.setProperty('--skew',(tilt*0.25).toFixed(2)+'deg');
         if(g[y][x]){
           cell.textContent=g[y][x].ch;
           cell.dataset.skill=g[y][x].ids.join(' ');
@@ -1331,6 +1333,19 @@ html.room-3d .works{height:170vh}
     bodies=[];
   }
   function traveled(){return window.scrollY;}
+  function contain(b,W,H){
+    var c=Math.cos(b.a), s=Math.sin(b.a);
+    var hw=Math.abs(b.w*0.5*c)+Math.abs(b.h*0.5*s);
+    var hh=Math.abs(b.w*0.5*s)+Math.abs(b.h*0.5*c);
+    var cx=b.x+b.w*0.5, cy=b.y+b.h*0.5;
+    var minX=Math.min(hw,W*0.5), maxX=Math.max(W-hw,W*0.5);
+    var minY=Math.min(hh,H*0.5), maxY=Math.max(H-hh,H*0.5);
+    if(cx<minX){cx=minX; if(b.vx<0)b.vx*=-0.35;}
+    if(cx>maxX){cx=maxX; if(b.vx>0)b.vx*=-0.35;}
+    if(cy<minY){cy=minY; if(b.vy<0)b.vy*=-0.25;}
+    if(cy>maxY){cy=maxY; if(b.vy>0){b.vy*=-0.22; b.vx*=0.84; b.va*=0.8;}}
+    b.x=cx-b.w*0.5; b.y=cy-b.h*0.5;
+  }
   function tick(now){
     if(!fallen||!onScreen){running=false;return;}
     var dt=Math.min(0.032,(now-(tick.last||now))/1000);
@@ -1343,10 +1358,7 @@ html.room-3d .works{height:170vh}
       b.live=true;
       b.vy+=2200*dt;
       b.x+=b.vx*dt; b.y+=b.vy*dt; b.a+=b.va*dt;
-      if(b.x<0){b.x=0;if(b.vx<0)b.vx*=-0.35;}
-      if(b.x>W-b.w){b.x=W-b.w;if(b.vx>0)b.vx*=-0.35;}
-      if(b.y<0){b.y=0;if(b.vy<0)b.vy*=-0.25;}
-      if(b.y>H-b.h){b.y=H-b.h;if(b.vy>0)b.vy*=-0.22;b.vx*=0.84;b.va*=0.8;}
+      contain(b,W,H);
       if(Math.hypot(b.vx,b.vy)>12||Math.abs(b.va)>0.4)moving=true;
     }
     for(var i=0;i<bodies.length;i++){
@@ -1371,13 +1383,7 @@ html.room-3d .works{height:170vh}
         moving=true;
       }
     }
-    for(var i=0;i<bodies.length;i++){
-      var b=bodies[i];
-      if(b.x<0)b.x=0;
-      if(b.y<0)b.y=0;
-      if(b.x>W-b.w)b.x=W-b.w;
-      if(b.y>H-b.h)b.y=H-b.h;
-    }
+    for(var i=0;i<bodies.length;i++)contain(bodies[i],W,H);
     draw();
     if(moving||awake){awake=false;requestAnimationFrame(tick);}
     else running=false;
