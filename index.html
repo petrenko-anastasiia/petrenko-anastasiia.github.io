@@ -1401,8 +1401,11 @@ html.room-3d .works{height:170vh}
     draw();
   }
   function draw(){
+    var now=performance.now();
     for(var i=0;i<bodies.length;i++){
       var b=bodies[i];
+      var waiting=b.born==null||now<b.born;
+      b.el.style.visibility=waiting?'hidden':'visible';
       b.el.style.transform='translate3d('+b.x.toFixed(2)+'px,'+b.y.toFixed(2)+'px,0) rotate('+b.a.toFixed(3)+'rad)';
     }
   }
