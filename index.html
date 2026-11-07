@@ -1268,14 +1268,27 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
     }
     queue();
   }
-  function onLeave(e){
-    if(e.pointerType&&e.pointerType!=='mouse')return;
+  function extinguish(){
     inside=false;
     title.classList.remove('is-lit');
   }
+  function onLeave(e){
+    if(e.pointerType&&e.pointerType!=='mouse')return;
+    extinguish();
+  }
+  function onDocumentOut(e){
+    if(!bound)return;
+    if(e.pointerType&&e.pointerType!=='mouse')return;
+    if(e.relatedTarget)return;
+    extinguish();
+  }
+  function onBlur(){
+    if(!bound)return;
+    extinguish();
+  }
   function onViewport(){
     if(!inside)return;
-    if(!stillOverHero()){inside=false;title.classList.remove('is-lit');return}
+    if(!stillOverHero()){extinguish();return}
     queue();
   }
   function bind(){
@@ -1284,16 +1297,20 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
     hero.addEventListener('pointermove',onPoint,{passive:true});
     if('onpointerrawupdate' in hero)hero.addEventListener('pointerrawupdate',onPoint,{passive:true});
     hero.addEventListener('pointerleave',onLeave);
+    document.addEventListener('pointerout',onDocumentOut);
+    window.addEventListener('blur',onBlur);
     window.addEventListener('scroll',onViewport,{passive:true});
     window.addEventListener('resize',onViewport,{passive:true});
   }
   function unbind(){
     if(!bound)return;
-    bound=false;inside=false;
-    title.classList.remove('is-lit');
+    bound=false;
+    extinguish();
     hero.removeEventListener('pointermove',onPoint);
     hero.removeEventListener('pointerrawupdate',onPoint);
     hero.removeEventListener('pointerleave',onLeave);
+    document.removeEventListener('pointerout',onDocumentOut);
+    window.removeEventListener('blur',onBlur);
     window.removeEventListener('scroll',onViewport);
     window.removeEventListener('resize',onViewport);
   }
