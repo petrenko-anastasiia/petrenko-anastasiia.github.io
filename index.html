@@ -891,6 +891,12 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 html.room-3d .room-view,html.room-3d .room-ui{display:flex}
 html.room-3d .works-cards{display:none}
 html.room-3d .works{height:170vh}
+.room-ui button:hover,.room-ui button:focus-visible,.room-case:hover,.room-case:focus-visible{background:#38bdf8;color:#0b0e14;border-color:#38bdf8}
+@media (max-width:899px){
+  html.room-3d .works{height:auto}
+  html.room-3d .works-sticky{position:static;height:auto;min-height:0;padding:48px 0 36px}
+  html.room-3d .room-view{height:min(72vh,560px)}
+}
 
 /* About: skill word-search. Photo stays in this board, not the viewport. */
 .hero-side,.hero-aside .hero-side{display:block!important;width:100%;max-width:none!important;margin:0}
@@ -917,8 +923,17 @@ html.room-3d .works{height:170vh}
   .about-board{padding:14px 16px 16px}
   .about-photo{width:52px;height:52px;right:10px;bottom:10px}
 }
+.hero-col{display:flex!important;flex-direction:column!important;align-items:flex-start!important;text-align:left!important;gap:10px}
+.hero-main{width:min(100%,760px)}
+.hero-aside{width:100%;padding-left:0!important;border-left:0!important}
+.hero-portrait{width:min(340px,78vw);margin:2px 0 8px}
+.hero-portrait img{width:100%;aspect-ratio:1;object-fit:cover;object-position:50% 20%;border-radius:18px;display:block;border:1px solid rgba(125,211,252,.5)}
+@media (max-width:899px){
+  .hero-main,.hero-aside{display:block}
+  .hero-portrait{width:min(260px,72vw)}
+}
 @media (min-width:900px){
-  .hero-col{align-items:start!important}
+  .hero-col{align-items:flex-start!important}
   .word-grid .cell{font-size:13px}
 }
 @media (prefers-reduced-motion:reduce){
@@ -928,14 +943,26 @@ html.room-3d .works{height:170vh}
 /* Illustrative knowledge graph. Not a measured export of a vault. */
 .know-fig{margin:18px 0 0;max-width:none}
 .know-lead{margin-top:14px;max-width:42ch}
-.know-stage{position:relative;background:#0b0e14;border:1px solid rgba(125,211,252,.35);border-radius:16px;overflow:hidden;aspect-ratio:16/10;width:100%}
-.know-stage canvas{display:block;width:100%;height:100%}
+.know-stage{position:relative;display:grid;grid-template-columns:minmax(230px,280px) minmax(0,1fr);background:#0b0e14;border:1px solid rgba(125,211,252,.35);border-radius:16px;overflow:hidden;width:100%;min-height:560px}
+.know-graph{position:relative;min-width:0;min-height:520px}
+.know-graph canvas{display:block;width:100%;height:100%}
+.know-tree{padding:16px 14px 18px;background:#10151e;border-right:1px solid rgba(56,189,248,.28);color:#e2e8f0;font-family:var(--mono);font-size:13.5px;line-height:1.45;overflow:auto}
+.know-tree-k{margin:0 0 10px;color:#7dd3fc;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
+.know-tree ul{list-style:none;margin:0;padding:0}
+.know-tree .nest{margin-left:16px}
+.know-tree .row{display:flex;align-items:baseline;gap:6px;min-height:24px;color:#e2e8f0}
+.know-tree .chev{width:12px;flex:0 0 auto;color:#7dd3fc;font-style:normal}
+.know-tree .tag{margin-left:8px;background:#7dd3fc;color:#0b0e14;border-radius:999px;padding:1px 6px;font-size:10px;font-weight:700;letter-spacing:.06em}
 .know-fallback{margin:0;padding:28px;color:var(--muted);max-width:42ch}
-.know-stage.is-drawn .know-fallback{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+.know-graph.is-drawn .know-fallback{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .know-fig figcaption{margin-top:12px;color:var(--muted);font-size:15px}
 .know-fig figcaption span{display:block;margin-bottom:4px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#7dd3fc}
-@media (max-width:700px){.know-stage{aspect-ratio:1/1}}
-@media (max-width:899px),(prefers-reduced-motion:reduce){
+@media (max-width:700px){
+  .know-stage{grid-template-columns:1fr;min-height:0}
+  .know-tree{max-height:232px;border-right:0;border-bottom:1px solid rgba(56,189,248,.28)}
+  .know-graph{min-height:340px;aspect-ratio:1/1}
+}
+@media (prefers-reduced-motion:reduce){
   .works{height:auto}
   .works-sticky{position:static;height:auto;padding:64px 0}
   .room-view,.room-ui{display:none!important}
@@ -968,6 +995,7 @@ html.room-3d .works{height:170vh}
       <div class="hero-main">
       <p class="hero-k">Anastasiia Petrenko · paid social · AI production</p>
       <h1 class="hero-title"><span class="hero-spot" aria-hidden="true"></span><span class="hero-title-text">Creative <em>strategist</em></span></h1>
+      <figure class="hero-portrait"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko" width="340" height="340"></figure>
       <p class="hook" id="hero-quote"><span class="hook-live">I decode what makes top-performing ads convert—and build the creative systems to scale them.</span><span class="hook-phys" aria-hidden="true"></span><button type="button" class="hook-replay">Show quote</button></p>
       <div class="lanes hero-ctas"><a class="pill-cta" href="#paid">See the work <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
       <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue</li><li><span class="num">~75%</span>faster publishing</li></ul>
@@ -981,7 +1009,6 @@ html.room-3d .works{height:170vh}
           </div>
           <div class="about-board">
             <div class="word-grid" id="skill-grid" aria-hidden="true"></div>
-            <img class="about-photo" src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko" width="68" height="68">
           </div>
           <ul class="skill-legend" aria-label="Skills">
             <li><button type="button" data-skill="strategy">Creative strategy</button></li>
@@ -1086,8 +1113,7 @@ html.room-3d .works{height:170vh}
     var inner=Math.max(160, gridEl.clientWidth||board.clientWidth-36);
     var cols=inner<340?8:inner<460?10:inner<640?12:14;
     var cell=inner/cols;
-    var photo=inner<420?52:68;
-    var rc=Math.min(4,Math.max(2,Math.ceil((photo+10)/cell)));
+    var rc=0;
     var rows=cols<=8?16:cols<=10?14:12;
     if(rows<10+rc)rows=10+rc+1;
     return {cols:cols,rows:rows,rc:rc,rr:rc};
@@ -1284,7 +1310,8 @@ html.room-3d .works{height:170vh}
     bodies=nodes.map(function(node,i){
       var r=node.getBoundingClientRect();
       var ch=text[i];
-      if(ch===' '||r.width<0.5)return null;
+      if(ch===' '||ch==='\n'||ch==='\t')return null;
+      if(r.width<0.5&&!'.,—–-'.includes(ch))return null;
       var el=document.createElement('span');
       el.textContent=ch;
       el.style.fontFamily=style.family;
@@ -1293,10 +1320,10 @@ html.room-3d .works{height:170vh}
       el.style.fontStyle=style.style;
       el.style.letterSpacing=style.spacing;
       el.style.color=style.color;
-      el.style.width=r.width+'px';
-      el.style.height=r.height+'px';
+      el.style.width=Math.max(r.width, ch==='.'?5:r.width)+'px';
+      el.style.height=Math.max(r.height, 8)+'px';
       phys.appendChild(el);
-      return {el:el,x:r.left-base.left,y:r.top-base.top,w:r.width,h:r.height,vx:0,vy:0,a:0,va:0,homeX:r.left-base.left,homeY:r.top-base.top,delay:0,live:false};
+      return {el:el,x:r.left-base.left,y:r.top-base.top,w:Math.max(r.width,ch==='.'?5:r.width),h:Math.max(r.height,8),vx:0,vy:0,a:0,va:0,homeX:r.left-base.left,homeY:r.top-base.top,delay:0,live:false};
     }).filter(Boolean);
     host.remove();
     bodies.sort(function(a,b){return a.homeX-b.homeX;});
@@ -1345,7 +1372,7 @@ html.room-3d .works{height:170vh}
     if(cx<minX){cx=minX; if(b.vx<0)b.vx*=-0.35;}
     if(cx>maxX){cx=maxX; if(b.vx>0)b.vx*=-0.35;}
     if(cy<minY){cy=minY; if(b.vy<0)b.vy*=-0.25;}
-    if(cy>maxY){cy=maxY; if(b.vy>0){b.vy*=-0.22; b.vx*=0.84; b.va*=0.8;}}
+    if(cy>maxY){cy=maxY; if(b.vy>40){b.vy*=-0.42; b.vx*=0.9; b.va*=0.86;}else if(b.vy>0){b.vy*=-0.12; b.vx*=0.8; b.va*=0.7;}}
     b.x=cx-b.w*0.5; b.y=cy-b.h*0.5;
   }
   function tick(now){
@@ -1391,41 +1418,56 @@ html.room-3d .works{height:170vh}
     else running=false;
   }
   function kick(){if(!running){running=true;tick.last=0;requestAnimationFrame(tick);}}
+  var armAt=0, departed=false, READ_MS=8000;
   function screen(){
     var r=quote.getBoundingClientRect();
-    var next=r.bottom>0&&r.top<innerHeight;
-    if(next&&!onScreen&&fallen)kick();
-    onScreen=next;
+    var vis=r.height>8&&r.bottom>innerHeight*0.12&&r.top<innerHeight*0.88;
+    var away=r.bottom<8||r.top>innerHeight-8;
+    if(away&&!fallen)departed=true;
+    if(!vis){
+      if(!fallen)armAt=0;
+      if(hold&&away)hold=false;
+    }else if(!fallen&&!hold){
+      if(departed){departed=false;release();}
+      else if(!armAt)armAt=performance.now();
+    }
+    if(vis&&!onScreen&&fallen)kick();
+    onScreen=vis;
   }
-  function onScroll(){
-    var dist=traveled();
-    if(fallen&&dist<28){hold=false;restore();return;}
-    if(hold&&dist<36)hold=false;
-    if(!fallen&&!hold&&dist>140)release();
+  function watch(now){
+    if(reduce.matches)return;
     screen();
+    if(onScreen&&!fallen&&!hold&&armAt&&now-armAt>READ_MS)release();
+    requestAnimationFrame(watch);
   }
+  function onScroll(){screen();}
   quote.addEventListener('pointermove',function(e){
     if(!fallen||!onScreen)return;
     var r=phys.getBoundingClientRect();
     var x=e.clientX-r.left, y=e.clientY-r.top;
+    var now=performance.now();
     if(lastPtr){
-      var dx=x-lastPtr.x, dy=y-lastPtr.y;
+      var dt=Math.max(0.008,(now-lastPtr.t)/1000);
+      var pvx=(x-lastPtr.x)/dt, pvy=(y-lastPtr.y)/dt;
       for(var i=0;i<bodies.length;i++){
         var b=bodies[i]; if(!b.live)continue;
         var dist=Math.hypot((b.x+b.w/2)-x,(b.y+b.h/2)-y);
-        if(dist<56){
-          var f=(1-dist/56)*16;
-          b.vx+=dx*f; b.vy+=dy*f; b.va+=(dx-dy)*0.015;
+        if(dist<78){
+          var f=(1-dist/78)*1.25;
+          b.vx+=pvx*f; b.vy+=pvy*f; b.va+=pvx*0.0004;
+          var sp=Math.hypot(b.vx,b.vy);
+          if(sp>1700){b.vx*=1700/sp;b.vy*=1700/sp;}
           awake=true;
         }
       }
       if(awake)kick();
     }
-    lastPtr={x:x,y:y};
+    lastPtr={x:x,y:y,t:now};
   },{passive:true});
   quote.addEventListener('pointerleave',function(){lastPtr=null;});
-  replay.addEventListener('click',function(){hold=true;restore();});
+  replay.addEventListener('click',function(){hold=true;armAt=0;restore();});
   window.addEventListener('scroll',onScroll,{passive:true});
+  requestAnimationFrame(watch);
 })();
 </script>
 
@@ -1464,7 +1506,6 @@ html.room-3d .works{height:170vh}
 (function(){
   var root=document.documentElement;
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  var wide=window.matchMedia('(min-width: 900px)');
   var section=document.getElementById('works');
   var view=document.getElementById('room-view');
   var room=document.getElementById('room');
@@ -1475,11 +1516,10 @@ html.room-3d .works{height:170vh}
   var caseLink=document.getElementById('room-case');
   var cards=[].slice.call(document.querySelectorAll('.works-card'));
   if(!section||!cards.length)return;
-  function enable(){return !reduce.matches&&wide.matches&&window.CSS&&CSS.supports('transform-style','preserve-3d');}
+  function enable(){return !reduce.matches&&window.CSS&&CSS.supports('transform-style','preserve-3d');}
   function applyMode(){root.classList.toggle('room-3d', enable());}
   applyMode();
   if(reduce.addEventListener)reduce.addEventListener('change',applyMode);
-  if(wide.addEventListener)wide.addEventListener('change',applyMode);
   var frames=cards.map(function(card){
     var fig=document.createElement('figure');
     fig.className='room-frame';
@@ -1508,32 +1548,58 @@ html.room-3d .works{height:170vh}
     caseLink.textContent='View case';
   }
   show(0);
-  document.getElementById('room-prev').addEventListener('click',function(){show(index-1);});
-  document.getElementById('room-next').addEventListener('click',function(){show(index+1);});
-  var drag=null;
-  view.addEventListener('pointerdown',function(e){if(e.button!==0)return; drag={x:e.clientX,y:e.clientY};});
+  var ui=document.querySelector('.room-ui');
+  function pause(ms){pauseUntil=performance.now()+(ms||2400);lastAdvance=performance.now();}
+  document.getElementById('room-prev').addEventListener('click',function(){pause();show(index-1);});
+  document.getElementById('room-next').addEventListener('click',function(){pause();show(index+1);});
+  ui.addEventListener('pointerenter',function(){uiHot=true;pause();});
+  ui.addEventListener('pointerleave',function(){uiHot=false;});
+  ui.addEventListener('focusin',function(){uiHot=true;pause();});
+  ui.addEventListener('focusout',function(){uiHot=false;});
+  var drag=null, pauseUntil=0, lastAdvance=0, seen=false, raf=0, pointerN=null, uiHot=false;
+  var ADVANCE=3600;
+  view.addEventListener('pointerdown',function(e){if(e.button!==0)return; drag={x:e.clientX,y:e.clientY};pause();});
   view.addEventListener('pointerup',function(e){
     if(!drag)return;
     var dx=e.clientX-drag.x, dy=e.clientY-drag.y;
     if(Math.abs(dx)>48&&Math.abs(dx)>Math.abs(dy))show(index+(dx<0?1:-1));
-    drag=null;
+    drag=null; pause();
   });
   view.addEventListener('pointercancel',function(){drag=null;});
-  var seen=false;
-  function cam(){
-    if(!root.classList.contains('room-3d'))return;
+  view.addEventListener('pointermove',function(e){
+    var b=view.getBoundingClientRect();
+    pointerN=(e.clientX-b.left)/Math.max(1,b.width);
+  },{passive:true});
+  view.addEventListener('pointerleave',function(){pointerN=null;});
+  function cam(now){
     var r=section.getBoundingClientRect();
-    if(r.bottom<0||r.top>innerHeight){seen=false;return;}
-    seen=true;
+    var narrow=innerWidth<900;
     var range=Math.max(1, section.offsetHeight-innerHeight);
-    var p=Math.min(1, Math.max(0, -r.top/range));
-    var z=320*(1-p);
-    var tilt=2+p*10;
-    room.style.transform='translate3d(0,0,'+z+'px) rotateX('+tilt+'deg)';
+    var p=narrow?0.35:Math.min(1, Math.max(0, -r.top/range));
+    var fit=narrow?Math.max(0.32, Math.min(0.52, (innerWidth-20)/1040)):1;
+    var hands=pointerN!==null||drag||uiHot||performance.now()<pauseUntil;
+    var breathe=hands?0:Math.sin(now/900)* (narrow?48:90);
+    var yaw=hands?(pointerN===null?0:(pointerN-0.5)*-26):Math.sin(now/1500)*(narrow?10:12);
+    var tilt=(narrow?8:3+p*8)+(hands?0:Math.sin(now/1200)*3.2);
+    var z=(narrow?70:300*(1-p))+breathe;
+    room.style.transform='translate3d(0,0,'+z+'px) rotateX('+tilt+'deg) rotateY('+yaw+'deg) scale('+fit+')';
   }
-  window.addEventListener('scroll',cam,{passive:true});
-  window.addEventListener('resize',cam,{passive:true});
-  cam();
+  function loop(now){
+    if(!root.classList.contains('room-3d')){raf=0;return;}
+    var r=section.getBoundingClientRect();
+    seen=r.bottom>40&&r.top<innerHeight-40;
+    if(!seen){raf=0;return;}
+    cam(now);
+    if(!drag&&!uiHot&&pointerN===null&&performance.now()>=pauseUntil){
+      if(!lastAdvance)lastAdvance=now;
+      if(now-lastAdvance>ADVANCE){show(index+1);lastAdvance=now;}
+    }
+    raf=requestAnimationFrame(loop);
+  }
+  function wake(){if(!raf)raf=requestAnimationFrame(loop);}
+  window.addEventListener('scroll',wake,{passive:true});
+  window.addEventListener('resize',wake,{passive:true});
+  wake();
 })();
 </script>
 
@@ -1633,16 +1699,51 @@ html.room-3d .works{height:170vh}
     <p class="sub know-lead">My second brain, built with Claude Code and Obsidian.</p>
     <figure class="know-fig">
       <div class="know-stage" id="know-stage">
-        <canvas id="know-canvas" width="1200" height="750" aria-hidden="true"></canvas>
-        <p class="know-fallback">Illustrative network view. Built with Claude Code and Obsidian.</p>
+        <aside class="know-tree" aria-label="Illustrative folder view">
+          <p class="know-tree-k">Illustrative folder view</p>
+          <ul>
+            <li>
+              <div class="row"><i class="chev" aria-hidden="true">▾</i><span>raw</span></div>
+              <ul class="nest">
+                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>trouble-cut-2026-10-…</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>trouble-cut-2026-10-…</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>trouble-cut-2026-10-…</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>trouble-cut-2026-10-…</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>trouble-cut-2026-10-…</span></div></li>
+              </ul>
+            </li>
+            <li>
+              <div class="row"><i class="chev" aria-hidden="true">▾</i><span>wiki</span></div>
+              <ul class="nest">
+                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>concepts</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>entities</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>handoffs</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>sources</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>synthesis</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true"></i><span>decisions</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true"></i><span>index</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true"></i><span>log</span></div></li>
+                <li><div class="row"><i class="chev" aria-hidden="true"></i><span>overview</span></div></li>
+              </ul>
+            </li>
+            <li><div class="row"><i class="chev" aria-hidden="true"></i><span>Планування</span><em class="tag">CANVAS</em></div></li>
+            <li><div class="row"><i class="chev" aria-hidden="true"></i><span>AGENTS</span></div></li>
+            <li><div class="row"><i class="chev" aria-hidden="true"></i><span>CLAUDE</span></div></li>
+            <li><div class="row"><i class="chev" aria-hidden="true"></i><span>hotcache</span></div></li>
+          </ul>
+        </aside>
+        <div class="know-graph" id="know-graph">
+          <canvas id="know-canvas" width="1200" height="750" aria-hidden="true"></canvas>
+          <p class="know-fallback">Illustrative network view. Built with Claude Code and Obsidian.</p>
+        </div>
       </div>
-      <figcaption><span>Illustrative network view</span>Built with Claude Code and Obsidian.</figcaption>
+      <figcaption><span>Illustrative network view</span>Built with Claude Code and Obsidian. The folder names are the ones visible in the reference; this is not a live vault.</figcaption>
     </figure>
   </div>
 </section>
 <script>
 (function(){
-  var stage=document.getElementById('know-stage');
+  var stage=document.getElementById('know-graph');
   var canvas=document.getElementById('know-canvas');
   if(!stage||!canvas||!canvas.getContext)return;
   var ctx=canvas.getContext('2d');
