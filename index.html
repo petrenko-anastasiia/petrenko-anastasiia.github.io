@@ -63,6 +63,33 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .name{font-family:var(--serif);font-size:clamp(22px,2.4vw,30px);letter-spacing:-.01em;white-space:nowrap;color:var(--ink);margin-bottom:10px}
 .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(48px,6.6vw,96px);line-height:.92;letter-spacing:-.03em;margin:0 0 22px}
 .hero h1 em{color:var(--red)}
+/* Cursor spotlight clipped to the hero headline.
+   #7dd3fc is the existing sky hover, rgb(56 189 248) is --red, rgb(251 191 36) is --accent-2. */
+.hero-title{position:relative}
+.hero-title-base{display:block}
+.hero-title-glow{
+  display:block;position:absolute;left:0;top:0;width:100%;
+  pointer-events:none;user-select:none;-webkit-user-select:none;
+  color:transparent;-webkit-text-fill-color:transparent;
+  opacity:0;transition:opacity .4s ease;
+  background-image:
+    radial-gradient(ellipse clamp(58px,5.6vw,80px) clamp(42px,4vw,58px) at var(--lx,50%) var(--ly,42%),
+      #7dd3fc 0%,
+      rgba(56,189,248,.7) 48%,
+      transparent 76%),
+    radial-gradient(ellipse clamp(128px,13vw,176px) clamp(72px,7vw,96px) at var(--lx,50%) var(--ly,42%),
+      rgba(56,189,248,.4) 0%,
+      rgba(251,191,36,.24) 50%,
+      transparent 76%);
+  background-repeat:no-repeat;
+  -webkit-background-clip:text;background-clip:text;
+}
+.hero h1 .hero-title-glow,
+.hero h1 .hero-title-glow em{color:transparent;-webkit-text-fill-color:transparent}
+.hero-title.is-lit .hero-title-glow{opacity:1;transition-duration:.12s}
+@media (prefers-reduced-motion:reduce),(pointer:coarse){
+  .hero-title-glow{display:none}
+}
 .role{font-size:16px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--red);margin-bottom:20px;line-height:1.5}
 .role span{white-space:nowrap}
 .role b{color:var(--red-soft);font-weight:400;margin:0 .45em}
@@ -835,7 +862,7 @@ section.block.hooklab#hooklab{padding-top:24px!important}
     <div class="hero-col">
       <div class="hero-main">
       <p class="hero-k">Anastasiia Petrenko · paid social · AI production</p>
-      <h1>Creative <em>strategist</em></h1>
+      <h1 class="hero-title"><span class="hero-title-base">Creative <em>strategist</em></span><span class="hero-title-glow" aria-hidden="true">Creative <em>strategist</em></span></h1>
       <p class="hook">I decode what makes top-performing ads convert—and build the creative systems to scale them.</p>
       <div class="lanes hero-ctas"><a class="pill-cta" href="#paid">See the work <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
       <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue</li><li><span class="num">~75%</span>faster publishing</li></ul>
@@ -1196,6 +1223,82 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
     b.setAttribute('aria-expanded',open?'true':'false');
   });
 });
+</script>
+<script>
+(function(){
+  var hero=document.querySelector('.hero');
+  var title=hero&&hero.querySelector('.hero-title');
+  var glow=title&&title.querySelector('.hero-title-glow');
+  if(!hero||!title||!glow)return;
+  var coarse=window.matchMedia('(pointer:coarse)');
+  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)');
+  var pending=false,inside=false,bound=false,x=0,y=0;
+  function allowed(){return !coarse.matches&&!reduce.matches}
+  function applyPosition(){
+    var r=glow.getBoundingClientRect();
+    glow.style.setProperty('--lx',(x-r.left)+'px');
+    glow.style.setProperty('--ly',(y-r.top)+'px');
+  }
+  function paint(){
+    pending=false;
+    if(!inside)return;
+    applyPosition();
+  }
+  function queue(){
+    if(pending)return;
+    pending=true;
+    requestAnimationFrame(paint);
+  }
+  function stillOverHero(){
+    var el=document.elementFromPoint(x,y);
+    return !!(el&&hero.contains(el));
+  }
+  function onPoint(e){
+    if(e.pointerType&&e.pointerType!=='mouse')return;
+    if(!allowed())return;
+    x=e.clientX;y=e.clientY;
+    if(!inside){
+      inside=true;
+      applyPosition();
+      title.classList.add('is-lit');
+      return;
+    }
+    queue();
+  }
+  function onLeave(e){
+    if(e.pointerType&&e.pointerType!=='mouse')return;
+    inside=false;
+    title.classList.remove('is-lit');
+  }
+  function onViewport(){
+    if(!inside)return;
+    if(!stillOverHero()){inside=false;title.classList.remove('is-lit');return}
+    queue();
+  }
+  function bind(){
+    if(bound||!allowed())return;
+    bound=true;
+    hero.addEventListener('pointermove',onPoint,{passive:true});
+    if('onpointerrawupdate' in hero)hero.addEventListener('pointerrawupdate',onPoint,{passive:true});
+    hero.addEventListener('pointerleave',onLeave);
+    window.addEventListener('scroll',onViewport,{passive:true});
+    window.addEventListener('resize',onViewport,{passive:true});
+  }
+  function unbind(){
+    if(!bound)return;
+    bound=false;inside=false;
+    title.classList.remove('is-lit');
+    hero.removeEventListener('pointermove',onPoint);
+    hero.removeEventListener('pointerrawupdate',onPoint);
+    hero.removeEventListener('pointerleave',onLeave);
+    window.removeEventListener('scroll',onViewport);
+    window.removeEventListener('resize',onViewport);
+  }
+  function sync(){if(allowed())bind();else unbind()}
+  if(coarse.addEventListener)coarse.addEventListener('change',sync);
+  if(reduce.addEventListener)reduce.addEventListener('change',sync);
+  sync();
+})();
 </script>
 <script data-goatcounter="https://petrenko-anastasiia.goatcounter.com/count" async="" src="https://gc.zgo.at/count.js"></script>
 </body></html>
