@@ -63,6 +63,28 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .name{font-family:var(--serif);font-size:clamp(22px,2.4vw,30px);letter-spacing:-.01em;white-space:nowrap;color:var(--ink);margin-bottom:10px}
 .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(48px,6.6vw,96px);line-height:.92;letter-spacing:-.03em;margin:0 0 22px}
 .hero h1 em{color:var(--red)}
+/* Desktop: headline matches the page until a sky spotlight sits behind it.
+   #7dd3fc is the existing sky hover; --red is #38bdf8. */
+html.hero-cursor .hero-title{position:relative;isolation:isolate}
+html.hero-cursor .hero-title-text{display:block;position:relative;z-index:1;color:var(--cream)}
+html.hero-cursor .hero-title-text em{position:relative;z-index:1;color:var(--cream)}
+html.hero-cursor .hero-spot{
+  position:absolute;z-index:0;left:0;top:0;width:300px;height:300px;
+  border-radius:50%;pointer-events:none;opacity:0;
+  transform:translate3d(var(--lx,-400px),var(--ly,-400px),0) translate(-50%,-50%);
+  background:radial-gradient(circle,#7dd3fc 0%,var(--red) 34%,rgba(56,189,248,.42) 56%,transparent 72%);
+  filter:blur(18px);transition:opacity .28s ease;
+}
+html.hero-cursor .hero-title.is-lit .hero-spot{opacity:1;transition-duration:.1s}
+html.hero-cursor .hero-k{position:relative;z-index:1}
+html.hero-cursor .hero:has(:focus-visible) .hero-title-text{color:var(--ink)}
+html.hero-cursor .hero:has(:focus-visible) .hero-title-text em{color:var(--red)}
+html.hero-cursor .hero:has(:focus-visible) .hero-spot{opacity:0}
+@media (prefers-reduced-motion:reduce),(pointer:coarse){
+  html.hero-cursor .hero-title-text{color:var(--ink)}
+  html.hero-cursor .hero-title-text em{color:var(--red)}
+  html.hero-cursor .hero-spot{display:none}
+}
 .role{font-size:16px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--red);margin-bottom:20px;line-height:1.5}
 .role span{white-space:nowrap}
 .role b{color:var(--red-soft);font-weight:400;margin:0 .45em}
@@ -818,6 +840,15 @@ section.block.hooklab#hooklab{padding-top:24px!important}
 .cr-tags .cr-btn{white-space:nowrap}
 
 </style>
+<script>
+(function(){
+  try{
+    if(matchMedia('(pointer:coarse)').matches)return;
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+    document.documentElement.classList.add('hero-cursor');
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 
@@ -835,7 +866,7 @@ section.block.hooklab#hooklab{padding-top:24px!important}
     <div class="hero-col">
       <div class="hero-main">
       <p class="hero-k">Anastasiia Petrenko · paid social · AI production</p>
-      <h1>Creative <em>strategist</em></h1>
+      <h1 class="hero-title"><span class="hero-spot" aria-hidden="true"></span><span class="hero-title-text">Creative <em>strategist</em></span></h1>
       <p class="hook">I decode what makes top-performing ads convert—and build the creative systems to scale them.</p>
       <div class="lanes hero-ctas"><a class="pill-cta" href="#paid">See the work <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
       <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue</li><li><span class="num">~75%</span>faster publishing</li></ul>
@@ -1196,6 +1227,101 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
     b.setAttribute('aria-expanded',open?'true':'false');
   });
 });
+</script>
+<script>
+(function(){
+  var hero=document.querySelector('.hero');
+  var title=hero&&hero.querySelector('.hero-title');
+  if(!hero||!title)return;
+  var coarse=window.matchMedia('(pointer:coarse)');
+  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)');
+  var pending=false,inside=false,bound=false,x=0,y=0;
+  function allowed(){return !coarse.matches&&!reduce.matches}
+  function applyPosition(){
+    var r=title.getBoundingClientRect();
+    title.style.setProperty('--lx',(x-r.left)+'px');
+    title.style.setProperty('--ly',(y-r.top)+'px');
+  }
+  function paint(){
+    pending=false;
+    if(!inside)return;
+    applyPosition();
+  }
+  function queue(){
+    if(pending)return;
+    pending=true;
+    requestAnimationFrame(paint);
+  }
+  function stillOverHero(){
+    var el=document.elementFromPoint(x,y);
+    return !!(el&&hero.contains(el));
+  }
+  function onPoint(e){
+    if(e.pointerType&&e.pointerType!=='mouse')return;
+    if(!allowed())return;
+    x=e.clientX;y=e.clientY;
+    if(!inside){
+      inside=true;
+      applyPosition();
+      title.classList.add('is-lit');
+      return;
+    }
+    queue();
+  }
+  function extinguish(){
+    inside=false;
+    title.classList.remove('is-lit');
+  }
+  function onLeave(e){
+    if(e.pointerType&&e.pointerType!=='mouse')return;
+    extinguish();
+  }
+  function onDocumentOut(e){
+    if(!bound)return;
+    if(e.pointerType&&e.pointerType!=='mouse')return;
+    if(e.relatedTarget)return;
+    extinguish();
+  }
+  function onBlur(){
+    if(!bound)return;
+    extinguish();
+  }
+  function onViewport(){
+    if(!inside)return;
+    if(!stillOverHero()){extinguish();return}
+    queue();
+  }
+  function bind(){
+    if(bound||!allowed())return;
+    bound=true;
+    hero.addEventListener('pointermove',onPoint,{passive:true});
+    if('onpointerrawupdate' in hero)hero.addEventListener('pointerrawupdate',onPoint,{passive:true});
+    hero.addEventListener('pointerleave',onLeave);
+    document.addEventListener('pointerout',onDocumentOut);
+    window.addEventListener('blur',onBlur);
+    window.addEventListener('scroll',onViewport,{passive:true});
+    window.addEventListener('resize',onViewport,{passive:true});
+  }
+  function unbind(){
+    if(!bound)return;
+    bound=false;
+    extinguish();
+    hero.removeEventListener('pointermove',onPoint);
+    hero.removeEventListener('pointerrawupdate',onPoint);
+    hero.removeEventListener('pointerleave',onLeave);
+    document.removeEventListener('pointerout',onDocumentOut);
+    window.removeEventListener('blur',onBlur);
+    window.removeEventListener('scroll',onViewport);
+    window.removeEventListener('resize',onViewport);
+  }
+  function sync(){
+    if(allowed()){document.documentElement.classList.add('hero-cursor');bind()}
+    else{document.documentElement.classList.remove('hero-cursor');unbind()}
+  }
+  if(coarse.addEventListener)coarse.addEventListener('change',sync);
+  if(reduce.addEventListener)reduce.addEventListener('change',sync);
+  sync();
+})();
 </script>
 <script data-goatcounter="https://petrenko-anastasiia.goatcounter.com/count" async="" src="https://gc.zgo.at/count.js"></script>
 </body></html>
