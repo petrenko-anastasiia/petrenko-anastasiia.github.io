@@ -119,6 +119,14 @@ html.hero-cursor .hero:has(:focus-visible) .hero-spot{opacity:0}
 .hook.is-fallen{margin-bottom:58px!important}
 .hook-replay{display:none;position:absolute;top:calc(100% + 8px);left:0;z-index:5;padding:5px 10px;border:1px solid rgba(56,189,248,.55);border-radius:999px;background:#121721;color:#7dd3fc;font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.04em;cursor:pointer}
 .hook.is-fallen .hook-replay{display:inline-block}
+.hook-hint{display:none;margin:10px 0 0;font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.04em;color:rgba(125,211,252,.82);pointer-events:none}
+.hero-quote-panel:has(.hook.is-live) .hook-hint{display:block}
+.hook.is-live{cursor:ew-resize}
+.hook.is-live .hook-replay{cursor:pointer}
+.hook:focus-visible{outline:2px solid #7dd3fc;outline-offset:4px;border-radius:8px}
+@media (prefers-reduced-motion:reduce){
+  .hook-hint{display:none!important}
+}
 .hook{touch-action:pan-y}
 .fw{transition:color .25s}
 [data-fill].fill-on .fw,
@@ -931,6 +939,7 @@ html.room-3d .works{height:170vh}
   .hero-quote-panel .hook{text-align:center;min-height:min(46vh,320px);font-size:clamp(24px,6.4vw,34px)}
   .hero-quote-panel .hook.is-fallen{min-height:min(46vh,320px);margin-bottom:40px!important}
   .hero-quote-panel .hook-replay{left:50%;transform:translateX(-50%)}
+  .hero-quote-panel .hook-hint{text-align:center;width:100%}
   .hero-quote-panel .hero-ctas{flex-direction:column!important;align-items:center!important;justify-content:center!important;margin:8px 0 0!important}
   .hero-quote-panel .hero-ctas .sec-links{justify-content:center}
   .hero-quote-panel .hero-proof{justify-content:center}
@@ -1027,7 +1036,8 @@ html.room-3d .works{height:170vh}
       <div class="hero-stage">
         <figure class="hero-portrait"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko" width="340" height="340"></figure>
         <div class="hero-quote-panel">
-          <p class="hook" id="hero-quote"><span class="hook-live">I decode what makes top-performing ads convert—and build the creative systems to scale them.</span><span class="hook-phys" aria-hidden="true"></span><button type="button" class="hook-replay">Show quote</button></p>
+          <p class="hook" id="hero-quote" aria-describedby="quote-hint"><span class="hook-live">I decode what makes top-performing ads convert—and build the creative systems to scale them.</span><span class="hook-phys" aria-hidden="true"></span><button type="button" class="hook-replay">Show quote</button></p>
+          <p class="hook-hint" id="quote-hint">Sweep across the quote</p>
           <div class="lanes hero-ctas"><a class="pill-cta" href="#paid">See the work <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
           <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue</li><li><span class="num">~75%</span>faster publishing</li></ul>
         </div>
@@ -1355,7 +1365,16 @@ html.room-3d .works{height:170vh}
   var replay=quote.querySelector('.hook-replay');
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
   if(reduce.matches)return;
-  var bodies=[],fallen=false,hold=false,running=false,awake=false,onScreen=true,lastPtr=null,releasing=false;
+  var bodies=[],fallen=false,running=false,awake=false,onScreen=true,lastPtr=null,releasing=false;
+  var hint=document.getElementById('quote-hint');
+  var mode='intact',reformRaf=0,flingOk=false;
+  var travel=0,armed=true,lastPt=null,lastMoveT=0,leaveToken=0;
+  var SWEEP=72,STILL=480;
+  quote.tabIndex=0;
+  quote.classList.add('is-live');
+  if(reduce.addEventListener)reduce.addEventListener('change',function(){
+    if(reduce.matches){cancelAnimationFrame(reformRaf);showSentence();}
+  });
   function cssOf(el){
     var cs=getComputedStyle(el);
     return {family:cs.fontFamily,size:cs.fontSize,weight:cs.fontWeight,style:cs.fontStyle,spacing:cs.letterSpacing,leading:cs.lineHeight,color:cs.color,align:cs.textAlign};
@@ -1409,31 +1428,75 @@ html.room-3d .works{height:170vh}
       b.el.style.transform='translate3d('+b.x.toFixed(2)+'px,'+b.y.toFixed(2)+'px,0) rotate('+b.a.toFixed(3)+'rad)';
     }
   }
-  function release(){
-    if(fallen||hold||releasing)return;
-    if(document.fonts&&document.fonts.status!=='loaded'){releasing=true;document.fonts.ready.then(function(){releasing=false;release();});return;}
-    quote.classList.add('is-fallen');
-    build();
-    var t0=performance.now();
-    bodies.forEach(function(b){
-      b.born=t0+b.delay*1000;
-      b.vx=(Math.random()-0.5)*70;
-      b.vy=-30-Math.random()*80;
-      b.va=(Math.random()-0.5)*4;
-      b.live=false;
-    });
-    fallen=true;
-    awake=true;
-    quote.classList.add('is-fallen');
-    kick();
+  function setHint(){
+    if(!hint)return;
+    hint.textContent=mode==='intact'?'Sweep across the quote':mode==='reforming'?'Putting the sentence back':'Sweep again to restore';
   }
-  function restore(){
+  function showSentence(){
+    cancelAnimationFrame(reformRaf);
+    mode='intact';
     fallen=false;
-    awake=false;
     running=false;
+    awake=false;
+    flingOk=false;
+    armed=false;
+    travel=0;
     quote.classList.remove('is-fallen');
     phys.innerHTML='';
     bodies=[];
+    setHint();
+  }
+  function scatter(vx,vy){
+    if(mode!=='intact'||releasing)return;
+    if(document.fonts&&document.fonts.status!=='loaded'){releasing=true;document.fonts.ready.then(function(){releasing=false;scatter(vx,vy);});return;}
+    quote.classList.add('is-fallen');
+    build();
+    var gv=Math.max(-820,Math.min(820,vx||0));
+    var gvy=Math.max(-640,Math.min(280,vy||0));
+    bodies.forEach(function(b){
+      b.born=0;
+      b.live=true;
+      b.vx=gv*0.28+(Math.random()-0.5)*240;
+      b.vy=Math.min(-30,gvy*0.2)-80-Math.random()*180;
+      b.va=(Math.random()-0.5)*5;
+      b.x+=b.vx*0.02;
+      b.y+=b.vy*0.02;
+    });
+    mode='apart';
+    fallen=true;
+    awake=true;
+    flingOk=true;
+    draw();
+    setHint();
+    kick();
+  }
+  function reform(){
+    if(mode!=='apart'||!bodies.length){showSentence();return;}
+    mode='reforming';
+    flingOk=false;
+    running=false;
+    awake=false;
+    var from=bodies.map(function(b){return {x:b.x,y:b.y,a:b.a};});
+    var t0=performance.now();
+    setHint();
+    function step(now){
+      if(mode!=='reforming')return;
+      var t=Math.min(1,(now-t0)/760);
+      var e=t<0.5?2*t*t:1-Math.pow(-2*t+2,2)/2;
+      for(var i=0;i<bodies.length;i++){
+        var b=bodies[i];
+        b.born=0;
+        b.live=true;
+        b.vx=0;b.vy=0;b.va=0;
+        b.x=from[i].x+(b.homeX-from[i].x)*e;
+        b.y=from[i].y+(b.homeY-from[i].y)*e;
+        b.a=from[i].a*(1-e);
+      }
+      draw();
+      if(t<1)reformRaf=requestAnimationFrame(step);
+      else showSentence();
+    }
+    reformRaf=requestAnimationFrame(step);
   }
   function traveled(){return window.scrollY;}
   function contain(b,W,H){
@@ -1450,7 +1513,7 @@ html.room-3d .works{height:170vh}
     b.x=cx-b.w*0.5; b.y=cy-b.h*0.5;
   }
   function tick(now){
-    if(!fallen||!onScreen){running=false;return;}
+    if(mode!=='apart'||!onScreen){running=false;return;}
     var dt=Math.min(0.032,(now-(tick.last||now))/1000);
     tick.last=now;
     var W=phys.clientWidth,H=phys.clientHeight;
@@ -1491,33 +1554,15 @@ html.room-3d .works{height:170vh}
     if(moving||awake){awake=false;requestAnimationFrame(tick);}
     else running=false;
   }
-  function kick(){if(!running){running=true;tick.last=0;requestAnimationFrame(tick);}}
-  var armAt=0, departed=false, READ_MS=8000;
+  function kick(){if(!running&&mode==='apart'){running=true;tick.last=0;requestAnimationFrame(tick);}}
   function screen(){
     var r=quote.getBoundingClientRect();
-    if(r.height<8||r.width<8)return;
-    var vis=r.bottom>innerHeight*0.12&&r.top<innerHeight*0.88;
-    var away=r.bottom<8||r.top>innerHeight-8;
-    if(away&&!fallen)departed=true;
-    if(!vis){
-      if(!fallen)armAt=0;
-      if(hold&&away)hold=false;
-    }else if(!fallen&&!hold){
-      if(departed){departed=false;release();}
-      else if(!armAt)armAt=performance.now();
-    }
-    if(vis&&!onScreen&&fallen)kick();
+    var vis=r.height>8&&r.bottom>0&&r.top<innerHeight;
+    if(vis&&!onScreen&&mode==='apart')kick();
     onScreen=vis;
   }
-  function watch(now){
-    if(reduce.matches)return;
-    screen();
-    if(onScreen&&!fallen&&!hold&&armAt&&now-armAt>READ_MS)release();
-    requestAnimationFrame(watch);
-  }
-  function onScroll(){screen();}
-  quote.addEventListener('pointermove',function(e){
-    if(!fallen||!onScreen)return;
+  function flingAt(e){
+    if(!flingOk||mode!=='apart')return;
     var r=phys.getBoundingClientRect();
     var x=e.clientX-r.left, y=e.clientY-r.top;
     var now=performance.now();
@@ -1528,7 +1573,7 @@ html.room-3d .works{height:170vh}
         var b=bodies[i]; if(!b.live)continue;
         var dist=Math.hypot((b.x+b.w/2)-x,(b.y+b.h/2)-y);
         if(dist<78){
-          var f=(1-dist/78)*1.25;
+          var f=(1-dist/78)*1.15;
           b.vx+=pvx*f; b.vy+=pvy*f; b.va+=pvx*0.0004;
           var sp=Math.hypot(b.vx,b.vy);
           if(sp>1700){b.vx*=1700/sp;b.vy*=1700/sp;}
@@ -1538,11 +1583,71 @@ html.room-3d .works{height:170vh}
       if(awake)kick();
     }
     lastPtr={x:x,y:y,t:now};
-  },{passive:true});
-  quote.addEventListener('pointerleave',function(){lastPtr=null;});
-  replay.addEventListener('click',function(){hold=true;armAt=0;restore();});
-  window.addEventListener('scroll',onScroll,{passive:true});
-  requestAnimationFrame(watch);
+  }
+  function onQuote(e){
+    var t=e.target;
+    if(!quote.contains(t))return false;
+    if(t.closest&&t.closest('.hook-replay'))return false;
+    return true;
+  }
+  function settle(){
+    travel=0;
+    flingOk=false;
+    lastPt=null;
+    lastPtr=null;
+    var token=++leaveToken;
+    setTimeout(function(){
+      if(token!==leaveToken||mode==='reforming')return;
+      armed=true;
+    },280);
+  }
+  function commit(vx,vy){
+    if(!armed||mode==='reforming')return;
+    armed=false;
+    travel=0;
+    if(mode==='intact')scatter(vx,vy);
+    else reform();
+  }
+  quote.addEventListener('pointermove',function(e){
+    if(reduce.matches||!onQuote(e))return;
+    if(e.pointerType==='touch'&&!e.buttons)return;
+    var now=performance.now();
+    if(lastPt&&now-lastMoveT>STILL&&mode!=='reforming'){travel=0;armed=true;flingOk=false;}
+    var x=e.clientX,y=e.clientY;
+    if(lastPt){
+      var dx=x-lastPt.x, dy=y-lastPt.y, step=Math.hypot(dx,dy);
+      if(e.pointerType==='touch'&&!flingOk&&Math.abs(dy)>Math.abs(dx)*1.35&&Math.abs(dy)>12)travel=0;
+      else travel+=step;
+      if(armed&&mode!=='reforming'&&travel>=SWEEP){
+        var dt=Math.max(0.016,(now-lastPt.t)/1000);
+        commit(dx/dt,dy/dt);
+      }else flingAt(e);
+    }
+    lastPt={x:x,y:y,t:now};
+    lastMoveT=now;
+  });
+  quote.addEventListener('pointerdown',function(e){
+    if(!onQuote(e))return;
+    lastPt={x:e.clientX,y:e.clientY,t:performance.now()};
+    lastMoveT=lastPt.t;
+  });
+  quote.addEventListener('pointerup',settle);
+  quote.addEventListener('pointercancel',settle);
+  quote.addEventListener('pointerleave',settle);
+  quote.addEventListener('keydown',function(e){
+    if(reduce.matches)return;
+    if(e.key!=='Enter'&&e.key!==' ')return;
+    if(e.target!==quote)return;
+    e.preventDefault();
+    if(mode==='reforming')return;
+    armed=false;
+    if(mode==='intact')scatter(160,-220);
+    else reform();
+    settle();
+  });
+  replay.addEventListener('click',function(e){e.stopPropagation();showSentence();armed=true;});
+  window.addEventListener('scroll',screen,{passive:true});
+  setHint();
 })();
 </script>
 
