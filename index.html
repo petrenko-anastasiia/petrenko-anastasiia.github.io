@@ -63,32 +63,27 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .name{font-family:var(--serif);font-size:clamp(22px,2.4vw,30px);letter-spacing:-.01em;white-space:nowrap;color:var(--ink);margin-bottom:10px}
 .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(48px,6.6vw,96px);line-height:.92;letter-spacing:-.03em;margin:0 0 22px}
 .hero h1 em{color:var(--red)}
-/* Cursor spotlight clipped to the hero headline.
-   #7dd3fc is the existing sky hover, rgb(56 189 248) is --red, rgb(251 191 36) is --accent-2. */
-.hero-title{position:relative}
-.hero-title-base{display:block}
-.hero-title-glow{
-  display:block;position:absolute;left:0;top:0;width:100%;
-  pointer-events:none;user-select:none;-webkit-user-select:none;
-  color:transparent;-webkit-text-fill-color:transparent;
-  opacity:0;transition:opacity .4s ease;
-  background-image:
-    radial-gradient(ellipse clamp(58px,5.6vw,80px) clamp(42px,4vw,58px) at var(--lx,50%) var(--ly,42%),
-      #7dd3fc 0%,
-      rgba(56,189,248,.7) 48%,
-      transparent 76%),
-    radial-gradient(ellipse clamp(128px,13vw,176px) clamp(72px,7vw,96px) at var(--lx,50%) var(--ly,42%),
-      rgba(56,189,248,.4) 0%,
-      rgba(251,191,36,.24) 50%,
-      transparent 76%);
-  background-repeat:no-repeat;
-  -webkit-background-clip:text;background-clip:text;
+/* Desktop: headline matches the page until a sky spotlight sits behind it.
+   #7dd3fc is the existing sky hover; --red is #38bdf8. */
+html.hero-cursor .hero-title{position:relative;isolation:isolate}
+html.hero-cursor .hero-title-text{display:block;position:relative;z-index:1;color:var(--cream)}
+html.hero-cursor .hero-title-text em{position:relative;z-index:1;color:var(--cream)}
+html.hero-cursor .hero-spot{
+  position:absolute;z-index:0;left:0;top:0;width:300px;height:300px;
+  border-radius:50%;pointer-events:none;opacity:0;
+  transform:translate3d(var(--lx,-400px),var(--ly,-400px),0) translate(-50%,-50%);
+  background:radial-gradient(circle,#7dd3fc 0%,var(--red) 34%,rgba(56,189,248,.42) 56%,transparent 72%);
+  filter:blur(18px);transition:opacity .28s ease;
 }
-.hero h1 .hero-title-glow,
-.hero h1 .hero-title-glow em{color:transparent;-webkit-text-fill-color:transparent}
-.hero-title.is-lit .hero-title-glow{opacity:1;transition-duration:.12s}
+html.hero-cursor .hero-title.is-lit .hero-spot{opacity:1;transition-duration:.1s}
+html.hero-cursor .hero-k{position:relative;z-index:1}
+html.hero-cursor .hero:has(:focus-visible) .hero-title-text{color:var(--ink)}
+html.hero-cursor .hero:has(:focus-visible) .hero-title-text em{color:var(--red)}
+html.hero-cursor .hero:has(:focus-visible) .hero-spot{opacity:0}
 @media (prefers-reduced-motion:reduce),(pointer:coarse){
-  .hero-title-glow{display:none}
+  html.hero-cursor .hero-title-text{color:var(--ink)}
+  html.hero-cursor .hero-title-text em{color:var(--red)}
+  html.hero-cursor .hero-spot{display:none}
 }
 .role{font-size:16px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--red);margin-bottom:20px;line-height:1.5}
 .role span{white-space:nowrap}
@@ -845,6 +840,15 @@ section.block.hooklab#hooklab{padding-top:24px!important}
 .cr-tags .cr-btn{white-space:nowrap}
 
 </style>
+<script>
+(function(){
+  try{
+    if(matchMedia('(pointer:coarse)').matches)return;
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
+    document.documentElement.classList.add('hero-cursor');
+  }catch(e){}
+})();
+</script>
 </head>
 <body>
 
@@ -862,7 +866,7 @@ section.block.hooklab#hooklab{padding-top:24px!important}
     <div class="hero-col">
       <div class="hero-main">
       <p class="hero-k">Anastasiia Petrenko · paid social · AI production</p>
-      <h1 class="hero-title"><span class="hero-title-base">Creative <em>strategist</em></span><span class="hero-title-glow" aria-hidden="true">Creative <em>strategist</em></span></h1>
+      <h1 class="hero-title"><span class="hero-spot" aria-hidden="true"></span><span class="hero-title-text">Creative <em>strategist</em></span></h1>
       <p class="hook">I decode what makes top-performing ads convert—and build the creative systems to scale them.</p>
       <div class="lanes hero-ctas"><a class="pill-cta" href="#paid">See the work <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
       <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue</li><li><span class="num">~75%</span>faster publishing</li></ul>
@@ -1228,16 +1232,15 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
 (function(){
   var hero=document.querySelector('.hero');
   var title=hero&&hero.querySelector('.hero-title');
-  var glow=title&&title.querySelector('.hero-title-glow');
-  if(!hero||!title||!glow)return;
+  if(!hero||!title)return;
   var coarse=window.matchMedia('(pointer:coarse)');
   var reduce=window.matchMedia('(prefers-reduced-motion:reduce)');
   var pending=false,inside=false,bound=false,x=0,y=0;
   function allowed(){return !coarse.matches&&!reduce.matches}
   function applyPosition(){
-    var r=glow.getBoundingClientRect();
-    glow.style.setProperty('--lx',(x-r.left)+'px');
-    glow.style.setProperty('--ly',(y-r.top)+'px');
+    var r=title.getBoundingClientRect();
+    title.style.setProperty('--lx',(x-r.left)+'px');
+    title.style.setProperty('--ly',(y-r.top)+'px');
   }
   function paint(){
     pending=false;
@@ -1294,7 +1297,10 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
     window.removeEventListener('scroll',onViewport);
     window.removeEventListener('resize',onViewport);
   }
-  function sync(){if(allowed())bind();else unbind()}
+  function sync(){
+    if(allowed()){document.documentElement.classList.add('hero-cursor');bind()}
+    else{document.documentElement.classList.remove('hero-cursor');unbind()}
+  }
   if(coarse.addEventListener)coarse.addEventListener('change',sync);
   if(reduce.addEventListener)reduce.addEventListener('change',sync);
   sync();
