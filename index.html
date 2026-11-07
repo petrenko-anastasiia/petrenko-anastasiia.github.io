@@ -468,12 +468,13 @@ ul.skills li{border:1px solid rgba(122,28,28,.28);background:rgba(122,28,28,.04)
 }
 .hero .portrait{position:relative;width:min(860px,100%);max-width:none;height:440px;margin:8px auto 0;justify-self:center}
 .hero .portrait .arch{position:absolute;z-index:1;left:50%;top:50%;width:156px;height:156px;right:auto;translate:-50% -50%}
-.skill-float{list-style:none;position:absolute;inset:0;margin:0;padding:0;pointer-events:none;z-index:2;overflow:visible}
-.skill-float li{position:absolute;margin:0;padding:4px 9px;border-radius:999px;border:1px solid rgba(56,189,248,.5);background:rgba(18,23,33,.94);color:var(--red);font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.02em;line-height:1.3;white-space:nowrap;left:0;top:0}
+.skill-float{list-style:none;position:absolute;inset:0;margin:0;padding:0;pointer-events:none;z-index:auto;overflow:visible}
+.skill-float li{position:absolute;z-index:3;margin:0;padding:4px 9px;border-radius:999px;border:1px solid rgba(56,189,248,.5);background:rgba(18,23,33,.94);color:var(--red);font-family:var(--mono);font-size:11px;font-weight:600;letter-spacing:.02em;line-height:1.3;white-space:nowrap;left:0;top:0}
+.hero .portrait .arch{z-index:2}
 @media (max-width:899px){
-  .hero .portrait{height:430px}
+  .hero .portrait{height:400px}
   .hero .portrait .arch{width:178px;height:178px}
-  .skill-float li{font-size:10px;padding:3px 7px}
+  .skill-float li{font-size:10px;line-height:1.25;max-width:92px;padding:3px 6px;white-space:normal;text-align:center}
 }
 @media (min-width:900px){section.block.paid{padding-top:56px}}
 @media (max-width:899px){section.block.paid{padding-top:64px}}
@@ -960,25 +961,47 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
         var cleared=pushOut(x,y,sz[i].w,sz[i].h,photoX-8,photoY-8,photoX+pw+8,photoY+ph+8,cx,cy);
         x=cleared.x;y=cleared.y;
       }else{
-        var gapY=sz[i].h+8, topN=4, botN=items.length-topN;
-        var rows=[];
-        for(var r=topN;r>=1;r--)rows.push(Math.max(0,photoY-10-r*gapY));
-        for(var r=0;r<botN;r++)rows.push(Math.min(H-sz[i].h,photoY+ph+10+r*gapY));
-        var u=(shift+i/items.length)%1;
-        var rowF=u*rows.length;
-        var seg=Math.min(rows.length-1, Math.floor(rowF));
-        var local=rowF-Math.floor(rowF);
-        y=rows[seg];
-        var x1=Math.max(0,W-sz[i].w);
-        x=(seg%2===0)?local*x1:(1-local)*x1;
+        var a2=ang+cursor/wt.total*Math.PI*2;
+        var rx2=Math.max(36, W/2-sz[i].w/2-3);
+        var ry2=Math.max(36, H/2-sz[i].h/2-3);
+        x=cx+rx2*Math.cos(a2)-sz[i].w/2;
+        y=cy+ry2*Math.sin(a2)-sz[i].h/2;
       }
       x=Math.max(0,Math.min(W-sz[i].w,x));
       y=Math.max(0,Math.min(H-sz[i].h,y));
-      placed.push({x:x,y:y});
+      var faceL=photoX+pw*0.2, faceT=photoY+ph*0.08, faceR=photoX+pw*0.8, faceB=photoY+ph*0.7;
+      var behind=!wide && hits(x,y,sz[i].w,sz[i].h,faceL,faceT,faceR,faceB);
+      placed.push({x:x,y:y,behind:behind});
       cursor+=wt.list[i];
+    }
+    if(!wide){
+      for(var n=0;n<12;n++){
+        for(var i=0;i<placed.length;i++){
+          for(var j=i+1;j<placed.length;j++){
+            if(placed[i].behind||placed[j].behind)continue;
+            var ax=placed[i].x, ay=placed[i].y, bx=placed[j].x, by=placed[j].y;
+            var ox=Math.min(ax+sz[i].w,bx+sz[j].w)-Math.max(ax,bx);
+            var oy=Math.min(ay+sz[i].h,by+sz[j].h)-Math.max(ay,by);
+            if(ox>0&&oy>0){
+              var dx=(ax+sz[i].w/2)-(bx+sz[j].w/2), dy=(ay+sz[i].h/2)-(by+sz[j].h/2);
+              if(Math.abs(dx)<1&&Math.abs(dy)<1)dx=1;
+              var len=Math.hypot(dx,dy)||1, step=(Math.min(ox,oy)+4)/2;
+              placed[i].x+=dx/len*step; placed[j].x-=dx/len*step;
+              placed[i].y+=dy/len*step; placed[j].y-=dy/len*step;
+            }
+          }
+        }
+        for(var k=0;k<placed.length;k++){
+          placed[k].x=Math.max(0,Math.min(W-sz[k].w,placed[k].x));
+          placed[k].y=Math.max(0,Math.min(H-sz[k].h,placed[k].y));
+          var fL=photoX+pw*0.2,fT=photoY+ph*0.08,fR=photoX+pw*0.8,fB=photoY+ph*0.7;
+          placed[k].behind=hits(placed[k].x,placed[k].y,sz[k].w,sz[k].h,fL,fT,fR,fB);
+        }
+      }
     }
     for(var i=0;i<items.length;i++){
       items[i].style.transform='translate3d('+placed[i].x.toFixed(2)+'px,'+placed[i].y.toFixed(2)+'px,0)';
+      items[i].style.zIndex=placed[i].behind?'1':'3';
     }
     if(!reduce.matches)requestAnimationFrame(frame);
   }
