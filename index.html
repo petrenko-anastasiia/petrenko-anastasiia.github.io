@@ -115,6 +115,7 @@ html.hero-cursor .hero:has(:focus-visible) .hero-spot{opacity:0}
 .hook-phys{position:absolute;inset:0;overflow:hidden;pointer-events:none}
 .hook-phys span{position:absolute;display:block;white-space:pre;transform-origin:center center;line-height:1}
 .hook.is-fallen .hook-live{visibility:hidden}
+.hook.is-fallen{touch-action:none}
 .hook.is-fallen{margin-bottom:58px!important}
 .hook-replay{display:none;position:absolute;top:calc(100% + 8px);left:0;z-index:5;padding:5px 10px;border:1px solid rgba(56,189,248,.55);border-radius:999px;background:#121721;color:#7dd3fc;font-family:var(--sans);font-size:12px;font-weight:600;letter-spacing:.04em;cursor:pointer}
 .hook.is-fallen .hook-replay{display:inline-block}
@@ -930,7 +931,9 @@ html.room-3d .works{height:170vh}
 .hero-portrait img{width:100%;aspect-ratio:1;object-fit:cover;object-position:50% 20%;border-radius:18px;display:block;border:1px solid rgba(125,211,252,.5)}
 @media (max-width:899px){
   .hero-main,.hero-aside{display:block}
+  .hero-col .hero-k,.hero-col h1,.hero-col .hero-portrait,.hero-col .hero-side,.hero-col .hook,.hero-col .hero-ctas,.hero-col .hero-proof{order:0}
   .hero-portrait{width:min(260px,72vw)}
+  .hook.is-fallen{min-height:240px}
 }
 @media (min-width:900px){
   .hero-col{align-items:flex-start!important}
@@ -996,9 +999,6 @@ html.room-3d .works{height:170vh}
       <p class="hero-k">Anastasiia Petrenko · paid social · AI production</p>
       <h1 class="hero-title"><span class="hero-spot" aria-hidden="true"></span><span class="hero-title-text">Creative <em>strategist</em></span></h1>
       <figure class="hero-portrait"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko" width="340" height="340"></figure>
-      <p class="hook" id="hero-quote"><span class="hook-live">I decode what makes top-performing ads convert—and build the creative systems to scale them.</span><span class="hook-phys" aria-hidden="true"></span><button type="button" class="hook-replay">Show quote</button></p>
-      <div class="lanes hero-ctas"><a class="pill-cta" href="#paid">See the work <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
-      <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue</li><li><span class="num">~75%</span>faster publishing</li></ul>
       </div>
       <div class="hero-aside">
       <div class="hero-side">
@@ -1024,6 +1024,9 @@ html.room-3d .works{height:170vh}
           </ul>
         </div>
       </div>
+      <p class="hook" id="hero-quote"><span class="hook-live">I decode what makes top-performing ads convert—and build the creative systems to scale them.</span><span class="hook-phys" aria-hidden="true"></span><button type="button" class="hook-replay">Show quote</button></p>
+      <div class="lanes hero-ctas"><a class="pill-cta" href="#paid">See the work <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
+      <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue</li><li><span class="num">~75%</span>faster publishing</li></ul>
       </div>
     </div>
   </div>
@@ -1339,6 +1342,7 @@ html.room-3d .works{height:170vh}
   function release(){
     if(fallen||hold||releasing)return;
     if(document.fonts&&document.fonts.status!=='loaded'){releasing=true;document.fonts.ready.then(function(){releasing=false;release();});return;}
+    quote.classList.add('is-fallen');
     build();
     var t0=performance.now();
     bodies.forEach(function(b){
