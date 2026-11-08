@@ -481,6 +481,49 @@ function assert(cond, msg, extra) {
   assert(entering.sy >= 0.85 && entering.sy < 0.99 && entering.sx <= 1.02, 'footer did not animate while the heading was entering', entering);
   await repeat.close();
 
+  for (var bleedVp of [{ w: 1024, h: 640, name: 'laptop' }, { w: 1440, h: 900, name: 'desktop' }, { w: 390, h: 844, name: 'phone' }]) {
+    var bleedPage = await browser.newPage();
+    await bleedPage.setViewport({ width: bleedVp.w, height: bleedVp.h, isMobile: bleedVp.w < 500 });
+    await bleedPage.evaluateOnNewDocument(function () { localStorage.setItem('ap-loader-seen-v1', '1'); });
+    await bleedPage.goto(URL, { waitUntil: 'domcontentloaded' });
+    await bleedPage.evaluate(go, 'scrollTrack', 0.2);
+    await new Promise(function (r) { setTimeout(r, 200); });
+    var bleed = await bleedPage.evaluate(async function () {
+      var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+      var next = document.getElementById('nextBtn');
+      var bad = [];
+      async function probe(label) {
+        await wait(40);
+        var anims = document.getAnimations().filter(function (a) {
+          return a.effect && a.effect.target && a.effect.target.classList && a.effect.target.classList.contains('case-frame');
+        });
+        var times = [0, 140, 275, 400, 540];
+        for (var ti = 0; ti < times.length; ti++) {
+          anims.forEach(function (a) { try { a.pause(); a.currentTime = times[ti]; } catch (e) {} });
+          var center = document.querySelector('.case-frame.slot-center');
+          var rect = center.getBoundingClientRect();
+          var foreign = 0;
+          for (var gy = 0.22; gy <= 0.78; gy += 0.28) {
+            for (var gx = 0.22; gx <= 0.78; gx += 0.28) {
+              var el = document.elementFromPoint(rect.left + rect.width * gx, rect.top + rect.height * gy);
+              var card = el && el.closest && el.closest('.case-frame');
+              if (card && card !== center) foreign++;
+            }
+          }
+          if (foreign) bad.push({ label: label, t: times[ti], foreign: foreign, hud: document.getElementById('hudCounterText').textContent });
+        }
+        anims.forEach(function (a) { try { a.finish(); } catch (e) {} });
+        await wait(20);
+      }
+      for (var step = 0; step < 5; step++) { next.click(); await probe('next-' + step); }
+      for (var rush = 0; rush < 5; rush++) next.click();
+      await probe('rapid');
+      return bad;
+    });
+    assert(!bleed.length, bleedVp.name + ' center card shows another case during the move', bleed);
+    await bleedPage.close();
+  }
+
   assert(!errors.length, 'page errors', errors);
   console.log(JSON.stringify({
     ok: true,
