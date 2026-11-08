@@ -1039,13 +1039,18 @@ body.is-sheet .back-bar{display:flex}
   var pctEl=document.getElementById('ap-pct');
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
   var urls=['assets/img/portrait.jpg','assets/img/outfit-transition.jpg','assets/img/tool/01-ai-caption-options.jpg','assets/img/argo-video-poster.jpg'];
-  var total=urls.length+1, got=0, leaving=false, born=performance.now();
+  var total=urls.length+1, got=0, leaving=false;
   var raf=0, renderer, geometry, texture, clock, spinGroup, tiltGroup, rootGroup;
   var headline='CREATIVE STRATEGY   ·   PAID SOCIAL   ·   AI PRODUCTION';
   var subItems=['META ADS','TIKTOK ADS','CREATIVE TESTING','HOOKS'];
-  function setPct(){
-    var n=Math.max(0,Math.min(100,Math.round(got/total*100)));
+  var displayed=0;
+  function showPct(n){
+    if(n<displayed)return;
+    displayed=n;
     if(pctEl)pctEl.textContent=n+'%';
+    var prev=root.dataset.pctSeen||'';
+    var last=prev.split(' ').pop();
+    if(String(n)!==last)root.dataset.pctSeen=prev?(prev+' '+n):String(n);
   }
   function paint(ctx,W,H){
     ctx.clearRect(0,0,W,H);
@@ -1133,6 +1138,7 @@ body.is-sheet .back-bar{display:flex}
       var dt=Math.min(clock.getDelta(),0.05);
       if(!reduce.matches&&spinGroup)spinGroup.rotation.y-=dt*0.42;
       renderer.render(scene,camera);
+      if(!shownAt)requestAnimationFrame(function(){markShown();});
     }
     raf=requestAnimationFrame(frame);
     root._apDispose=function(){
@@ -1150,22 +1156,43 @@ body.is-sheet .back-bar{display:flex}
     var gl=document.getElementById('ap-gl');
     if(gl)gl.hidden=true;
     if(fb)fb.hidden=false;
+    requestAnimationFrame(function(){requestAnimationFrame(function(){markShown();});});
   }
-  try{boot();}catch(err){showFallback();}
-  function finish(){
+  var shownAt=0, assetsReady=false, safetyDue=false, exitTimer=0;
+  var MIN_VISIBLE=5000, HANG_AFTER=3200;
+  function markShown(){
+    if(shownAt)return;
+    shownAt=performance.now();
+    root.dataset.visibleAt=String(Math.round(shownAt));
+    [0,10,20,30,40,50,60,70,80,90].forEach(function(n,i){
+      setTimeout(function(){if(!leaving)showPct(n);},i*500);
+    });
+    setTimeout(function(){safetyDue=true;tryLeave();},MIN_VISIBLE+HANG_AFTER);
+    tryLeave();
+  }
+  function beginLeave(){
     if(leaving)return;
     leaving=true;
     root.setAttribute('aria-busy','false');
-    var wait=Math.max(0,520-(performance.now()-born));
+    root.classList.add('is-leave');
     setTimeout(function(){
-      root.classList.add('is-leave');
-      setTimeout(function(){
-        if(root._apDispose)root._apDispose();
-        if(root.parentNode)root.parentNode.removeChild(root);
-      },520);
-    },wait);
+      if(root._apDispose)root._apDispose();
+      if(root.parentNode)root.parentNode.removeChild(root);
+    },520);
   }
-  function tick(){got++;setPct();if(got>=total)finish();}
+  function tryLeave(){
+    if(leaving||!shownAt)return;
+    var visibleFor=performance.now()-shownAt;
+    if(visibleFor<MIN_VISIBLE){
+      if(!exitTimer)exitTimer=setTimeout(function(){exitTimer=0;tryLeave();},MIN_VISIBLE-visibleFor);
+      return;
+    }
+    if(!assetsReady&&!safetyDue){showPct(Math.min(displayed,90));return;}
+    showPct(100);
+    setTimeout(beginLeave,350);
+  }
+  try{boot();}catch(err){showFallback();}
+  function tick(){got++;if(got>=total){assetsReady=true;tryLeave();}}
   urls.forEach(function(src){
     var img=new Image(), settled=false;
     function mark(){if(settled)return;settled=true;tick();}
@@ -1174,7 +1201,6 @@ body.is-sheet .back-bar{display:flex}
   });
   if(document.fonts&&document.fonts.ready)document.fonts.ready.then(tick,tick);
   else tick();
-  setTimeout(finish,3200);
   if(reduce.matches)root.classList.add('is-still');
 })();
 </script>
