@@ -893,11 +893,14 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .hud-stepper{display:flex;align-items:center;gap:18px;font-family:var(--mono);font-size:12px;letter-spacing:.14em;color:var(--text-muted)}
 .step-btn{width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.16);background:rgba(15,22,35,.8);color:var(--text-main);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px}
 .step-btn:hover{border-color:var(--accent);background:rgba(77,166,255,.15)}
+.room-play{height:32px;padding:0 14px;border-radius:999px;border:1px solid rgba(255,255,255,.16);background:rgba(15,22,35,.8);color:var(--text-muted);cursor:pointer;font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.room-play:hover{border-color:var(--accent);color:var(--text-main)}
+@media (prefers-reduced-motion:reduce){.room-play{display:none}}
 .hud-pills{display:flex;gap:6px;padding:5px;border-radius:12px;background:rgba(12,17,27,.88);border:1px solid rgba(255,255,255,.08);backdrop-filter:blur(10px);max-width:100%;overflow-x:auto;scrollbar-width:none}
 .hud-pills::-webkit-scrollbar{display:none}
 .pill-tab{padding:7px 13px;border-radius:8px;border:0;background:transparent;color:var(--text-muted);font-family:var(--mono);font-size:11px;letter-spacing:.08em;cursor:pointer;text-decoration:none;white-space:nowrap}
 .pill-tab.active{background:var(--accent);color:#041022;font-weight:600;box-shadow:0 0 16px rgba(77,166,255,.4)}
-.case-frame:focus-visible,.pedestal-node:focus-visible,.pill-tab:focus-visible,.step-btn:focus-visible,.floor-projection-ui:focus-visible,.room-backlink:focus-visible{outline:3px solid #7dd3fc;outline-offset:3px}
+.case-frame:focus-visible,.pedestal-node:focus-visible,.pill-tab:focus-visible,.step-btn:focus-visible,.room-play:focus-visible,.floor-projection-ui:focus-visible,.room-backlink:focus-visible{outline:3px solid #7dd3fc;outline-offset:3px}
 @media (max-width:900px){
   .case-frame.slot-left,.case-frame.slot-right{display:none}
   .case-frame.slot-center{width:min(440px,88vw);height:min(290px,42vh);top:16%}
@@ -1725,6 +1728,7 @@ body.is-sheet .back-bar{display:flex}
         <span id="hudCounterText">2 / 5 · Postroom</span>
         <button type="button" class="step-btn" id="nextBtn" aria-label="Next work">→</button>
       </div>
+      <button type="button" class="room-play" id="roomPlay" aria-pressed="false" aria-label="Play the works presentation">Play</button>
       <div class="hud-pills" id="hudPills" role="tablist" aria-label="Works">
         <a class="pill-tab" role="tab" href="#paid" data-index="0">Paid social</a>
         <a class="pill-tab active" role="tab" href="#tool" data-index="1" aria-selected="true">Postroom</a>
@@ -2490,31 +2494,118 @@ body.is-sheet .back-bar{display:flex}
     document.getElementById('floorCount').textContent=(activeCaseIndex+1)+' / '+CASES.length;
     document.getElementById('floorOpen').setAttribute('aria-label','Open '+CASES[activeCaseIndex].title);
   }
+  var roomAuto={timer:0,userHold:false,paused:false,hover:0,over:null,wasReady:false,lastPointer:0};
+  var ROOM_DWELL=5600;
+  function roomShowing(){
+    if(reduce.matches||document.hidden||document.body.classList.contains('is-sheet'))return false;
+    if(pNow<0.8)return false;
+    if(parseFloat(roomStage3D.style.opacity||'0')<0.98)return false;
+    var rect=scrollTrack.getBoundingClientRect();
+    return rect.top<=8 && rect.bottom>=window.innerHeight-8;
+  }
+  function syncPlayButton(){
+    var btn=document.getElementById('roomPlay');
+    if(!btn)return;
+    var playing=!!roomAuto.timer && !roomAuto.userHold && !roomAuto.paused;
+    btn.textContent=playing?'Pause':'Play';
+    btn.setAttribute('aria-pressed', playing?'true':'false');
+    btn.setAttribute('aria-label', playing?'Pause the works presentation':'Play the works presentation');
+  }
+  function scheduleRoom(){
+    clearTimeout(roomAuto.timer);
+    roomAuto.timer=0;
+    if(!roomShowing()||roomAuto.userHold||roomAuto.paused||roomAuto.hover){syncPlayButton();return;}
+    roomAuto.timer=setTimeout(function(){
+      roomAuto.timer=0;
+      if(!roomShowing()||roomAuto.userHold||roomAuto.paused||roomAuto.hover){syncPlayButton();return;}
+      selectCase(activeCaseIndex+1);
+      scheduleRoom();
+    }, ROOM_DWELL);
+    syncPlayButton();
+  }
+  function holdRoom(){
+    roomAuto.userHold=true;
+    clearTimeout(roomAuto.timer);
+    roomAuto.timer=0;
+    syncPlayButton();
+  }
+  function manualSelect(idx){holdRoom();selectCase(idx);}
+  function bindRoomPause(el){
+    if(!el)return;
+    el.addEventListener('pointermove', function(){
+      if(roomAuto.over===el)return;
+      roomAuto.over=el;
+      roomAuto.hover=1;
+      clearTimeout(roomAuto.timer);
+      roomAuto.timer=0;
+      syncPlayButton();
+    });
+    el.addEventListener('pointerleave', function(){
+      if(roomAuto.over!==el)return;
+      roomAuto.over=null;
+      roomAuto.hover=0;
+      if(!roomAuto.userHold&&!roomAuto.paused)scheduleRoom();
+      else syncPlayButton();
+    });
+    el.addEventListener('focusin', function(){
+      roomAuto.hover=1;
+      clearTimeout(roomAuto.timer);
+      roomAuto.timer=0;
+      syncPlayButton();
+    });
+    el.addEventListener('focusout', function(){
+      roomAuto.hover=0;
+      if(!roomAuto.userHold&&!roomAuto.paused)scheduleRoom();
+      else syncPlayButton();
+    });
+  }
   cardEls.forEach(function(card){
+    bindRoomPause(card);
     card.addEventListener('click', function(){
       var idx=+card.dataset.index;
       if(card.classList.contains('slot-center'))openActive();
-      else selectCase(idx);
+      else manualSelect(idx);
     });
   });
   pedestalEls.forEach(function(ped){
-    ped.addEventListener('click', function(){selectCase(+ped.dataset.index);});
+    bindRoomPause(ped);
+    ped.addEventListener('click', function(){manualSelect(+ped.dataset.index);});
   });
   pillEls.forEach(function(pill){
+    bindRoomPause(pill);
     pill.addEventListener('click', function(e){
       if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
       e.preventDefault();
-      selectCase(+pill.dataset.index);
+      manualSelect(+pill.dataset.index);
     });
   });
-  document.getElementById('prevBtn').addEventListener('click', function(){selectCase(activeCaseIndex-1);});
-  document.getElementById('nextBtn').addEventListener('click', function(){selectCase(activeCaseIndex+1);});
+  bindRoomPause(document.getElementById('prevBtn'));
+  bindRoomPause(document.getElementById('nextBtn'));
+  bindRoomPause(document.getElementById('floorOpen'));
+  document.getElementById('prevBtn').addEventListener('click', function(){manualSelect(activeCaseIndex-1);});
+  document.getElementById('nextBtn').addEventListener('click', function(){manualSelect(activeCaseIndex+1);});
   document.getElementById('floorOpen').addEventListener('click', openActive);
+  document.getElementById('roomPlay').addEventListener('click', function(){
+    if(roomAuto.userHold||roomAuto.paused||!roomAuto.timer){
+      roomAuto.userHold=false;
+      roomAuto.paused=false;
+      scheduleRoom();
+    }else{
+      roomAuto.paused=true;
+      clearTimeout(roomAuto.timer);
+      roomAuto.timer=0;
+      syncPlayButton();
+    }
+  });
+  document.addEventListener('visibilitychange', function(){
+    if(document.hidden){clearTimeout(roomAuto.timer);roomAuto.timer=0;roomAuto.wasReady=false;syncPlayButton();}
+  });
   selectCase(1);
 
   var mouseState={x:window.innerWidth/2, y:window.innerHeight/2, lerpX:window.innerWidth/2, lerpY:window.innerHeight/2};
   var physicsActive=false, pNow=0, fallLatched=false;
   window.addEventListener('pointermove', function(e){
+    roomAuto.lastPointer=performance.now();
     mouseState.x=e.clientX;
     mouseState.y=e.clientY;
     if(physicsActive && Body){
@@ -2534,15 +2625,15 @@ body.is-sheet .back-bar{display:flex}
     gallery.addEventListener('pointerup', function(e){
       if(!drag||pNow<0.55){drag=null;return;}
       var dx=e.clientX-drag.x, dy=e.clientY-drag.y;
-      if(Math.abs(dx)>56 && Math.abs(dx)>Math.abs(dy))selectCase(activeCaseIndex+(dx<0?1:-1));
+      if(Math.abs(dx)>56 && Math.abs(dx)>Math.abs(dy))manualSelect(activeCaseIndex+(dx<0?1:-1));
       drag=null;
     });
   }
   window.addEventListener('keydown', function(e){
     if(pNow<0.55)return;
     if(e.target.closest && e.target.closest('#skill-grid, .skill-legend, .top'))return;
-    if(e.key==='ArrowLeft'){e.preventDefault();selectCase(activeCaseIndex-1);}
-    if(e.key==='ArrowRight'){e.preventDefault();selectCase(activeCaseIndex+1);}
+    if(e.key==='ArrowLeft'){e.preventDefault();manualSelect(activeCaseIndex-1);}
+    if(e.key==='ArrowRight'){e.preventDefault();manualSelect(activeCaseIndex+1);}
   });
 
   function clamp(val, min, max){return Math.max(min, Math.min(max, val));}
@@ -2580,6 +2671,14 @@ body.is-sheet .back-bar{display:flex}
 
   function renderLoop(){
     if(document.body.classList.contains('is-sheet') || scrollTrack.offsetHeight<10){
+      if(roomAuto.timer||roomAuto.wasReady){
+        clearTimeout(roomAuto.timer);
+        roomAuto.timer=0;
+        roomAuto.wasReady=false;
+        roomAuto.hover=0;
+        roomAuto.over=null;
+        syncPlayButton();
+      }
       requestAnimationFrame(renderLoop);
       return;
     }
@@ -2670,6 +2769,15 @@ body.is-sheet .back-bar{display:flex}
     roomHud.style.pointerEvents=hudOn?'auto':'none';
     roomHud.setAttribute('aria-hidden', hudOn?'false':'true');
 
+    var roomReady=roomShowing();
+    if(roomReady && !roomAuto.wasReady && !roomAuto.userHold && !roomAuto.paused && !roomAuto.hover)scheduleRoom();
+    if(!roomReady && roomAuto.wasReady){clearTimeout(roomAuto.timer);roomAuto.timer=0;syncPlayButton();}
+    roomAuto.wasReady=roomReady;
+    if(roomAuto.timer && performance.now()-roomAuto.lastPointer>1400){
+      var glowT=performance.now()/1000;
+      mouseState.x=vw*(0.5+0.06*Math.sin(glowT*0.35));
+      mouseState.y=vh*(0.42+0.035*Math.cos(glowT*0.27));
+    }
     mouseState.lerpX+=(mouseState.x-mouseState.lerpX)*(motion?0.08:1);
     mouseState.lerpY+=(mouseState.y-mouseState.lerpY)*(motion?0.08:1);
     var normX=(mouseState.lerpX/vw-0.5)*2;
