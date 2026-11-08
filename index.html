@@ -843,7 +843,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .architect-scroll-track{--accent:#4da6ff;--accent-glow:rgba(77,166,255,.45);--text-main:#f3f6fc;--text-muted:#8b95a7;--card-bg:#0f1623;--mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;position:relative;height:380vh;width:100%;background:#07090e;color:var(--text-main);overflow-x:clip}
 .StickyViewport{position:sticky;top:0;width:100%;height:100vh;height:100dvh;overflow:hidden;background:#07090e}
 .works-anchor{position:absolute;top:72%;left:0;width:1px;height:1px;pointer-events:none}
-.physics-curtain-layer{position:absolute;inset:0;z-index:30;pointer-events:auto;will-change:opacity}
+.physics-curtain-layer{position:absolute;inset:0;z-index:30;pointer-events:auto;touch-action:pan-y;will-change:opacity}
 .physics-curtain-layer .skill-scene{height:100%;max-height:100%;min-height:0}
 .physics-floor-line{position:absolute;left:0;top:80%;width:100%;height:2px;background:linear-gradient(90deg,transparent 5%,rgba(77,166,255,.5) 50%,transparent 95%);box-shadow:0 20px 60px rgba(0,0,0,.95);pointer-events:none;opacity:0}
 .recent-header-bar{position:absolute;top:74px;left:0;width:100%;padding:0 56px;display:flex;align-items:baseline;justify-content:space-between;z-index:25;pointer-events:none}
@@ -1049,7 +1049,7 @@ body.hero-armed.hero-stage-content .hero .hero-lower-stack{opacity:1;transform:t
 /* Skills word-search fills the next viewport. No card, no second portrait. */
 .skill-scene{--nav-safe:72px;height:100vh;height:100dvh;max-height:100dvh;display:flex;box-sizing:border-box;background:#0b0e14;padding:calc(var(--nav-safe) + 2.5vh) 4vw 2.5vh;overflow:hidden}
 .skill-scene-inner{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;width:100%;height:100%}
-.word-grid{flex:1 1 0px;display:grid;grid-template-columns:repeat(var(--cols,15),var(--cell,56px));grid-auto-rows:var(--cell,56px);column-gap:var(--gap-x,22px);row-gap:var(--gap-y,22px);justify-content:center;align-content:center;width:100%;min-height:0;touch-action:none;user-select:none;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;overflow:visible}
+.word-grid{flex:1 1 0px;display:grid;grid-template-columns:repeat(var(--cols,15),var(--cell,56px));grid-auto-rows:var(--cell,56px);column-gap:var(--gap-x,22px);row-gap:var(--gap-y,22px);justify-content:center;align-content:center;width:100%;min-height:0;touch-action:pan-y;user-select:none;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;overflow:visible}
 .word-grid .cell{width:var(--cell,56px);height:var(--cell,56px);display:grid;place-items:center;color:rgba(148,163,184,.45);font-size:calc(var(--cell,56px) * .5);font-weight:650;line-height:1;letter-spacing:0;border-radius:calc(var(--cell,56px) * .18)}
 .word-grid .cell.on,.word-grid .cell.tracing{background:#38bdf8;color:#0b0e14;position:relative;z-index:1;transform:rotate(var(--tilt,1deg)) skewX(var(--skew,.3deg))}
 .word-grid .cell.tracing{z-index:2;background:#7dd3fc}
@@ -1925,7 +1925,7 @@ body.is-sheet .back-bar{display:flex}
     demoStarted=true;
     demoTimer=setTimeout(function(){stepDemo(0);},600);
   }
-  var path=[],solved={},dragging=false;
+  var path=[],solved={},dragging=false,gesture=null;
   function colsNow(){return parseInt(getComputedStyle(gridEl).getPropertyValue('--cols'),10)||1;}
   function xy(cell){var i=cells.indexOf(cell),c=colsNow();return {x:i%c,y:Math.floor(i/c)};}
   function paint(){
@@ -2030,26 +2030,64 @@ body.is-sheet .back-bar{display:flex}
       if(n&&path.indexOf(n)<0)path.push(n);
     }
   }
-  gridEl.addEventListener('pointerdown',function(e){
-    if(e.button!=null&&e.button!==0)return;
-    var cell=cellFromPoint(e.clientX,e.clientY);
-    if(!cell)return;
+  function armTrace(e,cell){
     yieldDemo();
     dragging=true;
     path=[cell];
     paint();
+    gesture=null;
     if(gridEl.setPointerCapture){try{gridEl.setPointerCapture(e.pointerId);}catch(err){}}
+  }
+  function decideGesture(id,x,y){
+    if(!gesture||gesture.id!==id||gesture.decided)return;
+    var dx=x-gesture.x, dy=y-gesture.y;
+    if(Math.hypot(dx,dy)<10)return;
+    var vertical=Math.abs(dy)>Math.abs(dx);
+    if(!vertical){
+      gesture.decided=true;
+      armTrace({pointerId:id},gesture.cell);
+      return;
+    }
+    var elapsed=Math.max(16,(window.performance?performance.now():Date.now())-gesture.t);
+    var speed=Math.abs(dy)/elapsed;
+    var next=cellFromPoint(x,y);
+    var wordStep=Math.abs(dx)<28&&next&&next!==gesture.cell&&gesture.cell.dataset.word&&next.dataset.word===gesture.cell.dataset.word;
+    if(wordStep&&speed<0.45&&Math.abs(dy)<78){
+      gesture.decided=true;
+      armTrace({pointerId:id},gesture.cell);
+      return;
+    }
+    if(Math.abs(dy)>24||speed>0.4)gesture=null;
+  }
+  gridEl.addEventListener('pointerdown',function(e){
+    if(e.button!=null&&e.button!==0)return;
+    var cell=cellFromPoint(e.clientX,e.clientY);
+    if(!cell)return;
+    if(e.pointerType==='touch'){
+      dragging=false;
+      gesture={id:e.pointerId,x:e.clientX,y:e.clientY,cell:cell,decided:false,t:(window.performance?performance.now():Date.now())};
+      return;
+    }
+    armTrace(e,cell);
     e.preventDefault();
   });
   gridEl.addEventListener('pointermove',function(e){
+    if(gesture&&e.pointerId===gesture.id)decideGesture(e.pointerId,e.clientX,e.clientY);
     if(!dragging)return;
     var cell=cellFromPoint(e.clientX,e.clientY);
     if(!cell)return;
     extendTo(cell);
     paint();
   });
-  gridEl.addEventListener('touchmove',function(e){if(dragging)e.preventDefault();},{passive:false});
-  function endDrag(){
+  gridEl.addEventListener('touchmove',function(e){
+    if(gesture&&!gesture.decided&&e.changedTouches&&e.changedTouches[0]){
+      var t=e.changedTouches[0];
+      decideGesture(gesture.id,t.clientX,t.clientY);
+    }
+    if(dragging)e.preventDefault();
+  },{passive:false});
+  function endDrag(e){
+    if(gesture&&(!e||e.pointerId==null||e.pointerId===gesture.id))gesture=null;
     if(!dragging)return;
     dragging=false;
     if(!finishIfWord())resetPartial();
@@ -2552,9 +2590,17 @@ body.is-sheet .back-bar{display:flex}
     var vh=window.innerHeight, vw=window.innerWidth;
     var motion=!reduce.matches && !!engine;
 
-    if(p>0.06 && p<0.72 && motion){
+    var fallOn=0.16, fallOff=0.08;
+    if(motion && !fallLatched && p>=fallOn && p<0.78)releaseTiles();
+    if(motion && fallLatched && p<=fallOff){
+      fallLatched=false;
+      physicsActive=false;
+      restoreTiles();
+      placeBodiesAtRest();
+    }
+    if(motion && fallLatched && p<0.78){
       physicsActive=true;
-      if(!fallLatched||!tilesMatch(liveTiles()))releaseTiles();
+      if(!tilesMatch(liveTiles())){initPhysicsBodies();fallLatched=true;}
       Engine.update(engine, 1000/60);
       var wipeProgress=clamp((p-0.40)/0.26, 0, 1);
       var currentFloorY=vh*0.78-wipeProgress*(vh*0.92);
@@ -2562,20 +2608,21 @@ body.is-sheet .back-bar{display:flex}
       physicsFloorLine.style.top=currentFloorY+'px';
       physicsFloorLine.style.opacity=p<0.68?'1':'0';
       if(skillHead)skillHead.style.opacity=String(clamp(1-(p-0.08)*5, 0, 1));
-      var stray=0;
       tileElements.forEach(function(el, idx){
         var b=tileBodies[idx], init=initialTileRects[idx];
         if(!b||!init)return;
+        if(b.position.y>vh*1.2){
+          Body.setPosition(b, {x:Math.min(vw-8, Math.max(8, b.position.x)), y:vh*0.9});
+          Body.setVelocity(b, {x:b.velocity.x*0.2, y:0});
+        }
         var dx=b.position.x-init.cx, dy=b.position.y-init.cy;
-        if(Math.abs(dy)>vh*1.15)stray++;
         el.style.transform='translate3d('+dx.toFixed(1)+'px, '+dy.toFixed(1)+'px, 0) rotate('+b.angle.toFixed(3)+'rad)';
       });
-      if(stray>tileElements.length*0.45)releaseTiles();
-      physicsCurtain.style.opacity=String(clamp(1-(p-0.60)*8, 0, 1));
-      physicsCurtain.style.pointerEvents=p>0.58?'none':'auto';
-    }else if(p<=0.06 || !motion && p<0.5){
+      var curtainFade=clamp((p-0.40)/0.22, 0, 1);
+      physicsCurtain.style.opacity=String(1-curtainFade);
+      physicsCurtain.style.pointerEvents=curtainFade>0.9?'none':'auto';
+    }else if(!fallLatched && (p<fallOn || !motion && p<0.5)){
       physicsActive=false;
-      fallLatched=false;
       if(skillHead)skillHead.style.opacity='1';
       physicsFloorLine.style.opacity='0';
       physicsCurtain.style.opacity = !motion ? String(clamp(1-(p-0.18)*4, 0, 1)) : '1';
@@ -2590,7 +2637,6 @@ body.is-sheet .back-bar{display:flex}
       physicsFloorLine.style.opacity='0';
     }
 
-    if(gridEl)gridEl.style.touchAction=(p>0.05 && p<0.62)?'pan-y':'';
     var curtainGone=parseFloat(physicsCurtain.style.opacity||'1')<0.05;
     if(curtainGone)physicsCurtain.setAttribute('inert','');
     else physicsCurtain.removeAttribute('inert');
