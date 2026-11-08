@@ -49,7 +49,7 @@ function contactSnap() {
   var total = track.offsetHeight - window.innerHeight;
   var tr = track.getBoundingClientRect();
   var p = Math.max(0, Math.min(1, -tr.top / Math.max(1, total)));
-  var lines = [].slice.call(track.querySelectorAll('.footer-scale-line')).map(function (line) {
+  var lines = [].slice.call(track.querySelectorAll('#engine-heading .engine-line')).map(function (line) {
     var cs = getComputedStyle(line);
     var t = cs.transform;
     var m = /matrix\(([^)]+)\)/.exec(t);
@@ -80,7 +80,37 @@ function contactSnap() {
     stickyPos: getComputedStyle(sticky).position,
     href: link.getAttribute('href'),
     lines: lines,
-    tilesOver: over
+    tilesOver: over,
+    kickerTransform: getComputedStyle(track.querySelector('.engine-kicker')).transform,
+    kickerText: track.querySelector('.engine-kicker').textContent.trim()
+  };
+}
+function scrollToEndGap() {
+  var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  window.scrollTo(0, Math.max(0, maxScroll - 80));
+}
+function endSnap() {
+  var maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+  var lines = [].slice.call(document.querySelectorAll('#engine-heading .engine-line')).map(function (line) {
+    var t = getComputedStyle(line).transform;
+    var m = /matrix\(([^)]+)\)/.exec(t);
+    var parts = m ? m[1].split(',').map(parseFloat) : null;
+    var r = line.getBoundingClientRect();
+    return { text: line.textContent.trim(), sx: parts ? parts[0] : 1, sy: parts ? parts[3] : 1, h: r.height };
+  });
+  var over = 0;
+  [].slice.call(document.querySelectorAll('#skill-grid > .cell')).forEach(function (c) {
+    var r = c.getBoundingClientRect();
+    if (r.bottom > 0 && r.top < window.innerHeight && r.height > 2 && r.width > 2) over++;
+  });
+  var kicker = document.querySelector('.engine-kicker');
+  return {
+    remain: maxScroll - window.scrollY,
+    lines: lines,
+    tilesOver: over,
+    kickerTransform: getComputedStyle(kicker).transform,
+    kickerText: kicker.textContent.trim(),
+    curtainVisibility: getComputedStyle(document.getElementById('physicsCurtain')).visibility
   };
 }
 function roomSnap() {
@@ -159,32 +189,70 @@ function assert(cond, msg, extra) {
   }
   assert(advanced, 'presentation did not advance', hudLog);
 
+  var order = await page.evaluate(function () {
+    return {
+      skill: document.getElementById('skillTrack').offsetTop,
+      room: document.getElementById('scrollTrack').offsetTop,
+      contact: document.querySelector('.contact').offsetTop,
+      nested: document.querySelectorAll('section.skill-scene').length,
+      labels: document.querySelectorAll('[aria-label="Find the word"]').length,
+      visibleLabel: [].slice.call(document.querySelectorAll('h2')).filter(function (h) {
+        return h.textContent.trim() === 'Find the word' && getComputedStyle(h).position !== 'absolute';
+      }).length
+    };
+  });
+  assert(order.skill < order.room && order.room < order.contact, 'page order is not intro grid, room, contact', order);
+  assert(order.nested === 0 && order.labels === 1, 'duplicate Find the word section remains', order);
+
   var reversals = [];
   for (var n = 0; n < 3; n++) {
-    await page.evaluate(go, 'skillTrack', 0.4);
+    await page.evaluate(go, 'skillTrack', 0.22);
     await new Promise(function (r) { setTimeout(r, 700); });
     var mid = await page.evaluate(skillSnap);
     await page.evaluate(go, 'skillTrack', 0.02);
     await new Promise(function (r) { setTimeout(r, 350); });
     var back = await page.evaluate(skillSnap);
+    var shown = await page.evaluate(function () {
+      return getComputedStyle(document.getElementById('physicsCurtain')).visibility;
+    });
     await page.evaluate(go, 'scrollTrack', 0.25);
     await new Promise(function (r) { setTimeout(r, 250); });
     var overRoom = await page.evaluate(function () {
       var nOver = 0;
       [].slice.call(document.querySelectorAll('#skill-grid > .cell')).forEach(function (c) {
-        if (!c.style.transform) return;
         var r = c.getBoundingClientRect();
-        if (r.bottom > 40 && r.top < window.innerHeight - 40) nOver++;
+        if (r.height > 2 && r.bottom > 40 && r.top < window.innerHeight - 40) nOver++;
       });
       return nOver;
     });
-    reversals.push({ mid: mid, back: back, overRoom: overRoom });
+    reversals.push({ mid: mid, back: back, overRoom: overRoom, shown: shown });
     assert(mid.moved > 12, 'fall did not move tiles on pass ' + n, mid);
     assert(mid.topBand < mid.moved * 0.35, 'tiles clumped in the top band on pass ' + n, mid);
     assert(mid.meanY > mid.vh * 0.45, 'fallen tiles stayed in the top half on pass ' + n, mid);
     assert(back.moved === 0, 'reverse to the skills start left transforms on pass ' + n, back);
+    assert(shown === 'visible', 'reverse did not restore the grid layer on pass ' + n, shown);
     assert(overRoom === 0, 'skill tiles covered the room after reverse on pass ' + n, overRoom);
   }
+
+  await page.evaluate(go, 'skillTrack', 0.64);
+  await new Promise(function (r) { setTimeout(r, 400); });
+  var risen = await page.evaluate(function () {
+    var floor = document.getElementById('physicsFloorLine');
+    var curtain = document.getElementById('physicsCurtain');
+    var posed = [].slice.call(document.querySelectorAll('#skill-grid > .cell')).filter(function (c) {
+      return !!c.style.transform;
+    }).length;
+    return {
+      floorTop: parseFloat(floor.style.top),
+      visibility: getComputedStyle(curtain).visibility,
+      opacity: getComputedStyle(curtain).opacity,
+      pointerEvents: getComputedStyle(curtain).pointerEvents,
+      posed: posed
+    };
+  });
+  assert(risen.floorTop <= -200, 'floor did not travel to -220', risen);
+  assert(risen.visibility === 'hidden' && risen.opacity === '0' && risen.pointerEvents === 'none', 'physics layer stayed interactive after the wipe', risen);
+  assert(risen.posed === 0, 'fallen tile transforms remained after the floor rose', risen);
 
   await page.evaluate(go, 'skillTrack', 0.02);
   await new Promise(function (r) { setTimeout(r, 300); });
@@ -212,11 +280,12 @@ function assert(cond, msg, extra) {
     assert(shot.lines.length === 2, 'missing footer lines', shot);
     assert(shot.href.indexOf('mailto:apetrenko597@gmail.com') === 0, 'mailto link changed', shot.href);
     assert(shot.tilesOver === 0, 'physics tiles still cover contact at ' + cp, shot);
+    assert(shot.kickerTransform === 'none', 'Open to work is transformed at contact ' + cp, shot);
     shot.lines.forEach(function (line) {
       assert(line.sx != null && line.sx <= 1.05 && line.sx >= 0.95, 'scaleX left 1 at p ' + cp, line);
-      assert(line.sy != null && line.sy >= 0.8, 'scaleY collapsed at p ' + cp, line);
-      assert(!/scaleX/.test(line.inline), 'inline scaleX transform returned', line);
-      assert(line.h >= 18, 'line is a flat bar at p ' + cp, line);
+      assert(line.sy != null && line.sy >= 0.88, 'scaleY collapsed at p ' + cp, line);
+      assert(!/scaleX\(/.test(line.inline), 'inline scaleX transform returned', line);
+      assert(line.h >= 24, 'line is a flat bar at p ' + cp, line);
     });
     if (cp >= 0.45) {
       assert(Math.abs(shot.stickyTop) < 30, 'contact pin missed at p ' + cp, shot);
@@ -229,7 +298,17 @@ function assert(cond, msg, extra) {
   }
   assert(contacts[0.45].lines[0].text === "Let's scale", 'heading copy changed', contacts[0.45]);
   assert(contacts[0.45].lines[1].text === 'Your growth engine', 'heading copy changed', contacts[0.45]);
-  assert(contacts[0.2].lines[0].h > 18 && contacts[1].lines[0].sy >= 0.97, 'readable state exists only at the endpoint', contacts);
+  assert(contacts[0.2].lines[0].h > 24 && contacts[1].lines[0].sy >= 0.97, 'readable state exists only at the endpoint', contacts);
+  await page.evaluate(scrollToEndGap);
+  await new Promise(function (r) { setTimeout(r, 250); });
+  var atEnd = await page.evaluate(endSnap);
+  assert(Math.abs(atEnd.remain - 80) < 2, 'did not stop 80px before max scroll', atEnd);
+  atEnd.lines.forEach(function (line) {
+    assert(line.sx >= 0.98 && line.sx <= 1.02 && line.sy >= 0.98, 'headline not fully readable 80px before the end', line);
+    assert(line.h >= 28, 'headline is flat 80px before the end', line);
+  });
+  assert(atEnd.kickerTransform === 'none' && /open to work/i.test(atEnd.kickerText), 'Open to work warped at the end', atEnd);
+  assert(atEnd.tilesOver === 0 && atEnd.curtainVisibility === 'hidden', 'tiles still cover the footer', atEnd);
 
   var tiles = await page.evaluate(function () {
     var cells = [].slice.call(document.querySelectorAll('#skill-grid > .cell'));
@@ -288,7 +367,7 @@ function assert(cond, msg, extra) {
     var moved = [].slice.call(document.querySelectorAll('#skill-grid > .cell')).filter(function (c) { return c.style.transform; }).length;
     go('engineTrack', 0.3);
     await new Promise(function (r) { setTimeout(r, 200); });
-    var lines = [].slice.call(document.querySelectorAll('.footer-scale-line')).map(function (line) {
+    var lines = [].slice.call(document.querySelectorAll('#engine-heading .engine-line')).map(function (line) {
       var r = line.getBoundingClientRect();
       return { h: r.height, transform: getComputedStyle(line).transform, sy: getComputedStyle(line).getPropertyValue('--line-sy').trim() };
     });
@@ -302,6 +381,47 @@ function assert(cond, msg, extra) {
   });
   assert(reduced.playDisplay === 'none', 'reduced motion still shows the room play control', reduced);
   await reducePage.close();
+
+  for (var vp of [{ w: 1440, h: 900, name: 'desktop' }, { w: 390, h: 844, name: 'phone' }]) {
+    var vpPage = await browser.newPage();
+    vpPage.on('pageerror', function (e) { errors.push(vp.name + ' ' + String(e)); });
+    await vpPage.setViewport({ width: vp.w, height: vp.h });
+    await vpPage.goto(URL, { waitUntil: 'domcontentloaded' });
+    await vpPage.evaluate(function () {
+      document.documentElement.style.scrollBehavior = 'auto';
+      var load = document.getElementById('ap-load');
+      if (load) load.remove();
+    });
+    var vpOrder = await vpPage.evaluate(function () {
+      return {
+        skill: document.getElementById('skillTrack').offsetTop,
+        room: document.getElementById('scrollTrack').offsetTop,
+        contact: document.querySelector('.contact').offsetTop
+      };
+    });
+    assert(vpOrder.skill < vpOrder.room && vpOrder.room < vpOrder.contact, vp.name + ' section order changed', vpOrder);
+    await vpPage.evaluate(go, 'skillTrack', 0.22);
+    await new Promise(function (r) { setTimeout(r, 500); });
+    var vpFall = await vpPage.evaluate(skillSnap);
+    assert(vpFall.moved > 8, vp.name + ' fall did not run', vpFall);
+    await vpPage.evaluate(go, 'skillTrack', 0.7);
+    await new Promise(function (r) { setTimeout(r, 300); });
+    var vpHide = await vpPage.evaluate(function () {
+      var curtain = document.getElementById('physicsCurtain');
+      var posed = [].slice.call(document.querySelectorAll('#skill-grid > .cell')).filter(function (c) { return !!c.style.transform; }).length;
+      return { visibility: getComputedStyle(curtain).visibility, floor: parseFloat(document.getElementById('physicsFloorLine').style.top), posed: posed };
+    });
+    assert(vpHide.visibility === 'hidden' && vpHide.floor <= -200 && vpHide.posed === 0, vp.name + ' tiles stayed over the next section', vpHide);
+    await vpPage.evaluate(scrollToEndGap);
+    await new Promise(function (r) { setTimeout(r, 250); });
+    var vpEnd = await vpPage.evaluate(endSnap);
+    assert(Math.abs(vpEnd.remain - 80) < 2, vp.name + ' footer was not measured 80px before the end', vpEnd);
+    vpEnd.lines.forEach(function (line) {
+      assert(line.sy >= 0.98 && line.sx >= 0.98 && line.sx <= 1.02 && line.h >= 20, vp.name + ' headline not readable 80px before the end', line);
+    });
+    assert(vpEnd.kickerTransform === 'none' && vpEnd.tilesOver === 0, vp.name + ' Open to work or tiles failed', vpEnd);
+    await vpPage.close();
+  }
 
   assert(!errors.length, 'page errors', errors);
   console.log(JSON.stringify({

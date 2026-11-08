@@ -1143,7 +1143,8 @@ body.is-sheet .back-bar{display:flex}
 .engine-block h2{position:relative;margin:0;max-width:none!important;font-size:inherit;line-height:1;color:#f3f6fc}
 .engine-glow{position:absolute;left:var(--gx,50%);top:var(--gy,42%);width:min(52vw,460px);height:min(24vw,210px);transform:translate(-50%,-50%);pointer-events:none;z-index:0;background:radial-gradient(circle, rgba(255,255,255,.7) 0%, rgba(186,230,253,.5) 30%, rgba(56,189,248,.18) 55%, rgba(56,189,248,0) 74%);filter:blur(18px);mix-blend-mode:screen;opacity:.9}
 .engine-line{position:relative;z-index:1;display:block;width:max-content;max-width:none;margin:0 auto;text-align:center;white-space:nowrap;font-family:var(--sans);font-weight:700;font-stretch:78%;letter-spacing:-.045em;line-height:.86;text-transform:uppercase;color:#f3f6fc}
-.footer-scale-line{display:block;transform-origin:center bottom;will-change:transform,opacity;transform:translate3d(0,var(--line-y,0px),0) scaleY(var(--line-sy,1))}
+#engine-heading .engine-line{display:block;min-height:1em;line-height:1.02!important}
+.engine-kicker,.engine-kicker span{transform:none}
 .engine-talk{position:relative;z-index:1;display:block;width:max-content;margin:12px auto 0;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#bae6fd}
 .engine-support{width:min(920px,92vw);display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;position:relative;z-index:2}
 .engine-support .sub{margin:0;max-width:46ch;color:#94a3b8!important}
@@ -1162,7 +1163,7 @@ body.is-sheet .back-bar{display:flex}
 @media (prefers-reduced-motion:reduce){
   .engine-track{height:auto}
   .engine-sticky{position:relative;height:auto;min-height:100dvh}
-  .footer-scale-line{--line-y:0px;--line-sy:1;opacity:1;transform:none!important}
+  #engine-heading .engine-line,.engine-kicker,.engine-kicker span{transform:none!important;opacity:1}
   .engine-glow{left:50%;top:42%}
 }
 
@@ -1656,6 +1657,39 @@ body.is-sheet .back-bar{display:flex}
   if(!document.getElementById('ap-load'))window.runPostLoaderChoreography();
 })();
 </script>
+<section class="skill-scroll-track" id="skillTrack" aria-label="Find the word">
+  <div class="StickyViewport">
+    <div class="physics-curtain-layer" id="physicsCurtain">
+<div class="skill-scene" id="skills">
+  <div class="skill-scene-inner">
+    <div class="skill-head">
+      <h2 class="skill-sr">Find the word</h2>
+      <p class="skill-bio">Four years leading paid social, short-form strategy and an 8–12 person content team for direct-to-consumer (DTC) lifestyle subscriptions &amp; creator-led brands. Over those four years the team worked on 50+ accounts; the cases here are selected examples, not that full set.</p>
+      <p class="skill-sr" id="skill-how">Drag through each word, letter by letter</p>
+      <p class="skill-live" id="skill-live" aria-live="polite"></p>
+      <ul class="skill-legend" aria-label="Skills">
+        <li><button type="button" class="is-secret" tabindex="-1" data-skill="strategy">Creative strategy</button></li>
+        <li><button type="button" class="is-secret" tabindex="-1" data-skill="paid">Paid social</button></li>
+        <li><button type="button" class="is-secret" tabindex="-1" data-skill="ai">AI production</button></li>
+        <li><button type="button" class="is-secret" tabindex="-1" data-skill="meta">Meta Ads</button></li>
+        <li><button type="button" class="is-secret" tabindex="-1" data-skill="tiktok">TikTok Ads</button></li>
+        <li><button type="button" class="is-secret" tabindex="-1" data-skill="claude">Claude &amp; Claude Code</button></li>
+        <li><button type="button" class="is-secret" tabindex="-1" data-skill="cursor">Cursor</button></li>
+        <li><button type="button" class="is-secret" tabindex="-1" data-skill="field">Higgsfield &amp; ComfyUI</button></li>
+        <li><button type="button" class="is-secret" tabindex="-1" data-skill="analytics">GA4 &amp; Looker Studio</button></li>
+        <li><button type="button" class="is-secret" tabindex="-1" data-skill="tools">CapCut, Canva &amp; Notion</button></li>
+      </ul>
+    </div>
+    <div class="word-grid" id="skill-grid" tabindex="0" aria-label="Find the skills in the letters" aria-describedby="skill-how"></div>
+  </div>
+</div>
+      <div class="physics-floor-line" id="physicsFloorLine"></div>
+    </div>
+  </div>
+</section>
+
+
+
 <section class="architect-scroll-track" id="scrollTrack">
   <div class="StickyViewport">
     <div class="recent-header-bar" id="recentHeaderBar">
@@ -1748,38 +1782,6 @@ body.is-sheet .back-bar{display:flex}
   </div>
   <div id="works" class="works-anchor" tabindex="-1"></div>
 </section>
-
-<section class="skill-scroll-track" id="skillTrack" aria-label="Find the word">
-  <div class="StickyViewport">
-    <div class="physics-curtain-layer" id="physicsCurtain">
-<section class="skill-scene" id="skills" aria-label="Find the word">
-  <div class="skill-scene-inner">
-    <div class="skill-head">
-      <h2 class="skill-sr">Find the word</h2>
-      <p class="skill-bio">Four years leading paid social, short-form strategy and an 8–12 person content team for direct-to-consumer (DTC) lifestyle subscriptions &amp; creator-led brands. Over those four years the team worked on 50+ accounts; the cases here are selected examples, not that full set.</p>
-      <p class="skill-sr" id="skill-how">Drag through each word, letter by letter</p>
-      <p class="skill-live" id="skill-live" aria-live="polite"></p>
-      <ul class="skill-legend" aria-label="Skills">
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="strategy">Creative strategy</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="paid">Paid social</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="ai">AI production</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="meta">Meta Ads</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="tiktok">TikTok Ads</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="claude">Claude &amp; Claude Code</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="cursor">Cursor</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="field">Higgsfield &amp; ComfyUI</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="analytics">GA4 &amp; Looker Studio</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="tools">CapCut, Canva &amp; Notion</button></li>
-      </ul>
-    </div>
-    <div class="word-grid" id="skill-grid" tabindex="0" aria-label="Find the skills in the letters" aria-describedby="skill-how"></div>
-  </div>
-</section>
-      <div class="physics-floor-line" id="physicsFloorLine"></div>
-    </div>
-  </div>
-</section>
-
 
 <script>
 (function(){
@@ -2311,6 +2313,7 @@ body.is-sheet .back-bar{display:flex}
   }
   var localHomes=[];
   var homesCaptured=false;
+  var lastFloorY=null;
   function skillStickyEl(){
     return skillTrack?skillTrack.querySelector('.StickyViewport'):null;
   }
@@ -2320,13 +2323,35 @@ body.is-sheet .back-bar{display:flex}
     var r=s.getBoundingClientRect();
     return {x:r.left,y:r.top,top:r.top,bottom:r.bottom,pinned:r.top<=6&&r.bottom>=window.innerHeight-24};
   }
+  function rowLocalOrigin(m){
+    var sticky=skillStickyEl();
+    var x=0, y=0, n=gridEl;
+    while(n && n!==sticky && n!==document.body){
+      x+=n.offsetLeft;
+      y+=n.offsetTop;
+      n=n.offsetParent;
+    }
+    var gridW=m.cols*m.cell+(m.cols-1)*m.gapX;
+    var gridH=m.rows*m.cell+(m.rows-1)*m.gapY;
+    x+=(gridEl.clientWidth-gridW)/2+m.cell/2;
+    y+=(gridEl.clientHeight-gridH)/2+m.cell/2;
+    return {x:x, y:y};
+  }
+  function writeRowHomes(m){
+    var origin=rowLocalOrigin(m);
+    localHomes=[];
+    for(var i=0;i<m.list.length;i++){
+      var col=i%m.cols, row=Math.floor(i/m.cols);
+      localHomes.push({cx:origin.x+col*(m.cell+m.gapX), cy:origin.y+row*(m.cell+m.gapY)});
+    }
+    homesCaptured=!!localHomes.length && localHomes[0].cy>8 && gridEl.clientHeight>40;
+  }
   function buildPhysicsWorld(){
     if(!Engine||!gridEl)return;
     var m=readGridMetrics();
     if(!m.list.length||!(m.cell>=8))return;
-    for(var n=0;n<m.list.length;n++){
-      if(m.list[n].getBoundingClientRect().width<4)return;
-    }
+    if(gridEl.clientWidth<40||gridEl.clientHeight<40)return;
+    lastFloorY=null;
     engine=Engine.create({positionIterations:8, velocityIterations:6});
     engine.gravity.y=1.4;
     tileBodies=[];
@@ -2335,22 +2360,21 @@ body.is-sheet .back-bar{display:flex}
     localHomes=[];
     homesCaptured=false;
     simMetrics=m;
+    writeRowHomes(m);
     var box=stickyBox();
     var vw=window.innerWidth, vh=window.innerHeight, isMobile=vw<=900;
-    var floorY=vh*0.92;
+    var floorY=vh*0.84;
     floorBody=Bodies.rectangle(vw/2, floorY+60, vw*3, 120, {isStatic:true, friction:0.3});
-    var leftWall=Bodies.rectangle(-60, vh/2, 120, vh*4, {isStatic:true});
-    var rightWall=Bodies.rectangle(vw+60, vh/2, 120, vh*4, {isStatic:true});
+    var leftWall=Bodies.rectangle(-60, vh/2, 120, vh*6, {isStatic:true});
+    var rightWall=Bodies.rectangle(vw+60, vh/2, 120, vh*6, {isStatic:true});
     World.add(engine.world, [floorBody, leftWall, rightWall]);
     var chamfer=Math.min(isMobile?4:8, m.cell*0.3);
     m.list.forEach(function(el, i){
-      var col=i%m.cols, row=Math.floor(i/m.cols);
+      var local=localHomes[i];
       el.style.transform='';
-      var r=el.getBoundingClientRect();
-      var cx=r.left+r.width/2, cy=r.top+r.height/2;
-      localHomes.push({cx:cx-box.x, cy:cy-box.y});
+      var cx=local.cx+box.x, cy=local.cy+box.y;
       homePositions.push({cx:cx, cy:cy});
-      simTiles.push({el:el, row:row, col:col, released:false});
+      simTiles.push({el:el, row:Math.floor(i/m.cols), col:i%m.cols, released:false});
       var body=Bodies.rectangle(cx, cy, m.cell*0.92, m.cell*0.92, {
         isStatic:true,
         chamfer:{radius:chamfer},
@@ -2362,20 +2386,11 @@ body.is-sheet .back-bar{display:flex}
       tileBodies.push(body);
       World.add(engine.world, body);
     });
-    homesCaptured=true;
   }
   function captureLocalHomes(){
     if(!simTiles.length)return;
     for(var k=0;k<simTiles.length;k++) if(!simTiles[k].released) simTiles[k].el.style.transform='';
-    var o=stickyBox();
-    for(var i=0;i<simTiles.length;i++){
-      var item=simTiles[i];
-      if(item.released)continue;
-      var r=item.el.getBoundingClientRect();
-      if(r.width<4||r.height<4)continue;
-      localHomes[i]={cx:r.left+r.width/2-o.x, cy:r.top+r.height/2-o.y};
-    }
-    homesCaptured=localHomes.length===simTiles.length && !!localHomes[0];
+    writeRowHomes(simMetrics);
   }
   function parkUnreleased(){
     var o=stickyBox();
@@ -2622,19 +2637,51 @@ body.is-sheet .back-bar{display:flex}
     return inverted/Math.max(1, simMetrics.rows)*0.75+(item.col%3)*0.05;
   }
   function placeFloor(p, vw, vh){
-    var lowest=0;
-    var o=stickyBox();
-    for(var i=0;i<localHomes.length;i++){
-      if(localHomes[i]&&localHomes[i].cy>lowest)lowest=localHomes[i].cy;
+    var wipeProgress=clamp((p-0.35)/0.27, 0, 1);
+    var start=vh*0.84;
+    var currentFloorY=start+(-220-start)*wipeProgress;
+    if(lastFloorY!=null && currentFloorY<lastFloorY && wipeProgress>0){
+      var lift=currentFloorY-lastFloorY;
+      for(var i=0;i<simTiles.length;i++){
+        if(!simTiles[i].released)continue;
+        var b=tileBodies[i];
+        if(!b)continue;
+        Body.setPosition(b, {x:b.position.x, y:b.position.y+lift});
+        Body.setVelocity(b, {x:b.velocity.x, y:Math.min(0, b.velocity.y)});
+      }
     }
-    var visualLowest=lowest+o.y;
-    var currentFloorY=Math.min(vh-6, Math.max(vh*0.78, visualLowest+simMetrics.cell*0.7));
+    lastFloorY=currentFloorY;
     if(floorBody)Body.setPosition(floorBody, {x:vw/2, y:currentFloorY+60});
-    var fade=clamp((p-0.62)/0.18, 0, 1);
     physicsFloorLine.style.top=currentFloorY+'px';
-    physicsFloorLine.style.opacity=String(1-fade);
-    return currentFloorY;
+    physicsFloorLine.style.opacity=wipeProgress>=0.95?'0':'1';
+    return {y:currentFloorY, wipeProgress:wipeProgress};
   }
+  function footerEntering(){
+    var footer=document.querySelector('.contact');
+    if(!footer)return false;
+    return footer.getBoundingClientRect().top<window.innerHeight*0.85;
+  }
+  function hidePhysicsLayer(){
+    physicsActive=false;
+    clearTileTransforms();
+    physicsFloorLine.style.opacity='0';
+    if(!physicsCurtain)return;
+    physicsCurtain.style.opacity='0';
+    physicsCurtain.style.visibility='hidden';
+    physicsCurtain.style.pointerEvents='none';
+    physicsCurtain.setAttribute('inert','');
+    physicsCurtain.setAttribute('aria-hidden','true');
+  }
+  function showPhysicsLayer(interactive){
+    if(!physicsCurtain)return;
+    physicsCurtain.style.opacity='1';
+    physicsCurtain.style.visibility='visible';
+    physicsCurtain.style.pointerEvents=interactive?'auto':'none';
+    if(interactive)physicsCurtain.removeAttribute('inert');
+    else physicsCurtain.setAttribute('inert','');
+    physicsCurtain.setAttribute('aria-hidden', interactive?'false':'true');
+  }
+  var physicsWasHidden=false;
   function releaseOneBand(releaseProgress){
     var band=null;
     for(var i=0;i<simTiles.length;i++){
@@ -2707,6 +2754,10 @@ body.is-sheet .back-bar{display:flex}
     if(!roomNear && !skillNear){
       physicsActive=false;
       clearTileTransforms();
+      if(footerEntering() || skillP>0.65){
+        hidePhysicsLayer();
+        physicsWasHidden=true;
+      }
       requestAnimationFrame(renderLoop);
       return;
     }
@@ -2717,62 +2768,67 @@ body.is-sheet .back-bar{display:flex}
       var stickyNow=stickyBox();
       var skillPinned=stickyNow.pinned;
       if(motion && !simCurrent())buildPhysicsWorld();
-      if(!skillPinned){
-        physicsActive=false;
-        clearTileTransforms();
-        if(motion && skillP<=0.05 && (!homesCaptured || simTiles.some(function(t){return t.released;}) || !simCurrent()))buildPhysicsWorld();
-        if(skillHead)skillHead.style.opacity='1';
-        physicsFloorLine.style.opacity='0';
-      }else if(motion && skillP<=0.05){
-        if(!homesCaptured || !simCurrent() || simTiles.some(function(t){return t.released;}))buildPhysicsWorld();
-        else clearTileTransforms();
-        if(skillHead)skillHead.style.opacity='1';
-        physicsFloorLine.style.opacity='0';
-      }else if(motion && skillP>0.05 && simTiles.length){
-        if(!homesCaptured)captureLocalHomes();
-        if(!homesCaptured){
-          if(skillHead)skillHead.style.opacity='1';
-        }else{
-        parkUnreleased();
-        var inWindow=skillP<0.72;
-        var moving=anyTileMoving();
-        if(inWindow||moving){
-          physicsActive=true;
-          var releaseProgress=inWindow?clamp((skillP-0.05)/0.11, 0, 1):1;
-          var catchup=releaseProgress>=1;
-          var steps=0;
-          while(steps<=simMetrics.rows){
-            var didRelease=inWindow?releaseOneBand(releaseProgress):false;
-            placeFloor(skillP, vw, vh);
-            var sub=didRelease&&catchup?10:1;
-            for(var s=0;s<sub;s++){
-              try{Engine.update(engine, 1000/60);}
-              catch(err){buildPhysicsWorld();didRelease=false;break;}
-            }
-            steps++;
-            if(!didRelease)break;
-          }
-          if(!inWindow && !anyTileMoving()){
-            physicsActive=false;
-            physicsFloorLine.style.opacity='0';
-          }
-        }else{
+      var floorState=placeFloor(skillP, vw, vh);
+      var wipeProgress=floorState.wipeProgress;
+      var footerRect=document.querySelector('.contact');
+      footerRect=footerRect?footerRect.getBoundingClientRect():null;
+      var footerIn=footerRect?footerRect.top<window.innerHeight*0.85:false;
+      if(skillP>0.65 || wipeProgress>=0.95 || footerIn){
+        hidePhysicsLayer();
+        physicsWasHidden=true;
+      }else{
+        if(physicsWasHidden && motion){
+          buildPhysicsWorld();
+          physicsWasHidden=false;
+          floorState=placeFloor(skillP, vw, vh);
+        }else physicsWasHidden=false;
+        showPhysicsLayer(skillP<0.12);
+        if(!skillPinned){
           physicsActive=false;
-          placeFloor(skillP, vw, vh);
+          clearTileTransforms();
+          if(motion && skillP<=0.05 && (!homesCaptured || simTiles.some(function(t){return t.released;}) || !simCurrent()))buildPhysicsWorld();
+          if(skillHead)skillHead.style.opacity='1';
           physicsFloorLine.style.opacity='0';
-        }
-        if(skillHead)skillHead.style.opacity=String(clamp(1-(skillP-0.08)*5, 0, 1));
-        paintSimTiles();
+        }else if(motion && skillP<=0.05){
+          if(!homesCaptured || !simCurrent() || simTiles.some(function(t){return t.released;}))buildPhysicsWorld();
+          else clearTileTransforms();
+          if(skillHead)skillHead.style.opacity='1';
+          physicsFloorLine.style.opacity='0';
+        }else if(motion && skillP>0.05 && simTiles.length){
+          if(!homesCaptured)captureLocalHomes();
+          if(homesCaptured){
+            parkUnreleased();
+            var inWindow=skillP<0.72;
+            var moving=anyTileMoving() || wipeProgress>0;
+            if(inWindow||moving){
+              physicsActive=true;
+              var releaseProgress=inWindow?clamp((skillP-0.05)/0.11, 0, 1):1;
+              var catchup=releaseProgress>=1;
+              var steps=0;
+              while(steps<=simMetrics.rows){
+                var didRelease=inWindow?releaseOneBand(releaseProgress):false;
+                placeFloor(skillP, vw, vh);
+                var sub=didRelease&&catchup?10:1;
+                for(var s=0;s<sub;s++){
+                  try{Engine.update(engine, 1000/60);}
+                  catch(err){buildPhysicsWorld();didRelease=false;break;}
+                }
+                steps++;
+                if(!didRelease)break;
+              }
+              if(!inWindow && !anyTileMoving() && wipeProgress>=0.95)physicsActive=false;
+            }else{
+              physicsActive=false;
+              placeFloor(skillP, vw, vh);
+            }
+            if(skillHead)skillHead.style.opacity=String(clamp(1-(skillP-0.08)*5, 0, 1));
+            paintSimTiles();
+          }
         }
       }
-      if(physicsCurtain){
-        physicsCurtain.style.opacity='1';
-        var curtainPlay=skillP<0.12;
-        physicsCurtain.style.pointerEvents=curtainPlay?'auto':'none';
-        if(curtainPlay)physicsCurtain.removeAttribute('inert');
-        else physicsCurtain.setAttribute('inert','');
-        physicsCurtain.setAttribute('aria-hidden', curtainPlay?'false':'true');
-      }
+    }else if(footerEntering() || skillP>0.65){
+      hidePhysicsLayer();
+      physicsWasHidden=true;
     }
 
     if(roomNear){
@@ -2990,8 +3046,8 @@ body.is-sheet .back-bar{display:flex}
       <a class="engine-heading-link" href="mailto:apetrenko597@gmail.com?subject=Let%27s%20work%20together">
         <h2 id="engine-heading">
           <span class="engine-glow" id="engineGlow" aria-hidden="true"></span>
-          <span class="engine-line footer-scale-line">Let's scale</span>
-          <span class="engine-line footer-scale-line">Your growth engine</span>
+          <span class="engine-line">Let's scale</span>
+          <span class="engine-line">Your growth engine</span>
         </h2>
         <span class="engine-talk">Let's talk ↗</span>
       </a>
@@ -3030,7 +3086,9 @@ body.is-sheet .back-bar{display:flex}
     var support=track.querySelector('.engine-support');
     var kicker=track.querySelector('.engine-kicker');
     var target=Math.min(track.clientWidth*0.9, 1100);
-    lines.forEach(function(line){line.style.transform='';});
+    lines.forEach(function(line){
+      line.style.transform='none';
+    });
     lines.forEach(function(line){
       var size=80;
       line.style.fontSize=size+'px';
@@ -3066,32 +3124,43 @@ body.is-sheet .back-bar{display:flex}
       }
     });
   }
-  function render(){
-    var rect=track.getBoundingClientRect();
-    var sticky=track.querySelector('.engine-sticky');
-    var stickyTop=sticky?sticky.getBoundingClientRect().top:0;
-    var total=track.offsetHeight-window.innerHeight;
-    var p=clamp(-rect.top/Math.max(1,total),0,1);
-    var visible=rect.bottom>0 && rect.top<window.innerHeight;
-    var pinFailed=visible && rect.top<window.innerHeight*0.25 && Math.abs(stickyTop)>48;
-    lines.forEach(function(line,i){
-      line.style.transform='';
-      if(reduce.matches){
-        line.style.setProperty('--line-y','0px');
-        line.style.setProperty('--line-sy','1');
-        line.style.opacity='1';
-        return;
-      }
-      var start=i*0.06;
-      var span=0.22;
-      var lp=clamp((p-start)/span,0,1);
-      var e=pinFailed?1:(1-Math.pow(1-lp,3));
-      var sy=0.86+(1-0.86)*e;
-      var y=(1-e)*28;
-      line.style.setProperty('--line-sy',sy.toFixed(3));
-      line.style.setProperty('--line-y',y.toFixed(1)+'px');
-      line.style.opacity=(0.55+0.45*e).toFixed(3);
+  var footerEl=document.querySelector('.contact');
+  var openToWorkEl=track.querySelector('.engine-kicker');
+  function getFooterProgress(footerEl) {
+    var rect = footerEl.getBoundingClientRect();
+    var vh = window.innerHeight;
+    var maxScroll = document.documentElement.scrollHeight - vh;
+    var scrollRemaining = maxScroll - window.scrollY;
+    var byPosition = (vh * 0.92 - rect.top) / (vh * 0.37);
+    var byBottomLimit = 1 - Math.max(0, Math.min(1, (scrollRemaining - 20) / 220));
+    return Math.max(0, Math.min(1, Math.max(byPosition, byBottomLimit)));
+  }
+  function updateFooterHeading(footerEl, line1Span, line2Span, openToWorkEl) {
+    if (openToWorkEl) {
+      openToWorkEl.style.transform = 'none';
+      openToWorkEl.querySelectorAll('span').forEach(function (s) { s.style.transform = 'none'; });
+    }
+    if (reduce.matches) {
+      [line1Span, line2Span].forEach(function (span) {
+        if (!span) return;
+        span.style.display = 'block';
+        span.style.opacity = '1';
+        span.style.transform = 'none';
+      });
+      return;
+    }
+    var p = getFooterProgress(footerEl);
+    [line1Span, line2Span].forEach(function (span, idx) {
+      if (!span) return;
+      var lp = Math.max(0, Math.min(1, (p - idx * 0.12) / 0.88));
+      var le = 1 - Math.pow(1 - lp, 3);
+      span.style.display = 'block';
+      span.style.opacity = String(0.2 + 0.8 * le);
+      span.style.transform = 'translate3d(0, ' + ((1 - le) * 28).toFixed(1) + 'px, 0) scale(1, ' + (0.88 + 0.12 * le).toFixed(3) + ')';
     });
+  }
+  function render(){
+    updateFooterHeading(footerEl, lines[0], lines[1], openToWorkEl);
   }
   fit();
   render();
