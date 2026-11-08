@@ -66,7 +66,7 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 /* Headline matches the page until a sky spotlight sits behind it.
    #7dd3fc is the existing sky hover; --red is #38bdf8.
    The light travels across the title on its own. */
-html.hero-cursor .hero-title{position:relative;isolation:isolate;overflow:visible;--lx:22%;--ly:42%;--sw:1.7em;--sh:1.05em}
+html.hero-cursor .hero-title{position:relative;isolation:isolate;overflow:visible;--lx:22%;--ly:42%;--sw:1.96em;--sh:1.05em}
 html.hero-cursor .hero-title-text{display:block;position:relative;z-index:2;color:#f8fafc;
   -webkit-mask-image:radial-gradient(ellipse calc(var(--sw) * .5) calc(var(--sh) * .5) at var(--lx) var(--ly), #000 0% 64%, transparent 82%);
   mask-image:radial-gradient(ellipse calc(var(--sw) * .5) calc(var(--sh) * .5) at var(--lx) var(--ly), #000 0% 64%, transparent 82%);
@@ -2361,7 +2361,7 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
   }
   function xAt(line,t){
     var fs=parseFloat(getComputedStyle(title).fontSize)||64;
-    var sw=Math.min(fs*1.65, Math.max(fs*1.2, line.w*0.34));
+    var sw=Math.min(fs*1.9, Math.max(fs*1.38, line.w*0.39));
     var lead=Math.min(fs*0.22, sw*0.18, line.w*0.08);
     var a=line.x0+lead, b=line.x1-lead;
     if(b<=a){a=line.x0;b=line.x1;}
@@ -2372,7 +2372,7 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
   }
   function light(x,y,w,h){
     var fs=parseFloat(getComputedStyle(title).fontSize)||64;
-    var sw=Math.min(fs*1.65, Math.max(fs*1.2, w*0.34));
+    var sw=Math.min(fs*1.9, Math.max(fs*1.38, w*0.39));
     var sh=Math.max(fs*0.98, h*0.92);
     title.style.setProperty('--lx',x.toFixed(1)+'px');
     title.style.setProperty('--ly',y.toFixed(1)+'px');
@@ -2391,7 +2391,7 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
       last=ts;
       var ls=lines();
       var n=ls.length;
-      var sweep=7500,dwell=400,hop=650;
+      var sweep=6000,dwell=400,hop=650;
       var pattern=[];
       for(var i=0;i<n;i++){
         pattern.push({line:i,from:0,to:1,dur:sweep});
