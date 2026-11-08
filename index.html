@@ -416,7 +416,7 @@ ul.skills li{border:1px solid rgba(122,28,28,.28);background:rgba(122,28,28,.04)
 /* Desktop + mobile split (30 Oct) */
 @media (max-width:899px){
   .hero-main,.hero-aside{display:contents}
-  .hero-col h1{order:1}.hero-col .hook{order:2}.hero-col .hero-ctas{order:3}
+  .hero-col h1{order:1}.hero-col .hook{order:2}.hero-col .hero-bio{order:2}.hero-col .hero-ctas{order:3}
   .hero-col .hero-stack{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;margin:0 0 20px;order:4}
   .hero-col .hero-side{order:4}.hero-col ul.skills{order:5}.hero-col .links{order:6}.hero-col .tool-callout{order:7}
 }
@@ -798,12 +798,12 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .hero-proof li{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:140px;flex:1 1 140px;max-width:240px}
 .hero-proof .num{font-size:clamp(32px,4.2vw,48px);color:#f7fbff;line-height:1;margin-bottom:8px}
 .hero-proof .lbl{font-family:var(--mono);font-size:14px;letter-spacing:.06em;line-height:1.35;color:#d5deea;text-transform:uppercase}
-.hero-proof-note{margin:16px auto 0;max-width:68ch;font-family:var(--mono);font-size:14.5px;line-height:1.5;letter-spacing:.01em;color:#d7e0ee;text-align:center}
+.hero-proof-note{margin:14px auto 0;max-width:54rem;font-family:var(--sans);font-size:clamp(16px,1.7vw,18px);line-height:1.45;letter-spacing:0;color:#e7eef8;text-align:center}
 @media (max-width:640px){
   .hero-proof{gap:16px 10px}
   .hero-proof li{min-width:0}
   .hero-proof .lbl{font-size:12px;letter-spacing:.04em}
-  .hero-proof-note{font-size:13px}
+  .hero-proof-note{font-size:15px;line-height:1.4}
 }
 .growth-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:48px;align-items:start}
 .growth-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:26px 28px}
@@ -831,7 +831,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 
 /* Recent works: supplied architectural room (380vh sticky track, Matter.js tile fall, 3D gallery). */
 .architect-scroll-track{--accent:#4da6ff;--accent-glow:rgba(77,166,255,.45);--text-main:#f3f6fc;--text-muted:#8b95a7;--card-bg:#0f1623;--mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;position:relative;height:220vh;width:100%;background:#07090e;color:var(--text-main);overflow-x:clip}
-.skill-scroll-track{position:relative;height:200vh;width:100%;background:#0b0e14;overflow:visible}
+.skill-scroll-track{position:relative;height:170vh;height:170dvh;width:100%;background:#0b0e14;overflow:visible}
 .skill-scroll-track .StickyViewport{background:#0b0e14}
 .skill-scroll-track .physics-curtain-layer{background:#0b0e14}
 .StickyViewport{position:sticky;top:0;width:100%;height:100vh;height:100dvh;overflow:hidden;background:#07090e}
@@ -844,13 +844,13 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .wave-char{display:inline-block;opacity:0;will-change:transform,opacity}
 .room-backlink{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;pointer-events:none;opacity:0}
 .room-backlink:hover{color:var(--accent)}
-.gallery-viewport{position:absolute;inset:0;perspective:1350px;overflow:hidden;z-index:10;touch-action:pan-y}
+.gallery-viewport{position:absolute;inset:0;perspective:var(--room-persp,1350px);perspective-origin:50% var(--room-origin,42%);overflow:hidden;z-index:10;touch-action:pan-y}
 .room-stage-3d{position:absolute;inset:0;transform-style:preserve-3d;opacity:0;will-change:transform;pointer-events:none}
-.wall-back{position:absolute;top:13%;left:16%;width:68%;height:58%;background:radial-gradient(circle at 50% 45%,#151e30 0%,#090d15 78%);border:1px solid rgba(255,255,255,.05);transform:translateZ(-260px);box-shadow:inset 0 0 110px rgba(0,0,0,.85)}
+.wall-back{position:absolute;top:13%;left:16%;width:68%;height:58%;background:radial-gradient(circle at 50% 45%,#151e30 0%,#090d15 78%);border:1px solid rgba(255,255,255,.05);transform:translateZ(calc(-260px - var(--room-push,0px)));box-shadow:inset 0 0 110px rgba(0,0,0,.85)}
 .wall-side{position:absolute;top:13%;width:min(420px,42vw);height:58%;background:linear-gradient(to bottom,#0b101b,#070a11);border-top:1px solid rgba(255,255,255,.03);pointer-events:none}
-.wall-left{left:16%;margin-left:calc(min(420px,42vw) * -1);transform-origin:right center;transform:translateZ(-260px) rotateY(-72deg);border-bottom:2px solid var(--accent);box-shadow:0 4px 28px var(--accent-glow)}
-.wall-right{right:16%;margin-right:calc(min(420px,42vw) * -1);transform-origin:left center;transform:translateZ(-260px) rotateY(72deg);border-bottom:2px solid var(--accent);box-shadow:0 4px 28px var(--accent-glow)}
-.room-floor{position:absolute;top:71%;left:5%;width:90%;height:580px;transform-origin:top center;transform:translateZ(-260px) rotateX(78deg);background-color:#090d14;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),radial-gradient(circle at var(--spot-x,50%) var(--spot-y,35%),rgba(77,166,255,.2),transparent 55%);background-size:72px 72px,72px 72px,100% 100%;border-top:1px solid rgba(255,255,255,.08);box-shadow:inset 0 60px 120px rgba(0,0,0,.85)}
+.wall-left{left:16%;margin-left:calc(min(420px,42vw) * -1);transform-origin:right center;transform:translateZ(calc(-260px - var(--room-push,0px))) rotateY(-72deg);border-bottom:2px solid var(--accent);box-shadow:0 4px 28px var(--accent-glow)}
+.wall-right{right:16%;margin-right:calc(min(420px,42vw) * -1);transform-origin:left center;transform:translateZ(calc(-260px - var(--room-push,0px))) rotateY(72deg);border-bottom:2px solid var(--accent);box-shadow:0 4px 28px var(--accent-glow)}
+.room-floor{position:absolute;top:71%;left:5%;width:90%;height:580px;transform-origin:top center;transform:translateZ(calc(-260px - var(--room-push,0px))) rotateX(78deg);background-color:#090d14;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),radial-gradient(circle at var(--spot-x,50%) var(--spot-y,35%),rgba(77,166,255,.2),transparent 55%);background-size:72px 72px,72px 72px,100% 100%;border-top:1px solid rgba(255,255,255,.08);box-shadow:inset 0 60px 120px rgba(0,0,0,.85)}
 .floor-projection-ui{position:absolute;top:22%;left:50%;transform:translate(-50%,-50%);text-align:center;font-family:var(--mono);color:rgba(243,246,252,.88);cursor:pointer;background:none;border:0;padding:10px 16px;z-index:8;text-shadow:0 1px 2px rgba(0,0,0,.8);pointer-events:auto}
 .floor-projection-ui:hover{color:var(--accent)}
 .floor-projection-count{font-size:16px;letter-spacing:.18em;margin-bottom:8px}
@@ -913,8 +913,8 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 }
 @media (max-width:700px){
   .wall-left,.wall-right{width:30vw}
-  .wall-left{margin-left:-30vw;transform:translateZ(-640px) rotateY(-72deg)}
-  .wall-right{margin-right:-30vw;transform:translateZ(-640px) rotateY(72deg)}
+  .wall-left{margin-left:-30vw;transform:translateZ(calc(-640px - var(--room-push,0px))) rotateY(-72deg)}
+  .wall-right{margin-right:-30vw;transform:translateZ(calc(-640px - var(--room-push,0px))) rotateY(72deg)}
   .pedestals-row{bottom:20%;transform:translate3d(-50%,0,200px);z-index:20}
   .case-frame.slot-center{z-index:24}
 }
@@ -936,6 +936,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .hero-portrait img{width:100%;height:auto;aspect-ratio:1;object-fit:cover;object-position:50% 20%;border-radius:18px;display:block;border:1px solid rgba(125,211,252,.5)}
 .hero-quote-panel{display:flex;flex-direction:column;align-items:center;text-align:center;width:min(100%,40rem);min-width:0;min-height:0}
 .hero-quote-panel .hook{margin:0 auto 8px!important;max-width:34rem;width:100%;min-height:0;flex:0 0 auto;text-align:center;font-size:clamp(22px,2.1vw,32px);line-height:1.35}
+.hero-bio{margin:8px auto 0;max-width:46rem;font-size:clamp(16px,1.5vw,18px);line-height:1.5;color:#c5d0e0;text-align:center}
 .hero-quote-panel .hero-ctas{flex-direction:row!important;flex-wrap:wrap;align-items:center!important;justify-content:center!important;gap:14px 26px!important;margin:8px 0 0!important}
 .hero-quote-panel .hero-ctas .sec-links{justify-content:center}
 .hero-quote-panel .hero-proof{justify-content:center;margin-top:14px}
@@ -1060,8 +1061,7 @@ body.hero-armed.hero-stage-content .hero .hero-lower-stack{opacity:1;transform:t
 }
 .skill-head{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 0 12px;max-width:100%;min-height:0}
 .skill-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-.skill-bio{margin:0;max-width:52ch;text-align:center;color:var(--muted);font-size:20px;line-height:1.55}
-@media (max-width:640px){.skill-bio{font-size:18px}}
+@media (max-width:640px){.hero-bio{font-size:16px;line-height:1.45}}
 .skill-live{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .skill-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;list-style:none;margin:8px 0 0;padding:0;max-width:100%;position:relative}
 .skill-legend:not(:has(button:not(.is-secret))){margin:0}
@@ -1595,13 +1595,14 @@ body.is-sheet .back-bar{display:flex}
             <li><span class="num">$471K</span><span class="lbl">subscription revenue since launch</span></li>
             <li><span class="num">~75%</span><span class="lbl">faster publishing</span></li>
           </ul>
-          <p class="hero-proof-note">October 2026 paid spend of about $43K brought 34K sign-ups, including free and trial, at about $1.25 each. The −54% is the cost of a paid subscription. The $471K is flagship subscription revenue since launch. The ~75% is time saved publishing with Postroom.</p>
+          <p class="hero-proof-note">Paid CPA on Meta · flagship revenue since launch · time saved with Postroom.</p>
         </div>
       </div>
       <div class="hero-stage">
         <figure class="hero-portrait hero-portrait-card"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko" width="340" height="340"></figure>
         <div class="hero-quote-panel hero-lower-stack">
           <p class="hook" id="hero-quote">I decode what makes top-performing ads convert—and build the creative systems to scale them.</p>
+          <p class="hero-bio">Four years leading paid social, short-form strategy and an 8–12 person content team for direct-to-consumer (DTC) lifestyle subscriptions &amp; creator-led brands. Over those four years the team worked on 50+ accounts; the cases here are selected examples, not that full set.</p>
           <div class="lanes hero-ctas"><div class="sec-links"><a class="ulink hero-email-pill" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
                   </div>
       </div>
@@ -1757,7 +1758,6 @@ body.is-sheet .back-bar{display:flex}
   <div class="skill-scene-inner">
     <div class="skill-head">
       <h2 class="skill-sr">Find the word</h2>
-      <p class="skill-bio">Four years leading paid social, short-form strategy and an 8–12 person content team for direct-to-consumer (DTC) lifestyle subscriptions &amp; creator-led brands. Over those four years the team worked on 50+ accounts; the cases here are selected examples, not that full set.</p>
       <p class="skill-sr" id="skill-how">Drag through each word, letter by letter</p>
       <p class="skill-live" id="skill-live" aria-live="polite"></p>
       <ul class="skill-legend" aria-label="Skills">
@@ -1985,7 +1985,8 @@ body.is-sheet .back-bar{display:flex}
     var vis=Math.min(r.bottom,innerHeight)-Math.max(r.top,0);
     return vis>=Math.min(r.height,innerHeight)*0.55;
   }
-  function fallUnderway(){return trackProgress()>0.38;}
+  function skillPhase(p){return p*0.70;}
+  function fallUnderway(){return skillPhase(trackProgress())>0.38;}
   function demoBlocked(){
     return reduce.matches||demoYielded||demoDone||dragging||document.hidden||fallUnderway()||!gridInView();
   }
@@ -2007,6 +2008,10 @@ body.is-sheet .back-bar{display:flex}
     var skill=sample&&sample.dataset.skill||'';
     if(skill&&groupDone(skill))buttons.forEach(function(b){if(b.dataset.skill===skill)b.classList.remove('is-secret');});
     if(skillLive&&!said[word]){said[word]=true;skillLive.textContent='Found '+nice(word);}
+    scheduleFit();
+  }
+  function scheduleFit(){
+    requestAnimationFrame(function(){if(!fallUnderway())render();});
   }
   function traceWord(entry,letter,done){
     if(demoYielded||demoDone||dragging||reduce.matches){yieldDemo();return;}
@@ -2074,6 +2079,7 @@ body.is-sheet .back-bar{display:flex}
     paint();
     if(groupDone(skill))buttons.forEach(function(b){if(b.dataset.skill===skill)b.classList.remove('is-secret');});
     if(skillLive&&!said[word]){said[word]=true;skillLive.textContent='Found '+nice(word);}
+    scheduleFit();
     return true;
   }
   function flash(list){
@@ -2309,6 +2315,10 @@ body.is-sheet .back-bar{display:flex}
   var simTiles=[], homePositions=[], simMetrics={rows:7, cols:15, cell:48};
   function gridCells(){
     return gridEl?[].slice.call(gridEl.querySelectorAll(':scope > .cell')):[];
+  }
+  function homesStale(){
+    var m=readGridMetrics();
+    return !simMetrics||simMetrics.cols!==m.cols||Math.abs((simMetrics.cell||0)-m.cell)>0.5||Math.abs((simMetrics.gapY||0)-m.gapY)>0.5;
   }
   function readGridMetrics(){
     var cols=parseInt(getComputedStyle(gridEl).getPropertyValue('--cols'),10)||15;
@@ -2763,12 +2773,13 @@ body.is-sheet .back-bar{display:flex}
     var skillRect=skillTrack?skillTrack.getBoundingClientRect():null;
     var skillTotal=skillTrack?skillTrack.offsetHeight-window.innerHeight:1;
     var skillP=skillRect?clamp(-skillRect.top/Math.max(1, skillTotal), 0, 1):0;
+    var phase=skillP*0.70;
     var roomNear=rect.bottom>-80 && rect.top<window.innerHeight+80;
     var skillNear=skillRect && skillRect.bottom>-80 && skillRect.top<window.innerHeight+80;
     if(!roomNear && !skillNear){
       physicsActive=false;
       clearTileTransforms();
-      if(footerEntering() || skillP>0.65){
+      if(footerEntering() || phase>0.65){
         hidePhysicsLayer();
         physicsWasHidden=true;
       }
@@ -2782,46 +2793,43 @@ body.is-sheet .back-bar{display:flex}
       var stickyNow=stickyBox();
       var skillPinned=stickyNow.pinned;
       if(motion && !simCurrent())buildPhysicsWorld();
-      var floorState=placeFloor(skillP, vw, vh);
+      var floorState=placeFloor(phase, vw, vh);
       var wipeProgress=floorState.wipeProgress;
-      var footerRect=document.querySelector('.contact');
-      footerRect=footerRect?footerRect.getBoundingClientRect():null;
-      var footerIn=footerRect?footerRect.top<window.innerHeight*0.85:false;
-      if(skillP>0.65 || wipeProgress>=0.95 || footerIn){
+      if(phase>0.65 || wipeProgress>=0.95){
         hidePhysicsLayer();
         physicsWasHidden=true;
       }else{
         if(physicsWasHidden && motion){
           buildPhysicsWorld();
           physicsWasHidden=false;
-          floorState=placeFloor(skillP, vw, vh);
+          floorState=placeFloor(phase, vw, vh);
         }else physicsWasHidden=false;
-        showPhysicsLayer(skillP<=0.38);
+        showPhysicsLayer(phase<=0.38);
         if(!skillPinned){
           physicsActive=false;
           clearTileTransforms();
-          if(motion && skillP<=0.38 && (!homesCaptured || simTiles.some(function(t){return t.released;}) || !simCurrent()))buildPhysicsWorld();
+          if(motion && phase<=0.38 && (!homesCaptured || simTiles.some(function(t){return t.released;}) || !simCurrent() || homesStale()))buildPhysicsWorld();
           if(skillHead)skillHead.style.opacity='1';
           physicsFloorLine.style.opacity='0';
-        }else if(motion && skillP<=0.38){
-          if(!homesCaptured || !simCurrent() || simTiles.some(function(t){return t.released;}))buildPhysicsWorld();
+        }else if(motion && phase<=0.38){
+          if(!homesCaptured || !simCurrent() || simTiles.some(function(t){return t.released;}) || homesStale())buildPhysicsWorld();
           else clearTileTransforms();
           if(skillHead)skillHead.style.opacity='1';
           physicsFloorLine.style.opacity='0';
-        }else if(motion && skillP>0.38 && simTiles.length){
+        }else if(motion && phase>0.38 && simTiles.length){
           if(!homesCaptured)captureLocalHomes();
           if(homesCaptured){
             parkUnreleased();
-            var inWindow=skillP<0.72;
+            var inWindow=phase<0.72;
             var moving=anyTileMoving() || wipeProgress>0;
             if(inWindow||moving){
               physicsActive=true;
-              var releaseProgress=inWindow?clamp((skillP-0.38)/0.14, 0, 1):1;
+              var releaseProgress=inWindow?clamp((phase-0.38)/0.14, 0, 1):1;
               var catchup=releaseProgress>=1;
               var steps=0;
               while(steps<=simMetrics.rows){
                 var didRelease=inWindow?releaseOneBand(releaseProgress):false;
-                placeFloor(skillP, vw, vh);
+                placeFloor(phase, vw, vh);
                 var sub=didRelease&&catchup?10:1;
                 for(var s=0;s<sub;s++){
                   try{Engine.update(engine, 1000/60);}
@@ -2833,14 +2841,14 @@ body.is-sheet .back-bar{display:flex}
               if(!inWindow && !anyTileMoving() && wipeProgress>=0.95)physicsActive=false;
             }else{
               physicsActive=false;
-              placeFloor(skillP, vw, vh);
+              placeFloor(phase, vw, vh);
             }
-            if(skillHead)skillHead.style.opacity=String(clamp(1-(skillP-0.38)*4, 0, 1));
+            if(skillHead)skillHead.style.opacity=String(clamp(1-(phase-0.38)*4, 0, 1));
             paintSimTiles();
           }
         }
       }
-    }else if(footerEntering() || skillP>0.65){
+    }else if(footerEntering() || phase>0.65){
       hidePhysicsLayer();
       physicsWasHidden=true;
     }
@@ -2854,11 +2862,23 @@ body.is-sheet .back-bar{display:flex}
     backLink.style.opacity='1';
     backLink.style.pointerEvents='auto';
     roomStage3D.style.opacity='1';
-    roomStage3D.style.transform='none';
+    var depthT=motion?clamp(p/0.32,0,1):0;
+    var depth=depthT*depthT*(3-2*depthT);
+    if(gallery){
+      gallery.style.setProperty('--room-push',(depth*80).toFixed(1)+'px');
+      gallery.style.setProperty('--room-persp',Math.round(1350-depth*180)+'px');
+      gallery.style.setProperty('--room-origin',(42+depth*6).toFixed(2)+'%');
+    }
+    roomStage3D.style.transform=depth>0.001?'translate3d(0,'+(-depth*8).toFixed(1)+'px,0)':'none';
     ceilingRig.style.transform='translate3d(-50%, 0px, 0)';
     roomHud.style.opacity='1';
     roomHud.style.pointerEvents='auto';
     roomHud.setAttribute('aria-hidden','false');
+    }else if(gallery&&gallery.style.getPropertyValue('--room-push')&&gallery.style.getPropertyValue('--room-push')!=='0px'){
+      gallery.style.setProperty('--room-push','0px');
+      gallery.style.setProperty('--room-persp','1350px');
+      gallery.style.setProperty('--room-origin','42%');
+      roomStage3D.style.transform='none';
     }
 
     var roomReady=roomShowing();

@@ -192,6 +192,71 @@ function assert(cond, msg, extra) {
   }
   assert(advanced, 'presentation did not advance', hudLog);
 
+  function roomDepth() {
+    var track = document.getElementById('scrollTrack');
+    var total = track.offsetHeight - window.innerHeight;
+    var p = Math.max(0, Math.min(1, -track.getBoundingClientRect().top / Math.max(1, total)));
+    var g = document.getElementById('galleryViewport');
+    var cs = getComputedStyle(g);
+    var center = document.querySelector('.case-frame.slot-center');
+    var visual = center.querySelector('.card-visual');
+    var metric = center.querySelector('.card-metric');
+    var cr = center.getBoundingClientRect();
+    var mr = metric.getBoundingClientRect();
+    var foreign = 0;
+    [[0.3, 0.35], [0.5, 0.5], [0.7, 0.62]].forEach(function (pt) {
+      var el = document.elementFromPoint(cr.left + cr.width * pt[0], cr.top + cr.height * pt[1]);
+      var card = el && el.closest && el.closest('.case-frame');
+      if (card && card !== center) foreign++;
+    });
+    return {
+      p: Math.round(p * 1000) / 1000,
+      push: parseFloat(cs.getPropertyValue('--room-push')) || 0,
+      persp: parseFloat(cs.getPropertyValue('--room-persp')) || 0,
+      origin: parseFloat(cs.getPropertyValue('--room-origin')) || 0,
+      stage: document.getElementById('roomStage3D').style.transform,
+      opacity: getComputedStyle(center).opacity,
+      bg: getComputedStyle(visual).backgroundColor,
+      metricInside: mr.top >= cr.top - 1 && mr.bottom <= cr.bottom + 2 && mr.left >= cr.left - 1 && mr.right <= cr.right + 1,
+      foreign: foreign,
+      hud: document.getElementById('hudCounterText').textContent,
+      back: document.getElementById('roomBackLink').textContent.trim()
+    };
+  }
+  var depthAt = {};
+  for (var dp of [0.02, 0.16, 0.4]) {
+    await page.evaluate(go, 'scrollTrack', dp);
+    await new Promise(function (r) { setTimeout(r, 180); });
+    depthAt[dp] = await page.evaluate(roomDepth);
+  }
+  assert(depthAt[0.02].push < 8 && depthAt[0.02].persp > 1320, 'room camera jumped before the scroll', depthAt[0.02]);
+  assert(depthAt[0.16].push > depthAt[0.02].push + 25 && depthAt[0.16].persp < depthAt[0.02].persp - 40, 'a small room scroll did not move the camera', depthAt);
+  assert(depthAt[0.4].push > depthAt[0.16].push && depthAt[0.4].push <= 130.5 && depthAt[0.4].persp >= 1070, 'room dolly overshot', depthAt[0.4]);
+  assert(depthAt[0.4].opacity === '1' && depthAt[0.4].bg === 'rgb(16, 24, 40)' && depthAt[0.4].foreign === 0 && depthAt[0.4].metricInside, 'front card layered or clipped during the dolly', depthAt[0.4]);
+  assert(depthAt[0.4].back === 'Back to introduction', 'room back link changed', depthAt[0.4]);
+  await page.evaluate(go, 'scrollTrack', 0.02);
+  await new Promise(function (r) { setTimeout(r, 180); });
+  var depthBack = await page.evaluate(roomDepth);
+  assert(depthBack.push < 8 && depthBack.persp > 1320, 'scrolling back did not restore the room camera', depthBack);
+  await page.evaluate(go, 'scrollTrack', 0.2);
+  await new Promise(function (r) { setTimeout(r, 200); });
+  var beforeOpen = await page.evaluate(function () {
+    var center = document.querySelector('.case-frame.slot-center');
+    return { hud: document.getElementById('hudCounterText').textContent, hash: center.getAttribute('data-hash'), id: center.getAttribute('data-hash').replace('#', '') };
+  });
+  await page.evaluate(function () { document.querySelector('.case-frame.slot-center').click(); });
+  await new Promise(function (r) { setTimeout(r, 200); });
+  var opened = await page.evaluate(function (id) {
+    var sheet = document.getElementById(id);
+    return { sheet: document.body.classList.contains('is-sheet'), open: !!(sheet && sheet.classList.contains('is-open')), hash: location.hash };
+  }, beforeOpen.id);
+  assert(opened.sheet && opened.open && opened.hash === beforeOpen.hash, 'center card did not open the case', { beforeOpen: beforeOpen, opened: opened });
+  await page.evaluate(function () { location.hash = ''; });
+  await new Promise(function (r) { setTimeout(r, 200); });
+  var closed = await page.evaluate(function () { return document.body.classList.contains('is-sheet'); });
+  assert(!closed, 'closing the case left the sheet open', closed);
+  assert(/Paid social|Postroom|Hook Lab|Growth case|Organic growth/.test(beforeOpen.hud), 'room hud missing before open', beforeOpen);
+
   var order = await page.evaluate(function () {
     return {
       skill: document.getElementById('skillTrack').offsetTop,
@@ -206,6 +271,27 @@ function assert(cond, msg, extra) {
   });
   assert(order.room < order.skill && order.skill < order.contact, 'page order is not intro, room, grid, contact', order);
   assert(order.nested === 0 && order.labels === 1, 'duplicate Find the word section remains', order);
+  var copy = await page.evaluate(function () {
+    var note = document.querySelector('.hero-proof-note');
+    var quote = document.getElementById('hero-quote');
+    var bios = [].slice.call(document.querySelectorAll('p')).filter(function (p) { return /Four years leading paid social/.test(p.textContent); });
+    var nums = [].slice.call(document.querySelectorAll('.hero-proof .num')).map(function (n) { return n.textContent.trim(); });
+    var skillBio = document.querySelector('#skillTrack .skill-bio, #skillTrack .hero-bio');
+    var quoteNext = quote && quote.nextElementSibling;
+    return {
+      note: note ? note.textContent.trim() : '',
+      noteFont: note ? getComputedStyle(note).fontFamily : '',
+      nums: nums,
+      bios: bios.length,
+      bioInIntro: !!(bios[0] && document.getElementById('intro').contains(bios[0])),
+      bioAfterQuote: !!(quoteNext && /Four years leading paid social/.test(quoteNext.textContent)),
+      skillBio: !!skillBio
+    };
+  });
+  assert(copy.note === 'Paid CPA on Meta · flagship revenue since launch · time saved with Postroom.', 'proof line changed', copy);
+  assert(copy.noteFont.toLowerCase().indexOf('mono') === -1, 'proof line is still monospace', copy);
+  assert(copy.nums.join('|') === '−54%|$471K|~75%', 'hero numbers changed', copy);
+  assert(copy.bios === 1 && copy.bioInIntro && copy.bioAfterQuote && !copy.skillBio, 'bio is not a single line under the quote', copy);
 
   function solvedWords() {
     var cells = [].slice.call(document.querySelectorAll('#skill-grid > .cell'));
@@ -244,7 +330,7 @@ function assert(cond, msg, extra) {
   await new Promise(function (r) { setTimeout(r, 200); });
   var n120 = await page.evaluate(skillSnap);
   assert(entry.moved === 0 && n40.moved === 0 && n80.moved === 0 && n120.moved === 0, 'a small scroll scrambled the word grid', { entry: entry, n40: n40, n80: n80, n120: n120 });
-  assert(n40.p > 0.03 && n120.p < 0.35, '40–120px did not stay inside the stable entry', { n40: n40, n120: n120 });
+  assert(n40.p > 0.03 && n120.p < 0.52, '40–120px did not stay inside the stable entry', { n40: n40, n120: n120 });
 
   var auto = { full: [] };
   for (var waitStep = 0; waitStep < 16 && auto.full.length < 3; waitStep++) {
@@ -256,6 +342,19 @@ function assert(cond, msg, extra) {
   assert(auto.full.length >= 3, 'automatic cursor did not finish three words', auto);
   assert(auto.fillerAccent === 0, 'automatic selection accented filler tiles', auto);
   assert(auto.full.indexOf('HIGGSFIELD') >= 0 && auto.full.indexOf('META') >= 0, 'first words were not traced in order', auto);
+  var fittedCells = await page.evaluate(function () {
+    var cells = [].slice.call(document.querySelectorAll('#skill-grid > .cell'));
+    var rows = {};
+    var outside = 0;
+    cells.forEach(function (c, i) {
+      var r = c.getBoundingClientRect();
+      var row = Math.floor(i / 15);
+      rows[row] = (rows[row] || 0) + 1;
+      if (r.top < -1 || r.bottom > window.innerHeight + 1 || r.height < 8) outside++;
+    });
+    return { count: cells.length, outside: outside, rows: Object.keys(rows).length, transformed: cells.filter(function (c) { return !!c.style.transform; }).length };
+  });
+  assert(fittedCells.count === 105 && fittedCells.rows === 7 && fittedCells.outside === 0 && fittedCells.transformed === 0, 'a solved grid hid a row on a short laptop', fittedCells);
 
   var beforeTouch = auto.full.slice();
   await page.evaluate(function () {
@@ -270,7 +369,7 @@ function assert(cond, msg, extra) {
   });
   await new Promise(function (r) { setTimeout(r, 200); });
   var afterTouchScroll = await page.evaluate(skillSnap);
-  assert(afterTouchScroll.moved === 0 && afterTouchScroll.p < 0.35, 'touch scroll scrambled the grid', afterTouchScroll);
+  assert(afterTouchScroll.moved === 0 && afterTouchScroll.p < 0.52, 'touch scroll scrambled the grid', afterTouchScroll);
   var afterTouch = { full: beforeTouch };
   for (var touchWait = 0; touchWait < 12 && afterTouch.full.length <= beforeTouch.length; touchWait++) {
     await new Promise(function (r) { setTimeout(r, 600); });
@@ -280,7 +379,7 @@ function assert(cond, msg, extra) {
 
   var reversals = [];
   for (var n = 0; n < 3; n++) {
-    await page.evaluate(go, 'skillTrack', 0.48);
+    await page.evaluate(go, 'skillTrack', 0.69);
     await new Promise(function (r) { setTimeout(r, 700); });
     var mid = await page.evaluate(skillSnap);
     await page.evaluate(go, 'skillTrack', 0.02);
@@ -308,7 +407,7 @@ function assert(cond, msg, extra) {
     assert(overRoom === 0, 'skill tiles covered the room after reverse on pass ' + n, overRoom);
   }
 
-  await page.evaluate(go, 'skillTrack', 0.64);
+  await page.evaluate(go, 'skillTrack', 0.94);
   await new Promise(function (r) { setTimeout(r, 400); });
   var risen = await page.evaluate(function () {
     var floor = document.getElementById('physicsFloorLine');
@@ -328,13 +427,38 @@ function assert(cond, msg, extra) {
   assert(risen.visibility === 'hidden' && risen.opacity === '0' && risen.pointerEvents === 'none', 'physics layer stayed interactive after the wipe', risen);
   assert(risen.posed === 0, 'fallen tile transforms remained after the floor rose', risen);
 
+  var tail = await page.evaluate(function () {
+    var footer = document.querySelector('.contact').getBoundingClientRect();
+    return { gap: Math.round(footer.top - window.innerHeight), vh: window.innerHeight };
+  });
+  assert(tail.gap < tail.vh * 0.22, 'hidden skill tail leaves a screen of blank above the footer', tail);
+  await page.evaluate(go, 'skillTrack', 1);
+  await new Promise(function (r) { setTimeout(r, 200); });
+  await page.evaluate(function () { window.scrollBy(0, -220); });
+  await new Promise(function (r) { setTimeout(r, 350); });
+  var returned = await page.evaluate(function () {
+    var curtain = document.getElementById('physicsCurtain');
+    var cells = [].slice.call(document.querySelectorAll('#skill-grid > .cell'));
+    var seen = 0;
+    cells.forEach(function (c) {
+      var r = c.getBoundingClientRect();
+      if (r.width > 4 && r.bottom > 80 && r.top < window.innerHeight - 24) seen++;
+    });
+    return {
+      curtain: getComputedStyle(curtain).visibility,
+      seen: seen,
+      moved: cells.filter(function (c) { return !!c.style.transform; }).length
+    };
+  });
+  assert(returned.curtain === 'visible' && returned.seen > 20 && returned.moved === 0, 'scrolling back from the footer did not restore the word grid', returned);
+
   await page.evaluate(go, 'skillTrack', 0.02);
   await new Promise(function (r) { setTimeout(r, 300); });
   var fitted = await page.evaluate(skillSnap);
   assert(fitted.gridBottom <= fitted.vh + 2, 'grid lower edge is clipped on a short laptop', fitted);
   assert(fitted.gridTop >= 0, 'grid top is above the pinned viewport', fitted);
 
-  await page.evaluate(go, 'skillTrack', 0.42);
+  await page.evaluate(go, 'skillTrack', 0.6);
   await new Promise(function (r) { setTimeout(r, 280); });
   var partialA = await page.evaluate(skillSnap);
   await new Promise(function (r) { setTimeout(r, 900); });
@@ -436,6 +560,12 @@ function assert(cond, msg, extra) {
       var total = el.offsetHeight - window.innerHeight;
       window.scrollTo(0, el.getBoundingClientRect().top + window.scrollY + total * p);
     }
+    go('scrollTrack', 0.35);
+    await new Promise(function (r) { setTimeout(r, 200); });
+    var roomStill = (function () {
+      var g = getComputedStyle(document.getElementById('galleryViewport'));
+      return { push: parseFloat(g.getPropertyValue('--room-push')) || 0, persp: parseFloat(g.getPropertyValue('--room-persp')) || 1350 };
+    })();
     go('skillTrack', 0.45);
     await new Promise(function (r) { setTimeout(r, 500); });
     var moved = [].slice.call(document.querySelectorAll('#skill-grid > .cell')).filter(function (c) { return c.style.transform; }).length;
@@ -446,9 +576,10 @@ function assert(cond, msg, extra) {
       return { h: r.height, transform: getComputedStyle(line).transform, sy: getComputedStyle(line).getPropertyValue('--line-sy').trim() };
     });
     var play = document.getElementById('roomPlay');
-    return { moved: moved, lines: lines, playDisplay: play ? getComputedStyle(play).display : '' };
+    return { moved: moved, lines: lines, playDisplay: play ? getComputedStyle(play).display : '', roomStill: roomStill };
   });
   assert(reduced.moved === 0, 'reduced motion still ran the tile fall', reduced);
+  assert(reduced.roomStill.push === 0 && reduced.roomStill.persp >= 1340, 'reduced motion still dollied the room', reduced);
   reduced.lines.forEach(function (line) {
     assert(line.h >= 28, 'reduced-motion headline is not readable', line);
     assert(line.transform === 'none', 'reduced-motion headline still transforms', line);
@@ -474,15 +605,55 @@ function assert(cond, msg, extra) {
       };
     });
     assert(vpOrder.room < vpOrder.skill && vpOrder.skill < vpOrder.contact, vp.name + ' section order changed', vpOrder);
+    var vpDepth = {};
+    for (var rp of [0.04, 0.36]) {
+      await vpPage.evaluate(go, 'scrollTrack', rp);
+      await new Promise(function (r) { setTimeout(r, 160); });
+      vpDepth[rp] = await vpPage.evaluate(function () {
+        var g = getComputedStyle(document.getElementById('galleryViewport'));
+        var center = document.querySelector('.case-frame.slot-center');
+        var cr = center.getBoundingClientRect();
+        var metric = center.querySelector('.card-metric').getBoundingClientRect();
+        return {
+          push: parseFloat(g.getPropertyValue('--room-push')) || 0,
+          persp: parseFloat(g.getPropertyValue('--room-persp')) || 0,
+          opacity: getComputedStyle(center).opacity,
+          metricInside: metric.bottom <= cr.bottom + 2 && metric.top >= cr.top - 1
+        };
+      });
+    }
+    assert(vpDepth[0.36].push > vpDepth[0.04].push + 40 && vpDepth[0.36].persp < vpDepth[0.04].persp - 60, vp.name + ' room scroll did not add depth', vpDepth);
+    assert(vpDepth[0.36].opacity === '1' && vpDepth[0.36].metricInside && vpDepth[0.36].push <= 130.5, vp.name + ' room dolly clipped the card', vpDepth);
+    await vpPage.evaluate(go, 'scrollTrack', 0.04);
+    await new Promise(function (r) { setTimeout(r, 140); });
+    var vpDepthBack = await vpPage.evaluate(function () {
+      return parseFloat(getComputedStyle(document.getElementById('galleryViewport')).getPropertyValue('--room-push')) || 0;
+    });
+    assert(vpDepthBack < vpDepth[0.04].push + 8, vp.name + ' room camera did not come back', { back: vpDepthBack, start: vpDepth[0.04] });
+    var vpCopy = await vpPage.evaluate(function () {
+      var note = document.querySelector('.hero-proof-note');
+      var quote = document.getElementById('hero-quote');
+      var bios = [].slice.call(document.querySelectorAll('p')).filter(function (p) { return /Four years leading paid social/.test(p.textContent); });
+      var r = note.getBoundingClientRect();
+      return {
+        note: note.textContent.trim(),
+        lines: Math.round(r.height / parseFloat(getComputedStyle(note).lineHeight)),
+        bioAfterQuote: !!(quote.nextElementSibling && /Four years leading paid social/.test(quote.nextElementSibling.textContent)),
+        skillBio: !!document.querySelector('#skillTrack .hero-bio, #skillTrack .skill-bio'),
+        bios: bios.length,
+        bioBelowQuote: document.querySelector('.hero-bio').getBoundingClientRect().top > document.getElementById('hero-quote').getBoundingClientRect().top
+      };
+    });
+    assert(vpCopy.note.indexOf('Paid CPA on Meta') === 0 && vpCopy.lines <= 3 && vpCopy.bioAfterQuote && vpCopy.bioBelowQuote && vpCopy.bios === 1 && !vpCopy.skillBio, vp.name + ' intro copy layout changed', vpCopy);
     await vpPage.evaluate(go, 'skillTrack', 0.2);
     await new Promise(function (r) { setTimeout(r, 250); });
     var vpStable = await vpPage.evaluate(skillSnap);
-    assert(vpStable.moved === 0 && vpStable.p < 0.35, vp.name + ' small entry scroll scrambled the grid', vpStable);
-    await vpPage.evaluate(go, 'skillTrack', 0.48);
+    assert(vpStable.moved === 0 && vpStable.p < 0.52, vp.name + ' small entry scroll scrambled the grid', vpStable);
+    await vpPage.evaluate(go, 'skillTrack', 0.69);
     await new Promise(function (r) { setTimeout(r, 700); });
     var vpFall = await vpPage.evaluate(skillSnap);
     assert(vpFall.moved > 8, vp.name + ' fall did not run', vpFall);
-    await vpPage.evaluate(go, 'skillTrack', 0.7);
+    await vpPage.evaluate(go, 'skillTrack', 0.96);
     await new Promise(function (r) { setTimeout(r, 300); });
     var vpHide = await vpPage.evaluate(function () {
       var curtain = document.getElementById('physicsCurtain');
