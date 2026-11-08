@@ -1003,7 +1003,8 @@ body.is-sheet .back-bar{display:flex}
   .obj{animation:none}
   .room{transform:none!important}
 }
-.ap-load{position:fixed;inset:0;z-index:2000;background:#0b0e14;color:#f8fafc;overflow:hidden}
+.ap-load{position:fixed;inset:0;z-index:2000;background:#0b0e14;color:#f8fafc;overflow:hidden;cursor:grab;touch-action:none;user-select:none}
+.ap-load.is-grabbing{cursor:grabbing}
 .ap-gl{position:absolute;inset:0;opacity:0;animation:ap-in .55s ease forwards}
 .ap-gl canvas{display:block;width:100%;height:100%}
 .ap-fallback{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);margin:0;text-align:center;font-family:var(--sans);font-weight:700;letter-spacing:-.03em;text-transform:uppercase;color:#f8fafc;font-size:clamp(18px,3vw,28px);line-height:1.35}
@@ -1119,8 +1120,37 @@ body.is-sheet .back-bar{display:flex}
     spinGroup.add(frontMesh);
     rootGroup.scale.setScalar(fitScale());
     rootGroup.position.set(0,0.22,0);
-    tiltGroup.rotation.x=0.16;
-    tiltGroup.rotation.z=-0.05;
+    var baseTiltX=0.16, baseTiltZ=-0.05;
+    tiltGroup.rotation.x=baseTiltX;
+    tiltGroup.rotation.z=baseTiltZ;
+    var dragging=false, prevX=0, prevY=0, pointerX=0, pointerY=0, dragTiltX=0;
+    function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
+    function onDown(e){
+      if(leaving||e.button>0)return;
+      dragging=true;
+      prevX=e.clientX; prevY=e.clientY;
+      root.classList.add('is-grabbing');
+      try{root.setPointerCapture(e.pointerId);}catch(err){}
+    }
+    function onMove(e){
+      if(leaving)return;
+      pointerX=(e.clientX/Math.max(window.innerWidth,1))*2-1;
+      pointerY=(e.clientY/Math.max(window.innerHeight,1))*2-1;
+      if(!dragging)return;
+      var dx=e.clientX-prevX, dy=e.clientY-prevY;
+      prevX=e.clientX; prevY=e.clientY;
+      if(spinGroup)spinGroup.rotation.y+=dx*0.007;
+      dragTiltX=clamp(dragTiltX+dy*0.0035,-0.42,0.42);
+      if(e.cancelable)e.preventDefault();
+    }
+    function onUp(){
+      dragging=false;
+      root.classList.remove('is-grabbing');
+    }
+    root.addEventListener('pointerdown',onDown);
+    root.addEventListener('pointermove',onMove,{passive:false});
+    root.addEventListener('pointerup',onUp);
+    root.addEventListener('pointercancel',onUp);
     clock=new THREE.Clock();
     function redraw(){paint(ctx,canvas.width,canvas.height);texture.needsUpdate=true;}
     if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
@@ -1136,13 +1166,25 @@ body.is-sheet .back-bar{display:flex}
       if(!renderer)return;
       raf=requestAnimationFrame(frame);
       var dt=Math.min(clock.getDelta(),0.05);
-      if(!reduce.matches&&spinGroup)spinGroup.rotation.y-=dt*0.42;
+      if(!dragging&&!reduce.matches&&spinGroup)spinGroup.rotation.y-=dt*0.42;
+      if(!dragging)dragTiltX+=(0-dragTiltX)*Math.min(1,dt*2.4);
+      var follow=reduce.matches?0:1;
+      var wantX=clamp(baseTiltX+dragTiltX+pointerY*-0.14*follow,-0.5,0.62);
+      var wantZ=clamp(baseTiltZ+pointerX*0.12*follow,-0.36,0.36);
+      var ease=Math.min(1,dt*7);
+      tiltGroup.rotation.x+=(wantX-tiltGroup.rotation.x)*ease;
+      tiltGroup.rotation.z+=(wantZ-tiltGroup.rotation.z)*ease;
       renderer.render(scene,camera);
       if(!shownAt)requestAnimationFrame(function(){markShown();});
     }
     raf=requestAnimationFrame(frame);
+    root._apRead=function(){return {y:spinGroup.rotation.y,x:tiltGroup.rotation.x,z:tiltGroup.rotation.z,dragging:dragging};};
     root._apDispose=function(){
       if(raf){cancelAnimationFrame(raf);raf=0;}
+      root.removeEventListener('pointerdown',onDown);
+      root.removeEventListener('pointermove',onMove);
+      root.removeEventListener('pointerup',onUp);
+      root.removeEventListener('pointercancel',onUp);
       window.removeEventListener('resize',onResize);
       if(geometry)geometry.dispose();
       if(back)back.dispose();
