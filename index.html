@@ -1219,6 +1219,9 @@ body.is-sheet .back-bar{display:flex}
     var g=m.kind==='wide'?placeWide():placePhone();
     if(!g)return;
     built=key;
+    var keepDemo=demoDone;
+    var restartDemo=demoStarted&&!demoDone&&!demoYielded;
+    if(restartDemo){stopDemo();demoStarted=false;}
     found={};
     solved={};
     path=[];
@@ -1252,7 +1255,50 @@ body.is-sheet .back-bar{display:flex}
     cells=[].slice.call(gridEl.children);
     if(reduce.matches)gridEl.classList.add('is-static');
     else gridEl.classList.remove('is-static');
+    if(keepDemo){solved.HIGGSFIELD=true;said.HIGGSFIELD=true;paint();}
     placeCursor(0);
+    maybeDemo();
+  }
+  var demoTimer=0,demoStarted=false,demoDone=false,demoYielded=false;
+  function stopDemo(){if(demoTimer){clearTimeout(demoTimer);demoTimer=0;}}
+  function higgsCells(){
+    return cells.filter(function(c){return c.dataset.word==='HIGGSFIELD';}).sort(function(a,b){return (+a.dataset.n)-(+b.dataset.n);});
+  }
+  function yieldDemo(){
+    if(demoDone||demoYielded||!demoStarted)return;
+    demoYielded=true;
+    stopDemo();
+    if(!solved.HIGGSFIELD){path=[];paint();}
+  }
+  function gridInView(){
+    if(document.getElementById('ap-load'))return false;
+    var r=gridEl.getBoundingClientRect();
+    if(r.height<40||r.width<40)return false;
+    var vis=Math.min(r.bottom,innerHeight)-Math.max(r.top,0);
+    return vis>=Math.min(r.height,innerHeight)*0.45;
+  }
+  function stepDemo(i){
+    if(demoYielded||demoDone||dragging||reduce.matches)return;
+    var list=higgsCells();
+    if(list.length!=='HIGGSFIELD'.length){demoStarted=false;return;}
+    if(i>=list.length){
+      solved.HIGGSFIELD=true;
+      path=[];
+      paint();
+      if(skillLive&&!said.HIGGSFIELD){said.HIGGSFIELD=true;skillLive.textContent='Found '+nice('HIGGSFIELD');}
+      demoDone=true;
+      return;
+    }
+    path=list.slice(0,i+1);
+    paint();
+    demoTimer=setTimeout(function(){stepDemo(i+1);},320);
+  }
+  function maybeDemo(){
+    if(reduce.matches||demoStarted||demoDone||demoYielded||dragging)return;
+    if(!gridInView())return;
+    if(higgsCells().length!=='HIGGSFIELD'.length)return;
+    demoStarted=true;
+    demoTimer=setTimeout(function(){stepDemo(0);},600);
   }
   var path=[],solved={},dragging=false;
   function colsNow(){return parseInt(getComputedStyle(gridEl).getPropertyValue('--cols'),10)||1;}
@@ -1363,6 +1409,7 @@ body.is-sheet .back-bar{display:flex}
     if(e.button!=null&&e.button!==0)return;
     var cell=cellFromPoint(e.clientX,e.clientY);
     if(!cell)return;
+    yieldDemo();
     dragging=true;
     path=[cell];
     paint();
@@ -1385,6 +1432,7 @@ body.is-sheet .back-bar{display:flex}
   gridEl.addEventListener('pointerup',endDrag);
   gridEl.addEventListener('pointercancel',endDrag);
   gridEl.addEventListener('keydown',function(e){
+    if(e.key==='Escape'||e.key==='Backspace'||e.key===' '||e.key==='Enter'||e.key.indexOf('Arrow')===0)yieldDemo();
     if(e.key==='Escape'){e.preventDefault();path=[];paint();return;}
     if(e.key==='Backspace'){e.preventDefault();path.pop();paint();return;}
     if(e.key===' '||e.key==='Enter'){
@@ -1409,6 +1457,13 @@ body.is-sheet .back-bar{display:flex}
   if(reduce.addEventListener)reduce.addEventListener('change',function(){built='';render();});
   render();
   requestAnimationFrame(function(){render();});
+  if('IntersectionObserver' in window){
+    var demoWatch=new IntersectionObserver(function(entries){if(entries[0].isIntersecting)maybeDemo();},{threshold:[0.45,0.7]});
+    demoWatch.observe(gridEl);
+  }
+  window.addEventListener('scroll',maybeDemo,{passive:true});
+  var demoMut=new MutationObserver(function(){maybeDemo();});
+  demoMut.observe(document.body,{childList:true});
 })();
 </script>
 <script>
