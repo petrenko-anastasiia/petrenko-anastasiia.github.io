@@ -882,7 +882,6 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .orbit{position:absolute;left:50%;top:48%;width:0;height:0;transform-style:preserve-3d}
 .orbit-piece{position:absolute;width:220px;margin:-132px 0 0 -110px;display:block;text-decoration:none;color:#e0f2fe;background:#0c1524;border:1px solid rgba(125,211,252,.5);border-radius:10px;overflow:hidden;box-shadow:0 18px 40px rgba(0,0,0,.5);transform-style:preserve-3d}
 .orbit-piece img,.orbit-face{width:100%;height:128px;object-fit:cover;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;background:#101a2c}
-.orbit-piece img.brain-cover{object-fit:contain;background:#0b0e14}
 .orbit-name{display:block;padding:10px 12px;font-family:var(--mono);font-size:14px;letter-spacing:.06em;text-transform:uppercase;color:#e0f2fe;background:#0c1524;border-top:1px solid rgba(125,211,252,.32)}
 .orbit-piece:focus-visible{outline:3px solid #7dd3fc;outline-offset:3px}
 .orbit-face b{font-family:var(--serif);font-size:32px;font-weight:400;color:#7dd3fc;line-height:1}
@@ -984,28 +983,6 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
   .word-grid.is-seq .cell.on.pop{animation:none!important}
 }
 
-/* Illustrative knowledge graph. Not a measured export of a vault. */
-.know-fig{margin:18px 0 0;max-width:none}
-.know-lead{margin-top:14px;max-width:42ch}
-.know-stage{position:relative;display:grid;grid-template-columns:minmax(230px,280px) minmax(0,1fr);background:#0b0e14;border:1px solid rgba(125,211,252,.35);border-radius:16px;overflow:hidden;width:100%;min-height:560px}
-.know-graph{position:relative;min-width:0;min-height:520px}
-.know-graph canvas{display:block;width:100%;height:100%;pointer-events:none}
-.know-tree{padding:16px 14px 18px;background:#10151e;border-right:1px solid rgba(56,189,248,.28);color:#e2e8f0;font-family:var(--mono);font-size:13.5px;line-height:1.45;overflow:auto}
-.know-tree-k{margin:0 0 10px;color:#7dd3fc;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600}
-.know-tree ul{list-style:none;margin:0;padding:0}
-.know-tree .nest{margin-left:16px}
-.know-tree .row{display:flex;align-items:baseline;gap:6px;min-height:24px;color:#e2e8f0}
-.know-tree .chev{width:12px;flex:0 0 auto;color:#7dd3fc;font-style:normal}
-.know-tree .tag{margin-left:8px;background:#7dd3fc;color:#0b0e14;border-radius:999px;padding:1px 6px;font-size:10px;font-weight:700;letter-spacing:.06em}
-.know-fallback{margin:0;padding:28px;color:var(--muted);max-width:42ch}
-.know-graph.is-drawn .know-fallback{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
-.know-fig figcaption{margin-top:12px;color:var(--muted);font-size:15px}
-.know-fig figcaption span{display:block;margin-bottom:4px;font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:#7dd3fc}
-@media (max-width:700px){
-  .know-stage{grid-template-columns:1fr;min-height:0}
-  .know-tree{max-height:232px;border-right:0;border-bottom:1px solid rgba(56,189,248,.28)}
-  .know-graph{min-height:340px;aspect-ratio:1/1}
-}
 .sheet{display:none}
 body.is-sheet .sheet.is-open{display:block}
 body.is-sheet .hero,body.is-sheet .skill-scene,body.is-sheet .works,body.is-sheet .contact{display:none}
@@ -1693,18 +1670,17 @@ body.is-sheet .back-bar{display:flex}
       <div class="o-floor"></div>
       <div class="o-lamp" aria-hidden="true"></div>
       <div class="orbit" id="orbit">
-        <a class="orbit-piece" href="#paid"><img src="assets/img/outfit-transition.jpg" alt=""><span class="orbit-name">Paid social</span></a>
+        <a class="orbit-piece" href="#paid"><span class="orbit-face" aria-hidden="true"><svg viewBox="0 0 160 64"><rect x="62" y="4" width="36" height="56" rx="5" fill="none" stroke="#e0f2fe" stroke-width="1.6"/><polygon points="74,22 88,32 74,42" fill="#7dd3fc"/><rect x="10" y="16" width="40" height="28" rx="4" fill="none" stroke="#38bdf8" stroke-width="1.5"/><path d="M18 30 l6 6 14-14" fill="none" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/><rect x="110" y="20" width="40" height="24" rx="4" fill="none" stroke="#64748b" stroke-width="1.4"/><path d="M120 32 h20" stroke="#64748b" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="orbit-name">Paid social</span></a>
         <a class="orbit-piece" href="#tool"><img src="assets/img/tool/01-ai-caption-options.jpg" alt=""><span class="orbit-name">Postroom</span></a>
         <a class="orbit-piece" href="#hooklab"><img src="assets/img/argo-video-poster.jpg" alt=""><span class="orbit-name">Hook Lab</span></a>
         <a class="orbit-piece" href="#ap-growth-case-study"><span class="orbit-face"><svg viewBox="0 0 160 64" aria-hidden="true"><rect x="8" y="36" width="18" height="24" rx="2" fill="#38bdf8" opacity=".4"/><rect x="34" y="24" width="18" height="36" rx="2" fill="#38bdf8" opacity=".7"/><rect x="60" y="10" width="18" height="50" rx="2" fill="#7dd3fc"/><path d="M12 42 L42 28 L70 16 L118 8 L150 4" fill="none" stroke="#e0f2fe" stroke-width="2"/><circle cx="150" cy="4" r="3" fill="#e0f2fe"/></svg><b>$471K</b><small>since launch</small></span><span class="orbit-name">Growth case</span></a>
         <a class="orbit-piece" href="#strategy"><span class="orbit-face"><svg viewBox="0 0 160 64" aria-hidden="true"><rect x="6" y="16" width="34" height="26" rx="4" fill="none" stroke="#7dd3fc" stroke-width="1.7"/><rect x="63" y="8" width="34" height="34" rx="4" fill="none" stroke="#e0f2fe" stroke-width="1.7"/><rect x="120" y="18" width="34" height="24" rx="4" fill="none" stroke="#7dd3fc" stroke-width="1.7"/><path d="M14 50h18M71 52h18M128 50h18" stroke="#38bdf8" stroke-width="2"/></svg><b>~1M</b><small>views</small></span><span class="orbit-name">Brand incubation</span></a>
-        <a class="orbit-piece" href="#knowledge"><img class="brain-cover" src="assets/img/second-brain-cover.png" alt=""><span class="orbit-name">Second brain</span></a>
       </div>
     </div>
   </div>
   <div class="gallery-nav">
     <button type="button" id="bay-prev" aria-label="Previous work">←</button>
-    <p id="bay-now">1 / 6 · Paid social</p>
+    <p id="bay-now">1 / 5 · Paid social</p>
     <button type="button" id="bay-next" aria-label="Next work">→</button>
   </div>
   <nav class="room-fallback" aria-label="Jump to a work">
@@ -1713,7 +1689,6 @@ body.is-sheet .back-bar{display:flex}
     <a href="#hooklab">Hook Lab</a>
     <a href="#ap-growth-case-study">Growth case</a>
     <a href="#strategy">Brand incubation</a>
-    <a href="#knowledge">Second brain</a>
   </nav>
 </section>
 <script>
@@ -1876,206 +1851,6 @@ body.is-sheet .back-bar{display:flex}
   </div>
 </section>
 
-
-<!-- KNOWLEDGE GRAPH -->
-<section class="block know sheet" id="knowledge">
-  <div class="wrap">
-    <p class="sec-k">Claude Code + Obsidian</p>
-    <h2>My Second Brain</h2>
-    <p class="sub know-lead">My second brain, built with Claude Code and Obsidian.</p>
-    <figure class="know-fig">
-      <div class="know-stage" id="know-stage">
-        <aside class="know-tree" aria-label="Illustrative folder view">
-          <p class="know-tree-k">Illustrative folder view</p>
-          <ul>
-            <li>
-              <div class="row"><i class="chev" aria-hidden="true">▾</i><span>raw</span></div>
-              <ul class="nest">
-                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>trouble-cut-2026-10-…</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>trouble-cut-2026-10-…</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>trouble-cut-2026-10-…</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>trouble-cut-2026-10-…</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>trouble-cut-2026-10-…</span></div></li>
-              </ul>
-            </li>
-            <li>
-              <div class="row"><i class="chev" aria-hidden="true">▾</i><span>wiki</span></div>
-              <ul class="nest">
-                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>concepts</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>entities</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>handoffs</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>sources</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true">▸</i><span>synthesis</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true"></i><span>decisions</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true"></i><span>index</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true"></i><span>log</span></div></li>
-                <li><div class="row"><i class="chev" aria-hidden="true"></i><span>overview</span></div></li>
-              </ul>
-            </li>
-            <li><div class="row"><i class="chev" aria-hidden="true"></i><span>Планування</span><em class="tag">CANVAS</em></div></li>
-            <li><div class="row"><i class="chev" aria-hidden="true"></i><span>AGENTS</span></div></li>
-            <li><div class="row"><i class="chev" aria-hidden="true"></i><span>CLAUDE</span></div></li>
-            <li><div class="row"><i class="chev" aria-hidden="true"></i><span>hotcache</span></div></li>
-          </ul>
-        </aside>
-        <div class="know-graph" id="know-graph">
-          <canvas id="know-canvas" width="1200" height="750" aria-hidden="true"></canvas>
-          <p class="know-fallback">Illustrative network view. Built with Claude Code and Obsidian.</p>
-        </div>
-      </div>
-      <figcaption><span>Illustrative network view</span>Built with Claude Code and Obsidian. The folder names are the ones visible in the reference; this is not a live vault.</figcaption>
-    </figure>
-  </div>
-</section>
-<script>
-(function(){
-  var stage=document.getElementById('know-graph');
-  var canvas=document.getElementById('know-canvas');
-  if(!stage||!canvas||!canvas.getContext)return;
-  var ctx=canvas.getContext('2d');
-  if(!ctx)return;
-  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  function rand(a){return function(){a|=0;a=a+0x6D2B79F5|0;var t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return ((t^t>>>14)>>>0)/4294967296;};}
-  var rnd=rand(0x0b51d1a);
-  var nodes=[];
-  function pushNode(x,y,r,hub){
-    var d=Math.hypot(x,y);
-    if(d>0.98){x*=0.98/d;y*=0.98/d;}
-    nodes.push({x:x,y:y,r:r,hub:!!hub,ph:rnd()*6.28});
-  }
-  for(var i=0;i<640;i++){
-    var ang=rnd()*Math.PI*2;
-    var rad=Math.sqrt(rnd())*0.98;
-    pushNode(Math.cos(ang)*rad,Math.sin(ang)*rad,0.0032+rnd()*0.0018,false);
-  }
-  for(var i=0;i<180;i++){
-    var ang2=rnd()*Math.PI*2;
-    var rad2=Math.pow(rnd(),1.35)*0.58;
-    pushNode(Math.cos(ang2)*rad2,Math.sin(ang2)*rad2,0.003+rnd()*0.0016,false);
-  }
-  for(var c=0;c<6;c++){
-    var ca=rnd()*Math.PI*2, cr=0.18+rnd()*0.48;
-    var gx=Math.cos(ca)*cr, gy=Math.sin(ca)*cr;
-    for(var k=0;k<24;k++){
-      var a=rnd()*Math.PI*2, rr=Math.pow(rnd(),0.6)*0.07;
-      pushNode(gx+Math.cos(a)*rr,gy+Math.sin(a)*rr,0.0028+rnd()*0.0014,false);
-    }
-    pushNode(gx,gy,0.008+rnd()*0.003,true);
-  }
-  nodes.slice().sort(function(a,b){return (a.x*a.x+a.y*a.y)-(b.x*b.x+b.y*b.y);}).slice(0,9).forEach(function(n,i){
-    n.hub=true; n.r=0.009+(8-i)*0.0011;
-  });
-  var edges=[],seen={};
-  function dist2(a,b){var dx=a.x-b.x,dy=a.y-b.y;return dx*dx+dy*dy;}
-  function link(i,j,hub){
-    if(i===j)return;
-    var a=i<j?i:j,b=i<j?j:i,key=a+'-'+b;
-    if(seen[key])return;
-    seen[key]=1;
-    edges.push(a,b,hub?1:0);
-  }
-  nodes.forEach(function(n,i){
-    var near=[];
-    for(var j=0;j<nodes.length;j++)if(j!==i)near.push([dist2(n,nodes[j]),j]);
-    near.sort(function(a,b){return a[0]-b[0];});
-    var kn=n.hub?12:9;
-    for(var e=0;e<kn&&e<near.length;e++)link(i,near[e][1],false);
-    var mid=near[Math.min(near.length-1, 12+(i%5))];
-    if(mid)link(i,mid[1],false);
-  });
-  nodes.forEach(function(n){
-    var zMax=Math.sqrt(Math.max(0,0.96-n.x*n.x-n.y*n.y));
-    n.z=(rnd()*2-1)*zMax;
-  });
-  var px=new Float32Array(nodes.length), py=new Float32Array(nodes.length), pz=new Float32Array(nodes.length), order=[];
-  for(var oi=0;oi<nodes.length;oi++)order.push(oi);
-  var raf=0,on=false,seenOn=false;
-  function project(t){
-    var yaw=t*0.22, pitch=Math.sin(t*0.13)*0.2;
-    var cyaw=Math.cos(yaw), syaw=Math.sin(yaw), cp=Math.cos(pitch), sp=Math.sin(pitch);
-    for(var i=0;i<nodes.length;i++){
-      var n=nodes[i];
-      var x=n.x, y=n.y, z=n.z;
-      if(t){
-        x+=Math.sin(t*0.37+n.ph)*0.018;
-        y+=Math.cos(t*0.29+n.ph*1.4)*0.018;
-        z+=Math.sin(t*0.23+n.ph*0.8)*0.014;
-      }
-      var x1=x*cyaw+z*syaw;
-      var z1=-x*syaw+z*cyaw;
-      var y1=y*cp-z1*sp;
-      var z2=y*sp+z1*cp;
-      var persp=1/(1+z2*0.16);
-      px[i]=x1*persp;
-      py[i]=y1*persp;
-      pz[i]=z2;
-    }
-  }
-  function draw(now){
-    var w=stage.clientWidth,h=stage.clientHeight;
-    if(w<2||h<2)return;
-    var dpr=Math.min(2,window.devicePixelRatio||1);
-    if(canvas.width!==Math.round(w*dpr)||canvas.height!==Math.round(h*dpr)){
-      canvas.width=Math.round(w*dpr);canvas.height=Math.round(h*dpr);
-    }
-    ctx.setTransform(dpr,0,0,dpr,0,0);
-    ctx.clearRect(0,0,w,h);
-    ctx.fillStyle='#0b0e14';
-    ctx.fillRect(0,0,w,h);
-    var cx=w*0.5,cy=h*0.5,scale=Math.min(w,h)*0.42;
-    var t=reduce.matches?0:((now||0)*0.001);
-    project(t);
-    for(var b=0;b<3;b++){
-      var pulse=reduce.matches?0.34:(0.26+0.18*(0.5+0.5*Math.sin(t*0.85+b*2.05)));
-      ctx.beginPath();
-      ctx.lineWidth=0.7;
-      ctx.strokeStyle='rgba(147,210,252,'+pulse.toFixed(3)+')';
-      for(var e=b*3;e<edges.length;e+=9){
-        var ia=edges[e], ib=edges[e+1];
-        ctx.moveTo(cx+px[ia]*scale, cy+py[ia]*scale);
-        ctx.lineTo(cx+px[ib]*scale, cy+py[ib]*scale);
-      }
-      ctx.stroke();
-    }
-    order.sort(function(a,b){return pz[a]-pz[b];});
-    for(var k=0;k<order.length;k++){
-      var i=order[k], n2=nodes[i];
-      var depth=(pz[i]+1.2)/2.4;
-      var radius=(n2.hub?3.3:1.45)*(0.72+depth*0.55);
-      ctx.beginPath();
-      ctx.fillStyle=n2.hub?'rgba(224,242,254,'+(0.75+depth*0.25).toFixed(3)+')':'rgba(125,211,252,'+(0.55+depth*0.4).toFixed(3)+')';
-      ctx.arc(cx+px[i]*scale, cy+py[i]*scale, radius, 0, Math.PI*2);
-      ctx.fill();
-    }
-    stage.classList.add('is-drawn');
-  }
-  function tick(now){
-    if(!on||document.hidden)return;
-    draw(now);
-    if(!reduce.matches)raf=requestAnimationFrame(tick);
-  }
-  function start(){if(on||document.hidden)return;on=true;raf=requestAnimationFrame(tick);}
-  function stop(){on=false;if(raf)cancelAnimationFrame(raf);raf=0;}
-  if('IntersectionObserver' in window){
-    var io=new IntersectionObserver(function(entries){
-      seenOn=entries[0].isIntersecting;
-      if(seenOn)start();
-      else stop();
-    },{threshold:0.12});
-    io.observe(stage);
-  }else start();
-  document.addEventListener('visibilitychange',function(){
-    if(document.hidden)stop();
-    else if(seenOn)start();
-  });
-  window.addEventListener('resize',function(){if(on||reduce.matches)draw(performance.now());},{passive:true});
-  if(reduce.addEventListener)reduce.addEventListener('change',function(){
-    stop();
-    draw(0);
-    if(!reduce.matches&&seenOn)start();
-  });
-})();
-</script>
 
 <!-- HOOK LAB -->
 <section class="block hooklab sheet" id="hooklab">
@@ -2436,8 +2211,8 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
 </script>
 <script>
 (function(){
-  var sheetsMap={paid:'paid',tool:'tool','content-ops-tool':'tool',hooklab:'hooklab','ap-growth-case-study':'ap-growth-case-study',growth:'ap-growth-case-study',strategy:'strategy',knowledge:'knowledge'};
-  var titles={paid:'Paid social',tool:'Postroom',hooklab:'Hook Lab','ap-growth-case-study':'Growth case',strategy:'Brand incubation',knowledge:'Second brain'};
+  var sheetsMap={paid:'paid',tool:'tool','content-ops-tool':'tool',hooklab:'hooklab','ap-growth-case-study':'ap-growth-case-study',growth:'ap-growth-case-study',strategy:'strategy'};
+  var titles={paid:'Paid social',tool:'Postroom',hooklab:'Hook Lab','ap-growth-case-study':'Growth case',strategy:'Brand incubation'};
   var jumps={intro:'intro',top:'intro',skills:'skills',find:'skills',room:'works',works:'works',contact:'contact'};
   var label=document.getElementById('back-label');
   function apply(){
