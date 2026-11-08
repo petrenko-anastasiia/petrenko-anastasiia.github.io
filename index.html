@@ -949,9 +949,11 @@ html.room-3d .works{height:170vh}
 /* Skills word-search fills the next viewport. No card, no second portrait. */
 .skill-scene{--nav-safe:72px;height:100vh;height:100dvh;max-height:100dvh;display:flex;box-sizing:border-box;background:#0b0e14;padding:calc(var(--nav-safe) + 2.5vh) 4vw 2.5vh;overflow:hidden}
 .skill-scene-inner{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;width:100%;height:100%}
-.word-grid{flex:1 1 0px;display:grid;grid-template-columns:repeat(var(--cols,15),var(--cell,56px));grid-auto-rows:var(--cell,56px);column-gap:var(--gap-x,22px);row-gap:var(--gap-y,22px);justify-content:center;align-content:center;width:100%;min-height:0;touch-action:pan-y;user-select:none;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;overflow:visible}
+.word-grid{flex:1 1 0px;display:grid;grid-template-columns:repeat(var(--cols,15),var(--cell,56px));grid-auto-rows:var(--cell,56px);column-gap:var(--gap-x,22px);row-gap:var(--gap-y,22px);justify-content:center;align-content:center;width:100%;min-height:0;touch-action:none;user-select:none;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;overflow:visible}
 .word-grid .cell{width:var(--cell,56px);height:var(--cell,56px);display:grid;place-items:center;color:rgba(148,163,184,.45);font-size:calc(var(--cell,56px) * .5);font-weight:650;line-height:1;letter-spacing:0;border-radius:calc(var(--cell,56px) * .18)}
-.word-grid .cell.on{background:#38bdf8;color:#0b0e14;position:relative;z-index:1;transform:rotate(var(--tilt,1deg)) skewX(var(--skew,.3deg))}
+.word-grid .cell.on,.word-grid .cell.tracing{background:#38bdf8;color:#0b0e14;position:relative;z-index:1;transform:rotate(var(--tilt,1deg)) skewX(var(--skew,.3deg))}
+.word-grid .cell.tracing{z-index:2;background:#7dd3fc}
+.word-grid .cell.bad{background:#1e293b;color:#e2e8f0;position:relative;z-index:2}
 .word-grid.is-seq .cell.on.pop{animation:tile-drop .34s cubic-bezier(.2,.8,.2,1) both;animation-delay:var(--d,0ms)}
 @keyframes tile-drop{
   0%{opacity:0;transform:translateY(-22%) scale(.9) rotate(0deg)}
@@ -1055,7 +1057,7 @@ html.room-3d .works{height:170vh}
   <div class="skill-scene-inner">
     <div class="word-grid" id="skill-grid" tabindex="0" aria-label="Find the skills in the letters"></div>
     <div class="skill-foot">
-      <p class="skill-prompt">Find the skills</p>
+      <p class="skill-prompt">Drag through each word, letter by letter</p>
       <p class="skill-live" id="skill-live" aria-live="polite"></p>
       <p class="skill-bio">Four years leading paid social, short-form strategy and an 8–12 person content team for direct-to-consumer (DTC) lifestyle subscriptions &amp; creator-led brands, across 50+ accounts on Meta and TikTok.</p>
       <ul class="skill-legend" aria-label="Skills">
@@ -1181,6 +1183,8 @@ html.room-3d .works{height:170vh}
     if(!g)return;
     built=key;
     found={};
+    solved={};
+    path=[];
     said={};
     buttons.forEach(function(b){b.classList.add('is-secret');});
     gridEl.innerHTML='';
@@ -1213,54 +1217,68 @@ html.room-3d .works{height:170vh}
     else gridEl.classList.remove('is-static');
     placeCursor(0);
   }
-  function mark(id){
-    buttons.forEach(function(b){if(id&&b.dataset.skill===id)b.setAttribute('aria-current','true');else b.removeAttribute('aria-current');});
-  }
-  function clearOn(){
-    cells.forEach(function(c){c.classList.remove('on','pop','hot','found');c.style.removeProperty('--d');});
-    mark(null);
-  }
-  function hasSkill(c,id){return c.dataset.skill&&c.dataset.skill.split(' ').indexOf(id)>=0;}
-  function idsOf(c){return (c.dataset.skill||'').split(' ').filter(Boolean);}
-  function paintIdle(){
+  var path=[],solved={},dragging=false;
+  function colsNow(){return parseInt(getComputedStyle(gridEl).getPropertyValue('--cols'),10)||1;}
+  function xy(cell){var i=cells.indexOf(cell),c=colsNow();return {x:i%c,y:Math.floor(i/c)};}
+  function paint(){
     cells.forEach(function(c){
-      var ids=idsOf(c);
-      var keep=ids.some(function(id){return found[id];});
-      c.classList.remove('pop','hot');
-      c.classList.toggle('on',keep);
-      c.classList.toggle('found',keep);
+      var kept=!!(c.dataset.word&&solved[c.dataset.word]);
+      var tracing=path.indexOf(c)>=0&&!kept;
+      c.classList.toggle('on',kept);
+      c.classList.toggle('found',kept);
+      c.classList.toggle('tracing',tracing);
     });
   }
-  function showAll(id){
-    gridEl.classList.remove('is-seq');
-    cells.forEach(function(c){
-      c.classList.remove('pop');
-      var ids=idsOf(c);
-      var hot=!!id&&ids.indexOf(id)>=0;
-      var keep=!hot&&ids.some(function(s){return found[s];});
-      c.classList.toggle('on',hot||keep);
-      c.classList.toggle('hot',hot);
-      c.classList.toggle('found',keep);
-    });
-    mark(id);
+  function groupDone(id){
+    var g=null;
+    for(var i=0;i<GROUPS.length;i++)if(GROUPS[i].id===id)g=GROUPS[i];
+    return !!g&&g.words.every(function(w){return solved[w];});
   }
-  function discover(id){
-    if(!id)return;
-    var first=!found[id];
-    found[id]=true;
-    hoverId=id;
-    showAll(id);
-    buttons.forEach(function(b){if(b.dataset.skill===id)b.classList.remove('is-secret');});
-    if(first&&skillLive){
-      var name='';
-      buttons.forEach(function(b){if(b.dataset.skill===id)name=b.textContent;});
-      if(name&&!said[id]){said[id]=true;skillLive.textContent='Found '+name;}
-    }
+  function nice(word){return word.charAt(0)+word.slice(1).toLowerCase();}
+  function finishIfWord(){
+    if(path.length<2)return false;
+    var word=path[0].dataset.word;
+    if(!word||path.length!==word.length)return false;
+    if(!path.every(function(c){return c.dataset.word===word;}))return false;
+    var forward=path.every(function(c,i){return +c.dataset.n===i;});
+    var back=path.every(function(c,i){return +c.dataset.n===word.length-1-i;});
+    if(!forward&&!back)return false;
+    solved[word]=true;
+    var skill=path[0].dataset.skill||'';
+    path=[];
+    paint();
+    if(groupDone(skill))buttons.forEach(function(b){if(b.dataset.skill===skill)b.classList.remove('is-secret');});
+    if(skillLive&&!said[word]){said[word]=true;skillLive.textContent='Found '+nice(word);}
+    return true;
   }
-  function unhover(){
-    hoverId=null;
-    paintIdle();
-    mark(null);
+  function flash(list){
+    list.forEach(function(c){c.classList.add('bad');});
+    var clear=function(){list.forEach(function(c){c.classList.remove('bad');});};
+    if(reduce.matches)clear();
+    else setTimeout(clear,280);
+  }
+  function continues(cell){
+    if(!path.length)return true;
+    var last=xy(path[path.length-1]), next=xy(cell);
+    var dx=next.x-last.x, dy=next.y-last.y;
+    if(Math.abs(dx)+Math.abs(dy)!==1)return false;
+    if(path.length<2)return true;
+    var a=xy(path[0]), b=xy(path[1]);
+    return dx===Math.sign(b.x-a.x)&&dy===Math.sign(b.y-a.y);
+  }
+  function addCell(cell){
+    if(!cell)return;
+    var at=path.indexOf(cell);
+    if(at>=0){path=path.slice(0,at+1);return;}
+    if(!continues(cell)){flash(path.slice());path=cell?[cell]:[];return;}
+    path.push(cell);
+  }
+  function resetPartial(){
+    if(!path.length)return;
+    var doomed=path.slice();
+    path=[];
+    paint();
+    flash(doomed);
   }
   function placeCursor(i){
     if(!cells.length)return;
@@ -1271,49 +1289,54 @@ html.room-3d .works{height:170vh}
       c.classList.toggle('is-cursor',focused&&n===cursor);
     });
   }
-  gridEl.addEventListener('pointerover',function(e){
-    if(e.pointerType==='touch')return;
+  function cellFromPoint(x,y){
+    var el=document.elementFromPoint(x,y);
+    var cell=el&&el.closest&&el.closest('.cell');
+    return cell&&gridEl.contains(cell)?cell:null;
+  }
+  gridEl.addEventListener('pointerdown',function(e){
     var cell=e.target.closest&&e.target.closest('.cell');
-    if(!cell||!cell.dataset.skill)return;
-    discover(cell.dataset.skill.split(' ')[0]);
+    if(!cell||!gridEl.contains(cell))return;
+    if(e.button!=null&&e.button!==0)return;
+    dragging=true;
+    path=[cell];
+    paint();
+    if(gridEl.setPointerCapture)gridEl.setPointerCapture(e.pointerId);
+    e.preventDefault();
   });
-  gridEl.addEventListener('pointerout',function(e){
-    if(e.pointerType==='touch')return;
-    if(e.relatedTarget&&gridEl.contains(e.relatedTarget)){
-      var next=e.relatedTarget.closest&&e.relatedTarget.closest('.cell');
-      if(next&&next.dataset.skill)return;
+  gridEl.addEventListener('pointermove',function(e){
+    if(!dragging)return;
+    var cell=cellFromPoint(e.clientX,e.clientY);
+    if(!cell||path.indexOf(cell)>=0)return;
+    if(continues(cell)){path.push(cell);paint();}
+  });
+  function endDrag(){
+    if(!dragging)return;
+    dragging=false;
+    if(!finishIfWord())resetPartial();
+  }
+  gridEl.addEventListener('pointerup',endDrag);
+  gridEl.addEventListener('pointercancel',endDrag);
+  gridEl.addEventListener('keydown',function(e){
+    if(e.key==='Escape'){e.preventDefault();path=[];paint();return;}
+    if(e.key==='Backspace'){e.preventDefault();path.pop();paint();return;}
+    if(e.key===' '||e.key==='Enter'){
+      e.preventDefault();
+      addCell(cells[cursor]);
+      paint();
+      finishIfWord();
+      return;
     }
-    unhover();
-  });
-  buttons.forEach(function(btn){
-    btn.addEventListener('pointerover',function(e){if(e.pointerType==='touch')return;discover(btn.dataset.skill);});
-    btn.addEventListener('pointerout',function(){unhover();});
-    btn.addEventListener('focus',function(){discover(btn.dataset.skill);});
-    btn.addEventListener('blur',function(){unhover();});
-    btn.addEventListener('click',function(){discover(btn.dataset.skill);});
-  });
-  gridEl.addEventListener('click',function(e){
-    var cell=e.target.closest&&e.target.closest('.cell');
-    if(!cell||!cell.dataset.skill)return;
-    discover(cell.dataset.skill.split(' ')[0]);
-  });
-  function onGridKey(e){
-    var cols=parseInt(getComputedStyle(gridEl).getPropertyValue('--cols'),10)||1;
-    var step=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:e.key==='ArrowDown'?cols:e.key==='ArrowUp'?-cols:0;
+    var step=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:e.key==='ArrowDown'?colsNow():e.key==='ArrowUp'?-colsNow():0;
     if(!step)return;
     e.preventDefault();
     placeCursor(cursor+step);
-    var cell=cells[cursor];
-    cell.focus();
-    if(cell.dataset.skill)discover(cell.dataset.skill.split(' ')[0]);
-    else unhover();
-  }
-  gridEl.addEventListener('keydown',onGridKey);
+    cells[cursor].focus();
+  });
   gridEl.addEventListener('focusin',function(e){
     var cell=e.target.closest&&e.target.closest('.cell');
     if(!cell)return;
     placeCursor(cells.indexOf(cell));
-    if(cell.dataset.skill)discover(cell.dataset.skill.split(' ')[0]);
   });
   window.addEventListener('resize',function(){render();},{passive:true});
   if(reduce.addEventListener)reduce.addEventListener('change',function(){built='';render();});
