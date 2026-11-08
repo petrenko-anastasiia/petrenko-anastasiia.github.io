@@ -66,20 +66,19 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 /* Headline matches the page until a sky spotlight sits behind it.
    #7dd3fc is the existing sky hover; --red is #38bdf8.
    The light travels across the title on its own. */
-html.hero-cursor .hero-title{position:relative;isolation:isolate;overflow:hidden;contain:paint}
-html.hero-cursor .hero-head h1.hero-title{overflow:hidden}
-html.hero-cursor .hero-title-text{display:block;position:relative;z-index:1;color:#f8fafc;
-  -webkit-mask-image:radial-gradient(ellipse calc(var(--sw,90px) * .5) calc(var(--sh,48px) * .5) at var(--lx,-400px) var(--ly,-400px), #000 0%, #000 34%, transparent 62%);
-  mask-image:radial-gradient(ellipse calc(var(--sw,90px) * .5) calc(var(--sh,48px) * .5) at var(--lx,-400px) var(--ly,-400px), #000 0%, #000 34%, transparent 62%);
+html.hero-cursor .hero-title{position:relative;isolation:isolate;overflow:visible;--lx:22%;--ly:42%;--sw:1.7em;--sh:1.05em}
+html.hero-cursor .hero-title-text{display:block;position:relative;z-index:2;color:#f8fafc;
+  -webkit-mask-image:radial-gradient(ellipse calc(var(--sw) * .5) calc(var(--sh) * .5) at var(--lx) var(--ly), #000 0% 64%, transparent 82%);
+  mask-image:radial-gradient(ellipse calc(var(--sw) * .5) calc(var(--sh) * .5) at var(--lx) var(--ly), #000 0% 64%, transparent 82%);
   -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
-html.hero-cursor .hero-title-text em{position:relative;z-index:1;color:#f8fafc}
+html.hero-cursor .hero-title-text em{position:relative;z-index:2;color:#f8fafc}
 html.hero-cursor .hero-spot{
-  position:absolute;z-index:0;left:0;top:0;width:var(--sw,90px);height:var(--sh,48px);
-  max-width:1.55em;max-height:.58em;
+  position:absolute;z-index:0;left:0;top:0;width:var(--sw);height:var(--sh);
+  max-width:2.4em;max-height:1.2em;
   border-radius:50%;pointer-events:none;opacity:0;
-  transform:translate3d(var(--lx,-400px),var(--ly,-400px),0) translate(-50%,-50%);
-  background:radial-gradient(ellipse at center, rgba(224,242,254,.95) 0%, #7dd3fc 24%, rgba(56,189,248,.4) 46%, rgba(56,189,248,0) 64%);
-  filter:blur(3px)}
+  transform:translate3d(var(--lx),var(--ly),0) translate(-50%,-50%);
+  background:radial-gradient(ellipse at center, rgba(125,211,252,.45) 0%, rgba(56,189,248,.22) 46%, rgba(56,189,248,0) 72%);
+  filter:blur(6px)}
 html.hero-cursor .hero-title.is-lit .hero-spot{opacity:1}
 html.hero-cursor .hero-k{position:relative;z-index:1}
 html.hero-cursor .hero:has(:focus-visible) .hero-title-text{color:var(--ink);-webkit-mask-image:none;mask-image:none}
@@ -2362,8 +2361,8 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
   }
   function light(x,y,w,h){
     var fs=parseFloat(getComputedStyle(title).fontSize)||64;
-    var sw=Math.max(78, Math.min(fs*1.28, w*0.42));
-    var sh=Math.max(36, fs*0.46);
+    var sw=Math.min(fs*1.65, Math.max(fs*1.2, w*0.34));
+    var sh=Math.max(fs*0.98, h*0.92);
     title.style.setProperty('--lx',x.toFixed(1)+'px');
     title.style.setProperty('--ly',y.toFixed(1)+'px');
     title.style.setProperty('--sw',sw.toFixed(0)+'px');
