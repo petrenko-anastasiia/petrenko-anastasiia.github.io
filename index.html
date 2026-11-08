@@ -660,7 +660,7 @@ section.block.paid#paid{padding-bottom:0!important}
 .ap-tab-btn:hover{border-color:var(--accent-2)!important;color:var(--accent-2)!important}
 
 /* === 3 Nov pass 2: eyebrows, before/after, light band, contact card, spec toggle, segmented tabs === */
-.sec-k{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--red);margin:0 0 14px;font-weight:600}
+.sec-k{font-family:var(--mono);font-size:14.5px;letter-spacing:.08em;color:#7ec8ff;margin:0 0 14px;font-weight:600}
 .creatives-head .sec-k{margin-bottom:10px}
 .creatives-head h3 em{color:var(--red)}
 .cr-sub{color:var(--muted);font-size:15px;margin-top:12px;max-width:52ch}
@@ -793,11 +793,18 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 
 /* === reorder pass: compact growth case, hero proof row === */
 .hero-k{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--red);font-weight:600;margin:0 0 14px}
-.hero-proof{display:none;list-style:none;margin:22px 0 0;padding:14px 0 0;border-top:1px solid var(--line);gap:14px 20px;flex-wrap:wrap;justify-content:center}
-.hero-proof li{display:flex;flex-direction:column;align-items:center;font-size:12px;color:var(--muted);text-align:center;min-width:88px}
-.hero-proof .num{font-size:22px;color:var(--ink);line-height:1.1;margin-bottom:2px}
-.hero-proof li:first-child .num{color:var(--red)}
-@media (max-width:899px){.hero-col .hero-k{order:0}.hero-proof{display:flex;order:3}.hero-col .hero-ctas{margin-bottom:0!important}.hero-col .hero-side{margin-top:28px}}
+.hero-proof-block{width:min(100%,920px);margin:18px auto 0}
+.hero-proof{display:flex;list-style:none;margin:0;padding:0;gap:18px 28px;flex-wrap:wrap;justify-content:center}
+.hero-proof li{display:flex;flex-direction:column;align-items:center;text-align:center;min-width:140px;flex:1 1 140px;max-width:240px}
+.hero-proof .num{font-size:clamp(32px,4.2vw,48px);color:#f7fbff;line-height:1;margin-bottom:8px}
+.hero-proof .lbl{font-family:var(--mono);font-size:14px;letter-spacing:.06em;line-height:1.35;color:#d5deea;text-transform:uppercase}
+.hero-proof-note{margin:16px auto 0;max-width:68ch;font-family:var(--mono);font-size:14.5px;line-height:1.5;letter-spacing:.01em;color:#d7e0ee;text-align:center}
+@media (max-width:640px){
+  .hero-proof{gap:16px 10px}
+  .hero-proof li{min-width:0}
+  .hero-proof .lbl{font-size:12px;letter-spacing:.04em}
+  .hero-proof-note{font-size:13px}
+}
 .growth-grid{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:48px;align-items:start}
 .growth-card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:26px 28px}
 .growth-nn{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:14px}
@@ -812,8 +819,8 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 @media (max-width:640px){.growth-card{padding:20px}.growth-n .num{font-size:32px}}
 
 .paid-scale{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px;padding:0}
-.paid-scale li{display:flex;flex-direction:column;gap:4px;padding:14px 0 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);line-height:1.4}
-.paid-scale .num{font-size:24px;color:var(--ink);line-height:1}
+.paid-scale li{display:flex;flex-direction:column;gap:4px;padding:14px 0 0;border-top:1px solid var(--line);font-size:15.5px;color:#d7e0ee;line-height:1.45}
+.paid-scale .num{font-size:28px;color:#f4f7fb;line-height:1}
 .paid-scale li:nth-child(2) .num{color:var(--red)}
 .paid-case p strong{color:var(--ink)!important;font-weight:600}
 @media (max-width:900px){.paid-scale{grid-template-columns:1fr 1fr}}
@@ -823,7 +830,10 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .cr-tags .cr-btn{white-space:nowrap}
 
 /* Recent works: supplied architectural room (380vh sticky track, Matter.js tile fall, 3D gallery). */
-.architect-scroll-track{--accent:#4da6ff;--accent-glow:rgba(77,166,255,.45);--text-main:#f3f6fc;--text-muted:#8b95a7;--card-bg:#0f1623;--mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;position:relative;height:380vh;width:100%;background:#07090e;color:var(--text-main);overflow-x:clip}
+.architect-scroll-track{--accent:#4da6ff;--accent-glow:rgba(77,166,255,.45);--text-main:#f3f6fc;--text-muted:#8b95a7;--card-bg:#0f1623;--mono:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;position:relative;height:220vh;width:100%;background:#07090e;color:var(--text-main);overflow-x:clip}
+.skill-scroll-track{position:relative;height:240vh;width:100%;background:#0b0e14;overflow-x:clip}
+.skill-scroll-track .StickyViewport{background:#0b0e14}
+.skill-scroll-track .physics-curtain-layer{background:#0b0e14}
 .StickyViewport{position:sticky;top:0;width:100%;height:100vh;height:100dvh;overflow:hidden;background:#07090e}
 .works-anchor{position:absolute;top:72%;left:0;width:1px;height:1px;pointer-events:none}
 .physics-curtain-layer{position:absolute;inset:0;z-index:30;pointer-events:auto;touch-action:pan-y;will-change:opacity}
@@ -870,7 +880,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .card-visual.has-photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .card-visual.has-photo .card-copy{position:relative;z-index:1;width:100%;padding:14px 16px 12px;background:linear-gradient(transparent,rgba(5,8,14,.9))}
 .card-metric{font-family:var(--serif);font-size:64px;color:#d7ecff;line-height:1;margin-bottom:8px;text-shadow:0 0 18px rgba(77,166,255,.45)}
-.card-sub{font-family:var(--mono);font-size:13px;letter-spacing:.12em;color:#e7eef8;text-transform:uppercase}
+.card-sub{font-family:var(--mono);font-size:14px;letter-spacing:.1em;color:#e7eef8;text-transform:uppercase}
 .card-footer-bar{height:64px;padding:0 22px;display:flex;align-items:center;justify-content:space-between;background:rgba(36,58,92,.96);font-family:var(--mono);font-size:16px;letter-spacing:.12em;font-weight:650;text-transform:uppercase;color:#f7fbff}
 .card-footer-bar span:last-child{color:#9fd2ff;font-size:20px}
 .room-hud-bottom{position:absolute;bottom:24px;left:50%;transform:translateX(-50%);z-index:26;display:flex;flex-direction:column;align-items:center;gap:12px;width:min(100% - 16px,920px);opacity:0;pointer-events:none}
@@ -1014,7 +1024,9 @@ body.hero-armed.hero-stage-wave .hero .hero-wave-char{animation:heroWaveDrop .88
 }
 body.hero-stage-spotlight .hero .spotlight-title::after{opacity:1}
 .hero .spotlight-title.is-still::after{-webkit-mask-image:none;mask-image:none;opacity:1}
-.hero .hero-spaced-sub{font-family:var(--mono);font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:#8b95a7;margin-top:-6px}
+.hero .hero-spaced-sub{font-family:var(--mono);font-size:13px;letter-spacing:.28em;text-transform:uppercase;color:#d5deea;margin-top:-6px}
+body.hero-armed .hero-proof-block{opacity:0;transform:translateY(12px);transition:opacity .7s ease .2s,transform .7s cubic-bezier(.16,1,.3,1) .2s}
+body.hero-armed.hero-stage-content .hero-proof-block{opacity:1;transform:translateY(0)}
 body.hero-armed .hero .hero-spaced-sub{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
 body.hero-armed.hero-stage-content .hero .hero-spaced-sub{opacity:.85;transform:translateY(0)}
 body.hero-armed .hero .hero-portrait{clip-path:inset(100% 0 0 0 round 18px);transform:translateY(18px);transition:clip-path .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1)}
@@ -1026,7 +1038,7 @@ body.hero-armed.hero-stage-content .hero .hero-lower-stack{opacity:1;transform:t
 .hero .hero-email-pill{display:inline-flex;align-items:center;padding:7px 18px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);color:#f3f6fc;font-family:var(--mono);font-size:12.5px;text-decoration:none}
 .hero .hero-email-pill:hover{border-color:#4da6ff;background:rgba(77,166,255,.12);color:#f3f6fc}
 @media (max-width:700px){
-  .hero .hero-spaced-sub{letter-spacing:.18em;font-size:10px}
+  .hero .hero-spaced-sub{letter-spacing:.12em;font-size:11px}
 }
 
 /* Skills word-search fills the next viewport. No card, no second portrait. */
@@ -1075,7 +1087,7 @@ body.hero-armed.hero-stage-content .hero .hero-lower-stack{opacity:1;transform:t
 
 .sheet{display:none}
 body.is-sheet .sheet.is-open{display:block}
-body.is-sheet .hero,body.is-sheet .architect-scroll-track,body.is-sheet .contact{display:none}
+body.is-sheet .hero,body.is-sheet .architect-scroll-track,body.is-sheet .skill-scroll-track,body.is-sheet .contact{display:none}
 .hero{min-height:100dvh;scroll-snap-align:start}
 @media (max-width:899px){
   .hero{min-height:0;padding-bottom:12px}
@@ -1574,14 +1586,21 @@ body.is-sheet .back-bar{display:flex}
           </div>
         </div>
         <p class="hero-k hero-spaced-sub">Paid social · AI production · Warsaw EU</p>
+        <div class="hero-proof-block">
+          <ul class="hero-proof">
+            <li><span class="num">−54%</span><span class="lbl">CPA on Meta in 6 weeks</span></li>
+            <li><span class="num">$471K</span><span class="lbl">subscription revenue since launch</span></li>
+            <li><span class="num">~75%</span><span class="lbl">faster publishing</span></li>
+          </ul>
+          <p class="hero-proof-note">October 2026 paid spend of about $43K brought 34K sign-ups, including free and trial, at about $1.25 each. The −54% is the cost of a paid subscription. The $471K is flagship subscription revenue since launch. The ~75% is time saved publishing with Postroom.</p>
+        </div>
       </div>
       <div class="hero-stage">
         <figure class="hero-portrait hero-portrait-card"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko" width="340" height="340"></figure>
         <div class="hero-quote-panel hero-lower-stack">
           <p class="hook" id="hero-quote">I decode what makes top-performing ads convert—and build the creative systems to scale them.</p>
           <div class="lanes hero-ctas"><div class="sec-links"><a class="ulink hero-email-pill" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
-          <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue since launch</li><li><span class="num">~75%</span>faster publishing</li></ul>
-        </div>
+                  </div>
       </div>
     </div>
   </div>
@@ -1635,6 +1654,99 @@ body.is-sheet .back-bar{display:flex}
 </script>
 <section class="architect-scroll-track" id="scrollTrack">
   <div class="StickyViewport">
+    <div class="recent-header-bar" id="recentHeaderBar">
+      <h2 class="wave-title" id="waveTitle" aria-label="Recent works"></h2>
+      <a href="#intro" class="room-backlink" id="roomBackLink">Back to introduction</a>
+    </div>
+
+    <div class="gallery-viewport" id="galleryViewport">
+      <div class="ceiling-rig-anchor" id="ceilingRig">
+        <div class="rig-vertical-rod"></div>
+        <div class="rig-lamp-head" id="rigLampHead"></div>
+      </div>
+      <div class="spotlight-beam-overlay" id="spotlightOverlay"></div>
+      <div class="room-stage-3d" id="roomStage3D">
+        <div class="wall-back"></div>
+        <div class="wall-side wall-left"></div>
+        <div class="wall-side wall-right"></div>
+        <div class="room-floor" id="roomFloor">
+          <button type="button" class="floor-projection-ui" id="floorOpen">
+            <div class="floor-projection-count" id="floorCount">1 / 5</div>
+            <div class="floor-projection-cta">[ View case ]</div>
+          </button>
+        </div>
+        <div class="center-tube-light"></div>
+        <div class="cards-mount" id="cardsContainer">
+          <button type="button" class="case-frame slot-center" data-index="0" data-hash="#paid">
+            <div class="card-visual">
+              <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="62" y="4" width="36" height="56" rx="5" fill="none" stroke="#e0f2fe" stroke-width="1.6"/><polygon points="74,22 88,32 74,42" fill="#7dd3fc"/><rect x="10" y="16" width="40" height="28" rx="4" fill="none" stroke="#38bdf8" stroke-width="1.5"/><path d="M18 30 l6 6 14-14" fill="none" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/><rect x="110" y="20" width="40" height="24" rx="4" fill="none" stroke="#64748b" stroke-width="1.4"/><path d="M120 32 h20" stroke="#64748b" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <div class="card-metric">−54%</div>
+              <div class="card-sub">CPA on Meta in 6 weeks</div>
+            </div>
+            <div class="card-footer-bar"><span>Paid social</span><span aria-hidden="true">↗</span></div>
+          </button>
+          <button type="button" class="case-frame slot-right" data-index="1" data-hash="#tool">
+            <div class="card-visual has-photo">
+              <img src="assets/img/tool/01-ai-caption-options.jpg" alt="">
+              <div class="card-copy"><div class="card-metric">~75%</div><div class="card-sub">faster publishing</div></div>
+            </div>
+            <div class="card-footer-bar"><span>Postroom</span><span aria-hidden="true">↗</span></div>
+          </button>
+          <button type="button" class="case-frame slot-hidden" data-index="2" data-hash="#hooklab">
+            <div class="card-visual has-photo">
+              <img src="assets/img/argo-video-poster.jpg" alt="">
+              <div class="card-copy"><div class="card-sub">Six pieces, one hook type each</div></div>
+            </div>
+            <div class="card-footer-bar"><span>Hook Lab</span><span aria-hidden="true">↗</span></div>
+          </button>
+          <button type="button" class="case-frame slot-hidden" data-index="3" data-hash="#ap-growth-case-study">
+            <div class="card-visual">
+              <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="8" y="36" width="18" height="24" rx="2" fill="#38bdf8" opacity=".4"/><rect x="34" y="24" width="18" height="36" rx="2" fill="#38bdf8" opacity=".7"/><rect x="60" y="10" width="18" height="50" rx="2" fill="#7dd3fc"/><path d="M12 42 L42 28 L70 16 L118 8 L150 4" fill="none" stroke="#e0f2fe" stroke-width="2"/><circle cx="150" cy="4" r="3" fill="#e0f2fe"/></svg>
+              <div class="card-metric">$471K</div>
+              <div class="card-sub">subscription revenue since launch</div>
+            </div>
+            <div class="card-footer-bar"><span>Growth case</span><span aria-hidden="true">↗</span></div>
+          </button>
+          <button type="button" class="case-frame slot-left" data-index="4" data-hash="#strategy">
+            <div class="card-visual">
+              <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="6" y="16" width="34" height="26" rx="4" fill="none" stroke="#7dd3fc" stroke-width="1.7"/><rect x="63" y="8" width="34" height="34" rx="4" fill="none" stroke="#e0f2fe" stroke-width="1.7"/><rect x="120" y="18" width="34" height="24" rx="4" fill="none" stroke="#7dd3fc" stroke-width="1.7"/><path d="M14 50h18M71 52h18M128 50h18" stroke="#38bdf8" stroke-width="2"/></svg>
+              <div class="card-metric">~1M</div>
+              <div class="card-sub">organic views in one month</div>
+            </div>
+            <div class="card-footer-bar"><span>Organic growth</span><span aria-hidden="true">↗</span></div>
+          </button>
+        </div>
+        <div class="pedestals-row" id="pedestalsRow">
+          <button type="button" class="pedestal-node active" data-index="0" aria-label="Show Paid social"></button>
+          <button type="button" class="pedestal-node" data-index="1" aria-label="Show Postroom"></button>
+          <button type="button" class="pedestal-node" data-index="2" aria-label="Show Hook Lab"></button>
+          <button type="button" class="pedestal-node" data-index="3" aria-label="Show Growth case"></button>
+          <button type="button" class="pedestal-node" data-index="4" aria-label="Show Organic growth"></button>
+        </div>
+      </div>
+    </div>
+
+    <div class="room-hud-bottom" id="roomHud" aria-hidden="true">
+      <div class="hud-stepper">
+        <button type="button" class="step-btn" id="prevBtn" aria-label="Previous work">←</button>
+        <span id="hudCounterText">1 / 5 · Paid social</span>
+        <button type="button" class="step-btn" id="nextBtn" aria-label="Next work">→</button>
+      </div>
+      <button type="button" class="room-play" id="roomPlay" aria-pressed="false" aria-label="Play the works presentation">Play</button>
+      <div class="hud-pills" id="hudPills" role="tablist" aria-label="Works">
+        <a class="pill-tab active" role="tab" href="#paid" data-index="0" aria-selected="true">Paid social</a>
+        <a class="pill-tab" role="tab" href="#tool" data-index="1">Postroom</a>
+        <a class="pill-tab" role="tab" href="#hooklab" data-index="2">Hook Lab</a>
+        <a class="pill-tab" role="tab" href="#ap-growth-case-study" data-index="3">Growth case</a>
+        <a class="pill-tab" role="tab" href="#strategy" data-index="4">Organic growth</a>
+      </div>
+    </div>
+  </div>
+  <div id="works" class="works-anchor" tabindex="-1"></div>
+</section>
+
+<section class="skill-scroll-track" id="skillTrack" aria-label="Find the word">
+  <div class="StickyViewport">
     <div class="physics-curtain-layer" id="physicsCurtain">
 <section class="skill-scene" id="skills" aria-label="Find the word">
   <div class="skill-scene-inner">
@@ -1661,97 +1773,9 @@ body.is-sheet .back-bar{display:flex}
 </section>
       <div class="physics-floor-line" id="physicsFloorLine"></div>
     </div>
-
-    <div class="recent-header-bar" id="recentHeaderBar">
-      <h2 class="wave-title" id="waveTitle" aria-label="Recent works"></h2>
-      <a href="#intro" class="room-backlink" id="roomBackLink">Back to introduction</a>
-    </div>
-
-    <div class="gallery-viewport" id="galleryViewport">
-      <div class="ceiling-rig-anchor" id="ceilingRig">
-        <div class="rig-vertical-rod"></div>
-        <div class="rig-lamp-head" id="rigLampHead"></div>
-      </div>
-      <div class="spotlight-beam-overlay" id="spotlightOverlay"></div>
-      <div class="room-stage-3d" id="roomStage3D">
-        <div class="wall-back"></div>
-        <div class="wall-side wall-left"></div>
-        <div class="wall-side wall-right"></div>
-        <div class="room-floor" id="roomFloor">
-          <button type="button" class="floor-projection-ui" id="floorOpen">
-            <div class="floor-projection-count" id="floorCount">2 / 5</div>
-            <div class="floor-projection-cta">[ View case ]</div>
-          </button>
-        </div>
-        <div class="center-tube-light"></div>
-        <div class="cards-mount" id="cardsContainer">
-          <button type="button" class="case-frame slot-left" data-index="0" data-hash="#paid">
-            <div class="card-visual">
-              <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="62" y="4" width="36" height="56" rx="5" fill="none" stroke="#e0f2fe" stroke-width="1.6"/><polygon points="74,22 88,32 74,42" fill="#7dd3fc"/><rect x="10" y="16" width="40" height="28" rx="4" fill="none" stroke="#38bdf8" stroke-width="1.5"/><path d="M18 30 l6 6 14-14" fill="none" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/><rect x="110" y="20" width="40" height="24" rx="4" fill="none" stroke="#64748b" stroke-width="1.4"/><path d="M120 32 h20" stroke="#64748b" stroke-width="1.6" stroke-linecap="round"/></svg>
-              <div class="card-metric">−54%</div>
-              <div class="card-sub">CPA on Meta in 6 weeks</div>
-            </div>
-            <div class="card-footer-bar"><span>Paid social</span><span aria-hidden="true">↗</span></div>
-          </button>
-          <button type="button" class="case-frame slot-center" data-index="1" data-hash="#tool">
-            <div class="card-visual has-photo">
-              <img src="assets/img/tool/01-ai-caption-options.jpg" alt="">
-              <div class="card-copy"><div class="card-metric">~75%</div><div class="card-sub">faster publishing</div></div>
-            </div>
-            <div class="card-footer-bar"><span>Postroom</span><span aria-hidden="true">↗</span></div>
-          </button>
-          <button type="button" class="case-frame slot-right" data-index="2" data-hash="#hooklab">
-            <div class="card-visual has-photo">
-              <img src="assets/img/argo-video-poster.jpg" alt="">
-              <div class="card-copy"><div class="card-sub">Six pieces, one hook type each</div></div>
-            </div>
-            <div class="card-footer-bar"><span>Hook Lab</span><span aria-hidden="true">↗</span></div>
-          </button>
-          <button type="button" class="case-frame slot-hidden" data-index="3" data-hash="#ap-growth-case-study">
-            <div class="card-visual">
-              <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="8" y="36" width="18" height="24" rx="2" fill="#38bdf8" opacity=".4"/><rect x="34" y="24" width="18" height="36" rx="2" fill="#38bdf8" opacity=".7"/><rect x="60" y="10" width="18" height="50" rx="2" fill="#7dd3fc"/><path d="M12 42 L42 28 L70 16 L118 8 L150 4" fill="none" stroke="#e0f2fe" stroke-width="2"/><circle cx="150" cy="4" r="3" fill="#e0f2fe"/></svg>
-              <div class="card-metric">$471K</div>
-              <div class="card-sub">subscription revenue since launch</div>
-            </div>
-            <div class="card-footer-bar"><span>Growth case</span><span aria-hidden="true">↗</span></div>
-          </button>
-          <button type="button" class="case-frame slot-hidden" data-index="4" data-hash="#strategy">
-            <div class="card-visual">
-              <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="6" y="16" width="34" height="26" rx="4" fill="none" stroke="#7dd3fc" stroke-width="1.7"/><rect x="63" y="8" width="34" height="34" rx="4" fill="none" stroke="#e0f2fe" stroke-width="1.7"/><rect x="120" y="18" width="34" height="24" rx="4" fill="none" stroke="#7dd3fc" stroke-width="1.7"/><path d="M14 50h18M71 52h18M128 50h18" stroke="#38bdf8" stroke-width="2"/></svg>
-              <div class="card-metric">~1M</div>
-              <div class="card-sub">organic views in one month</div>
-            </div>
-            <div class="card-footer-bar"><span>Organic growth</span><span aria-hidden="true">↗</span></div>
-          </button>
-        </div>
-        <div class="pedestals-row" id="pedestalsRow">
-          <button type="button" class="pedestal-node" data-index="0" aria-label="Show Paid social"></button>
-          <button type="button" class="pedestal-node active" data-index="1" aria-label="Show Postroom"></button>
-          <button type="button" class="pedestal-node" data-index="2" aria-label="Show Hook Lab"></button>
-          <button type="button" class="pedestal-node" data-index="3" aria-label="Show Growth case"></button>
-          <button type="button" class="pedestal-node" data-index="4" aria-label="Show Organic growth"></button>
-        </div>
-      </div>
-    </div>
-
-    <div class="room-hud-bottom" id="roomHud" aria-hidden="true">
-      <div class="hud-stepper">
-        <button type="button" class="step-btn" id="prevBtn" aria-label="Previous work">←</button>
-        <span id="hudCounterText">2 / 5 · Postroom</span>
-        <button type="button" class="step-btn" id="nextBtn" aria-label="Next work">→</button>
-      </div>
-      <button type="button" class="room-play" id="roomPlay" aria-pressed="false" aria-label="Play the works presentation">Play</button>
-      <div class="hud-pills" id="hudPills" role="tablist" aria-label="Works">
-        <a class="pill-tab" role="tab" href="#paid" data-index="0">Paid social</a>
-        <a class="pill-tab active" role="tab" href="#tool" data-index="1" aria-selected="true">Postroom</a>
-        <a class="pill-tab" role="tab" href="#hooklab" data-index="2">Hook Lab</a>
-        <a class="pill-tab" role="tab" href="#ap-growth-case-study" data-index="3">Growth case</a>
-        <a class="pill-tab" role="tab" href="#strategy" data-index="4">Organic growth</a>
-      </div>
-    </div>
   </div>
-  <div id="works" class="works-anchor" tabindex="-1"></div>
 </section>
+
 
 <script>
 (function(){
@@ -1942,7 +1966,7 @@ body.is-sheet .back-bar{display:flex}
     return list;
   }
   function trackProgress(){
-    var track=document.getElementById('scrollTrack');
+    var track=document.getElementById('skillTrack')||document.getElementById('scrollTrack');
     if(!track)return 0;
     var total=track.offsetHeight-window.innerHeight;
     return Math.max(0,Math.min(1,-track.getBoundingClientRect().top/Math.max(1,total)));
@@ -2278,7 +2302,8 @@ body.is-sheet .back-bar{display:flex}
     return {cols:cols, rows:rows, cell:cell, gapX:gapX, gapY:gapY, list:list};
   }
   function pinnedCellOrigin(m){
-    var sticky=document.querySelector('.StickyViewport');
+    var sticky=document.getElementById('skillTrack');
+    sticky=sticky?sticky.querySelector('.StickyViewport'):document.querySelector('.StickyViewport');
     var x=0, y=0, n=gridEl;
     while(n && n!==sticky && n!==document.body){
       x+=n.offsetLeft;
@@ -2379,7 +2404,6 @@ body.is-sheet .back-bar{display:flex}
   var ROOM_DWELL=5600;
   function roomShowing(){
     if(reduce.matches||document.hidden||document.body.classList.contains('is-sheet'))return false;
-    if(pNow<0.8)return false;
     if(parseFloat(roomStage3D.style.opacity||'0')<0.98)return false;
     var rect=scrollTrack.getBoundingClientRect();
     return rect.top<=8 && rect.bottom>=window.innerHeight-8;
@@ -2481,10 +2505,22 @@ body.is-sheet .back-bar{display:flex}
   document.addEventListener('visibilitychange', function(){
     if(document.hidden){clearTimeout(roomAuto.timer);roomAuto.timer=0;roomAuto.wasReady=false;syncPlayButton();}
   });
-  selectCase(1);
+  function caseIndexFromHash(){
+    var raw=(location.hash||'').replace(/^#/,'').split(/[?&]/)[0];
+    var map={paid:0,tool:1,'content-ops-tool':1,hooklab:2,'ap-growth-case-study':3,growth:3,strategy:4};
+    return Object.prototype.hasOwnProperty.call(map,raw)?map[raw]:-1;
+  }
+  selectCase(0);
+  var hashCase=caseIndexFromHash();
+  if(hashCase>=0)selectCase(hashCase);
+  window.addEventListener('hashchange',function(){
+    var idx=caseIndexFromHash();
+    if(idx>=0)selectCase(idx);
+  });
 
   var mouseState={x:window.innerWidth/2, y:window.innerHeight/2, lerpX:window.innerWidth/2, lerpY:window.innerHeight/2};
-  var physicsActive=false, pNow=0, curtainHold=false;
+  var physicsActive=false, pNow=0;
+  var skillTrack=document.getElementById('skillTrack');
   window.addEventListener('pointermove', function(e){
     roomAuto.lastPointer=performance.now();
     mouseState.x=e.clientX;
@@ -2507,14 +2543,14 @@ body.is-sheet .back-bar{display:flex}
   if(gallery){
     gallery.addEventListener('pointerdown', function(e){drag={x:e.clientX,y:e.clientY};});
     gallery.addEventListener('pointerup', function(e){
-      if(!drag||pNow<0.55){drag=null;return;}
+      if(!drag||!roomShowing()){drag=null;return;}
       var dx=e.clientX-drag.x, dy=e.clientY-drag.y;
       if(Math.abs(dx)>56 && Math.abs(dx)>Math.abs(dy))manualSelect(activeCaseIndex+(dx<0?1:-1));
       drag=null;
     });
   }
   window.addEventListener('keydown', function(e){
-    if(pNow<0.55)return;
+    if(!roomShowing())return;
     if(e.target.closest && e.target.closest('#skill-grid, .skill-legend, .top'))return;
     if(e.key==='ArrowLeft'){e.preventDefault();manualSelect(activeCaseIndex-1);}
     if(e.key==='ArrowRight'){e.preventDefault();manualSelect(activeCaseIndex+1);}
@@ -2596,7 +2632,12 @@ body.is-sheet .back-bar{display:flex}
     var totalScrollable=scrollTrack.offsetHeight-window.innerHeight;
     var p=clamp(-rect.top/Math.max(1, totalScrollable), 0, 1);
     pNow=p;
-    if(rect.bottom<-80 || rect.top>window.innerHeight+80){
+    var skillRect=skillTrack?skillTrack.getBoundingClientRect():null;
+    var skillTotal=skillTrack?skillTrack.offsetHeight-window.innerHeight:1;
+    var skillP=skillRect?clamp(-skillRect.top/Math.max(1, skillTotal), 0, 1):0;
+    var roomNear=rect.bottom>-80 && rect.top<window.innerHeight+80;
+    var skillNear=skillRect && skillRect.bottom>-80 && skillRect.top<window.innerHeight+80;
+    if(!roomNear && !skillNear){
       physicsActive=false;
       requestAnimationFrame(renderLoop);
       return;
@@ -2604,73 +2645,56 @@ body.is-sheet .back-bar{display:flex}
     var vh=window.innerHeight, vw=window.innerWidth;
     var motion=!reduce.matches && !!engine;
 
-    if(motion && !simCurrent())buildPhysicsWorld();
-    if(motion && p<=0.05){
-      resetSimTiles();
-      if(skillHead)skillHead.style.opacity='1';
-      physicsFloorLine.style.opacity='0';
-    }else if(motion && p>0.05 && p<0.68 && simTiles.length){
-      physicsActive=true;
-      var releaseProgress=clamp((p-0.05)/0.11, 0, 1);
-      var catchup=releaseProgress>=1;
-      var steps=0;
-      while(steps<=simMetrics.rows){
-        var didRelease=releaseOneBand(releaseProgress);
-        placeFloor(p, vw, vh);
-        var sub=didRelease&&catchup?10:1;
-        for(var s=0;s<sub;s++)Engine.update(engine, 1000/60);
-        steps++;
-        if(!didRelease)break;
+    if(skillNear){
+      if(motion && !simCurrent())buildPhysicsWorld();
+      if(motion && skillP<=0.05){
+        resetSimTiles();
+        if(skillHead)skillHead.style.opacity='1';
+        physicsFloorLine.style.opacity='0';
+      }else if(motion && skillP>0.05 && skillP<0.72 && simTiles.length){
+        physicsActive=true;
+        var releaseProgress=clamp((skillP-0.05)/0.11, 0, 1);
+        var catchup=releaseProgress>=1;
+        var steps=0;
+        while(steps<=simMetrics.rows){
+          var didRelease=releaseOneBand(releaseProgress);
+          placeFloor(skillP, vw, vh);
+          var sub=didRelease&&catchup?10:1;
+          for(var s=0;s<sub;s++)Engine.update(engine, 1000/60);
+          steps++;
+          if(!didRelease)break;
+        }
+        if(skillHead)skillHead.style.opacity=String(clamp(1-(skillP-0.08)*5, 0, 1));
+        paintSimTiles();
+      }else if(skillP>=0.72){
+        physicsActive=false;
+        physicsFloorLine.style.opacity='0';
       }
-      if(skillHead)skillHead.style.opacity=String(clamp(1-(p-0.08)*5, 0, 1));
-      paintSimTiles();
-    }else if(!motion && p<0.5){
-      physicsActive=false;
-      if(skillHead)skillHead.style.opacity='1';
-      physicsFloorLine.style.opacity='0';
-    }else if(p>=0.68){
-      physicsActive=false;
-      physicsFloorLine.style.opacity='0';
+      if(physicsCurtain){
+        physicsCurtain.style.opacity='1';
+        var curtainPlay=skillP<0.12;
+        physicsCurtain.style.pointerEvents=curtainPlay?'auto':'none';
+        if(curtainPlay)physicsCurtain.removeAttribute('inert');
+        else physicsCurtain.setAttribute('inert','');
+        physicsCurtain.setAttribute('aria-hidden', curtainPlay?'false':'true');
+      }
     }
 
-    if(p>0.62)curtainHold=true;
-    if(p<=0.05)curtainHold=false;
-    var curtainFade=!motion ? clamp((p-0.18)*4, 0, 1) : (curtainHold ? 1 : clamp((p-0.40)/0.22, 0, 1));
-    physicsCurtain.style.opacity=String(1-curtainFade);
-    physicsCurtain.style.pointerEvents=curtainFade>0.9?'none':'auto';
-
-    var curtainGone=parseFloat(physicsCurtain.style.opacity||'1')<0.05;
-    if(curtainGone)physicsCurtain.setAttribute('inert','');
-    else physicsCurtain.removeAttribute('inert');
-    physicsCurtain.setAttribute('aria-hidden', curtainGone?'true':'false');
-
-    var titleReveal=clamp((p-0.28)/0.36, 0, 1);
-    var waveAmp=motion?(1-titleReveal)*48:0;
-    var dockProgress=clamp((p-0.52)/0.22, 0, 1);
-    var startX=(vw*0.5-220)*(1-dockProgress);
-    var startY=(vh*0.34)*(1-dockProgress);
-    waveTitleEl.style.transform='translate3d('+startX.toFixed(1)+'px, '+startY.toFixed(1)+'px, 0)';
-    waveCharEls.forEach(function(span, i){
-      var waveOffset=Math.sin(p*18+i*0.55)*waveAmp;
-      var stretchY=1+Math.abs(Math.cos(p*14+i*0.4))*(motion?(1-titleReveal)*0.65:0);
-      span.style.opacity=String(clamp((p-0.26)*6, 0, 1));
-      span.style.transform='translate3d(0, '+waveOffset.toFixed(1)+'px, 0) scaleY('+stretchY.toFixed(2)+')';
+    if(roomNear){
+    waveTitleEl.style.transform='translate3d(0px, 0px, 0)';
+    waveCharEls.forEach(function(span){
+      span.style.opacity='1';
+      span.style.transform='none';
     });
-    var linkOn=dockProgress>0.8;
-    backLink.style.opacity=linkOn?'1':'0';
-    backLink.style.pointerEvents=linkOn?'auto':'none';
-
-    var roomProgress=clamp((p-0.42)/0.48, 0, 1);
-    var camTiltX=motion?(1-roomProgress)*24:0;
-    var camY=motion?(1-roomProgress)*240:0;
-    var camScale=motion?(0.84+roomProgress*0.16):1;
-    roomStage3D.style.opacity=String(clamp((p-0.38)*3.2, 0, 1));
-    roomStage3D.style.transform='translate3d(0, '+camY.toFixed(1)+'px, 0) rotateX('+camTiltX.toFixed(2)+'deg) scale('+camScale.toFixed(3)+')';
-    ceilingRig.style.transform='translate3d(-50%, '+((motion?(1-roomProgress):-0)*-190).toFixed(1)+'px, 0)';
-    var hudOn=p>0.65;
-    roomHud.style.opacity=String(clamp((p-0.65)*4, 0, 1));
-    roomHud.style.pointerEvents=hudOn?'auto':'none';
-    roomHud.setAttribute('aria-hidden', hudOn?'false':'true');
+    backLink.style.opacity='1';
+    backLink.style.pointerEvents='auto';
+    roomStage3D.style.opacity='1';
+    roomStage3D.style.transform='none';
+    ceilingRig.style.transform='translate3d(-50%, 0px, 0)';
+    roomHud.style.opacity='1';
+    roomHud.style.pointerEvents='auto';
+    roomHud.setAttribute('aria-hidden','false');
+    }
 
     var roomReady=roomShowing();
     if(roomReady && !roomAuto.wasReady && !roomAuto.userHold && !roomAuto.paused && !roomAuto.hover)scheduleRoom();
