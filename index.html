@@ -1028,7 +1028,9 @@ body.hero-armed.hero-stage-content .hero .hero-lower-stack{opacity:1;transform:t
 /* Skills word-search fills the next viewport. No card, no second portrait. */
 .skill-scene{--nav-safe:72px;height:100vh;height:100dvh;max-height:100dvh;display:flex;box-sizing:border-box;background:#0b0e14;padding:calc(var(--nav-safe) + 2.5vh) 4vw 2.5vh;overflow:hidden}
 .skill-scene-inner{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;width:100%;height:100%}
-.word-grid{flex:1 1 0px;display:grid;grid-template-columns:repeat(var(--cols,15),var(--cell,56px));grid-auto-rows:var(--cell,56px);column-gap:var(--gap-x,22px);row-gap:var(--gap-y,22px);justify-content:center;align-content:center;width:100%;min-height:0;touch-action:pan-y;user-select:none;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;overflow:visible}
+.word-grid{position:relative;flex:1 1 0px;display:grid;grid-template-columns:repeat(var(--cols,15),var(--cell,56px));grid-auto-rows:var(--cell,56px);column-gap:var(--gap-x,22px);row-gap:var(--gap-y,22px);justify-content:center;align-content:center;width:100%;min-height:0;touch-action:pan-y;user-select:none;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;overflow:visible}
+.skill-auto-cursor{position:fixed;left:0;top:0;width:18px;height:18px;margin:-9px 0 0 -9px;border:2px solid #e0f2fe;border-radius:50%;background:rgba(56,189,248,.28);box-shadow:0 0 0 6px rgba(56,189,248,.16);pointer-events:none;z-index:80;opacity:0;visibility:hidden;transition:transform .2s linear,opacity .15s linear}
+.skill-auto-cursor.is-on{opacity:1;visibility:visible}
 .word-grid .cell{width:var(--cell,56px);height:var(--cell,56px);display:grid;place-items:center;color:rgba(148,163,184,.45);font-size:calc(var(--cell,56px) * .5);font-weight:650;line-height:1;letter-spacing:0;border-radius:calc(var(--cell,56px) * .18)}
 .word-grid .cell.on,.word-grid .cell.tracing{background:#38bdf8;color:#0b0e14;position:relative;z-index:1;transform:rotate(var(--tilt,1deg)) skewX(var(--skew,.3deg))}
 .word-grid .cell.tracing{z-index:2;background:#7dd3fc}
@@ -1064,6 +1066,7 @@ body.hero-armed.hero-stage-content .hero .hero-lower-stack{opacity:1;transform:t
 @media (prefers-reduced-motion:reduce){
   .word-grid.is-seq .cell.on.pop{animation:none!important}
   .word-grid.is-departing .cell{transform:none;pointer-events:auto}
+  .skill-auto-cursor{display:none!important}
 }
 
 .sheet{display:none}
@@ -1822,13 +1825,17 @@ body.is-sheet .back-bar{display:flex}
     var g=m.kind==='wide'?placeWide():placePhone();
     if(!g)return;
     built=key;
-    var keepDemo=demoDone;
-    var restartDemo=demoStarted&&!demoDone&&!demoYielded;
-    if(restartDemo){stopDemo();demoStarted=false;}
+    var keptSolved={};
+    for(var sk in solved) if(solved[sk]) keptSolved[sk]=true;
+    var keptSaid={};
+    for(var saidKey in said) keptSaid[saidKey]=said[saidKey];
+    var resumeDemo=demoStarted&&!demoDone&&!demoYielded;
+    stopDemo();
+    hideAutoCursor();
     found={};
-    solved={};
+    solved=keptSolved;
     path=[];
-    said={};
+    said=keptSaid;
     buttons.forEach(function(b){b.classList.add('is-secret');});
     gridEl.innerHTML='';
     var letters='ABCDEFGHJKLMNPQRSTUVWXYZ';
@@ -1858,50 +1865,108 @@ body.is-sheet .back-bar{display:flex}
     cells=[].slice.call(gridEl.children);
     if(reduce.matches)gridEl.classList.add('is-static');
     else gridEl.classList.remove('is-static');
-    if(keepDemo){solved.HIGGSFIELD=true;said.HIGGSFIELD=true;paint();}
+    ensureAutoCursor();
+    paint();
     placeCursor(0);
-    maybeDemo();
+    if(resumeDemo && !demoBlocked()) demoTimer=setTimeout(runSequence, 360);
+    else maybeDemo();
   }
-  var demoTimer=0,demoStarted=false,demoDone=false,demoYielded=false;
+  var demoTimer=0,demoStarted=false,demoDone=false,demoYielded=false,autoCursor=null;
   function stopDemo(){if(demoTimer){clearTimeout(demoTimer);demoTimer=0;}}
-  function higgsCells(){
-    return cells.filter(function(c){return c.dataset.word==='HIGGSFIELD';}).sort(function(a,b){return (+a.dataset.n)-(+b.dataset.n);});
+  function ensureAutoCursor(){
+    if(autoCursor&&autoCursor.isConnected)return autoCursor;
+    autoCursor=document.createElement('span');
+    autoCursor.className='skill-auto-cursor';
+    autoCursor.setAttribute('aria-hidden','true');
+    document.body.appendChild(autoCursor);
+    return autoCursor;
   }
-  function yieldDemo(){
-    if(demoDone||demoYielded||!demoStarted)return;
-    demoYielded=true;
-    stopDemo();
-    if(!solved.HIGGSFIELD){path=[];paint();}
+  function hideAutoCursor(){if(autoCursor)autoCursor.classList.remove('is-on');}
+  function placeAutoCursor(cell){
+    if(!cell||!gridEl.contains(cell))return;
+    var el=ensureAutoCursor();
+    var r=cell.getBoundingClientRect();
+    el.style.transform='translate3d('+(r.left+r.width/2)+'px,'+(r.top+r.height/2)+'px,0)';
+    el.classList.add('is-on');
+  }
+  function wordPaths(){
+    var map={};
+    cells.forEach(function(c){
+      var w=c.dataset.word;
+      if(!w)return;
+      (map[w]=map[w]||[]).push(c);
+    });
+    var list=[];
+    Object.keys(map).forEach(function(w){
+      var seq=map[w].sort(function(a,b){return (+a.dataset.n)-(+b.dataset.n);});
+      if(seq.length!==w.length)return;
+      if(!seq.every(function(c,i){return +c.dataset.n===i;}))return;
+      list.push({word:w,cells:seq});
+    });
+    list.sort(function(a,b){return cells.indexOf(a.cells[0])-cells.indexOf(b.cells[0]);});
+    return list;
+  }
+  function trackProgress(){
+    var track=document.getElementById('scrollTrack');
+    if(!track)return 0;
+    var total=track.offsetHeight-window.innerHeight;
+    return Math.max(0,Math.min(1,-track.getBoundingClientRect().top/Math.max(1,total)));
   }
   function gridInView(){
     if(document.getElementById('ap-load'))return false;
     var r=gridEl.getBoundingClientRect();
     if(r.height<40||r.width<40)return false;
     var vis=Math.min(r.bottom,innerHeight)-Math.max(r.top,0);
-    return vis>=Math.min(r.height,innerHeight)*0.45;
+    return vis>=Math.min(r.height,innerHeight)*0.55;
   }
-  function stepDemo(i){
-    if(demoYielded||demoDone||dragging||reduce.matches)return;
-    var list=higgsCells();
-    if(list.length!=='HIGGSFIELD'.length){demoStarted=false;return;}
-    if(i>=list.length){
-      solved.HIGGSFIELD=true;
-      path=[];
-      paint();
-      if(skillLive&&!said.HIGGSFIELD){said.HIGGSFIELD=true;skillLive.textContent='Found '+nice('HIGGSFIELD');}
-      demoDone=true;
+  function demoBlocked(){
+    return reduce.matches||demoYielded||demoDone||dragging||document.hidden||trackProgress()>=0.14||!gridInView();
+  }
+  function yieldDemo(){
+    if(demoDone)return;
+    demoYielded=true;
+    stopDemo();
+    path=[];
+    hideAutoCursor();
+    paint();
+  }
+  function markFound(word,sample){
+    solved[word]=true;
+    path=[];
+    paint();
+    var skill=sample&&sample.dataset.skill||'';
+    if(skill&&groupDone(skill))buttons.forEach(function(b){if(b.dataset.skill===skill)b.classList.remove('is-secret');});
+    if(skillLive&&!said[word]){said[word]=true;skillLive.textContent='Found '+nice(word);}
+  }
+  function traceWord(entry,letter,done){
+    if(demoBlocked()){yieldDemo();return;}
+    if(letter>=entry.cells.length){
+      markFound(entry.word,entry.cells[0]);
+      hideAutoCursor();
+      demoTimer=setTimeout(done,460);
       return;
     }
-    path=list.slice(0,i+1);
+    var cell=entry.cells[letter];
+    if(!cell||!gridEl.contains(cell)){yieldDemo();return;}
+    placeAutoCursor(cell);
+    path=entry.cells.slice(0,letter+1);
     paint();
-    demoTimer=setTimeout(function(){stepDemo(i+1);},320);
+    demoTimer=setTimeout(function(){traceWord(entry,letter+1,done);},260);
+  }
+  function runSequence(){
+    if(demoBlocked()){yieldDemo();return;}
+    var paths=wordPaths();
+    var next=null;
+    for(var i=0;i<paths.length;i++) if(!solved[paths[i].word]){next=paths[i];break;}
+    if(!next){demoDone=true;path=[];hideAutoCursor();paint();return;}
+    traceWord(next,0,runSequence);
   }
   function maybeDemo(){
-    if(reduce.matches||demoStarted||demoDone||demoYielded||dragging)return;
-    if(!gridInView())return;
-    if(higgsCells().length!=='HIGGSFIELD'.length)return;
+    if(reduce.matches||demoStarted||demoDone||demoYielded||dragging||document.hidden)return;
+    if(!gridInView()||trackProgress()>=0.14)return;
+    if(!wordPaths().length)return;
     demoStarted=true;
-    demoTimer=setTimeout(function(){stepDemo(0);},600);
+    demoTimer=setTimeout(runSequence,720);
   }
   var path=[],solved={},dragging=false,gesture=null;
   function colsNow(){return parseInt(getComputedStyle(gridEl).getPropertyValue('--cols'),10)||1;}
@@ -2039,6 +2104,7 @@ body.is-sheet .back-bar{display:flex}
   }
   gridEl.addEventListener('pointerdown',function(e){
     if(e.button!=null&&e.button!==0)return;
+    yieldDemo();
     var cell=cellFromPoint(e.clientX,e.clientY);
     if(!cell)return;
     if(e.pointerType==='touch'){
@@ -2073,7 +2139,7 @@ body.is-sheet .back-bar{display:flex}
   gridEl.addEventListener('pointerup',endDrag);
   gridEl.addEventListener('pointercancel',endDrag);
   gridEl.addEventListener('keydown',function(e){
-    if(e.key==='Escape'||e.key==='Backspace'||e.key===' '||e.key==='Enter'||e.key.indexOf('Arrow')===0)yieldDemo();
+    yieldDemo();
     if(e.key==='Escape'){e.preventDefault();path=[];paint();return;}
     if(e.key==='Backspace'){e.preventDefault();path.pop();paint();return;}
     if(e.key===' '||e.key==='Enter'){
@@ -2102,7 +2168,19 @@ body.is-sheet .back-bar{display:flex}
     var demoWatch=new IntersectionObserver(function(entries){if(entries[0].isIntersecting)maybeDemo();},{threshold:[0.45,0.7]});
     demoWatch.observe(gridEl);
   }
-  window.addEventListener('scroll',maybeDemo,{passive:true});
+  window.addEventListener('scroll',function(){
+    if(demoStarted&&!demoDone&&!demoYielded){
+      if(trackProgress()>=0.14||!gridInView())yieldDemo();
+      else if(!demoTimer&&!demoBlocked())demoTimer=setTimeout(runSequence,400);
+    }else maybeDemo();
+  },{passive:true});
+  document.addEventListener('visibilitychange',function(){
+    if(document.hidden){stopDemo();hideAutoCursor();path=[];paint();}
+    else if(demoStarted&&!demoDone&&!demoYielded){
+      if(trackProgress()>=0.14||!gridInView())yieldDemo();
+      else demoTimer=setTimeout(runSequence,400);
+    }
+  });
   var demoMut=new MutationObserver(function(){maybeDemo();});
   demoMut.observe(document.body,{childList:true});
 })();
