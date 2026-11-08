@@ -1003,33 +1003,17 @@ body.is-sheet .back-bar{display:flex}
   .obj{animation:none}
   .room{transform:none!important}
 }
-.ap-load{position:fixed;inset:0;z-index:2000;background:#0b0e14;color:#f8fafc}
-.ap-seg,.ap-pct,.ap-skip{opacity:0;animation:ap-in .6s ease forwards}
+.ap-load{position:fixed;inset:0;z-index:2000;background:#0b0e14;color:#f8fafc;overflow:hidden}
+.ap-gl{position:absolute;inset:0;opacity:0;animation:ap-in .55s ease forwards}
+.ap-gl canvas{display:block;width:100%;height:100%}
+.ap-fallback{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);margin:0;text-align:center;font-family:var(--sans);font-weight:700;letter-spacing:-.03em;text-transform:uppercase;color:#f8fafc;font-size:clamp(18px,3vw,28px);line-height:1.35}
+.ap-fallback span{display:block;margin-top:10px;color:#7dd3fc;font-size:.42em;font-weight:650;letter-spacing:.18em}
+.ap-pct{position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);margin:0;font-family:var(--sans);font-weight:700;font-size:clamp(18px,2vw,26px);letter-spacing:-.04em;color:#f8fafc;opacity:0;animation:ap-in .55s ease forwards}
 .ap-load.is-leave{pointer-events:none}
-.ap-load.is-leave .ap-seg,.ap-load.is-leave .ap-pct,.ap-load.is-leave .ap-skip{animation:none;opacity:0;transition:opacity .45s ease}
-.ap-scene{position:absolute;inset:0;perspective:2200px;perspective-origin:50% 46%}
-.ap-tilt{position:absolute;left:50%;top:44%;width:0;height:0;transform-style:preserve-3d;transform:rotateX(-18deg)}
-.ap-spin{position:absolute;left:0;top:0;width:0;height:0;transform-style:preserve-3d;animation:ap-turn 22s linear infinite}
-.ap-track{position:absolute;left:0;top:0;transform-style:preserve-3d}
-.ap-main{transform:translate3d(0,-6px,0)}
-.ap-sub{transform:translate3d(0,58px,0)}
-.ap-seg{position:absolute;left:0;top:0;white-space:nowrap;font-family:var(--sans);font-weight:700;font-stretch:78%;text-transform:uppercase;backface-visibility:visible;color:#f8fafc;line-height:1}
-.ap-main .ap-seg{font-size:var(--ap-main,40px);letter-spacing:-.035em}
-.ap-sub .ap-seg{font-size:var(--ap-sub,12px);font-weight:650;letter-spacing:.22em;color:#7dd3fc}
-.ap-pct{position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);margin:0;font-family:var(--sans);font-weight:700;font-size:clamp(18px,2vw,26px);letter-spacing:-.04em;color:#f8fafc}
-.ap-skip{position:absolute;left:50%;bottom:3.5vh;transform:translateX(-50%);font-family:var(--sans);font-size:12px;font-weight:650;letter-spacing:.16em;text-transform:uppercase;color:#7dd3fc;background:transparent;border:0;padding:8px 12px;cursor:pointer}
-.ap-skip:focus-visible{outline:2px solid #e0f2fe;outline-offset:3px}
-@keyframes ap-turn{to{transform:rotateY(-360deg)}}
+.ap-load.is-leave .ap-gl,.ap-load.is-leave .ap-pct,.ap-load.is-leave .ap-fallback{opacity:0 !important;transition:opacity .45s ease}
 @keyframes ap-in{to{opacity:1}}
-@media (max-width:800px){
-  .ap-main{transform:translate3d(0,-2px,0)}
-  .ap-sub{transform:translate3d(0,26px,0)}
-  .ap-scene{perspective:900px}
-  .ap-tilt{top:42%}
-}
 @media (prefers-reduced-motion:reduce){
-  .ap-spin{animation:none}
-  .ap-seg,.ap-pct,.ap-skip{animation:none;opacity:1}
+  .ap-gl,.ap-pct{animation:none;opacity:1}
 }
 </style>
 <script>
@@ -1043,17 +1027,11 @@ body.is-sheet .back-bar{display:flex}
 </head>
 <body class="screen-intro">
 <div class="ap-load" id="ap-load" role="status" aria-live="polite" aria-busy="true">
-  <div class="ap-scene" aria-hidden="true">
-    <div class="ap-tilt">
-      <div class="ap-spin" id="ap-spin">
-        <div class="ap-track ap-main" data-phrase="CREATIVE STRATEGY  ·  PAID SOCIAL  ·  AI PRODUCTION  ·  "></div>
-        <div class="ap-track ap-sub" data-phrase="META ADS  ·  TIKTOK ADS  ·  CREATIVE TESTING  ·  HOOKS  ·  "></div>
-      </div>
-    </div>
-  </div>
+  <div class="ap-gl" id="ap-gl" aria-hidden="true"></div>
+  <p class="ap-fallback" id="ap-fallback" hidden>Creative strategy · Paid social · AI production<span>Meta ads · TikTok ads · Creative testing · Hooks</span></p>
   <p class="ap-pct" id="ap-pct">0%</p>
-  <button type="button" class="ap-skip">Skip</button>
 </div>
+<script src="assets/vendor/three.r128.min.js"></script>
 <script>
 (function(){
   var root=document.getElementById('ap-load');
@@ -1061,100 +1039,146 @@ body.is-sheet .back-bar{display:flex}
   var pctEl=document.getElementById('ap-pct');
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
   var urls=['assets/img/portrait.jpg','assets/img/outfit-transition.jpg','assets/img/tool/01-ai-caption-options.jpg','assets/img/argo-video-poster.jpg'];
-  var total=urls.length+1, got=0, done=false, born=performance.now();
+  var total=urls.length+1, got=0, leaving=false, born=performance.now();
+  var raf=0, renderer, geometry, texture, clock, spinGroup, tiltGroup, rootGroup;
+  var headline='CREATIVE STRATEGY   ·   PAID SOCIAL   ·   AI PRODUCTION';
+  var subItems=['META ADS','TIKTOK ADS','CREATIVE TESTING','HOOKS'];
   function setPct(){
     var n=Math.max(0,Math.min(100,Math.round(got/total*100)));
     if(pctEl)pctEl.textContent=n+'%';
   }
-  function widthOf(track,text){
-    var probe=document.createElement('span');
-    probe.className='ap-seg';
-    probe.textContent=text;
-    probe.style.visibility='hidden';
-    track.appendChild(probe);
-    var w=Math.max(12,Math.ceil(probe.getBoundingClientRect().width));
-    probe.remove();
-    return w;
-  }
-  function tokens(phrase){
-    var raw=phrase.replace(/\s+/g,' ').trim().split(' ').filter(Boolean);
-    var out=[];
-    raw.forEach(function(w){
-      if((w==='·'||w==='•')&&out.length)out[out.length-1]+='  ·';
-      else out.push(w);
-    });
-    return out;
-  }
-  function lay(track,radius){
-    var bits=tokens(track.getAttribute('data-phrase'));
-    var widths=bits.map(function(bit){return widthOf(track,bit);});
-    var sumW=widths.reduce(function(a,b){return a+b;},0);
-    var circ=2*Math.PI*radius;
-    var minGap=12;
-    var repeats=Math.min(2,Math.max(1,Math.floor(circ/Math.max(1,sumW+bits.length*minGap))));
-    var gap=(circ/repeats-sumW)/bits.length;
-    if(gap<6&&repeats>1){repeats=1;gap=(circ-sumW)/bits.length;}
-    track.innerHTML='';
-    var ang=0;
-    for(var r=0;r<repeats;r++){
-      for(var i=0;i<bits.length;i++){
-        var wordDeg=(widths[i]/radius)*180/Math.PI;
-        var seg=document.createElement('span');
-        seg.className='ap-seg';
-        seg.textContent=bits[i];
-        seg.style.transform='rotateY('+(ang+wordDeg/2).toFixed(3)+'deg) translateZ('+radius.toFixed(1)+'px) translate(-50%,-50%)';
-        track.appendChild(seg);
-        ang+=((widths[i]+gap)/radius)*180/Math.PI;
-      }
+  function tracked(ctx,text,x,y,gap){
+    var cx=x;
+    for(var i=0;i<text.length;i++){
+      ctx.fillText(text[i],cx,y);
+      cx+=ctx.measureText(text[i]).width+gap;
     }
   }
-  function build(){
-    var main=root.querySelector('.ap-main');
-    var sub=root.querySelector('.ap-sub');
-    var wide=window.innerWidth||800;
-    var phone=wide<800;
-    var size=phone?30:50;
-    root.style.setProperty('--ap-main',size+'px');
-    var bits=tokens(main.getAttribute('data-phrase'));
-    var wordCap=phone?wide*0.46:wide*0.2;
-    for(var guard=0;guard<10;guard++){
-      var max=0;
-      bits.forEach(function(bit){max=Math.max(max,widthOf(main,bit));});
-      if(max<=wordCap)break;
-      size*=0.9;
-      root.style.setProperty('--ap-main',size+'px');
+  function paint(ctx,W,H){
+    ctx.clearRect(0,0,W,H);
+    ctx.textBaseline='alphabetic';
+    ctx.fillStyle='#f8fafc';
+    ctx.font='700 430px "Instrument Sans",sans-serif';
+    var line=headline+'    ';
+    var scaleX=W/Math.max(ctx.measureText(line).width,100);
+    ctx.save();
+    ctx.scale(scaleX,1.05);
+    ctx.fillText(line,12/scaleX,400);
+    ctx.restore();
+    ctx.fillStyle='#7dd3fc';
+    ctx.font='650 72px "Instrument Sans",sans-serif';
+    var slot=W/subItems.length;
+    for(var s=0;s<subItems.length;s++){
+      ctx.save();
+      ctx.translate(s*slot+slot*0.16,930);
+      ctx.scale(0.92,1);
+      tracked(ctx,subItems[s],0,0,7);
+      ctx.restore();
     }
-    var sumW=bits.reduce(function(a,bit){return a+widthOf(main,bit);},0);
-    var gap=phone?12:26;
-    var radius=(sumW+bits.length*gap)/Math.PI;
-    var radCap=phone?wide*0.42:Math.min(560,wide*0.44);
-    radius=Math.max(phone?140:320,Math.min(radCap,radius));
-    root.style.setProperty('--ap-sub',Math.max(phone?9:10,Math.min(13,size*0.28))+'px');
-    lay(main,radius);
-    lay(sub,radius);
   }
+  function fitScale(){
+    var w=window.innerWidth||800;
+    if(w<500)return 0.6;
+    if(w<900)return 0.7;
+    return 0.82;
+  }
+  function boot(){
+    var host=document.getElementById('ap-gl');
+    if(!host||typeof THREE==='undefined')throw new Error('no three');
+    var canvas=document.createElement('canvas');
+    canvas.width=window.innerWidth<700?2048:4096;
+    canvas.height=window.innerWidth<700?512:1024;
+    var ctx=canvas.getContext('2d');
+    paint(ctx,canvas.width,canvas.height);
+    var scene=new THREE.Scene();
+    var camera=new THREE.PerspectiveCamera(36,window.innerWidth/Math.max(window.innerHeight,1),0.1,100);
+    camera.position.set(0,0,12.6);
+    renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});
+    if(!renderer.getContext())throw new Error('no webgl');
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+    renderer.setSize(window.innerWidth,window.innerHeight);
+    renderer.setClearColor(0x0b0e14,0);
+    host.appendChild(renderer.domElement);
+    rootGroup=new THREE.Group();
+    tiltGroup=new THREE.Group();
+    spinGroup=new THREE.Group();
+    rootGroup.add(tiltGroup);
+    tiltGroup.add(spinGroup);
+    scene.add(rootGroup);
+    texture=new THREE.CanvasTexture(canvas);
+    texture.wrapS=THREE.RepeatWrapping;
+    texture.anisotropy=renderer.capabilities.getMaxAnisotropy();
+    geometry=new THREE.CylinderGeometry(2.05,2.05,1.18,160,1,true);
+    var back=new THREE.MeshBasicMaterial({map:texture,side:THREE.BackSide,transparent:true,depthWrite:false,opacity:0.72});
+    var front=new THREE.MeshBasicMaterial({map:texture,side:THREE.FrontSide,transparent:true,depthWrite:false,opacity:1});
+    var backMesh=new THREE.Mesh(geometry,back);
+    var frontMesh=new THREE.Mesh(geometry,front);
+    backMesh.renderOrder=1;
+    frontMesh.renderOrder=2;
+    spinGroup.add(backMesh);
+    spinGroup.add(frontMesh);
+    rootGroup.scale.setScalar(fitScale());
+    rootGroup.position.set(0,0.22,0);
+    tiltGroup.rotation.x=0.36;
+    tiltGroup.rotation.z=-0.1;
+    clock=new THREE.Clock();
+    function redraw(){paint(ctx,canvas.width,canvas.height);texture.needsUpdate=true;}
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
+    function onResize(){
+      if(!renderer||!camera)return;
+      camera.aspect=window.innerWidth/Math.max(window.innerHeight,1);
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth,window.innerHeight);
+      if(rootGroup)rootGroup.scale.setScalar(fitScale());
+    }
+    window.addEventListener('resize',onResize);
+    function frame(){
+      if(!renderer)return;
+      raf=requestAnimationFrame(frame);
+      var dt=Math.min(clock.getDelta(),0.05);
+      if(!reduce.matches&&spinGroup)spinGroup.rotation.y-=dt*0.42;
+      renderer.render(scene,camera);
+    }
+    raf=requestAnimationFrame(frame);
+    root._apDispose=function(){
+      if(raf){cancelAnimationFrame(raf);raf=0;}
+      window.removeEventListener('resize',onResize);
+      if(geometry)geometry.dispose();
+      if(back)back.dispose();
+      if(front)front.dispose();
+      if(texture)texture.dispose();
+      if(renderer){renderer.dispose();if(renderer.domElement&&renderer.domElement.parentNode)renderer.domElement.parentNode.removeChild(renderer.domElement);renderer=null;}
+    };
+  }
+  function showFallback(){
+    var fb=document.getElementById('ap-fallback');
+    var gl=document.getElementById('ap-gl');
+    if(gl)gl.hidden=true;
+    if(fb)fb.hidden=false;
+  }
+  try{boot();}catch(err){showFallback();}
   function finish(){
-    if(done)return;
-    done=true;
+    if(leaving)return;
+    leaving=true;
     root.setAttribute('aria-busy','false');
     var wait=Math.max(0,520-(performance.now()-born));
     setTimeout(function(){
       root.classList.add('is-leave');
-      setTimeout(function(){if(root.parentNode)root.parentNode.removeChild(root);},520);
+      setTimeout(function(){
+        if(root._apDispose)root._apDispose();
+        if(root.parentNode)root.parentNode.removeChild(root);
+      },520);
     },wait);
   }
   function tick(){got++;setPct();if(got>=total)finish();}
-  build();
-  window.addEventListener('resize',function(){if(!done)build();},{passive:true});
   urls.forEach(function(src){
     var img=new Image(), settled=false;
     function mark(){if(settled)return;settled=true;tick();}
     img.onload=mark;img.onerror=mark;img.src=src;
     if(img.complete)mark();
   });
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){if(!done)build();tick();},tick);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(tick,tick);
   else tick();
-  root.querySelector('.ap-skip').addEventListener('click',finish);
   setTimeout(finish,3200);
   if(reduce.matches)root.classList.add('is-still');
 })();
