@@ -168,6 +168,9 @@ function assert(cond, msg, extra) {
     card.dispatchEvent(new PointerEvent('pointermove', {
       bubbles: true, clientX: r.left + 12, clientY: r.top + 12, pointerId: 1, pointerType: 'mouse'
     }));
+    card.dispatchEvent(new PointerEvent('pointermove', {
+      bubbles: true, clientX: r.left + 36, clientY: r.top + 28, pointerId: 1, pointerType: 'mouse'
+    }));
   });
   var hovered = await page.evaluate(roomSnap);
   assert(hovered.play === 'Play', 'hover after start should pause', hovered);
@@ -201,7 +204,7 @@ function assert(cond, msg, extra) {
       }).length
     };
   });
-  assert(order.skill < order.room && order.room < order.contact, 'page order is not intro grid, room, contact', order);
+  assert(order.room < order.skill && order.skill < order.contact, 'page order is not intro, room, grid, contact', order);
   assert(order.nested === 0 && order.labels === 1, 'duplicate Find the word section remains', order);
 
   var reversals = [];
@@ -399,7 +402,7 @@ function assert(cond, msg, extra) {
         contact: document.querySelector('.contact').offsetTop
       };
     });
-    assert(vpOrder.skill < vpOrder.room && vpOrder.room < vpOrder.contact, vp.name + ' section order changed', vpOrder);
+    assert(vpOrder.room < vpOrder.skill && vpOrder.skill < vpOrder.contact, vp.name + ' section order changed', vpOrder);
     await vpPage.evaluate(go, 'skillTrack', 0.22);
     await new Promise(function (r) { setTimeout(r, 500); });
     var vpFall = await vpPage.evaluate(skillSnap);
@@ -422,6 +425,61 @@ function assert(cond, msg, extra) {
     assert(vpEnd.kickerTransform === 'none' && vpEnd.tilesOver === 0, vp.name + ' Open to work or tiles failed', vpEnd);
     await vpPage.close();
   }
+
+  const repeat = await browser.newPage();
+  await repeat.evaluateOnNewDocument(function () { localStorage.setItem('ap-loader-seen-v1', '1'); });
+  await repeat.setViewport({ width: 1024, height: 640 });
+  await repeat.goto(URL, { waitUntil: 'domcontentloaded' });
+  await new Promise(function (r) { setTimeout(r, 1600); });
+  const hero = await repeat.evaluate(function () {
+    var h = document.getElementById('waveHeading');
+    return {
+      chars: h.querySelectorAll('.hero-wave-char').length,
+      color: getComputedStyle(h).color,
+      wave: document.body.classList.contains('hero-stage-wave'),
+      spotlight: document.body.classList.contains('hero-stage-spotlight'),
+      quote: document.getElementById('hero-quote').textContent.indexOf('decode what makes') >= 0,
+      replay: document.querySelectorAll('.hook-replay').length
+    };
+  });
+  assert(hero.chars > 10 && hero.wave && hero.spotlight, 'repeat visit skipped the hero wave', hero);
+  assert(hero.color !== 'rgba(243, 246, 252, 0.16)', 'headline stayed dim on a repeat visit', hero);
+  assert(hero.quote && hero.replay === 0, 'static quote was replaced', hero);
+  await repeat.mouse.move(512, 340);
+  var parked = false;
+  for (var step = 0; step < 90 && !parked; step++) {
+    await repeat.mouse.wheel({ deltaY: 160 });
+    await new Promise(function (r) { setTimeout(r, 30); });
+    parked = await repeat.evaluate(function () {
+      var s = document.getElementById('roomStage3D').getBoundingClientRect();
+      return s.top < 80 && s.bottom > window.innerHeight - 80;
+    });
+  }
+  assert(parked, 'native wheel never brought the room on screen');
+  var before = await repeat.evaluate(roomSnap);
+  var movedCase = false;
+  var roomLog = [before.hud + ' ' + before.play];
+  for (var tick = 0; tick < 14; tick++) {
+    await new Promise(function (r) { setTimeout(r, 1000); });
+    var now = await repeat.evaluate(roomSnap);
+    roomLog.push(now.hud + ' ' + now.play);
+    if (now.hud !== before.hud) { movedCase = true; break; }
+  }
+  assert(movedCase, 'parked cursor on a visible room did not advance', roomLog);
+  await repeat.evaluate(function () {
+    var h = document.getElementById('engine-heading');
+    window.scrollTo(0, h.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.9);
+  });
+  await new Promise(function (r) { setTimeout(r, 250); });
+  const entering = await repeat.evaluate(function () {
+    var line = document.querySelector('#engine-heading .engine-line');
+    var t = getComputedStyle(line).transform;
+    var m = /matrix\(([^)]+)\)/.exec(t);
+    var parts = m ? m[1].split(',').map(parseFloat) : [1, 0, 0, 1];
+    return { sy: parts[3], sx: parts[0], top: document.getElementById('engine-heading').getBoundingClientRect().top, vh: window.innerHeight };
+  });
+  assert(entering.sy >= 0.85 && entering.sy < 0.99 && entering.sx <= 1.02, 'footer did not animate while the heading was entering', entering);
+  await repeat.close();
 
   assert(!errors.length, 'page errors', errors);
   console.log(JSON.stringify({
