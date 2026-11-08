@@ -50,6 +50,9 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 
 /* top bar */
 .top{border-bottom:1px solid var(--line);position:sticky;top:0;z-index:900;background:rgba(11,14,20,.88);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px)}
+body.hero-armed:not(.hero-stage-nav) header.top{transform:translateY(-100%);opacity:0;pointer-events:none}
+body.hero-armed header.top{transition:transform .7s cubic-bezier(.16,1,.3,1),opacity .5s ease}
+body.hero-armed.hero-stage-nav header.top{transform:translateY(0);opacity:1;pointer-events:auto}
 .top .wrap{display:flex;justify-content:space-between;align-items:center;height:64px;font-size:13px;color:var(--muted)}
 .mono{white-space:nowrap;font-family:ui-monospace,"SF Mono",SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px;letter-spacing:-.01em;color:var(--ink);padding:6px 11px;border:1px solid var(--line);border-radius:7px;background:rgba(255,255,255,.45);-webkit-font-smoothing:antialiased}
 .hs-k{display:block;flex:0 0 100%;font-size:13px;letter-spacing:.18em;text-transform:uppercase;font-weight:600;color:var(--muted);margin-bottom:2px}
@@ -962,29 +965,32 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
   .hero-proof li{min-width:0;flex:1}
 }
 
-/* Hero title spotlight. Scoped to the title wrap so the rest of the page is unchanged. */
-.hero{padding-top:104px;overflow:visible}
+/* Hero entrance. Letter class is hero-wave-char so it does not touch the room title. */
+.hero{padding-top:88px;overflow:visible}
 .hero-head{overflow:visible}
+.hero .title-wave-clip-box{position:relative;display:inline-block;max-width:100%;margin-top:8px;padding:.04em .35em .22em;overflow:hidden}
+body.hero-stage-spotlight .hero .title-wave-clip-box{overflow:visible}
 .hero .spotlight-title-wrap{
   --spot-x:50%;
   --spot-y:50%;
-  --spot-radius:220px;
+  --spot-radius:215px;
   position:relative;
   display:inline-block;
   max-width:100%;
-  padding:.28em .45em;
   user-select:none;
-  overflow:visible;
 }
 .hero .spotlight-title-wrap::before{
   content:"";
   position:absolute;
-  inset:-60px;
+  inset:-55px;
   pointer-events:none;
   z-index:0;
+  opacity:0;
+  transition:opacity .8s ease;
   background:radial-gradient(calc(var(--spot-radius) * 1.35) circle at var(--spot-x) var(--spot-y), rgba(77,166,255,.28) 0%, rgba(36,114,196,.12) 42%, transparent 72%);
   filter:blur(22px);
 }
+body.hero-stage-spotlight .hero .spotlight-title-wrap::before{opacity:1}
 .hero .spotlight-title{
   position:relative;
   z-index:1;
@@ -993,13 +999,23 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
   max-width:100%;
   font-family:var(--serif);
   font-weight:400;
-  font-size:clamp(34px, 10.5vw, 158px);
-  line-height:1.15;
+  font-size:clamp(32px, 8.8vw, 134px);
+  line-height:1.12;
   letter-spacing:-.02em;
-  color:rgba(243,246,252,.14);
+  color:#f3f6fc;
   white-space:nowrap;
   text-align:center;
-  overflow:visible;
+  display:inline-flex;
+  transition:color .7s ease;
+}
+body.hero-stage-spotlight .hero .spotlight-title{color:rgba(243,246,252,.16)}
+.hero .hero-wave-char{display:inline-block;will-change:transform}
+body.hero-armed .hero .hero-wave-char{transform:translate3d(0,-118%,0) scaleY(1.12)}
+body.hero-armed.hero-stage-wave .hero .hero-wave-char{animation:heroWaveDrop .88s cubic-bezier(.16,1,.3,1) forwards;animation-delay:var(--char-delay,0ms)}
+@keyframes heroWaveDrop{
+  0%{transform:translate3d(0,-118%,0) scaleY(1.14)}
+  58%{transform:translate3d(0,var(--char-dip,8%),0) scaleY(1.02)}
+  100%{transform:translate3d(0,0,0) scaleY(1)}
 }
 .hero .spotlight-title::after{
   content:attr(data-text);
@@ -1008,12 +1024,26 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
   color:#ffffff;
   text-shadow:0 0 28px rgba(77,166,255,.45);
   pointer-events:none;
-  -webkit-mask-image:radial-gradient(var(--spot-radius) circle at calc(var(--spot-x) - .45em) calc(var(--spot-y) - .28em), rgba(0,0,0,1) 0%, rgba(0,0,0,.85) 38%, rgba(0,0,0,0) 78%);
-  mask-image:radial-gradient(var(--spot-radius) circle at calc(var(--spot-x) - .45em) calc(var(--spot-y) - .28em), rgba(0,0,0,1) 0%, rgba(0,0,0,.85) 38%, rgba(0,0,0,0) 78%);
+  opacity:0;
+  transition:opacity .6s ease;
+  -webkit-mask-image:radial-gradient(var(--spot-radius) circle at var(--spot-x) var(--spot-y), rgba(0,0,0,1) 0%, rgba(0,0,0,.85) 38%, rgba(0,0,0,0) 78%);
+  mask-image:radial-gradient(var(--spot-radius) circle at var(--spot-x) var(--spot-y), rgba(0,0,0,1) 0%, rgba(0,0,0,.85) 38%, rgba(0,0,0,0) 78%);
 }
-.hero .spotlight-title.is-still::after{-webkit-mask-image:none;mask-image:none}
-@media (max-width:420px){
-  .hero .spotlight-title{font-size:clamp(30px, 9.4vw, 158px)}
+body.hero-stage-spotlight .hero .spotlight-title::after{opacity:1}
+.hero .spotlight-title.is-still::after{-webkit-mask-image:none;mask-image:none;opacity:1}
+.hero .hero-spaced-sub{font-family:var(--mono);font-size:11px;letter-spacing:.42em;text-transform:uppercase;color:#8b95a7;margin-top:-6px}
+body.hero-armed .hero .hero-spaced-sub{opacity:0;transform:translateY(10px);transition:opacity .6s ease,transform .6s ease}
+body.hero-armed.hero-stage-content .hero .hero-spaced-sub{opacity:.85;transform:translateY(0)}
+body.hero-armed .hero .hero-portrait{clip-path:inset(100% 0 0 0 round 18px);transform:translateY(18px);transition:clip-path .85s cubic-bezier(.16,1,.3,1),transform .85s cubic-bezier(.16,1,.3,1)}
+body.hero-armed.hero-stage-content .hero .hero-portrait{clip-path:inset(0 0 0 0 round 18px);transform:translateY(0)}
+body.hero-armed .hero .hero-portrait img{transform:scale(1.12);transition:transform 1.1s cubic-bezier(.16,1,.3,1)}
+body.hero-armed.hero-stage-content .hero .hero-portrait img{transform:scale(1)}
+body.hero-armed .hero .hero-lower-stack{opacity:0;transform:translateY(20px);transition:opacity .75s ease .15s,transform .75s cubic-bezier(.16,1,.3,1) .15s}
+body.hero-armed.hero-stage-content .hero .hero-lower-stack{opacity:1;transform:translateY(0)}
+.hero .hero-email-pill{display:inline-flex;align-items:center;padding:7px 18px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.14);color:#f3f6fc;font-family:var(--mono);font-size:12.5px;text-decoration:none}
+.hero .hero-email-pill:hover{border-color:#4da6ff;background:rgba(77,166,255,.12);color:#f3f6fc}
+@media (max-width:700px){
+  .hero .hero-spaced-sub{letter-spacing:.18em;font-size:10px}
 }
 
 /* Skills word-search fills the next viewport. No card, no second portrait. */
@@ -1091,6 +1121,7 @@ body.is-sheet .back-bar{display:flex}
 .ap-cursor-ring,.ap-cursor-dot{position:absolute;top:0;left:0;pointer-events:none;z-index:40;transform:translate3d(-50%,-50%,0);will-change:transform}
 .ap-cursor-ring{width:30px;height:30px;border-radius:50%;border:1px solid rgba(91,184,255,.45)}
 .ap-cursor-dot{width:4px;height:4px;border-radius:50%;background:#5bb8ff}
+.ap-load.is-complete{opacity:0;transform:scale(.92);visibility:hidden;pointer-events:none;transition:opacity .55s cubic-bezier(.22,1,.36,1),transform .55s cubic-bezier(.22,1,.36,1),visibility .55s}
 .ap-load.is-leave{pointer-events:none}
 .ap-load.is-leave .ap-gl,.ap-load.is-leave .percentage-anchor,.ap-load.is-leave .ap-fallback,.ap-load.is-leave .ap-cursor-ring,.ap-load.is-leave .ap-cursor-dot{opacity:0 !important;transition:opacity .45s ease}
 @keyframes ap-in{to{opacity:1}}
@@ -1436,10 +1467,17 @@ body.is-sheet .back-bar{display:flex}
     leaving=true;
     root.setAttribute('aria-busy','false');
     root.classList.add('is-leave');
+    root.classList.add('is-complete');
+    if(!root.dataset.handed){
+      root.dataset.handed='1';
+      setTimeout(function(){
+        if(window.runPostLoaderChoreography)window.runPostLoaderChoreography();
+      },180);
+    }
     setTimeout(function(){
       if(root._apDispose)root._apDispose();
       if(root.parentNode)root.parentNode.removeChild(root);
-    },520);
+    },550);
   }
   function tryLeave(){
     if(leaving||!shownAt)return;
@@ -1480,23 +1518,72 @@ body.is-sheet .back-bar{display:flex}
   <div class="wrap hero-grid">
     <div class="hero-col">
       <div class="hero-head">
-        <p class="hero-k">Anastasiia Petrenko · paid social · AI production</p>
-        <div class="spotlight-title-wrap" id="spotlightWrap">
-          <h1 class="spotlight-title" data-text="Creative strategist">Creative strategist</h1>
+        <div class="title-wave-clip-box">
+          <div class="spotlight-title-wrap" id="spotlightWrap">
+            <h1 class="spotlight-title" id="waveHeading" data-text="Creative strategist" aria-label="Creative strategist">Creative strategist</h1>
+          </div>
         </div>
+        <p class="hero-k hero-spaced-sub">Paid social · AI production · Warsaw EU</p>
       </div>
       <div class="hero-stage">
-        <figure class="hero-portrait"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko" width="340" height="340"></figure>
-        <div class="hero-quote-panel">
+        <figure class="hero-portrait hero-portrait-card"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko" width="340" height="340"></figure>
+        <div class="hero-quote-panel hero-lower-stack">
           <p class="hook" id="hero-quote" aria-describedby="quote-hint"><span class="hook-live">I decode what makes top-performing ads convert—and build the creative systems to scale them.</span><span class="hook-phys" aria-hidden="true"></span><button type="button" class="hook-replay">Show quote</button></p>
           <p class="hook-hint" id="quote-hint" hidden>Move across the quote</p>
-          <div class="lanes hero-ctas"><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
+          <div class="lanes hero-ctas"><div class="sec-links"><a class="ulink hero-email-pill" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
           <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue since launch</li><li><span class="num">~75%</span>faster publishing</li></ul>
         </div>
       </div>
     </div>
   </div>
 </section>
+<script>
+(function(){
+  var heading=document.getElementById('waveHeading');
+  if(!heading||heading.dataset.built)return;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function settle(){
+    document.body.classList.add('hero-stage-content','hero-stage-nav','hero-stage-spotlight');
+  }
+  if(reduce){settle();return;}
+  heading.dataset.built='1';
+  var titleStr=heading.getAttribute('data-text')||'';
+  var chars=titleStr.split('');
+  var centerIdx=(chars.length-1)/2;
+  heading.textContent='';
+  chars.forEach(function(ch, idx){
+    var span=document.createElement('span');
+    span.className='hero-wave-char';
+    span.innerHTML=ch===' '?'&nbsp;':ch;
+    var normDist=centerIdx?Math.abs(idx-centerIdx)/centerIdx:0;
+    var delayMs=Math.pow(normDist,1.35)*340;
+    var dipPercent=(1-normDist)*11+2;
+    span.style.setProperty('--char-delay', delayMs.toFixed(0)+'ms');
+    span.style.setProperty('--char-dip', dipPercent.toFixed(1)+'%');
+    heading.appendChild(span);
+  });
+  document.body.classList.add('hero-armed');
+  var played=false;
+  window.runPostLoaderChoreography=function(){
+    if(played)return;
+    played=true;
+    var nodes=heading.querySelectorAll('.hero-wave-char');
+    var last=0;
+    for(var i=0;i<nodes.length;i++){
+      var d=parseFloat(nodes[i].style.getPropertyValue('--char-delay'))||0;
+      if(d>last)last=d;
+    }
+    var unlock=Math.max(1220, Math.round(last+880));
+    document.body.classList.add('hero-stage-wave');
+    setTimeout(function(){document.body.classList.add('hero-stage-content');},480);
+    setTimeout(function(){
+      document.body.classList.add('hero-stage-nav');
+      document.body.classList.add('hero-stage-spotlight');
+    }, unlock);
+  };
+  if(!document.getElementById('ap-load'))window.runPostLoaderChoreography();
+})();
+</script>
 <section class="architect-scroll-track" id="scrollTrack">
   <div class="StickyViewport">
     <div class="physics-curtain-layer" id="physicsCurtain">
@@ -2178,6 +2265,7 @@ body.is-sheet .back-bar{display:flex}
   }
   function heroOnPage(){
     if(document.getElementById('ap-load'))return false;
+    if(document.body.classList.contains('hero-armed')&&!document.body.classList.contains('hero-stage-content'))return false;
     if(document.body.classList.contains('is-sheet'))return false;
     var r=quote.getBoundingClientRect();
     if(r.height<8)return false;
