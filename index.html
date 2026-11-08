@@ -854,7 +854,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .paid-scale{list-style:none;display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:26px;padding:0}
 .paid-scale li{display:flex;flex-direction:column;gap:4px;padding:14px 0 0;border-top:1px solid var(--line);font-size:13.5px;color:var(--muted);line-height:1.4}
 .paid-scale .num{font-size:24px;color:var(--ink);line-height:1}
-.paid-scale li:nth-child(3) .num{color:var(--red)}
+.paid-scale li:nth-child(2) .num{color:var(--red)}
 .paid-case p strong{color:var(--ink)!important;font-weight:600}
 @media (max-width:900px){.paid-scale{grid-template-columns:1fr 1fr}}
 
@@ -1047,7 +1047,7 @@ html.room-3d .works{height:170vh}
           <p class="hook" id="hero-quote" aria-describedby="quote-hint"><span class="hook-live">I decode what makes top-performing ads convert—and build the creative systems to scale them.</span><span class="hook-phys" aria-hidden="true"></span><button type="button" class="hook-replay">Show quote</button></p>
           <p class="hook-hint" id="quote-hint" hidden>Move across the quote</p>
           <div class="lanes hero-ctas"><a class="pill-cta" href="#paid">See the work <span aria-hidden="true">↓</span></a><div class="sec-links"><a class="ulink" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
-          <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue</li><li><span class="num">~75%</span>faster publishing</li></ul>
+          <ul class="hero-proof"><li><span class="num">−54%</span>CPA on Meta in 6 weeks</li><li><span class="num">$471K</span>subscription revenue since launch</li><li><span class="num">~75%</span>faster publishing</li></ul>
         </div>
       </div>
     </div>
@@ -1290,26 +1290,56 @@ html.room-3d .works{height:170vh}
     });
   }
   function cellFromPoint(x,y){
+    var gr=gridEl.getBoundingClientRect();
+    if(x<gr.left-12||x>gr.right+12||y<gr.top-12||y>gr.bottom+12)return null;
     var el=document.elementFromPoint(x,y);
-    var cell=el&&el.closest&&el.closest('.cell');
-    return cell&&gridEl.contains(cell)?cell:null;
+    var direct=el&&el.closest&&el.closest('.cell');
+    if(direct&&gridEl.contains(direct))return direct;
+    var best=null,bestD=1e9;
+    for(var i=0;i<cells.length;i++){
+      var r=cells[i].getBoundingClientRect();
+      var d=Math.hypot(x-(r.left+r.width/2), y-(r.top+r.height/2));
+      var reach=(Math.max(r.width,r.height)+20)/2;
+      if(d<bestD&&d<=reach){bestD=d;best=cells[i];}
+    }
+    return best;
+  }
+  function extendTo(cell){
+    if(!cell||!path.length)return;
+    if(path.indexOf(cell)>=0)return;
+    var last=xy(path[path.length-1]), next=xy(cell);
+    var dx=next.x-last.x, dy=next.y-last.y;
+    if(dx&&dy)return;
+    var steps=Math.max(Math.abs(dx),Math.abs(dy));
+    if(!steps||steps>4)return;
+    if(path.length>=2){
+      var a=xy(path[0]), b=xy(path[1]);
+      if(Math.sign(dx)!==Math.sign(b.x-a.x)||Math.sign(dy)!==Math.sign(b.y-a.y))return;
+    }
+    var sx=Math.sign(dx), sy=Math.sign(dy), c=colsNow();
+    for(var s=1;s<=steps;s++){
+      var n=cells[(last.y+sy*s)*c+(last.x+sx*s)];
+      if(n&&path.indexOf(n)<0)path.push(n);
+    }
   }
   gridEl.addEventListener('pointerdown',function(e){
-    var cell=e.target.closest&&e.target.closest('.cell');
-    if(!cell||!gridEl.contains(cell))return;
     if(e.button!=null&&e.button!==0)return;
+    var cell=cellFromPoint(e.clientX,e.clientY);
+    if(!cell)return;
     dragging=true;
     path=[cell];
     paint();
-    if(gridEl.setPointerCapture)gridEl.setPointerCapture(e.pointerId);
+    if(gridEl.setPointerCapture){try{gridEl.setPointerCapture(e.pointerId);}catch(err){}}
     e.preventDefault();
   });
   gridEl.addEventListener('pointermove',function(e){
     if(!dragging)return;
     var cell=cellFromPoint(e.clientX,e.clientY);
-    if(!cell||path.indexOf(cell)>=0)return;
-    if(continues(cell)){path.push(cell);paint();}
+    if(!cell)return;
+    extendTo(cell);
+    paint();
   });
+  gridEl.addEventListener('touchmove',function(e){if(dragging)e.preventDefault();},{passive:false});
   function endDrag(){
     if(!dragging)return;
     dragging=false;
@@ -1743,8 +1773,7 @@ html.room-3d .works{height:170vh}
 
     <ul class="paid-scale">
       <li><span class="num">~$43K</span><span>paid spend in October 2026 → 34K new subscribers (~$1.25 each)</span></li>
-      <li><span class="num">10</span><span>creator accounts across two platforms, ~41K active subscribers</span></li>
-      <li><span class="num">≈2.3×</span><span>October roster revenue on paid spend: $99K gross, $80K net</span></li>
+      <li><span class="num">$126K</span><span>gross in the first 3 months after launching a creator roster on a new platform</span></li>
       <li><span class="num">8–10</span><span>new creatives tested a week, cut or scaled by hook type</span></li>
     </ul>
 
@@ -2026,10 +2055,10 @@ html.room-3d .works{height:170vh}
       <div><p class="sec-k">04 · Growth case</p><h2>Subscription <em>growth</em></h2></div>
       <div class="growth-card">
         <div class="growth-nn">
-          <div class="growth-n"><span class="num">$471K</span><span>flagship account · subscription revenue</span></div>
-          <div class="growth-n"><span class="num">$126K</span><span>roster gross · Aug – Nov 2026 · 10 accounts, 2 platforms</span></div>
+          <div class="growth-n"><span class="num">$471K</span><span>subscription revenue since launch · top 2% on the platform · 86% from lifecycle and CRM · 0% chargebacks</span></div>
+          <div class="growth-n"><span class="num">$126K</span><span>gross in the first 3 months after launching a creator roster on a new platform</span></div>
         </div>
-        <p>Co-founded and ran the revenue side of a subscription business: pricing, the post-purchase lifecycle and CRM (customer relationship management) funnel, and retention across ten creator accounts on two platforms. <strong>86%</strong> of the flagship account's revenue came after sign-up through lifecycle and CRM, with a <strong>0%</strong> chargeback ratio, and it ranked in the <strong>top 2%</strong> on its platform; the ten-account roster did <strong>$126K gross</strong> in its first three months on two platforms (Aug – Nov 2026). Hired and led the 8–12 person team behind it.</p>
+        <p>Co-founded and ran the revenue side of a subscription business: pricing, the post-purchase lifecycle and CRM (customer relationship management) funnel, and retention. The flagship account made <strong>$471K</strong> subscription revenue since launch, in the <strong>top 2%</strong> on the platform, with <strong>86%</strong> from lifecycle and CRM and <strong>0%</strong> chargebacks. Launching a creator roster on a new platform brought <strong>$126K</strong> gross in the first 3 months. Hired and led the 8–12 person team behind it.</p>
         <p class="growth-note">Figures from the platform's own statements. Full breakdown available on request.</p>
       </div>
     </div>
