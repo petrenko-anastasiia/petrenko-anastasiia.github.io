@@ -63,35 +63,6 @@ em,.it{font-family:var(--serif);font-style:italic;font-weight:400}
 .name{font-family:var(--serif);font-size:clamp(22px,2.4vw,30px);letter-spacing:-.01em;white-space:nowrap;color:var(--ink);margin-bottom:10px}
 .hero h1{font-family:var(--serif);font-weight:400;font-size:clamp(48px,6.6vw,96px);line-height:.92;letter-spacing:-.03em;margin:0 0 22px}
 .hero h1 em{color:var(--red)}
-/* Headline matches the page until a sky spotlight sits behind it.
-   #7dd3fc is the existing sky hover; --red is #38bdf8.
-   The light travels across the title on its own. */
-html.hero-cursor .hero-title{position:relative;isolation:isolate;overflow:visible;--lx:22%;--ly:42%;--sw:1.96em;--sh:1.05em}
-html.hero-cursor .hero-title-text{display:block;position:relative;z-index:2;color:#f8fafc;
-  -webkit-mask-image:radial-gradient(ellipse calc(var(--sw) * .5) calc(var(--sh) * .5) at var(--lx) var(--ly), #000 0% 64%, transparent 82%);
-  mask-image:radial-gradient(ellipse calc(var(--sw) * .5) calc(var(--sh) * .5) at var(--lx) var(--ly), #000 0% 64%, transparent 82%);
-  -webkit-mask-repeat:no-repeat;mask-repeat:no-repeat}
-html.hero-cursor .hero-title-text em{position:relative;z-index:2;color:#f8fafc}
-html.hero-cursor .hero-spot{
-  position:absolute;z-index:0;left:0;top:0;width:var(--sw);height:var(--sh);
-  max-width:2.4em;max-height:1.2em;
-  border-radius:50%;pointer-events:none;opacity:0;
-  transform:translate3d(var(--lx),var(--ly),0) translate(-50%,-50%);
-  background:radial-gradient(ellipse at center, rgba(125,211,252,.62) 0%, rgba(56,189,248,.36) 46%, rgba(56,189,248,0) 72%);
-  filter:blur(6px)}
-html.hero-cursor .hero-title.is-lit .hero-spot{opacity:1}
-html.hero-cursor .hero-k{position:relative;z-index:1}
-html.hero-cursor .hero:has(:focus-visible) .hero-title-text{color:var(--ink);-webkit-mask-image:none;mask-image:none}
-html.hero-cursor .hero:has(:focus-visible) .hero-title-text em{color:var(--red)}
-html.hero-cursor .hero:has(:focus-visible) .hero-spot{opacity:0}
-@media (pointer:coarse){
-  html.hero-cursor .hero-title{touch-action:pan-y pinch-zoom}
-}
-@media (prefers-reduced-motion:reduce){
-  html.hero-cursor .hero-title-text{color:var(--ink);-webkit-mask-image:none;mask-image:none}
-  html.hero-cursor .hero-title-text em{color:var(--red)}
-  html.hero-cursor .hero-spot{display:none}
-}
 .role{font-size:16px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;color:var(--red);margin-bottom:20px;line-height:1.5}
 .role span{white-space:nowrap}
 .role b{color:var(--red-soft);font-weight:400;margin:0 .45em}
@@ -984,6 +955,60 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
   .hero-proof li{min-width:0;flex:1}
 }
 
+/* Hero title spotlight. Scoped to the title wrap so the rest of the page is unchanged. */
+.hero{padding-top:104px;overflow:visible}
+.hero-head{overflow:visible}
+.hero .spotlight-title-wrap{
+  --spot-x:50%;
+  --spot-y:50%;
+  --spot-radius:220px;
+  position:relative;
+  display:inline-block;
+  max-width:100%;
+  padding:.28em .45em;
+  user-select:none;
+  overflow:visible;
+}
+.hero .spotlight-title-wrap::before{
+  content:"";
+  position:absolute;
+  inset:-60px;
+  pointer-events:none;
+  z-index:0;
+  background:radial-gradient(calc(var(--spot-radius) * 1.35) circle at var(--spot-x) var(--spot-y), rgba(77,166,255,.28) 0%, rgba(36,114,196,.12) 42%, transparent 72%);
+  filter:blur(22px);
+}
+.hero .spotlight-title{
+  position:relative;
+  z-index:1;
+  margin:0;
+  width:auto;
+  max-width:100%;
+  font-family:var(--serif);
+  font-weight:400;
+  font-size:clamp(34px, 10.5vw, 158px);
+  line-height:1.15;
+  letter-spacing:-.02em;
+  color:rgba(243,246,252,.14);
+  white-space:nowrap;
+  text-align:center;
+  overflow:visible;
+}
+.hero .spotlight-title::after{
+  content:attr(data-text);
+  position:absolute;
+  inset:0;
+  color:#ffffff;
+  text-shadow:0 0 28px rgba(77,166,255,.45);
+  pointer-events:none;
+  -webkit-mask-image:radial-gradient(var(--spot-radius) circle at calc(var(--spot-x) - .45em) calc(var(--spot-y) - .28em), rgba(0,0,0,1) 0%, rgba(0,0,0,.85) 38%, rgba(0,0,0,0) 78%);
+  mask-image:radial-gradient(var(--spot-radius) circle at calc(var(--spot-x) - .45em) calc(var(--spot-y) - .28em), rgba(0,0,0,1) 0%, rgba(0,0,0,.85) 38%, rgba(0,0,0,0) 78%);
+}
+.hero .spotlight-title.is-still::after{-webkit-mask-image:none;mask-image:none}
+@media (max-width:420px){
+  .hero .spotlight-title{font-size:clamp(30px, 9.4vw, 158px)}
+}
+
 /* Skills word-search fills the next viewport. No card, no second portrait. */
 .skill-scene{--nav-safe:72px;height:100vh;height:100dvh;max-height:100dvh;display:flex;box-sizing:border-box;background:#0b0e14;padding:calc(var(--nav-safe) + 2.5vh) 4vw 2.5vh;overflow:hidden}
 .skill-scene-inner{flex:1;display:flex;flex-direction:column;min-width:0;min-height:0;width:100%;height:100%}
@@ -1068,14 +1093,6 @@ body.is-sheet .back-bar{display:flex}
   .ap-cursor-ring,.ap-cursor-dot{display:none}
 }
 </style>
-<script>
-(function(){
-  try{
-    if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;
-    document.documentElement.classList.add('hero-cursor');
-  }catch(e){}
-})();
-</script>
 </head>
 <body class="screen-intro">
 <div class="ap-load" id="ap-load" role="status" aria-live="polite" aria-busy="true">
@@ -1457,7 +1474,9 @@ body.is-sheet .back-bar{display:flex}
     <div class="hero-col">
       <div class="hero-head">
         <p class="hero-k">Anastasiia Petrenko · paid social · AI production</p>
-        <h1 class="hero-title"><span class="hero-spot" aria-hidden="true"></span><span class="hero-title-text">Creative <em>strategist</em></span></h1>
+        <div class="spotlight-title-wrap" id="spotlightWrap">
+          <h1 class="spotlight-title" data-text="Creative strategist">Creative strategist</h1>
+        </div>
       </div>
       <div class="hero-stage">
         <figure class="hero-portrait"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko" width="340" height="340"></figure>
@@ -2834,106 +2853,74 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
 </script>
 <script>
 (function(){
-  var hero=document.querySelector('.hero');
-  var title=hero&&hero.querySelector('.hero-title');
-  var spot=title&&title.querySelector('.hero-spot');
-  if(!hero||!title||!spot)return;
-  var reduce=window.matchMedia('(prefers-reduced-motion:reduce)');
-  var token=0;
-  function lines(){
-    var host=title.getBoundingClientRect();
-    var text=title.querySelector('.hero-title-text');
-    var emEl=text.querySelector('em');
-    var em=emEl.getBoundingClientRect();
-    var all=document.createRange();
-    all.selectNodeContents(text);
-    var full=all.getBoundingClientRect();
-    var firstRange=document.createRange();
-    firstRange.setStart(text,0);
-    firstRange.setEndBefore(emEl);
-    var first=firstRange.getBoundingClientRect();
-    function box(rect){
-      return {
-        x0:rect.left-host.left,
-        x1:rect.right-host.left,
-        y:rect.top-host.top+rect.height*0.5,
-        w:Math.max(80,rect.width),
-        h:Math.max(48,rect.height)
-      };
+  var spotlightWrap=document.getElementById('spotlightWrap');
+  var title=spotlightWrap&&spotlightWrap.querySelector('.spotlight-title');
+  if(!spotlightWrap||!title)return;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
+  var state={targetX:0,targetY:0,currentX:0,currentY:0,isPointerInside:false,initialized:false,running:false};
+  function loaderOn(){return !!document.getElementById('ap-load');}
+  function initCenter(){
+    var rect=spotlightWrap.getBoundingClientRect();
+    state.targetX=rect.width*0.5;
+    state.targetY=rect.height*0.5;
+    if(!state.initialized){
+      state.currentX=state.targetX;
+      state.currentY=state.targetY;
+      state.initialized=true;
     }
-    if(em.top>full.top+18)return[box(first),box(em)];
-    return[box(full)];
   }
-  function xAt(line,t){
-    var fs=parseFloat(getComputedStyle(title).fontSize)||64;
-    var sw=Math.min(fs*1.9, Math.max(fs*1.38, line.w*0.39));
-    var lead=Math.min(fs*0.22, sw*0.18, line.w*0.08);
-    var a=line.x0+lead, b=line.x1-lead;
-    if(b<=a){a=line.x0;b=line.x1;}
-    return a+(b-a)*t;
+  function paint(){
+    spotlightWrap.style.setProperty('--spot-x', state.currentX.toFixed(1)+'px');
+    spotlightWrap.style.setProperty('--spot-y', state.currentY.toFixed(1)+'px');
   }
-  function place(line,t){
-    light(xAt(line,t),line.y,line.w,line.h);
+  function idle(){state.isPointerInside=false;}
+  initCenter();
+  paint();
+  window.addEventListener('resize', initCenter);
+  window.addEventListener('mousemove', function(e){
+    if(loaderOn()||reduce.matches)return;
+    var rect=spotlightWrap.getBoundingClientRect();
+    var margin=160;
+    var insideH=e.clientX>=rect.left-margin && e.clientX<=rect.right+margin;
+    var insideV=e.clientY>=rect.top-margin && e.clientY<=rect.bottom+margin;
+    if(insideH && insideV){
+      state.isPointerInside=true;
+      state.targetX=e.clientX-rect.left;
+      state.targetY=e.clientY-rect.top;
+    }else idle();
+  });
+  document.addEventListener('pointerout', function(e){
+    if(!e.relatedTarget)idle();
+  });
+  window.addEventListener('blur', idle);
+  function still(){
+    title.classList.add('is-still');
+    initCenter();
+    state.currentX=state.targetX;
+    state.currentY=state.targetY;
+    paint();
   }
-  function light(x,y,w,h){
-    var fs=parseFloat(getComputedStyle(title).fontSize)||64;
-    var sw=Math.min(fs*1.9, Math.max(fs*1.38, w*0.39));
-    var sh=Math.max(fs*0.98, h*0.92);
-    title.style.setProperty('--lx',x.toFixed(1)+'px');
-    title.style.setProperty('--ly',y.toFixed(1)+'px');
-    title.style.setProperty('--sw',sw.toFixed(0)+'px');
-    title.style.setProperty('--sh',sh.toFixed(0)+'px');
-    title.classList.add('is-lit');
-  }
-  function run(){
-    var mine=++token;
-    var last=null,elapsed=0,leg=0;
-    function frame(ts){
-      if(mine!==token||reduce.matches)return;
-      if(document.hidden){last=null;requestAnimationFrame(frame);return}
-      if(last===null)last=ts;
-      elapsed+=Math.min(48,ts-last);
-      last=ts;
-      var ls=lines();
-      var n=ls.length;
-      var sweep=6000,dwell=400,hop=650;
-      var pattern=[];
-      for(var i=0;i<n;i++){
-        pattern.push({line:i,from:0,to:1,dur:sweep});
-        pattern.push({line:i,from:1,to:1,dur:dwell});
-        var next=(i+1)%n;
-        pattern.push({line:i,from:1,to:0,dur:next===i?sweep:hop,toLine:next,toAt:0});
-      }
-      var step=pattern[leg%pattern.length];
-      var p=Math.min(1,elapsed/step.dur);
-      var e=p<0.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
-      if(step.toLine==null){
-        place(ls[step.line],step.from+(step.to-step.from)*e);
-      }else{
-        var a=ls[step.line],b=ls[step.toLine];
-        var y=a.y+(b.y-a.y)*e;
-        var x=xAt(a,step.from)*(1-e)+xAt(b,step.toAt)*e;
-        var w=a.w+(b.w-a.w)*e,h=a.h+(b.h-a.h)*e;
-        light(x,y,w,h);
-      }
-      if(p>=1){elapsed=0;leg++;}
-      requestAnimationFrame(frame);
+  function animateSpotlight(timestamp){
+    if(reduce.matches){still();return;}
+    if(loaderOn()){requestAnimationFrame(animateSpotlight);return;}
+    title.classList.remove('is-still');
+    var rect=spotlightWrap.getBoundingClientRect();
+    if(!state.isPointerInside){
+      var t=timestamp*0.0012;
+      state.targetX=rect.width*(0.5+0.36*Math.sin(t));
+      state.targetY=rect.height*(0.5+0.14*Math.cos(t*1.7));
     }
-    requestAnimationFrame(frame);
+    state.currentX+=(state.targetX-state.currentX)*0.09;
+    state.currentY+=(state.targetY-state.currentY)*0.09;
+    paint();
+    requestAnimationFrame(animateSpotlight);
   }
-  function sync(){
-    token++;
-    if(reduce.matches){
-      document.documentElement.classList.remove('hero-cursor');
-      title.classList.remove('is-lit');
-      return;
-    }
-    document.documentElement.classList.add('hero-cursor');
-    run();
-  }
-  if(reduce.addEventListener)reduce.addEventListener('change',sync);
-  window.addEventListener('resize',function(){},{passive:true});
-  sync();
+  if(reduce.matches)still();
+  else requestAnimationFrame(animateSpotlight);
+  if(reduce.addEventListener)reduce.addEventListener('change', function(){
+    if(reduce.matches)still();
+    else requestAnimationFrame(animateSpotlight);
+  });
 })();
 </script>
 <script>
