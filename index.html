@@ -1045,18 +1045,27 @@ body.is-sheet .back-bar{display:flex}
   .obj{animation:none}
   .room{transform:none!important}
 }
-.ap-load{position:fixed;inset:0;z-index:2000;background:#0b0e14;color:#f8fafc;overflow:hidden;cursor:grab;touch-action:none;user-select:none}
+@font-face{font-family:"Antonio";src:url("assets/fonts/Antonio-700-latin.woff2") format("woff2");font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:"Anton";src:url("assets/fonts/Anton-latin.woff2") format("woff2");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Inter";src:url("assets/fonts/Inter-latin.woff2") format("woff2");font-weight:600 700;font-style:normal;font-display:swap}
+.ap-load{position:fixed;inset:0;z-index:2000;background:#080a10;color:#fff;overflow:hidden;cursor:grab;touch-action:none;user-select:none}
 .ap-load.is-grabbing{cursor:grabbing}
-.ap-gl{position:absolute;inset:0;opacity:0;animation:ap-in .55s ease forwards}
+.ap-gl{position:absolute;inset:0;z-index:1;opacity:0;animation:ap-in .35s ease forwards}
 .ap-gl canvas{display:block;width:100%;height:100%}
-.ap-fallback{position:absolute;left:50%;top:42%;transform:translate(-50%,-50%);margin:0;text-align:center;font-family:var(--sans);font-weight:700;letter-spacing:-.03em;text-transform:uppercase;color:#f8fafc;font-size:clamp(18px,3vw,28px);line-height:1.35}
-.ap-fallback span{display:block;margin-top:10px;color:#7dd3fc;font-size:.42em;font-weight:650;letter-spacing:.18em}
-.ap-pct{position:absolute;left:50%;bottom:8vh;transform:translateX(-50%);margin:0;font-family:var(--sans);font-weight:700;font-size:clamp(18px,2vw,26px);letter-spacing:-.04em;color:#f8fafc;opacity:0;animation:ap-in .55s ease forwards}
+.ap-fallback{position:absolute;left:50%;top:42%;z-index:2;transform:translate(-50%,-50%);margin:0;text-align:center;font-family:Antonio,Anton,Impact,sans-serif;font-weight:700;letter-spacing:-.02em;text-transform:uppercase;color:#fff;font-size:clamp(22px,4vw,40px);line-height:1.15}
+.ap-fallback span{display:block;margin-top:12px;color:#5bb8ff;font-family:Inter,var(--sans);font-size:.38em;font-weight:600;letter-spacing:.14em}
+.percentage-anchor{position:absolute;bottom:44px;left:50%;transform:translateX(-50%);z-index:30;display:flex;flex-direction:column;align-items:center;gap:6px;pointer-events:none;opacity:0;animation:ap-in .35s ease forwards}
+.percentage-value{font-family:Inter,var(--sans);font-weight:700;font-size:22px;letter-spacing:-.03em;color:#fff;font-variant-numeric:tabular-nums;line-height:1;margin:0}
+.ap-cursor-ring,.ap-cursor-dot{position:absolute;top:0;left:0;pointer-events:none;z-index:40;transform:translate3d(-50%,-50%,0);will-change:transform}
+.ap-cursor-ring{width:30px;height:30px;border-radius:50%;border:1px solid rgba(91,184,255,.45)}
+.ap-cursor-dot{width:4px;height:4px;border-radius:50%;background:#5bb8ff}
 .ap-load.is-leave{pointer-events:none}
-.ap-load.is-leave .ap-gl,.ap-load.is-leave .ap-pct,.ap-load.is-leave .ap-fallback{opacity:0 !important;transition:opacity .45s ease}
+.ap-load.is-leave .ap-gl,.ap-load.is-leave .percentage-anchor,.ap-load.is-leave .ap-fallback,.ap-load.is-leave .ap-cursor-ring,.ap-load.is-leave .ap-cursor-dot{opacity:0 !important;transition:opacity .45s ease}
 @keyframes ap-in{to{opacity:1}}
+@media (max-width:768px){.ap-cursor-ring,.ap-cursor-dot{display:none}}
 @media (prefers-reduced-motion:reduce){
-  .ap-gl,.ap-pct{animation:none;opacity:1}
+  .ap-gl,.percentage-anchor{animation:none;opacity:1}
+  .ap-cursor-ring,.ap-cursor-dot{display:none}
 }
 </style>
 <script>
@@ -1071,8 +1080,12 @@ body.is-sheet .back-bar{display:flex}
 <body class="screen-intro">
 <div class="ap-load" id="ap-load" role="status" aria-live="polite" aria-busy="true">
   <div class="ap-gl" id="ap-gl" aria-hidden="true"></div>
-  <p class="ap-fallback" id="ap-fallback" hidden>Creative strategy · Paid social · AI production<span>Meta ads · TikTok ads · Creative testing · Hooks</span></p>
-  <p class="ap-pct" id="ap-pct">0%</p>
+  <p class="ap-fallback" id="ap-fallback" hidden>Creative strategy · Paid social · AI production<span>TikTok ads · Creative testing · Hooks · Meta ads</span></p>
+  <div class="ap-cursor-ring" id="ap-cursor-ring" aria-hidden="true"></div>
+  <div class="ap-cursor-dot" id="ap-cursor-dot" aria-hidden="true"></div>
+  <div class="percentage-anchor">
+    <p class="percentage-value" id="ap-pct">0%</p>
+  </div>
 </div>
 <script src="assets/vendor/three.r128.min.js"></script>
 <script>
@@ -1083,9 +1096,7 @@ body.is-sheet .back-bar{display:flex}
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
   var urls=['assets/img/portrait.jpg','assets/img/outfit-transition.jpg','assets/img/tool/01-ai-caption-options.jpg','assets/img/argo-video-poster.jpg'];
   var total=urls.length+1, got=0, leaving=false;
-  var raf=0, renderer, geometry, texture, clock, spinGroup, tiltGroup, rootGroup;
-  var headline='CREATIVE STRATEGY   ·   PAID SOCIAL   ·   AI PRODUCTION';
-  var subItems=['META ADS','TIKTOK ADS','CREATIVE TESTING','HOOKS'];
+  var raf=0, renderer, quoteGeo, microGeo, quoteTexture, microTexture, quoteBackMat, quoteFrontMat, microBackMat, microFrontMat;
   var displayed=0;
   function showPct(n){
     if(n<displayed)return;
@@ -1095,143 +1106,285 @@ body.is-sheet .back-bar{display:flex}
     var last=prev.split(' ').pop();
     if(String(n)!==last)root.dataset.pctSeen=prev?(prev+' '+n):String(n);
   }
-  function paint(ctx,W,H){
-    ctx.clearRect(0,0,W,H);
-    ctx.textBaseline='alphabetic';
-    ctx.fillStyle='#f8fafc';
-    var headSize=Math.round(H*0.32);
-    ctx.font='700 '+headSize+'px "Instrument Sans",sans-serif';
-    var line=headline+'    ';
-    var scaleX=W/Math.max(ctx.measureText(line).width,100);
-    ctx.save();
-    ctx.translate(0,H*0.40);
-    ctx.scale(scaleX,1);
-    ctx.fillText(line,8/scaleX,0);
-    ctx.restore();
-    ctx.fillStyle='#7dd3fc';
-    var subSize=Math.round(H*0.145);
-    ctx.font='600 '+subSize+'px "Instrument Sans",sans-serif';
-    var sub=subItems.join('   ·   ')+'    ';
-    var subX=W/Math.max(ctx.measureText(sub).width,100);
-    ctx.save();
-    ctx.translate(0,H*0.74);
-    ctx.scale(subX,1);
-    ctx.fillText(sub,8/subX,0);
-    ctx.restore();
-  }
-  function fitScale(){
-    var w=window.innerWidth||800;
-    if(w<500)return 0.72;
-    if(w<900)return 0.9;
-    return 1.05;
-  }
   function boot(){
     var host=document.getElementById('ap-gl');
     if(!host||typeof THREE==='undefined')throw new Error('no three');
-    var canvas=document.createElement('canvas');
-    canvas.width=4096;
-    canvas.height=1024;
-    var ctx=canvas.getContext('2d');
-    paint(ctx,canvas.width,canvas.height);
+    var state={
+      bigQuoteText:'CREATIVE STRATEGY · PAID SOCIAL · AI PRODUCTION · ',
+      microRingText:'TIKTOK ADS · CREATIVE TESTING · HOOKS · META ADS · ',
+      microScaleMode:'small',
+      sculptureScale:1.0,
+      eccentricity:1.385,
+      backWallOpacity:0.64,
+      baseOrbitSpeed:0.38,
+      mouseX:0,
+      mouseY:0,
+      rawPxX:window.innerWidth/2,
+      rawPxY:window.innerHeight/2,
+      cursorX:window.innerWidth/2,
+      cursorY:window.innerHeight/2,
+      isDragging:false,
+      lastDragX:0,
+      lastDragY:0,
+      spinVelocity:0,
+      pitchOffset:0
+    };
+    var stageEl=host;
     var scene=new THREE.Scene();
-    var camera=new THREE.PerspectiveCamera(36,window.innerWidth/Math.max(window.innerHeight,1),0.1,100);
-    camera.position.set(0,0,12.6);
-    renderer=new THREE.WebGLRenderer({antialias:true,alpha:true,powerPreference:'high-performance'});
+    var camera=new THREE.PerspectiveCamera(32, window.innerWidth/Math.max(window.innerHeight,1), 0.1, 100);
+    camera.position.set(0, 0.08, 12.8);
+    renderer=new THREE.WebGLRenderer({antialias:true, alpha:false, powerPreference:'high-performance'});
     if(!renderer.getContext())throw new Error('no webgl');
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-    renderer.setSize(window.innerWidth,window.innerHeight);
-    renderer.setClearColor(0x0b0e14,0);
-    host.appendChild(renderer.domElement);
-    rootGroup=new THREE.Group();
-    tiltGroup=new THREE.Group();
-    spinGroup=new THREE.Group();
-    rootGroup.add(tiltGroup);
-    tiltGroup.add(spinGroup);
-    scene.add(rootGroup);
-    texture=new THREE.CanvasTexture(canvas);
-    texture.wrapS=THREE.RepeatWrapping;
-    texture.anisotropy=renderer.capabilities.getMaxAnisotropy();
-    geometry=new THREE.CylinderGeometry(2.05,2.05,1.72,160,1,true);
-    var back=new THREE.MeshBasicMaterial({map:texture,side:THREE.BackSide,transparent:true,depthWrite:false,opacity:0.72});
-    var front=new THREE.MeshBasicMaterial({map:texture,side:THREE.FrontSide,transparent:true,depthWrite:false,opacity:1});
-    var backMesh=new THREE.Mesh(geometry,back);
-    var frontMesh=new THREE.Mesh(geometry,front);
-    backMesh.renderOrder=1;
-    frontMesh.renderOrder=2;
-    spinGroup.add(backMesh);
-    spinGroup.add(frontMesh);
-    rootGroup.scale.setScalar(fitScale());
-    rootGroup.position.set(0,0.22,0);
-    var baseTiltX=0.16, baseTiltZ=-0.05;
-    tiltGroup.rotation.x=baseTiltX;
-    tiltGroup.rotation.z=baseTiltZ;
-    var dragging=false, prevX=0, prevY=0, pointerX=0, pointerY=0, dragTiltX=0;
-    function clamp(n,a,b){return Math.max(a,Math.min(b,n));}
+    renderer.setClearColor(0x080a10, 1);
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
+    stageEl.appendChild(renderer.domElement);
+    var maxAnisotropy=Math.min(16, renderer.capabilities.getMaxAnisotropy());
+
+    function createBigQuoteTexture(quoteStr){
+      var canvas=document.createElement('canvas');
+      canvas.width=4096;
+      canvas.height=512;
+      var ctx=canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle='#ffffff';
+      ctx.textBaseline='middle';
+      var clean=quoteStr.trim().toUpperCase();
+      if(clean.slice(-1)!=='·')clean+='   ·';
+      var fullRibbon=clean+'   ';
+      var fontSize=375;
+      ctx.font='700 '+fontSize+'px "Antonio", "Anton", "Impact", sans-serif';
+      var measuredWidth=ctx.measureText(fullRibbon).width;
+      var scaleX=(canvas.width*0.985)/Math.max(1, measuredWidth);
+      ctx.save();
+      ctx.translate(canvas.width*0.0075, canvas.height/2+14);
+      ctx.scale(scaleX, 1.15);
+      ctx.fillText(fullRibbon, 0, 0);
+      ctx.restore();
+      var texture=new THREE.CanvasTexture(canvas);
+      texture.wrapS=THREE.RepeatWrapping;
+      texture.wrapT=THREE.ClampToEdgeWrapping;
+      texture.anisotropy=maxAnisotropy;
+      texture.minFilter=THREE.LinearMipmapLinearFilter;
+      texture.magFilter=THREE.LinearFilter;
+      texture.needsUpdate=true;
+      return texture;
+    }
+    function createSmallMicroTexture(microStr, scaleMode){
+      var canvas=document.createElement('canvas');
+      canvas.width=4096;
+      canvas.height=256;
+      var ctx=canvas.getContext('2d');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle='#ffffff';
+      ctx.textBaseline='middle';
+      var basePhrase=microStr.trim().toUpperCase();
+      if(basePhrase.slice(-1)!=='·')basePhrase+='   ·';
+      var spacedUnit=scaleMode==='small'?basePhrase+'      ':basePhrase+'    ';
+      var fullLoop=scaleMode==='small'?spacedUnit+spacedUnit:spacedUnit;
+      var fontSize=scaleMode==='small'?54:112;
+      ctx.font='600 '+fontSize+'px "Inter", -apple-system, sans-serif';
+      if('letterSpacing' in ctx)ctx.letterSpacing=scaleMode==='small'?'6px':'4px';
+      var measuredWidth=ctx.measureText(fullLoop).width;
+      var scaleX=(canvas.width*0.975)/Math.max(1, measuredWidth);
+      ctx.save();
+      ctx.translate(canvas.width*0.012, canvas.height/2);
+      ctx.scale(scaleX, 1.0);
+      ctx.fillText(fullLoop, 0, 0);
+      ctx.restore();
+      var texture=new THREE.CanvasTexture(canvas);
+      texture.wrapS=THREE.RepeatWrapping;
+      texture.wrapT=THREE.ClampToEdgeWrapping;
+      texture.anisotropy=maxAnisotropy;
+      texture.minFilter=THREE.LinearMipmapLinearFilter;
+      texture.magFilter=THREE.LinearFilter;
+      texture.needsUpdate=true;
+      return texture;
+    }
+
+    var sculptureRoot=new THREE.Group();
+    scene.add(sculptureRoot);
+    var quoteGimbalGroup=new THREE.Group();
+    sculptureRoot.add(quoteGimbalGroup);
+    var quoteBaseRadius=1.48;
+    var quoteCylinderHeight=0.86;
+    quoteGeo=new THREE.CylinderGeometry(quoteBaseRadius, quoteBaseRadius, quoteCylinderHeight, 180, 1, true);
+    quoteTexture=createBigQuoteTexture(state.bigQuoteText);
+    quoteBackMat=new THREE.MeshBasicMaterial({map:quoteTexture, color:new THREE.Color('#8c98ad'), side:THREE.BackSide, transparent:true, opacity:state.backWallOpacity, depthWrite:false, alphaTest:0.02});
+    quoteFrontMat=new THREE.MeshBasicMaterial({map:quoteTexture, color:new THREE.Color('#ffffff'), side:THREE.FrontSide, transparent:true, opacity:1.0, depthWrite:true, alphaTest:0.02});
+    var quoteBackMesh=new THREE.Mesh(quoteGeo, quoteBackMat);
+    var quoteFrontMesh=new THREE.Mesh(quoteGeo, quoteFrontMat);
+    quoteBackMesh.renderOrder=1;
+    quoteFrontMesh.renderOrder=3;
+    var quoteSpinGroup=new THREE.Group();
+    quoteSpinGroup.add(quoteBackMesh);
+    quoteSpinGroup.add(quoteFrontMesh);
+    quoteSpinGroup.rotation.y=0.42;
+    quoteGimbalGroup.add(quoteSpinGroup);
+
+    var microGimbalGroup=new THREE.Group();
+    sculptureRoot.add(microGimbalGroup);
+    var microBaseRadius=1.38;
+    var microCylinderHeight=0.18;
+    microGeo=new THREE.CylinderGeometry(microBaseRadius, microBaseRadius, microCylinderHeight, 160, 1, true);
+    microTexture=createSmallMicroTexture(state.microRingText, state.microScaleMode);
+    microBackMat=new THREE.MeshBasicMaterial({map:microTexture, color:new THREE.Color('#3d7eb3'), side:THREE.BackSide, transparent:true, opacity:0.52, depthWrite:false, alphaTest:0.02});
+    microFrontMat=new THREE.MeshBasicMaterial({map:microTexture, color:new THREE.Color('#5bb8ff'), side:THREE.FrontSide, transparent:true, opacity:0.98, depthWrite:true, alphaTest:0.02});
+    var microBackMesh=new THREE.Mesh(microGeo, microBackMat);
+    var microFrontMesh=new THREE.Mesh(microGeo, microFrontMat);
+    microBackMesh.renderOrder=2;
+    microFrontMesh.renderOrder=4;
+    var microSpinGroup=new THREE.Group();
+    microSpinGroup.add(microBackMesh);
+    microSpinGroup.add(microFrontMesh);
+    microSpinGroup.rotation.y=-0.35;
+    microGimbalGroup.add(microSpinGroup);
+
+    function refreshAllTextures(){
+      var newQuoteTex=createBigQuoteTexture(state.bigQuoteText);
+      var newMicroTex=createSmallMicroTexture(state.microRingText, state.microScaleMode);
+      quoteBackMat.map=newQuoteTex;
+      quoteFrontMat.map=newQuoteTex;
+      microBackMat.map=newMicroTex;
+      microFrontMat.map=newMicroTex;
+      quoteBackMat.needsUpdate=true;
+      quoteFrontMat.needsUpdate=true;
+      microBackMat.needsUpdate=true;
+      microFrontMat.needsUpdate=true;
+      if(quoteTexture)quoteTexture.dispose();
+      if(microTexture)microTexture.dispose();
+      quoteTexture=newQuoteTex;
+      microTexture=newMicroTex;
+    }
+    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(refreshAllTextures);
+
+    var cursorRing=document.getElementById('ap-cursor-ring');
+    var cursorDot=document.getElementById('ap-cursor-dot');
+    var fine=window.matchMedia('(pointer:fine)').matches;
     function onDown(e){
-      if(leaving||e.button>0)return;
-      dragging=true;
-      prevX=e.clientX; prevY=e.clientY;
+      if(leaving||(e.button!=null&&e.button>0))return;
+      state.isDragging=true;
+      state.lastDragX=e.clientX;
+      state.lastDragY=e.clientY;
       root.classList.add('is-grabbing');
+      if(cursorRing){cursorRing.style.width='22px';cursorRing.style.height='22px';cursorRing.style.borderColor='#5bb8ff';}
       try{root.setPointerCapture(e.pointerId);}catch(err){}
     }
     function onMove(e){
       if(leaving)return;
-      pointerX=(e.clientX/Math.max(window.innerWidth,1))*2-1;
-      pointerY=(e.clientY/Math.max(window.innerHeight,1))*2-1;
-      if(!dragging)return;
-      var dx=e.clientX-prevX, dy=e.clientY-prevY;
-      prevX=e.clientX; prevY=e.clientY;
-      if(spinGroup)spinGroup.rotation.y+=dx*0.007;
-      dragTiltX=clamp(dragTiltX+dy*0.0035,-0.42,0.42);
-      if(e.cancelable)e.preventDefault();
+      state.rawPxX=e.clientX;
+      state.rawPxY=e.clientY;
+      var nx=(e.clientX/Math.max(window.innerWidth,1))*2-1;
+      var ny=(e.clientY/Math.max(window.innerHeight,1))*2-1;
+      var dxNorm=nx-state.mouseX;
+      state.mouseX=nx;
+      state.mouseY=ny;
+      if(!reduce.matches && e.pointerType!=='touch')state.spinVelocity+=dxNorm*0.02;
+      if(state.isDragging){
+        var dx=e.clientX-state.lastDragX;
+        var dy=e.clientY-state.lastDragY;
+        state.lastDragX=e.clientX;
+        state.lastDragY=e.clientY;
+        if(e.pointerType==='touch')state.spinVelocity=dx*0.004;
+        else{
+          state.spinVelocity=dx*0.0042;
+          state.pitchOffset=Math.max(-0.65, Math.min(0.65, state.pitchOffset+dy*0.0035));
+        }
+      }
     }
     function onUp(){
-      dragging=false;
+      state.isDragging=false;
       root.classList.remove('is-grabbing');
+      if(cursorRing){cursorRing.style.width='30px';cursorRing.style.height='30px';cursorRing.style.borderColor='rgba(91, 184, 255, 0.45)';}
     }
-    root.addEventListener('pointerdown',onDown);
-    root.addEventListener('pointermove',onMove,{passive:false});
-    root.addEventListener('pointerup',onUp);
-    root.addEventListener('pointercancel',onUp);
-    clock=new THREE.Clock();
-    function redraw(){paint(ctx,canvas.width,canvas.height);texture.needsUpdate=true;}
-    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
+    root.addEventListener('pointerdown', onDown);
+    root.addEventListener('pointermove', onMove);
+    root.addEventListener('pointerup', onUp);
+    root.addEventListener('pointercancel', onUp);
     function onResize(){
       if(!renderer||!camera)return;
       camera.aspect=window.innerWidth/Math.max(window.innerHeight,1);
       camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth,window.innerHeight);
-      if(rootGroup)rootGroup.scale.setScalar(fitScale());
+      renderer.setSize(window.innerWidth, window.innerHeight);
     }
-    window.addEventListener('resize',onResize);
-    function frame(){
-      if(!renderer)return;
+    window.addEventListener('resize', onResize);
+
+    var lastNow=performance.now();
+    function easeOutCubic(t){return 1-Math.pow(1-t, 3);}
+    function pose(now){
+      var loadT=shownAt?Math.min(1, (now-shownAt)/5000):0;
+      var loadFactor=easeOutCubic(loadT);
+      var quotePitch=0.34+(1-loadFactor)*0.22+state.pitchOffset;
+      var quoteRoll=-0.15-(1-loadFactor)*0.18;
+      var quoteYaw=0;
+      var microPitch=0.62+Math.sin(now*0.0007)*0.04;
+      var microRoll=0.22+Math.cos(now*0.0006)*0.04;
+      var microYaw=0;
+      var activeEccentricity=state.eccentricity;
+      var verticalOpenScale=1;
+      var speedMultiplier=1;
+      if(!reduce.matches){
+        quotePitch+=state.mouseY*0.34;
+        quoteYaw+=state.mouseX*0.42;
+        quoteRoll+=-state.mouseX*0.18;
+        microPitch+=state.mouseY*0.26;
+        microYaw+=-state.mouseX*0.32;
+        microRoll+=state.mouseX*0.20;
+      }
+      var entranceScale=(0.76+0.24*easeOutCubic(Math.min(1, loadFactor*1.2)))*state.sculptureScale;
+      if(reduce.matches)entranceScale=state.sculptureScale;
+      sculptureRoot.scale.setScalar(entranceScale);
+      quoteGimbalGroup.scale.lerp(new THREE.Vector3(activeEccentricity, verticalOpenScale, 1.0), reduce.matches?1:0.12);
+      microGimbalGroup.scale.lerp(new THREE.Vector3(activeEccentricity*1.004, 1.0, 1.0), reduce.matches?1:0.12);
+      var rotEase=reduce.matches?1:0.09;
+      quoteGimbalGroup.rotation.x+=(quotePitch-quoteGimbalGroup.rotation.x)*rotEase;
+      quoteGimbalGroup.rotation.y+=(quoteYaw-quoteGimbalGroup.rotation.y)*rotEase;
+      quoteGimbalGroup.rotation.z+=(quoteRoll-quoteGimbalGroup.rotation.z)*rotEase;
+      var microEase=reduce.matches?1:0.08;
+      microGimbalGroup.rotation.x+=(microPitch-microGimbalGroup.rotation.x)*microEase;
+      microGimbalGroup.rotation.y+=(microYaw-microGimbalGroup.rotation.y)*microEase;
+      microGimbalGroup.rotation.z+=(microRoll-microGimbalGroup.rotation.z)*microEase;
+      var targetMicroY=-0.46-(reduce.matches?0:state.mouseY*0.06);
+      microGimbalGroup.position.y+=(targetMicroY-microGimbalGroup.position.y)*(reduce.matches?1:0.1);
+      return {loadFactor:loadFactor, speedMultiplier:speedMultiplier};
+    }
+    function frame(now){
+      if(!renderer||leaving)return;
       raf=requestAnimationFrame(frame);
-      var dt=Math.min(clock.getDelta(),0.05);
-      if(!dragging&&!reduce.matches&&spinGroup)spinGroup.rotation.y-=dt*0.42;
-      if(!dragging)dragTiltX+=(0-dragTiltX)*Math.min(1,dt*2.4);
-      var follow=reduce.matches?0:1;
-      var wantX=clamp(baseTiltX+dragTiltX+pointerY*-0.14*follow,-0.5,0.62);
-      var wantZ=clamp(baseTiltZ+pointerX*0.12*follow,-0.36,0.36);
-      var ease=Math.min(1,dt*7);
-      tiltGroup.rotation.x+=(wantX-tiltGroup.rotation.x)*ease;
-      tiltGroup.rotation.z+=(wantZ-tiltGroup.rotation.z)*ease;
-      renderer.render(scene,camera);
+      var dt=Math.min(0.05, (now-lastNow)/1000);
+      lastNow=now;
+      var posed=pose(now);
+      if(!reduce.matches){
+        var omega=state.baseOrbitSpeed*posed.speedMultiplier;
+        quoteSpinGroup.rotation.y-=omega*dt+state.spinVelocity;
+        microSpinGroup.rotation.y+=omega*0.68*dt+state.spinVelocity*0.55;
+        state.spinVelocity*=0.94;
+      }
+      if(fine&&cursorRing&&cursorDot){
+        state.cursorX+=(state.rawPxX-state.cursorX)*0.22;
+        state.cursorY+=(state.rawPxY-state.cursorY)*0.22;
+        cursorRing.style.transform='translate3d('+state.cursorX.toFixed(1)+'px, '+state.cursorY.toFixed(1)+'px, 0)';
+        cursorDot.style.transform='translate3d('+state.rawPxX.toFixed(1)+'px, '+state.rawPxY.toFixed(1)+'px, 0)';
+      }
+      renderer.render(scene, camera);
       if(!shownAt)requestAnimationFrame(function(){markShown();});
     }
     raf=requestAnimationFrame(frame);
-    root._apRead=function(){return {y:spinGroup.rotation.y,x:tiltGroup.rotation.x,z:tiltGroup.rotation.z,dragging:dragging};};
+    root._apRead=function(){
+      return {y:quoteSpinGroup.rotation.y, micro:microSpinGroup.rotation.y, x:quoteGimbalGroup.rotation.x, z:quoteGimbalGroup.rotation.z, dragging:state.isDragging, pct:displayed};
+    };
     root._apDispose=function(){
       if(raf){cancelAnimationFrame(raf);raf=0;}
-      root.removeEventListener('pointerdown',onDown);
-      root.removeEventListener('pointermove',onMove);
-      root.removeEventListener('pointerup',onUp);
-      root.removeEventListener('pointercancel',onUp);
-      window.removeEventListener('resize',onResize);
-      if(geometry)geometry.dispose();
-      if(back)back.dispose();
-      if(front)front.dispose();
-      if(texture)texture.dispose();
+      root.removeEventListener('pointerdown', onDown);
+      root.removeEventListener('pointermove', onMove);
+      root.removeEventListener('pointerup', onUp);
+      root.removeEventListener('pointercancel', onUp);
+      window.removeEventListener('resize', onResize);
+      if(quoteGeo)quoteGeo.dispose();
+      if(microGeo)microGeo.dispose();
+      [quoteBackMat, quoteFrontMat, microBackMat, microFrontMat].forEach(function(m){if(m)m.dispose();});
+      if(quoteTexture)quoteTexture.dispose();
+      if(microTexture)microTexture.dispose();
       if(renderer){renderer.dispose();if(renderer.domElement&&renderer.domElement.parentNode)renderer.domElement.parentNode.removeChild(renderer.domElement);renderer=null;}
     };
   }
