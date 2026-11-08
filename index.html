@@ -1985,17 +1985,20 @@ body.is-sheet .back-bar{display:flex}
     var vis=Math.min(r.bottom,innerHeight)-Math.max(r.top,0);
     return vis>=Math.min(r.height,innerHeight)*0.55;
   }
-  function fallUnderway(){return trackProgress()>0.12;}
+  function fallUnderway(){return trackProgress()>0.38;}
   function demoBlocked(){
     return reduce.matches||demoYielded||demoDone||dragging||document.hidden||fallUnderway()||!gridInView();
   }
-  function yieldDemo(){
-    if(demoDone)return;
-    demoYielded=true;
+  function pauseDemo(){
     stopDemo();
     path=[];
     hideAutoCursor();
     paint();
+  }
+  function yieldDemo(){
+    if(demoDone)return;
+    demoYielded=true;
+    pauseDemo();
   }
   function markFound(word,sample){
     solved[word]=true;
@@ -2006,7 +2009,8 @@ body.is-sheet .back-bar{display:flex}
     if(skillLive&&!said[word]){said[word]=true;skillLive.textContent='Found '+nice(word);}
   }
   function traceWord(entry,letter,done){
-    if(demoBlocked()){yieldDemo();return;}
+    if(demoYielded||demoDone||dragging||reduce.matches){yieldDemo();return;}
+    if(document.hidden||fallUnderway()||!gridInView()){pauseDemo();return;}
     if(letter>=entry.cells.length){
       markFound(entry.word,entry.cells[0]);
       hideAutoCursor();
@@ -2021,7 +2025,8 @@ body.is-sheet .back-bar{display:flex}
     demoTimer=setTimeout(function(){traceWord(entry,letter+1,done);},260);
   }
   function runSequence(){
-    if(demoBlocked()){yieldDemo();return;}
+    if(demoYielded||demoDone||dragging||reduce.matches){yieldDemo();return;}
+    if(document.hidden||fallUnderway()||!gridInView()){pauseDemo();return;}
     var paths=wordPaths();
     var next=null;
     for(var i=0;i<paths.length;i++) if(!solved[paths[i].word]){next=paths[i];break;}
@@ -2173,7 +2178,6 @@ body.is-sheet .back-bar{display:flex}
   }
   gridEl.addEventListener('pointerdown',function(e){
     if(e.button!=null&&e.button!==0)return;
-    yieldDemo();
     var cell=cellFromPoint(e.clientX,e.clientY);
     if(!cell)return;
     if(e.pointerType==='touch'){
@@ -2238,18 +2242,21 @@ body.is-sheet .back-bar{display:flex}
     demoWatch.observe(gridEl);
   }
   window.addEventListener('scroll',function(){
-    if(demoStarted&&!demoDone&&!demoYielded){
-      if(fallUnderway())yieldDemo();
-      else if(!gridInView()){stopDemo();hideAutoCursor();path=[];paint();}
-      else if(!demoTimer&&!demoBlocked())demoTimer=setTimeout(runSequence,400);
+    if(demoYielded||demoDone||reduce.matches)return;
+    if(fallUnderway()||!gridInView()){
+      if(demoStarted)pauseDemo();
+      return;
+    }
+    if(demoStarted){
+      if(!demoTimer)demoTimer=setTimeout(runSequence,400);
     }else maybeDemo();
   },{passive:true});
   document.addEventListener('visibilitychange',function(){
-    if(document.hidden){stopDemo();hideAutoCursor();path=[];paint();}
-    else if(demoStarted&&!demoDone&&!demoYielded){
-      if(fallUnderway())yieldDemo();
-      else if(gridInView()&&!demoBlocked())demoTimer=setTimeout(runSequence,400);
-    }
+    if(document.hidden){pauseDemo();return;}
+    if(demoYielded||demoDone||reduce.matches)return;
+    if(fallUnderway()||!gridInView())return;
+    if(demoStarted){if(!demoTimer)demoTimer=setTimeout(runSequence,400);}
+    else maybeDemo();
   });
   var demoMut=new MutationObserver(function(){maybeDemo();});
   demoMut.observe(document.body,{childList:true});
@@ -2644,7 +2651,7 @@ body.is-sheet .back-bar{display:flex}
     return inverted/Math.max(1, simMetrics.rows)*0.75+(item.col%3)*0.05;
   }
   function placeFloor(p, vw, vh){
-    var wipeProgress=clamp((p-0.35)/0.27, 0, 1);
+    var wipeProgress=clamp((p-0.52)/0.12, 0, 1);
     var start=vh*0.84;
     var currentFloorY=start+(-220-start)*wipeProgress;
     if(lastFloorY!=null && currentFloorY<lastFloorY && wipeProgress>0){
@@ -2789,19 +2796,19 @@ body.is-sheet .back-bar{display:flex}
           physicsWasHidden=false;
           floorState=placeFloor(skillP, vw, vh);
         }else physicsWasHidden=false;
-        showPhysicsLayer(skillP<0.12);
+        showPhysicsLayer(skillP<=0.38);
         if(!skillPinned){
           physicsActive=false;
           clearTileTransforms();
-          if(motion && skillP<=0.05 && (!homesCaptured || simTiles.some(function(t){return t.released;}) || !simCurrent()))buildPhysicsWorld();
+          if(motion && skillP<=0.38 && (!homesCaptured || simTiles.some(function(t){return t.released;}) || !simCurrent()))buildPhysicsWorld();
           if(skillHead)skillHead.style.opacity='1';
           physicsFloorLine.style.opacity='0';
-        }else if(motion && skillP<=0.05){
+        }else if(motion && skillP<=0.38){
           if(!homesCaptured || !simCurrent() || simTiles.some(function(t){return t.released;}))buildPhysicsWorld();
           else clearTileTransforms();
           if(skillHead)skillHead.style.opacity='1';
           physicsFloorLine.style.opacity='0';
-        }else if(motion && skillP>0.05 && simTiles.length){
+        }else if(motion && skillP>0.38 && simTiles.length){
           if(!homesCaptured)captureLocalHomes();
           if(homesCaptured){
             parkUnreleased();
@@ -2809,7 +2816,7 @@ body.is-sheet .back-bar{display:flex}
             var moving=anyTileMoving() || wipeProgress>0;
             if(inWindow||moving){
               physicsActive=true;
-              var releaseProgress=inWindow?clamp((skillP-0.05)/0.11, 0, 1):1;
+              var releaseProgress=inWindow?clamp((skillP-0.38)/0.14, 0, 1):1;
               var catchup=releaseProgress>=1;
               var steps=0;
               while(steps<=simMetrics.rows){
@@ -2828,7 +2835,7 @@ body.is-sheet .back-bar{display:flex}
               physicsActive=false;
               placeFloor(skillP, vw, vh);
             }
-            if(skillHead)skillHead.style.opacity=String(clamp(1-(skillP-0.08)*5, 0, 1));
+            if(skillHead)skillHead.style.opacity=String(clamp(1-(skillP-0.38)*4, 0, 1));
             paintSimTiles();
           }
         }
