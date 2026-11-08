@@ -1047,47 +1047,42 @@ body.is-sheet .back-bar{display:flex}
     var n=Math.max(0,Math.min(100,Math.round(got/total*100)));
     if(pctEl)pctEl.textContent=n+'%';
   }
-  function tracked(ctx,text,x,y,gap){
-    var cx=x;
-    for(var i=0;i<text.length;i++){
-      ctx.fillText(text[i],cx,y);
-      cx+=ctx.measureText(text[i]).width+gap;
-    }
-  }
   function paint(ctx,W,H){
     ctx.clearRect(0,0,W,H);
     ctx.textBaseline='alphabetic';
     ctx.fillStyle='#f8fafc';
-    ctx.font='700 430px "Instrument Sans",sans-serif';
+    var headSize=Math.round(H*0.32);
+    ctx.font='700 '+headSize+'px "Instrument Sans",sans-serif';
     var line=headline+'    ';
     var scaleX=W/Math.max(ctx.measureText(line).width,100);
     ctx.save();
-    ctx.scale(scaleX,1.05);
-    ctx.fillText(line,12/scaleX,400);
+    ctx.translate(0,H*0.40);
+    ctx.scale(scaleX,1);
+    ctx.fillText(line,8/scaleX,0);
     ctx.restore();
     ctx.fillStyle='#7dd3fc';
-    ctx.font='650 72px "Instrument Sans",sans-serif';
-    var slot=W/subItems.length;
-    for(var s=0;s<subItems.length;s++){
-      ctx.save();
-      ctx.translate(s*slot+slot*0.16,930);
-      ctx.scale(0.92,1);
-      tracked(ctx,subItems[s],0,0,7);
-      ctx.restore();
-    }
+    var subSize=Math.round(H*0.145);
+    ctx.font='600 '+subSize+'px "Instrument Sans",sans-serif';
+    var sub=subItems.join('   ·   ')+'    ';
+    var subX=W/Math.max(ctx.measureText(sub).width,100);
+    ctx.save();
+    ctx.translate(0,H*0.74);
+    ctx.scale(subX,1);
+    ctx.fillText(sub,8/subX,0);
+    ctx.restore();
   }
   function fitScale(){
     var w=window.innerWidth||800;
-    if(w<500)return 0.6;
-    if(w<900)return 0.7;
-    return 0.82;
+    if(w<500)return 0.72;
+    if(w<900)return 0.9;
+    return 1.05;
   }
   function boot(){
     var host=document.getElementById('ap-gl');
     if(!host||typeof THREE==='undefined')throw new Error('no three');
     var canvas=document.createElement('canvas');
-    canvas.width=window.innerWidth<700?2048:4096;
-    canvas.height=window.innerWidth<700?512:1024;
+    canvas.width=4096;
+    canvas.height=1024;
     var ctx=canvas.getContext('2d');
     paint(ctx,canvas.width,canvas.height);
     var scene=new THREE.Scene();
@@ -1108,7 +1103,7 @@ body.is-sheet .back-bar{display:flex}
     texture=new THREE.CanvasTexture(canvas);
     texture.wrapS=THREE.RepeatWrapping;
     texture.anisotropy=renderer.capabilities.getMaxAnisotropy();
-    geometry=new THREE.CylinderGeometry(2.05,2.05,1.18,160,1,true);
+    geometry=new THREE.CylinderGeometry(2.05,2.05,1.72,160,1,true);
     var back=new THREE.MeshBasicMaterial({map:texture,side:THREE.BackSide,transparent:true,depthWrite:false,opacity:0.72});
     var front=new THREE.MeshBasicMaterial({map:texture,side:THREE.FrontSide,transparent:true,depthWrite:false,opacity:1});
     var backMesh=new THREE.Mesh(geometry,back);
@@ -1119,8 +1114,8 @@ body.is-sheet .back-bar{display:flex}
     spinGroup.add(frontMesh);
     rootGroup.scale.setScalar(fitScale());
     rootGroup.position.set(0,0.22,0);
-    tiltGroup.rotation.x=0.36;
-    tiltGroup.rotation.z=-0.1;
+    tiltGroup.rotation.x=0.16;
+    tiltGroup.rotation.z=-0.05;
     clock=new THREE.Clock();
     function redraw(){paint(ctx,canvas.width,canvas.height);texture.needsUpdate=true;}
     if(document.fonts&&document.fonts.ready)document.fonts.ready.then(redraw);
