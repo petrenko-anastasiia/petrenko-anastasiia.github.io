@@ -940,7 +940,14 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 @media (max-height:740px){
   .case-frame.slot-center{height:min(230px,38vh);top:16%}
   .rig-vertical-rod{height:120px}
-  .pedestals-row{bottom:12%}
+  .pedestals-row{bottom:18%}
+}
+@media (max-width:700px){
+  .wall-left,.wall-right{width:30vw}
+  .wall-left{margin-left:-30vw;transform:translateZ(-640px) rotateY(-72deg)}
+  .wall-right{margin-right:-30vw;transform:translateZ(-640px) rotateY(72deg)}
+  .pedestals-row{bottom:20%;transform:translate3d(-50%,0,200px);z-index:20}
+  .case-frame.slot-center{z-index:24}
 }
 @media (prefers-reduced-motion:reduce){
   .case-frame,.pedestal-node,.pill-tab{transition:none}
