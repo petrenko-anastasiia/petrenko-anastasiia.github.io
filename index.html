@@ -1106,10 +1106,12 @@ body.is-sheet .back-bar{display:flex}
 .engine-sticky{position:sticky;top:0;height:100vh;height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px;padding:104px 22px 28px;box-sizing:border-box;overflow:hidden}
 .engine-kicker{margin:0;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.42em;text-transform:uppercase;color:#7dd3fc}
 .engine-block{width:min(1100px,92vw);margin:0 auto}
-.engine-heading-link{display:block;text-decoration:none;color:inherit}
-.engine-heading-link:focus-visible{outline:3px solid #7dd3fc;outline-offset:6px}
-.engine-block h2{margin:0;max-width:none!important;font-size:inherit;line-height:1;color:#f3f6fc}
-.engine-line{display:block;width:max-content;max-width:none;margin:0 auto;text-align:center;white-space:nowrap;font-family:var(--sans);font-weight:700;font-stretch:78%;letter-spacing:-.045em;line-height:.86;text-transform:uppercase;color:#f3f6fc;transform-origin:center center;will-change:transform}
+.engine-heading-link{display:block;text-decoration:none;color:inherit;cursor:pointer}
+.engine-heading-link:focus-visible{outline:3px solid #7dd3fc;outline-offset:8px}
+.engine-block h2{position:relative;margin:0;max-width:none!important;font-size:inherit;line-height:1;color:#f3f6fc}
+.engine-glow{position:absolute;left:var(--gx,50%);top:var(--gy,42%);width:min(52vw,460px);height:min(24vw,210px);transform:translate(-50%,-50%);pointer-events:none;z-index:0;background:radial-gradient(circle, rgba(255,255,255,.7) 0%, rgba(186,230,253,.5) 30%, rgba(56,189,248,.18) 55%, rgba(56,189,248,0) 74%);filter:blur(18px);mix-blend-mode:screen;opacity:.9}
+.engine-line{position:relative;z-index:1;display:block;width:max-content;max-width:none;margin:0 auto;text-align:center;white-space:nowrap;font-family:var(--sans);font-weight:700;font-stretch:78%;letter-spacing:-.045em;line-height:.86;text-transform:uppercase;color:#f3f6fc;transform-origin:center center;will-change:transform}
+.engine-talk{position:relative;z-index:1;display:block;width:max-content;margin:12px auto 0;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#bae6fd}
 .engine-support{width:min(920px,92vw);display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;position:relative;z-index:2}
 .engine-support .sub{margin:0;max-width:46ch;color:#94a3b8!important}
 .engine-support .btn-cv{margin:0}
@@ -1128,6 +1130,7 @@ body.is-sheet .back-bar{display:flex}
   .engine-track{height:auto}
   .engine-sticky{position:relative;height:auto;min-height:100dvh}
   .engine-line{transform:none!important}
+  .engine-glow{left:50%;top:42%}
 }
 
 </style>
@@ -2712,9 +2715,11 @@ body.is-sheet .back-bar{display:flex}
     <div class="engine-block">
       <a class="engine-heading-link" href="mailto:apetrenko597@gmail.com?subject=Let%27s%20work%20together">
         <h2 id="engine-heading">
+          <span class="engine-glow" id="engineGlow" aria-hidden="true"></span>
           <span class="engine-line">Let's scale</span>
           <span class="engine-line">Your growth engine</span>
         </h2>
+        <span class="engine-talk">Let's talk ↗</span>
       </a>
     </div>
     <div class="engine-support">
@@ -2767,7 +2772,8 @@ body.is-sheet .back-bar{display:flex}
     });
     var cs=getComputedStyle(sticky);
     var pad=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
-    var avail=sticky.clientHeight-pad-support.offsetHeight-kicker.offsetHeight-28;
+    var talk=track.querySelector('.engine-talk');
+    var avail=sticky.clientHeight-pad-support.offsetHeight-kicker.offsetHeight-(talk?talk.offsetHeight:0)-36;
     if(avail<72)avail=72;
     var used=lines.reduce(function(sum,line){return sum+line.getBoundingClientRect().height;},0);
     if(used>avail && used>0){
@@ -2810,6 +2816,53 @@ body.is-sheet .back-bar{display:flex}
   window.addEventListener('scroll',render,{passive:true});
   window.addEventListener('resize',function(){fit();render();},{passive:true});
   if(reduce.addEventListener)reduce.addEventListener('change',function(){fit();render();});
+  var link=track.querySelector('.engine-heading-link');
+  var glow=document.getElementById('engineGlow');
+  var hovering=false, seen=false, glowRaf=0;
+  var tx=0.5, ty=0.42, gx=0.5, gy=0.42;
+  function paintGlow(){
+    if(!glow)return;
+    glow.style.setProperty('--gx',(gx*100).toFixed(1)+'%');
+    glow.style.setProperty('--gy',(gy*100).toFixed(1)+'%');
+  }
+  function glowFrame(ts){
+    if(!seen||reduce.matches){glowRaf=0;return;}
+    if(!hovering){
+      var t=ts*0.0007;
+      tx=0.5+0.26*Math.sin(t);
+      ty=0.42+0.1*Math.cos(t*1.6);
+    }
+    gx+=(tx-gx)*0.08;
+    gy+=(ty-gy)*0.08;
+    paintGlow();
+    glowRaf=requestAnimationFrame(glowFrame);
+  }
+  function startGlow(){
+    if(reduce.matches){gx=0.5;gy=0.42;paintGlow();return;}
+    if(!glowRaf)glowRaf=requestAnimationFrame(glowFrame);
+  }
+  if(link){
+    link.addEventListener('pointermove',function(e){
+      if(e.pointerType==='touch'||reduce.matches)return;
+      var r=link.getBoundingClientRect();
+      hovering=true;
+      tx=(e.clientX-r.left)/Math.max(r.width,1);
+      ty=(e.clientY-r.top)/Math.max(r.height,1);
+    });
+    link.addEventListener('pointerleave',function(){hovering=false;});
+  }
+  if('IntersectionObserver' in window){
+    var watch=new IntersectionObserver(function(ents){
+      seen=ents[0].isIntersecting;
+      if(seen)startGlow();
+      else if(glowRaf){cancelAnimationFrame(glowRaf);glowRaf=0;}
+    },{threshold:0.08});
+    watch.observe(track);
+  }else{
+    seen=true;
+    startGlow();
+  }
+  if(reduce.matches){gx=0.5;gy=0.42;paintGlow();}
 })();
 </script>
 
