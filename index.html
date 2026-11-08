@@ -1152,6 +1152,7 @@ body.is-sheet .back-bar{display:flex}
 </style>
 </head>
 <body class="screen-intro">
+<noscript><style>#ap-load{display:none!important}</style></noscript>
 <div class="ap-load" id="ap-load" role="status" aria-live="polite" aria-busy="true">
   <div class="ap-gl" id="ap-gl" aria-hidden="true"></div>
   <p class="ap-fallback" id="ap-fallback" hidden>Creative strategy · Paid social · AI production<span>TikTok ads · Creative testing · Hooks · Meta ads</span></p>
@@ -1166,6 +1167,34 @@ body.is-sheet .back-bar{display:flex}
 (function(){
   var root=document.getElementById('ap-load');
   if(!root)return;
+  var SEEN_KEY='ap-loader-seen-v1';
+  var CASE_IDS={paid:1,tool:1,'content-ops-tool':1,hooklab:1,'ap-growth-case-study':1,growth:1,strategy:1};
+  function storageGet(key){try{return window.localStorage.getItem(key);}catch(err){return null;}}
+  function storageSet(key,val){try{window.localStorage.setItem(key,val);}catch(err){}}
+  function caseFromLocation(){
+    var raw=(location.hash||'').replace(/^#/,'').split(/[?&]/)[0];
+    if(CASE_IDS[raw])return raw;
+    try{
+      var q=new URLSearchParams(location.search);
+      var named=(q.get('case')||q.get('work')||'').replace(/^#/,'');
+      if(CASE_IDS[named])return named;
+    }catch(err){}
+    return '';
+  }
+  function dropLoader(){
+    storageSet(SEEN_KEY,'1');
+    window.__apSkipLoader=true;
+    if(root.parentNode)root.parentNode.removeChild(root);
+  }
+  window.addEventListener('pageshow',function(ev){
+    if(!ev.persisted)return;
+    var node=document.getElementById('ap-load');
+    if(node&&node.parentNode)node.parentNode.removeChild(node);
+    window.__apSkipLoader=true;
+    if(window.runPostLoaderChoreography)window.runPostLoaderChoreography();
+    else document.body.classList.add('hero-stage-content','hero-stage-nav','hero-stage-spotlight');
+  });
+  if(storageGet(SEEN_KEY)==='1'||caseFromLocation()){dropLoader();return;}
   var pctEl=document.getElementById('ap-pct');
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
   var urls=['assets/img/portrait.jpg','assets/img/outfit-transition.jpg','assets/img/tool/01-ai-caption-options.jpg','assets/img/argo-video-poster.jpg'];
@@ -1470,13 +1499,13 @@ body.is-sheet .back-bar{display:flex}
     requestAnimationFrame(function(){requestAnimationFrame(function(){markShown();});});
   }
   var shownAt=0, assetsReady=false, safetyDue=false, exitTimer=0;
-  var MIN_VISIBLE=5000, HANG_AFTER=3200;
+  var MIN_VISIBLE=reduce.matches?0:900, HANG_AFTER=600;
   function markShown(){
     if(shownAt)return;
     shownAt=performance.now();
     root.dataset.visibleAt=String(Math.round(shownAt));
     [0,10,20,30,40,50,60,70,80,90].forEach(function(n,i){
-      setTimeout(function(){if(!leaving)showPct(n);},i*500);
+      setTimeout(function(){if(!leaving)showPct(n);},i*120);
     });
     setTimeout(function(){safetyDue=true;tryLeave();},MIN_VISIBLE+HANG_AFTER);
     tryLeave();
@@ -1484,6 +1513,7 @@ body.is-sheet .back-bar{display:flex}
   function beginLeave(){
     if(leaving)return;
     leaving=true;
+    storageSet(SEEN_KEY,'1');
     root.setAttribute('aria-busy','false');
     root.classList.add('is-leave');
     root.classList.add('is-complete');
@@ -1507,7 +1537,7 @@ body.is-sheet .back-bar{display:flex}
     }
     if(!assetsReady&&!safetyDue){showPct(Math.min(displayed,90));return;}
     showPct(100);
-    setTimeout(beginLeave,350);
+    setTimeout(beginLeave,80);
   }
   try{boot();}catch(err){showFallback();}
   function tick(){got++;if(got>=total){assetsReady=true;tryLeave();}}
@@ -1563,7 +1593,7 @@ body.is-sheet .back-bar{display:flex}
   function settle(){
     document.body.classList.add('hero-stage-content','hero-stage-nav','hero-stage-spotlight');
   }
-  if(reduce){settle();return;}
+  if(reduce||window.__apSkipLoader){settle();return;}
   heading.dataset.built='1';
   var titleStr=heading.getAttribute('data-text')||'';
   var chars=titleStr.split('');
