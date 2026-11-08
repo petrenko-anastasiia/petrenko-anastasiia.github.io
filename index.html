@@ -1099,6 +1099,37 @@ body.is-sheet .back-bar{display:flex}
   .ap-gl,.percentage-anchor{animation:none;opacity:1}
   .ap-cursor-ring,.ap-cursor-dot{display:none}
 }
+
+/* Final contact: scroll-scrubbed type block. Navy field, off-white type, blue labels. */
+.contact{background:#07090e!important;border:0!important;color:#f3f6fc!important;padding:0!important;scroll-snap-align:none}
+.engine-track{position:relative;height:175vh;overflow-x:clip}
+.engine-sticky{position:sticky;top:0;height:100vh;height:100dvh;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:22px;padding:104px 22px 28px;box-sizing:border-box;overflow:hidden}
+.engine-kicker{margin:0;font-family:var(--mono);font-size:12px;font-weight:600;letter-spacing:.42em;text-transform:uppercase;color:#7dd3fc}
+.engine-block{width:min(1100px,92vw);margin:0 auto}
+.engine-heading-link{display:block;text-decoration:none;color:inherit}
+.engine-heading-link:focus-visible{outline:3px solid #7dd3fc;outline-offset:6px}
+.engine-block h2{margin:0;max-width:none!important;font-size:inherit;line-height:1;color:#f3f6fc}
+.engine-line{display:block;width:max-content;max-width:none;margin:0 auto;text-align:center;white-space:nowrap;font-family:var(--sans);font-weight:700;font-stretch:78%;letter-spacing:-.045em;line-height:.86;text-transform:uppercase;color:#f3f6fc;transform-origin:center center;will-change:transform}
+.engine-support{width:min(920px,92vw);display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center;position:relative;z-index:2}
+.engine-support .sub{margin:0;max-width:46ch;color:#94a3b8!important}
+.engine-support .btn-cv{margin:0}
+.engine-support .clist{margin:0;width:100%;max-width:640px}
+.engine-support .c-card{width:100%;max-width:640px;margin:0;text-align:left}
+.engine-after{width:min(720px,92vw);margin:0 auto;padding:8px 22px 48px;box-sizing:border-box}
+.engine-after .c-card{width:100%;margin:0;text-align:left}
+.engine-after .foot{margin:28px 0 0;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.engine-anchor{position:absolute;left:0;bottom:0;width:1px;height:1px}
+@media (max-width:700px){
+  .engine-sticky{padding:76px 14px 24px;gap:18px}
+  .engine-kicker{letter-spacing:.28em;font-size:11px}
+  .engine-support .foot{justify-content:center}
+}
+@media (prefers-reduced-motion:reduce){
+  .engine-track{height:auto}
+  .engine-sticky{position:relative;height:auto;min-height:100dvh}
+  .engine-line{transform:none!important}
+}
+
 </style>
 </head>
 <body class="screen-intro">
@@ -2674,16 +2705,30 @@ body.is-sheet .back-bar{display:flex}
 </section>
 
 <!-- CONTACT -->
-<section class="contact" id="contact">
-  <div class="wrap">
-    <p class="cta-k">[ Open to work ]</p>
-    <a class="big-cta" href="mailto:apetrenko597@gmail.com?subject=Let%27s%20work%20together"><h2>Let's scale your growth engine <span class="arr">→</span></h2></a>
-    <p class="sub">Open to remote full-time roles and retainers in creative strategy, paid social and AI production.</p>
-    <a class="btn-cv" href="assets/Anastasiia_Petrenko_CV_2026-11.pdf">CV (PDF)</a>
-    <div class="clist">
-      <div><div class="l">E-mail</div><a href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div>
-      <div><div class="l">LinkedIn</div><a href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">anastasiia-petrenko-marketing</a></div>
+<section class="contact" aria-labelledby="engine-heading">
+  <div class="engine-track" id="engineTrack">
+  <div class="engine-sticky">
+    <p class="engine-kicker">[ Open to work ]</p>
+    <div class="engine-block">
+      <a class="engine-heading-link" href="mailto:apetrenko597@gmail.com?subject=Let%27s%20work%20together">
+        <h2 id="engine-heading">
+          <span class="engine-line">Let's scale</span>
+          <span class="engine-line">Your growth engine</span>
+        </h2>
+      </a>
     </div>
+    <div class="engine-support">
+      <p class="sub">Open to remote full-time roles and retainers in creative strategy, paid social and AI production.</p>
+      <a class="btn-cv" href="assets/Anastasiia_Petrenko_CV_2026-11.pdf">CV (PDF)</a>
+      <div class="clist">
+        <div><div class="l">E-mail</div><a href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div>
+        <div><div class="l">LinkedIn</div><a href="https://www.linkedin.com/in/anastasiia-petrenko-marketing/" target="_blank" rel="noopener">anastasiia-petrenko-marketing</a></div>
+      </div>
+    </div>
+  </div>
+  <div id="contact" class="engine-anchor" tabindex="-1"></div>
+  </div>
+  <div class="engine-after">
     <aside class="c-card">
       <div class="c-row"><span class="c-k">Based in</span><span>Warsaw, Poland · CET (UTC+1)</span></div>
       <div class="c-row"><span class="c-k">Overlap</span><span>Full EU day · US East until early afternoon</span></div>
@@ -2694,6 +2739,79 @@ body.is-sheet .back-bar{display:flex}
     <div class="foot"><span>© 2026 Anastasiia Petrenko</span><a href="#intro" style="text-decoration:none">Back to introduction ↑</a></div>
   </div>
 </section>
+<script>
+(function(){
+  var track=document.getElementById('engineTrack');
+  var lines=track?[].slice.call(track.querySelectorAll('.engine-line')):[];
+  if(!track||!lines.length)return;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
+  function clamp(v,a,b){return Math.max(a,Math.min(b,v));}
+  function fit(){
+    var sticky=track.querySelector('.engine-sticky');
+    var support=track.querySelector('.engine-support');
+    var kicker=track.querySelector('.engine-kicker');
+    var target=Math.min(track.clientWidth*0.9, 1100);
+    lines.forEach(function(line){line.style.transform='none';});
+    lines.forEach(function(line){
+      var size=80;
+      line.style.fontSize=size+'px';
+      var guard=0;
+      while(guard++<20){
+        var w=line.scrollWidth;
+        if(w<8)break;
+        var next=size*(target/w);
+        if(Math.abs(next-size)<0.4){size=next;break;}
+        size=clamp(next,18,260);
+        line.style.fontSize=size.toFixed(2)+'px';
+      }
+    });
+    var cs=getComputedStyle(sticky);
+    var pad=parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom);
+    var avail=sticky.clientHeight-pad-support.offsetHeight-kicker.offsetHeight-28;
+    if(avail<72)avail=72;
+    var used=lines.reduce(function(sum,line){return sum+line.getBoundingClientRect().height;},0);
+    if(used>avail && used>0){
+      var scale=avail/used;
+      lines.forEach(function(line){
+        line.style.fontSize=(parseFloat(line.style.fontSize)*scale).toFixed(2)+'px';
+      });
+    }
+    var goal=Math.min.apply(null, lines.map(function(line){return line.scrollWidth;}));
+    lines.forEach(function(line){
+      var size=parseFloat(line.style.fontSize);
+      var guard=0;
+      while(guard++<8 && Math.abs(line.scrollWidth-goal)>2){
+        size=size*(goal/Math.max(line.scrollWidth,1));
+        line.style.fontSize=size.toFixed(2)+'px';
+      }
+    });
+  }
+  function render(){
+    if(reduce.matches){
+      lines.forEach(function(line){line.style.transform='none';});
+      return;
+    }
+    var rect=track.getBoundingClientRect();
+    var total=track.offsetHeight-window.innerHeight;
+    var p=clamp(-rect.top/Math.max(1,total),0,1);
+    lines.forEach(function(line,i){
+      var start=i*0.18;
+      var span=0.68;
+      var lp=clamp((p-start)/span,0,1);
+      var e=1-Math.pow(1-lp,3);
+      var sx=3.6-(3.6-1)*e;
+      var sy=0.07+(1-0.07)*e;
+      line.style.transform='scaleX('+sx.toFixed(3)+') scaleY('+sy.toFixed(3)+')';
+    });
+  }
+  fit();
+  render();
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(function(){fit();render();});
+  window.addEventListener('scroll',render,{passive:true});
+  window.addEventListener('resize',function(){fit();render();},{passive:true});
+  if(reduce.addEventListener)reduce.addEventListener('change',function(){fit();render();});
+})();
+</script>
 
 <script>
 document.querySelectorAll('.frame[data-drive]').forEach(function(f){
