@@ -880,16 +880,16 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .gallery-viewport{position:absolute;inset:0;perspective:1350px;overflow:hidden;z-index:10;touch-action:pan-y}
 .room-stage-3d{position:absolute;inset:0;transform-style:preserve-3d;opacity:0;will-change:transform;pointer-events:none}
 .wall-back{position:absolute;top:13%;left:16%;width:68%;height:58%;background:radial-gradient(circle at 50% 45%,#151e30 0%,#090d15 78%);border:1px solid rgba(255,255,255,.05);transform:translateZ(-260px);box-shadow:inset 0 0 110px rgba(0,0,0,.85)}
-.wall-side{position:absolute;top:13%;width:420px;height:58%;background:linear-gradient(to bottom,#0b101b,#070a11);border-top:1px solid rgba(255,255,255,.03)}
-.wall-left{left:16%;transform-origin:left center;transform:translateZ(-260px) rotateY(72deg);border-bottom:2px solid var(--accent);box-shadow:0 4px 28px var(--accent-glow)}
-.wall-right{right:16%;transform-origin:right center;transform:translateZ(-260px) rotateY(-72deg);border-bottom:2px solid var(--accent);box-shadow:0 4px 28px var(--accent-glow)}
+.wall-side{position:absolute;top:13%;width:min(420px,42vw);height:58%;background:linear-gradient(to bottom,#0b101b,#070a11);border-top:1px solid rgba(255,255,255,.03);pointer-events:none}
+.wall-left{left:16%;margin-left:calc(min(420px,42vw) * -1);transform-origin:right center;transform:translateZ(-260px) rotateY(-72deg);border-bottom:2px solid var(--accent);box-shadow:0 4px 28px var(--accent-glow)}
+.wall-right{right:16%;margin-right:calc(min(420px,42vw) * -1);transform-origin:left center;transform:translateZ(-260px) rotateY(72deg);border-bottom:2px solid var(--accent);box-shadow:0 4px 28px var(--accent-glow)}
 .room-floor{position:absolute;top:71%;left:5%;width:90%;height:580px;transform-origin:top center;transform:translateZ(-260px) rotateX(78deg);background-color:#090d14;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px),radial-gradient(circle at var(--spot-x,50%) var(--spot-y,35%),rgba(77,166,255,.2),transparent 55%);background-size:72px 72px,72px 72px,100% 100%;border-top:1px solid rgba(255,255,255,.08);box-shadow:inset 0 60px 120px rgba(0,0,0,.85)}
-.floor-projection-ui{position:absolute;top:52%;left:50%;transform:translate(-50%,-50%);text-align:center;font-family:var(--mono);color:rgba(243,246,252,.42);cursor:pointer;background:none;border:0;padding:8px 12px}
+.floor-projection-ui{position:absolute;top:22%;left:50%;transform:translate(-50%,-50%);text-align:center;font-family:var(--mono);color:rgba(243,246,252,.88);cursor:pointer;background:none;border:0;padding:10px 16px;z-index:8;text-shadow:0 1px 2px rgba(0,0,0,.8);pointer-events:auto}
 .floor-projection-ui:hover{color:var(--accent)}
 .floor-projection-count{font-size:16px;letter-spacing:.18em;margin-bottom:8px}
 .floor-projection-cta{font-size:13px;letter-spacing:.22em}
-.pedestals-row{position:absolute;bottom:18%;left:50%;transform:translateX(-50%);display:flex;gap:92px;z-index:18;pointer-events:auto;max-width:100%}
-.pedestal-node{position:relative;width:44px;height:52px;cursor:pointer;background:linear-gradient(90deg,#1b2436 0%,#2d3b56 42%,#0e1420 100%);border-radius:6px 6px 12px 12px;box-shadow:0 18px 26px rgba(0,0,0,.85);appearance:none;-webkit-appearance:none;padding:0;border:0;color:inherit;transition:transform .28s cubic-bezier(.22,1,.36,1),box-shadow .28s}
+.pedestals-row{position:absolute;bottom:11%;left:50%;transform:translateX(-50%);display:flex;gap:92px;z-index:6;pointer-events:none;max-width:100%}
+.pedestal-node{position:relative;width:44px;height:52px;cursor:pointer;pointer-events:auto;background:linear-gradient(90deg,#1b2436 0%,#2d3b56 42%,#0e1420 100%);border-radius:6px 6px 12px 12px;box-shadow:0 18px 26px rgba(0,0,0,.85);appearance:none;-webkit-appearance:none;padding:0;border:0;color:inherit;transition:transform .28s cubic-bezier(.22,1,.36,1),box-shadow .28s}
 .pedestal-node::before{content:'';position:absolute;top:-8px;left:0;width:100%;height:16px;border-radius:50%;background:radial-gradient(circle at 35% 35%,#516487,#1c2638);border:1px solid rgba(255,255,255,.18);transition:background .25s,box-shadow .25s}
 .pedestal-node.active{transform:translateY(-8px) scale(1.06);box-shadow:0 22px 32px rgba(0,0,0,.9),0 0 24px var(--accent-glow)}
 .pedestal-node.active::before{background:radial-gradient(circle at 35% 35%,#8ec7ff,var(--accent));box-shadow:0 0 18px var(--accent)}
@@ -898,7 +898,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .rig-lamp-head{width:68px;height:36px;border-radius:8px;background:linear-gradient(180deg,#273244 0%,#101622 100%);border:1px solid rgba(255,255,255,.16);box-shadow:0 10px 25px rgba(0,0,0,.9),0 0 26px var(--accent-glow);position:relative;transform-style:preserve-3d;will-change:transform}
 .rig-lamp-head::after{content:'';position:absolute;bottom:-4px;left:50%;transform:translateX(-50%);width:34px;height:8px;border-radius:50%;background:#d8edff;box-shadow:0 0 24px 6px var(--accent)}
 .spotlight-beam-overlay{position:absolute;inset:0;pointer-events:none;z-index:16;background:radial-gradient(460px circle at var(--cursor-x,50vw) var(--cursor-y,44vh),rgba(77,166,255,.16) 0%,rgba(77,166,255,.05) 42%,rgba(5,7,12,.68) 85%);mix-blend-mode:screen}
-.cards-mount{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none}
+.cards-mount{position:absolute;inset:0;transform-style:preserve-3d;pointer-events:none;z-index:12}
 .case-frame{position:absolute;border-radius:14px;background:var(--card-bg);border:1px solid rgba(255,255,255,.12);overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;transition:transform .55s cubic-bezier(.22,1,.36,1),opacity .55s cubic-bezier(.22,1,.36,1),box-shadow .55s;box-shadow:0 28px 70px rgba(0,0,0,.85);cursor:pointer;pointer-events:auto;color:inherit;font:inherit;text-align:inherit;padding:0}
 .case-frame.slot-center{top:21%;left:50%;width:440px;height:290px;transform:translate3d(-50%,0,-190px);z-index:15;border-color:rgba(77,166,255,.45);box-shadow:0 30px 90px rgba(0,0,0,.92),0 0 40px rgba(77,166,255,.15)}
 .case-frame.slot-left{top:25%;left:14%;width:240px;height:240px;transform:translate3d(0,0,-140px) rotateY(62deg);opacity:.65;z-index:12}
@@ -927,7 +927,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 @media (max-width:900px){
   .case-frame.slot-left,.case-frame.slot-right{display:none}
   .case-frame.slot-center{width:min(440px,88vw);height:min(290px,42vh);top:16%}
-  .pedestals-row{gap:clamp(14px,6vw,32px);bottom:22%}
+  .pedestals-row{gap:clamp(14px,6vw,32px);bottom:14%}
   .recent-header-bar{padding:0 16px;top:64px}
   .wave-title{font-size:clamp(36px,10vw,54px)}
   .room-backlink{font-size:10px;max-width:42vw;text-align:right}
@@ -940,7 +940,7 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 @media (max-height:740px){
   .case-frame.slot-center{height:min(230px,38vh);top:16%}
   .rig-vertical-rod{height:120px}
-  .pedestals-row{bottom:20%}
+  .pedestals-row{bottom:12%}
 }
 @media (prefers-reduced-motion:reduce){
   .case-frame,.pedestal-node,.pill-tab{transition:none}
@@ -2229,7 +2229,7 @@ body.is-sheet .back-bar{display:flex}
   if(window.Matter && !reduce.matches){
     Engine=Matter.Engine; World=Matter.World; Bodies=Matter.Bodies; Body=Matter.Body; Composite=Matter.Composite;
     engine=Engine.create();
-    engine.gravity.y=1.35;
+    engine.gravity.y=3.4;
   }
 
   function liveTiles(){
@@ -2256,7 +2256,7 @@ body.is-sheet .back-bar{display:flex}
     World.add(engine.world, [floorBody, leftWall, rightWall]);
     initialTileRects.forEach(function(pos){
       var body=Bodies.rectangle(pos.cx, pos.cy, Math.max(pos.w,4), Math.max(pos.h,4), {
-        restitution:0.35, friction:0.15, frictionAir:0.018, angle:(Math.random()-0.5)*0.18
+        restitution:0.35, friction:0.15, frictionAir:0.0016, angle:(Math.random()-0.5)*0.18
       });
       Body.setVelocity(body, {x:(Math.random()-0.5)*3.2, y:Math.random()*2.5});
       Body.setAngularVelocity(body, (Math.random()-0.5)*0.08);
@@ -2327,7 +2327,7 @@ body.is-sheet .back-bar{display:flex}
   selectCase(1);
 
   var mouseState={x:window.innerWidth/2, y:window.innerHeight/2, lerpX:window.innerWidth/2, lerpY:window.innerHeight/2};
-  var physicsActive=false, pNow=0;
+  var physicsActive=false, pNow=0, fallLatched=false;
   window.addEventListener('pointermove', function(e){
     mouseState.x=e.clientX;
     mouseState.y=e.clientY;
@@ -2368,6 +2368,29 @@ body.is-sheet .back-bar{display:flex}
   function restoreTiles(){
     tileElements.forEach(function(el){el.style.transform='';});
   }
+  function placeBodiesAtRest(){
+    tileElements=liveTiles();
+    if(!tileElements.length)return;
+    cacheInitialTilePositions();
+    if(!engine||!initialTileRects[0]||initialTileRects[0].w<2)return;
+    if(tileBodies.length!==tileElements.length){initPhysicsBodies();return;}
+    initialTileRects.forEach(function(init, idx){
+      if(!tileBodies[idx])return;
+      Body.setPosition(tileBodies[idx], {x:init.cx, y:init.cy});
+      Body.setVelocity(tileBodies[idx], {x:0, y:0});
+      Body.setAngle(tileBodies[idx], 0);
+      Body.setAngularVelocity(tileBodies[idx], 0);
+    });
+  }
+  function releaseTiles(){
+    restoreTiles();
+    placeBodiesAtRest();
+    tileBodies.forEach(function(body){
+      Body.setVelocity(body, {x:(Math.random()-0.5)*1.6, y:0.4+Math.random()*0.8});
+      Body.setAngularVelocity(body, (Math.random()-0.5)*0.06);
+    });
+    fallLatched=true;
+  }
 
   function renderLoop(){
     if(document.body.classList.contains('is-sheet') || scrollTrack.offsetHeight<10){
@@ -2381,41 +2404,37 @@ body.is-sheet .back-bar{display:flex}
     var vh=window.innerHeight, vw=window.innerWidth;
     var motion=!reduce.matches && !!engine;
 
-    if(p>0.06 && p<0.65 && motion){
+    if(p>0.06 && p<0.72 && motion){
       physicsActive=true;
-      if(!tilesMatch(liveTiles()))initPhysicsBodies();
+      if(!fallLatched||!tilesMatch(liveTiles()))releaseTiles();
       Engine.update(engine, 1000/60);
-      var wipeProgress=clamp((p-0.34)/0.28, 0, 1);
-      var currentFloorY=vh*0.80-wipeProgress*(vh*0.95);
+      var wipeProgress=clamp((p-0.40)/0.26, 0, 1);
+      var currentFloorY=vh*0.78-wipeProgress*(vh*0.92);
       if(floorBody)Body.setPosition(floorBody, {x:vw/2, y:currentFloorY+30});
       physicsFloorLine.style.top=currentFloorY+'px';
-      physicsFloorLine.style.opacity=p<0.62?'1':'0';
-      if(skillHead)skillHead.style.opacity=String(clamp(1-(p-0.05)*7, 0, 1));
+      physicsFloorLine.style.opacity=p<0.68?'1':'0';
+      if(skillHead)skillHead.style.opacity=String(clamp(1-(p-0.08)*5, 0, 1));
+      var stray=0;
       tileElements.forEach(function(el, idx){
         var b=tileBodies[idx], init=initialTileRects[idx];
         if(!b||!init)return;
         var dx=b.position.x-init.cx, dy=b.position.y-init.cy;
+        if(Math.abs(dy)>vh*1.15)stray++;
         el.style.transform='translate3d('+dx.toFixed(1)+'px, '+dy.toFixed(1)+'px, 0) rotate('+b.angle.toFixed(3)+'rad)';
       });
-      physicsCurtain.style.opacity=String(clamp(1-(p-0.54)*10, 0, 1));
-      physicsCurtain.style.pointerEvents=p>0.52?'none':'auto';
+      if(stray>tileElements.length*0.45)releaseTiles();
+      physicsCurtain.style.opacity=String(clamp(1-(p-0.60)*8, 0, 1));
+      physicsCurtain.style.pointerEvents=p>0.58?'none':'auto';
     }else if(p<=0.06 || !motion && p<0.5){
       physicsActive=false;
+      fallLatched=false;
       if(skillHead)skillHead.style.opacity='1';
       physicsFloorLine.style.opacity='0';
       physicsCurtain.style.opacity = !motion ? String(clamp(1-(p-0.18)*4, 0, 1)) : '1';
       physicsCurtain.style.pointerEvents = physicsCurtain.style.opacity==='0' ? 'none' : 'auto';
       if(!tilesMatch(liveTiles()))initPhysicsBodies();
       restoreTiles();
-      if(motion){
-        initialTileRects.forEach(function(init, idx){
-          if(!tileBodies[idx])return;
-          Body.setPosition(tileBodies[idx], {x:init.cx, y:init.cy});
-          Body.setVelocity(tileBodies[idx], {x:(Math.random()-0.5)*2.5, y:0});
-          Body.setAngle(tileBodies[idx], 0);
-          Body.setAngularVelocity(tileBodies[idx], 0);
-        });
-      }
+      if(motion)placeBodiesAtRest();
     }else{
       physicsActive=false;
       physicsCurtain.style.opacity='0';
