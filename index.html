@@ -959,9 +959,8 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
   100%{opacity:1;transform:translateY(0) scale(1) rotate(var(--tilt,1deg)) skewX(var(--skew,.3deg))}
 }
 .skill-head{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:8px;padding:0 0 12px;max-width:100%;min-height:0}
-.skill-title{margin:0;font-family:var(--serif);font-weight:400;font-size:clamp(32px,4vw,48px);line-height:1;color:#f8fafc;text-align:center}
+.skill-sr{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .skill-bio{margin:0;max-width:72ch;text-align:center;color:var(--muted);font-size:13px;line-height:1.4}
-.skill-prompt{margin:0;text-align:center;font-size:12px;letter-spacing:.16em;text-transform:uppercase;font-weight:600;color:rgba(125,211,252,.82)}
 .skill-live{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
 .skill-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;list-style:none;margin:8px 0 0;padding:0;max-width:100%;position:relative}
 .skill-legend:not(:has(button:not(.is-secret))){margin:0}
@@ -1116,9 +1115,9 @@ body.is-sheet .back-bar{display:flex}
 <section class="skill-scene" id="skills" aria-label="Find the word">
   <div class="skill-scene-inner">
     <div class="skill-head">
-      <h2 class="skill-title">Find the word</h2>
+      <h2 class="skill-sr">Find the word</h2>
       <p class="skill-bio">Four years leading paid social, short-form strategy and an 8–12 person content team for direct-to-consumer (DTC) lifestyle subscriptions &amp; creator-led brands, across 50+ accounts on Meta and TikTok.</p>
-      <p class="skill-prompt">Drag through each word, letter by letter</p>
+      <p class="skill-sr" id="skill-how">Drag through each word, letter by letter</p>
       <p class="skill-live" id="skill-live" aria-live="polite"></p>
       <ul class="skill-legend" aria-label="Skills">
         <li><button type="button" class="is-secret" tabindex="-1" data-skill="strategy">Creative strategy</button></li>
@@ -1133,7 +1132,7 @@ body.is-sheet .back-bar{display:flex}
         <li><button type="button" class="is-secret" tabindex="-1" data-skill="tools">CapCut, Canva &amp; Notion</button></li>
       </ul>
     </div>
-    <div class="word-grid" id="skill-grid" tabindex="0" aria-label="Find the skills in the letters"></div>
+    <div class="word-grid" id="skill-grid" tabindex="0" aria-label="Find the skills in the letters" aria-describedby="skill-how"></div>
   </div>
 </section>
 <script>
