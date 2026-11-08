@@ -207,9 +207,80 @@ function assert(cond, msg, extra) {
   assert(order.room < order.skill && order.skill < order.contact, 'page order is not intro, room, grid, contact', order);
   assert(order.nested === 0 && order.labels === 1, 'duplicate Find the word section remains', order);
 
+  function solvedWords() {
+    var cells = [].slice.call(document.querySelectorAll('#skill-grid > .cell'));
+    var by = {};
+    cells.forEach(function (c) {
+      if (!c.dataset.word) return;
+      var w = c.dataset.word;
+      if (!by[w]) by[w] = { n: 0, accent: 0, found: 0 };
+      by[w].n++;
+      if (c.classList.contains('is-accent')) by[w].accent++;
+      if (c.classList.contains('found')) by[w].found++;
+    });
+    var full = [];
+    Object.keys(by).forEach(function (w) {
+      if (by[w].n === w.length && by[w].found === w.length && by[w].accent === w.length) full.push(w);
+    });
+    var fillerAccent = cells.filter(function (c) { return !c.dataset.word && c.classList.contains('is-accent'); }).length;
+    return {
+      full: full,
+      cursor: !!document.querySelector('.skill-auto-cursor.is-on'),
+      fillerAccent: fillerAccent,
+      tracing: cells.filter(function (c) { return c.classList.contains('tracing'); }).length
+    };
+  }
+
+  await page.evaluate(go, 'skillTrack', 0);
+  await new Promise(function (r) { setTimeout(r, 250); });
+  var entry = await page.evaluate(skillSnap);
+  await page.evaluate(function () { window.scrollBy(0, 40); });
+  await new Promise(function (r) { setTimeout(r, 200); });
+  var n40 = await page.evaluate(skillSnap);
+  await page.evaluate(function () { window.scrollBy(0, 40); });
+  await new Promise(function (r) { setTimeout(r, 200); });
+  var n80 = await page.evaluate(skillSnap);
+  await page.evaluate(function () { window.scrollBy(0, 40); });
+  await new Promise(function (r) { setTimeout(r, 200); });
+  var n120 = await page.evaluate(skillSnap);
+  assert(entry.moved === 0 && n40.moved === 0 && n80.moved === 0 && n120.moved === 0, 'a small scroll scrambled the word grid', { entry: entry, n40: n40, n80: n80, n120: n120 });
+  assert(n40.p > 0.03 && n120.p < 0.35, '40–120px did not stay inside the stable entry', { n40: n40, n120: n120 });
+
+  var auto = { full: [] };
+  for (var waitStep = 0; waitStep < 16 && auto.full.length < 3; waitStep++) {
+    await new Promise(function (r) { setTimeout(r, 600); });
+    auto = await page.evaluate(solvedWords);
+    var snap = await page.evaluate(skillSnap);
+    assert(snap.moved === 0, 'grid collapsed while words were selecting themselves', { snap: snap, auto: auto });
+  }
+  assert(auto.full.length >= 3, 'automatic cursor did not finish three words', auto);
+  assert(auto.fillerAccent === 0, 'automatic selection accented filler tiles', auto);
+  assert(auto.full.indexOf('HIGGSFIELD') >= 0 && auto.full.indexOf('META') >= 0, 'first words were not traced in order', auto);
+
+  var beforeTouch = auto.full.slice();
+  await page.evaluate(function () {
+    var cell = document.querySelector('#skill-grid > .cell');
+    var r = cell.getBoundingClientRect();
+    var x = r.left + r.width / 2;
+    var y = r.top + r.height / 2;
+    cell.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, cancelable: true, clientX: x, clientY: y, pointerId: 7, pointerType: 'touch' }));
+    document.getElementById('skill-grid').dispatchEvent(new PointerEvent('pointermove', { bubbles: true, cancelable: true, clientX: x, clientY: y + 72, pointerId: 7, pointerType: 'touch' }));
+    document.getElementById('skill-grid').dispatchEvent(new PointerEvent('pointerup', { bubbles: true, cancelable: true, clientX: x, clientY: y + 72, pointerId: 7, pointerType: 'touch' }));
+    window.scrollBy(0, 40);
+  });
+  await new Promise(function (r) { setTimeout(r, 200); });
+  var afterTouchScroll = await page.evaluate(skillSnap);
+  assert(afterTouchScroll.moved === 0 && afterTouchScroll.p < 0.35, 'touch scroll scrambled the grid', afterTouchScroll);
+  var afterTouch = { full: beforeTouch };
+  for (var touchWait = 0; touchWait < 12 && afterTouch.full.length <= beforeTouch.length; touchWait++) {
+    await new Promise(function (r) { setTimeout(r, 600); });
+    afterTouch = await page.evaluate(solvedWords);
+  }
+  assert(afterTouch.full.length > beforeTouch.length, 'a vertical touch cancelled automatic selection', { beforeTouch: beforeTouch, afterTouch: afterTouch });
+
   var reversals = [];
   for (var n = 0; n < 3; n++) {
-    await page.evaluate(go, 'skillTrack', 0.22);
+    await page.evaluate(go, 'skillTrack', 0.48);
     await new Promise(function (r) { setTimeout(r, 700); });
     var mid = await page.evaluate(skillSnap);
     await page.evaluate(go, 'skillTrack', 0.02);
@@ -263,7 +334,7 @@ function assert(cond, msg, extra) {
   assert(fitted.gridBottom <= fitted.vh + 2, 'grid lower edge is clipped on a short laptop', fitted);
   assert(fitted.gridTop >= 0, 'grid top is above the pinned viewport', fitted);
 
-  await page.evaluate(go, 'skillTrack', 0.14);
+  await page.evaluate(go, 'skillTrack', 0.42);
   await new Promise(function (r) { setTimeout(r, 280); });
   var partialA = await page.evaluate(skillSnap);
   await new Promise(function (r) { setTimeout(r, 900); });
@@ -403,8 +474,12 @@ function assert(cond, msg, extra) {
       };
     });
     assert(vpOrder.room < vpOrder.skill && vpOrder.skill < vpOrder.contact, vp.name + ' section order changed', vpOrder);
-    await vpPage.evaluate(go, 'skillTrack', 0.22);
-    await new Promise(function (r) { setTimeout(r, 500); });
+    await vpPage.evaluate(go, 'skillTrack', 0.2);
+    await new Promise(function (r) { setTimeout(r, 250); });
+    var vpStable = await vpPage.evaluate(skillSnap);
+    assert(vpStable.moved === 0 && vpStable.p < 0.35, vp.name + ' small entry scroll scrambled the grid', vpStable);
+    await vpPage.evaluate(go, 'skillTrack', 0.48);
+    await new Promise(function (r) { setTimeout(r, 700); });
     var vpFall = await vpPage.evaluate(skillSnap);
     assert(vpFall.moved > 8, vp.name + ' fall did not run', vpFall);
     await vpPage.evaluate(go, 'skillTrack', 0.7);
