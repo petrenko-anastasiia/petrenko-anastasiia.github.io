@@ -1,0 +1,41 @@
+<!-- STACK MATRIX (upgrade v1) -->
+<section class="sm-section" id="stack" aria-labelledby="sm-title">
+  <div id="skills" class="sm-anchor" tabindex="-1"></div>
+  <div class="sm-wrap">
+    <div class="sm-head">
+      <div>
+        <h2 class="sm-title" id="sm-title">Creative &amp; AI stack</h2>
+        <p class="sm-sub">Hover or tap a word for proof from the work. One more word is hiding in column 9.</p>
+      </div>
+      <div class="sm-filters" role="group" aria-label="Filter the stack by pillar">
+        <button type="button" class="sm-pill" data-filter="all" aria-pressed="true">All stack</button>
+        <button type="button" class="sm-pill" data-filter="ai" aria-pressed="false"><i class="sm-dot sm-dot--ai" aria-hidden="true"></i>AI &amp; Ops</button>
+        <button type="button" class="sm-pill" data-filter="paid" aria-pressed="false"><i class="sm-dot sm-dot--paid" aria-hidden="true"></i>Paid Social &amp; Strategy</button>
+        <button type="button" class="sm-pill" data-filter="data" aria-pressed="false"><i class="sm-dot sm-dot--data" aria-hidden="true"></i>Data</button>
+      </div>
+    </div>
+
+    <div class="sm-frame" id="sm-frame">
+      <div class="sm-board" id="sm-board">
+        <div class="sm-caps" id="sm-caps"></div>
+      </div>
+    </div>
+
+    <div class="sm-foot">
+      <p class="sm-legend"><span><i class="sm-dot sm-dot--ai" aria-hidden="true"></i>AI &amp; Ops</span><span><i class="sm-dot sm-dot--paid" aria-hidden="true"></i>Paid Social &amp; Strategy</span><span><i class="sm-dot sm-dot--data" aria-hidden="true"></i>Data</span></p>
+      <p class="sm-egg">
+        <span id="sm-egg-status">Hidden word: click or drag R, O, A, S down column 9 (0/4)</span>
+        <button type="button" class="sm-hint" id="sm-hint">Hint</button>
+      </p>
+    </div>
+    <p class="sm-sr" id="sm-live" aria-live="polite"></p>
+  </div>
+
+  <div class="sm-card" id="sm-card" role="dialog" aria-labelledby="sm-card-name" hidden>
+    <p class="sm-card-tag" id="sm-card-tag"></p>
+    <h3 class="sm-card-name" id="sm-card-name"></h3>
+    <p class="sm-card-desc" id="sm-card-desc"></p>
+    <p class="sm-card-foot"><span class="sm-card-kpi" id="sm-card-kpi"></span><a class="sm-card-link" id="sm-card-link" href="#">Open case</a></p>
+    <button type="button" class="sm-card-close" id="sm-card-close" aria-label="Close proof card">×</button>
+  </div>
+</section>

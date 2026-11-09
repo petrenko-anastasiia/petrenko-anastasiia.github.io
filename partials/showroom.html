@@ -1,0 +1,115 @@
+<!-- RECENT WORKS SHOWROOM (upgrade v1) -->
+<section class="vr-section" id="work" aria-labelledby="vr-title">
+  <div id="works" class="vr-anchor" tabindex="-1"></div>
+  <div class="vr-stage" id="vr-stage" tabindex="0" aria-describedby="vr-help" aria-roledescription="3D showroom">
+    <div class="vr-webgl" id="vr-webgl"></div>
+    <div class="vr-css" id="vr-css"></div>
+    <div class="vr-bars" aria-hidden="true"><i></i><i></i></div>
+
+    <div class="vr-hud-top">
+      <div class="vr-heading">
+        <h2 class="vr-title" id="vr-title">Recent works</h2>
+        <p class="vr-help" id="vr-help">Swipe sideways or drag to look around. WASD to walk. Click a pedestal to go to it.</p>
+        <button type="button" class="vr-mode-btn" id="vr-walk" aria-pressed="false">Walk mode: off</button>
+      </div>
+      <div class="vr-radar">
+        <canvas id="vr-radar" width="120" height="92" aria-hidden="true"></canvas>
+        <span>Room map</span>
+      </div>
+    </div>
+
+    <nav class="vr-dock" id="vr-dock" aria-label="Go to a case"></nav>
+    <p class="vr-sr" id="vr-live" aria-live="polite"></p>
+  </div>
+
+  <div class="vr-cards" id="vr-cards">
+    <article class="vr-card" data-id="paid" data-label="Paid social" data-angle="-64" data-accent="blue">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">Meta &amp; TikTok ads</p>
+        <h3 class="vr-card-title">Paid social</h3>
+        <p class="vr-card-stat"><strong>−54%</strong> CPA on Meta in 6 weeks</p>
+        <p class="vr-card-desc">Ad sets split by hook type, 8–10 new variants a week. Budget moved to the product-demo hook: CPA ~$48 → ~$22.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="#paid">Open case</a>
+        </div>
+      </div>
+      <div class="vr-card-media">
+        <video muted loop playsinline preload="none" poster="assets/img/argo-video-poster.jpg" data-src="assets/video/argo-loop.mp4" aria-label="Product-demo hook example: ARGŌ golden body oil"></video>
+      </div>
+    </article>
+
+    <article class="vr-card" data-id="hooklab" data-label="Hook Lab" data-angle="-32" data-accent="violet">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">AI production, no shoot</p>
+        <h3 class="vr-card-title">Hook Lab</h3>
+        <p class="vr-card-stat"><strong>6</strong> pieces, one hook type each</p>
+        <p class="vr-card-desc">Macro reveals, question hooks, scene switches and outcome claims, made with ComfyUI, Higgsfield, Nano Banana and Veo.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="#hooklab">Open Hook Lab</a>
+        </div>
+      </div>
+      <div class="vr-card-media">
+        <video muted loop playsinline preload="none" poster="assets/img/outfit-transition.jpg" data-src="assets/video/outfit-loop.mp4" aria-label="Hook Lab: outfit transition"></video>
+      </div>
+    </article>
+
+    <article class="vr-card" data-id="growth" data-label="$471K Growth case" data-angle="0" data-accent="violet">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">Subscription business</p>
+        <h3 class="vr-card-title">Growth case</h3>
+        <p class="vr-card-stat"><strong>$471K</strong> subscription revenue since launch</p>
+        <p class="vr-card-desc">Co-founded and ran the revenue side: pricing, post-purchase lifecycle and CRM funnel, retention.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="#ap-growth-case-study">Open case</a>
+        </div>
+      </div>
+      <div class="vr-card-media vr-card-media--stats">
+        <dl>
+          <div><dt>Platform rank</dt><dd>Top 2%</dd></div>
+          <div><dt>From lifecycle &amp; CRM</dt><dd>86%</dd></div>
+          <div><dt>Chargebacks</dt><dd>0%</dd></div>
+          <div><dt>Creator roster, first 3 months</dt><dd>$126K</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="vr-card" data-id="organic" data-label="~1M Organic growth" data-angle="32" data-accent="emerald">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">Short-form strategy</p>
+        <h3 class="vr-card-title">Organic growth</h3>
+        <p class="vr-card-stat"><strong>~1M</strong> organic views in one month</p>
+        <p class="vr-card-desc">Across 3 accounts: market research, brand voice, a publishing plan, then adjust on the numbers.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="#strategy">Open case</a>
+        </div>
+      </div>
+      <div class="vr-card-media vr-card-media--stats">
+        <dl>
+          <div><dt>Creator-led brand</dt><dd>0 → 5k</dd></div>
+          <div><dt>Followers, in about</dt><dd>1 month</dd></div>
+          <div><dt>Accounts</dt><dd>3</dd></div>
+        </dl>
+      </div>
+    </article>
+
+    <article class="vr-card" data-id="postroom" data-label="Postroom" data-angle="64" data-accent="violet">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">Built in Cursor</p>
+        <h3 class="vr-card-title">Postroom</h3>
+        <p class="vr-card-stat"><strong>~75%</strong> faster publishing</p>
+        <p class="vr-card-desc">AI captions, approval, scheduling and Instagram API publishing in one workspace. Used in production.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="work/postroom/">Try the demo</a>
+        </div>
+      </div>
+      <div class="vr-card-media">
+        <video muted loop playsinline preload="none" poster="assets/img/postroom-poster.jpg" data-src="assets/video/postroom-loop.mp4" aria-label="Postroom promo"></video>
+      </div>
+    </article>
+  </div>
+</section>
