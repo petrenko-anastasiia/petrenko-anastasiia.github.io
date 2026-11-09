@@ -305,16 +305,6 @@
     }
   });
 
-  /* ---------- Portrait face scan: click or tap pins the scan on/off ---------- */
-  var scan = $('#ph-scan');
-  if (scan) {
-    scan.addEventListener('click', function () {
-      var on = !scan.classList.contains('is-scanning');
-      scan.classList.toggle('is-scanning', on);
-      scan.setAttribute('aria-pressed', String(on));
-    });
-  }
-
   /* ---------- 3D tilt on the monitors (fine pointers only) ---------- */
   var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)');
   $$('[data-tilt]').forEach(function (card) {
