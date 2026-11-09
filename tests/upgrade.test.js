@@ -84,10 +84,18 @@ async function open(browser, opts) {
     const copied = await page.evaluate(() => navigator.clipboard.readText());
     check('copy button copies the email', copied === 'apetrenko597@gmail.com', copied);
 
-    await page.click('#ph-scan');
-    const scan = await page.evaluate(() => ({ on: document.getElementById('ph-scan').classList.contains('is-scanning'), pressed: document.getElementById('ph-scan').getAttribute('aria-pressed'),
-      line: getComputedStyle(document.querySelector('.ph-scan-line')).opacity }));
-    check('portrait click runs the face scan', scan.on && scan.pressed === 'true' && scan.line === '1', JSON.stringify(scan));
+    const portrait = await page.evaluate(() => {
+      const el = document.getElementById('ph-scan');
+      const img = el.querySelector('img');
+      const cs = getComputedStyle(el);
+      return {
+        overlays: el.querySelectorAll('.ph-scan-label, .ph-scan-chip, .ph-scan-line, .ph-scan-tint, .ph-scan-ring').length,
+        text: el.textContent.trim(),
+        radius: cs.borderRadius,
+        alt: img ? img.alt : '',
+      };
+    });
+    check('portrait is a clean circle', portrait.overlays === 0 && portrait.text === '' && portrait.radius === '50%' && portrait.alt === 'Anastasiia Petrenko', JSON.stringify(portrait));
 
     /* Stack matrix */
     await page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));

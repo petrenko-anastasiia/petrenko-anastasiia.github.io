@@ -182,7 +182,7 @@ body.is-sheet .vr-section { display: none; }
 }
 .ph-drawer-links a:hover { text-decoration: underline; }
 
-/* Portrait face-scan card: idle shows the photo, hover/tap runs the scan */
+/* Round portrait under the hero metrics. */
 .ph-scan {
   --scan-size: 200px;
   position: relative;
@@ -194,14 +194,7 @@ body.is-sheet .vr-section { display: none; }
   border-radius: 50%;
   overflow: hidden;
   border: 2px solid rgba(125, 211, 252, 0.55);
-  background:
-    radial-gradient(70% 60% at 30% 30%, rgba(245, 158, 11, 0.16), transparent 60%),
-    radial-gradient(80% 70% at 75% 60%, rgba(139, 92, 246, 0.28), transparent 65%),
-    linear-gradient(160deg, #1a1530, #0c0f1c);
-  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.6);
-  cursor: pointer;
-  font: inherit;
-  color: inherit;
+  background: #0c0f1c;
 }
 .ph-scan img {
   position: absolute;
@@ -213,101 +206,7 @@ body.is-sheet .vr-section { display: none; }
   object-position: 50% 35%;
   border-radius: 50%;
   display: block;
-  transition: filter 0.35s ease;
 }
-.ph-scan-tint {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(180deg, rgba(76, 29, 149, 0.35), rgba(30, 27, 75, 0.55));
-  mix-blend-mode: color;
-  opacity: 0;
-  transition: opacity 0.35s ease;
-}
-.ph-scan-ring {
-  position: absolute;
-  left: 50%;
-  top: 48%;
-  width: 46%;
-  height: 46%;
-  border: 1.5px dashed rgba(196, 181, 253, 0.85);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.ph-scan-line {
-  position: absolute;
-  left: 4%;
-  right: 4%;
-  top: 12%;
-  height: 2px;
-  border-radius: 2px;
-  background: linear-gradient(90deg, transparent, #a78bfa 20%, #60a5fa 80%, transparent);
-  box-shadow: 0 0 12px 2px rgba(139, 92, 246, 0.7);
-  opacity: 0;
-}
-.ph-scan-chip {
-  position: absolute;
-  top: 7px;
-  font-family: var(--mono, ui-monospace, Menlo, monospace);
-  font-size: 8px;
-  letter-spacing: 0.06em;
-  line-height: 1;
-  opacity: 0.45;
-  transition: opacity 0.3s ease;
-}
-.ph-scan-chip--key {
-  left: 7px;
-  padding: 3px 5px;
-  border-radius: 5px;
-  color: #fcd34d;
-  background: rgba(20, 16, 10, 0.7);
-  border: 1px solid rgba(245, 158, 11, 0.55);
-}
-.ph-scan-chip--lock {
-  right: 8px;
-  top: 10px;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  color: #6ee7b7;
-}
-.ph-scan-chip--lock i { width: 5px; height: 5px; border-radius: 50%; background: #34d399; box-shadow: 0 0 6px #34d399; }
-.ph-scan-label {
-  position: absolute;
-  left: 7px;
-  right: 7px;
-  bottom: 7px;
-  padding: 3px 0;
-  border-radius: 6px;
-  background: rgba(5, 7, 12, 0.72);
-  font-family: var(--mono, ui-monospace, Menlo, monospace);
-  font-size: 8px;
-  letter-spacing: 0.06em;
-  color: #e2e8f0;
-  opacity: 0.55;
-  transition: opacity 0.3s ease;
-}
-
-/* scanning: hover on mouse devices, or pinned with a click/tap */
-.ph-scan.is-scanning img { filter: blur(1.2px) saturate(0.7) brightness(0.9); }
-.ph-scan.is-scanning .ph-scan-tint,
-.ph-scan.is-scanning .ph-scan-ring,
-.ph-scan.is-scanning .ph-scan-chip,
-.ph-scan.is-scanning .ph-scan-label { opacity: 1; }
-.ph-scan.is-scanning .ph-scan-line { opacity: 1; animation: ph-sweep 1.8s ease-in-out infinite alternate; }
-.ph-scan.is-scanning .ph-scan-ring { animation: ph-ring 6s linear infinite; }
-@media (hover: hover) and (pointer: fine) {
-  .ph-scan:hover img { filter: blur(1.2px) saturate(0.7) brightness(0.9); }
-  .ph-scan:hover .ph-scan-tint,
-  .ph-scan:hover .ph-scan-ring,
-  .ph-scan:hover .ph-scan-chip,
-  .ph-scan:hover .ph-scan-label { opacity: 1; }
-  .ph-scan:hover .ph-scan-line { opacity: 1; animation: ph-sweep 1.8s ease-in-out infinite alternate; }
-  .ph-scan:hover .ph-scan-ring { animation: ph-ring 6s linear infinite; }
-}
-@keyframes ph-sweep { from { top: 12%; } to { top: 80%; } }
-@keyframes ph-ring { to { transform: translate(-50%, -50%) rotate(360deg); } }
 
 .ph-bio {
   font-size: 14px;
@@ -527,8 +426,7 @@ body.is-sheet .vr-section { display: none; }
   .ph-hook { font-size: clamp(18px, 1.7vw, 22px); margin-bottom: 12px; }
   .ph-kpi { padding: 9px 8px; }
   .ph-kpi-value { font-size: 24px; }
-  .ph-scan { --scan-size: 80px; margin: 8px 0; border-radius: 16px; }
-  .ph-scan-chip, .ph-scan-label { display: none; }
+  .ph-scan { --scan-size: 80px; margin: 8px 0; }
   .ph-bio { font-size: 13px; margin-bottom: 10px; }
   .ph-monitor { padding: 10px; }
   .ph-step-detail { min-height: 0; }
@@ -578,7 +476,4 @@ body.is-sheet .vr-section { display: none; }
   .ph-monitor { --ry: 0deg !important; --rx: 0deg !important; }
   .ph-curve-line.is-drawing { animation: none; }
   .ph-node.is-running .ph-node-bar { transform: scaleX(1); }
-  .ph-scan .ph-scan-line, .ph-scan .ph-scan-ring { animation: none !important; }
-  .ph-scan.is-scanning .ph-scan-line, .ph-scan:hover .ph-scan-line { top: 48%; }
-  .ph-scan img, .ph-scan-tint, .ph-scan-ring, .ph-scan-chip, .ph-scan-label { transition: none; }
 }
