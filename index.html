@@ -1207,409 +1207,12 @@ body.is-sheet .back-bar{display:flex}
 }
 
 </style>
+<link rel="stylesheet" href="assets/css/hero.css">
+<link rel="stylesheet" href="assets/css/stack-matrix.css">
+<link rel="stylesheet" href="assets/css/showroom.css">
 </head>
 <body class="screen-intro">
 <noscript><style>#ap-load{display:none!important}</style></noscript>
-<div class="ap-load" id="ap-load" role="status" aria-live="polite" aria-busy="true">
-  <div class="ap-gl" id="ap-gl" aria-hidden="true"></div>
-  <p class="ap-fallback" id="ap-fallback" hidden>Creative strategy · Paid social · AI production<span>TikTok ads · Creative testing · Hooks · Meta ads</span></p>
-  <div class="ap-cursor-ring" id="ap-cursor-ring" aria-hidden="true"></div>
-  <div class="ap-cursor-dot" id="ap-cursor-dot" aria-hidden="true"></div>
-  <div class="percentage-anchor">
-    <p class="percentage-value" id="ap-pct">0%</p>
-  </div>
-</div>
-<script src="assets/vendor/three.r128.min.js"></script>
-<script>
-(function(){
-  var root=document.getElementById('ap-load');
-  if(!root)return;
-  var SEEN_KEY='ap-loader-seen-v1';
-  var CASE_IDS={paid:1,tool:1,'content-ops-tool':1,hooklab:1,'ap-growth-case-study':1,growth:1,strategy:1};
-  function storageGet(key){try{return window.localStorage.getItem(key);}catch(err){return null;}}
-  function storageSet(key,val){try{window.localStorage.setItem(key,val);}catch(err){}}
-  function caseFromLocation(){
-    var raw=(location.hash||'').replace(/^#/,'').split(/[?&]/)[0];
-    if(CASE_IDS[raw])return raw;
-    try{
-      var q=new URLSearchParams(location.search);
-      var named=(q.get('case')||q.get('work')||'').replace(/^#/,'');
-      if(CASE_IDS[named])return named;
-    }catch(err){}
-    return '';
-  }
-  function dropLoader(){
-    storageSet(SEEN_KEY,'1');
-    window.__apSkipLoader=true;
-    if(root.parentNode)root.parentNode.removeChild(root);
-  }
-  window.addEventListener('pageshow',function(ev){
-    if(!ev.persisted)return;
-    var node=document.getElementById('ap-load');
-    if(node&&node.parentNode)node.parentNode.removeChild(node);
-    window.__apSkipLoader=true;
-    if(window.runPostLoaderChoreography)window.runPostLoaderChoreography();
-    else document.body.classList.add('hero-stage-content','hero-stage-nav','hero-stage-spotlight');
-  });
-  if(storageGet(SEEN_KEY)==='1'||caseFromLocation()){dropLoader();return;}
-  var pctEl=document.getElementById('ap-pct');
-  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  var urls=['assets/img/portrait.jpg','assets/img/outfit-transition.jpg','assets/img/tool/01-ai-caption-options.jpg','assets/img/argo-video-poster.jpg'];
-  var total=urls.length+1, got=0, leaving=false;
-  var raf=0, renderer, quoteGeo, microGeo, quoteTexture, microTexture, quoteBackMat, quoteFrontMat, microBackMat, microFrontMat;
-  var displayed=0;
-  function showPct(n){
-    if(n<displayed)return;
-    displayed=n;
-    if(pctEl)pctEl.textContent=n+'%';
-    var prev=root.dataset.pctSeen||'';
-    var last=prev.split(' ').pop();
-    if(String(n)!==last)root.dataset.pctSeen=prev?(prev+' '+n):String(n);
-  }
-  function boot(){
-    var host=document.getElementById('ap-gl');
-    if(!host||typeof THREE==='undefined')throw new Error('no three');
-    var state={
-      bigQuoteText:'CREATIVE STRATEGY · PAID SOCIAL · AI PRODUCTION · ',
-      microRingText:'TIKTOK ADS · CREATIVE TESTING · HOOKS · META ADS · ',
-      microScaleMode:'small',
-      sculptureScale:1.0,
-      eccentricity:1.385,
-      backWallOpacity:0.64,
-      baseOrbitSpeed:0.38,
-      mouseX:0,
-      mouseY:0,
-      rawPxX:window.innerWidth/2,
-      rawPxY:window.innerHeight/2,
-      cursorX:window.innerWidth/2,
-      cursorY:window.innerHeight/2,
-      isDragging:false,
-      lastDragX:0,
-      lastDragY:0,
-      spinVelocity:0,
-      pitchOffset:0
-    };
-    var stageEl=host;
-    var scene=new THREE.Scene();
-    var camera=new THREE.PerspectiveCamera(32, window.innerWidth/Math.max(window.innerHeight,1), 0.1, 100);
-    camera.position.set(0, 0.08, 12.8);
-    renderer=new THREE.WebGLRenderer({antialias:true, alpha:false, powerPreference:'high-performance'});
-    if(!renderer.getContext())throw new Error('no webgl');
-    renderer.setClearColor(0x080a10, 1);
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 2));
-    stageEl.appendChild(renderer.domElement);
-    var maxAnisotropy=Math.min(16, renderer.capabilities.getMaxAnisotropy());
-
-    function createBigQuoteTexture(quoteStr){
-      var canvas=document.createElement('canvas');
-      canvas.width=4096;
-      canvas.height=512;
-      var ctx=canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle='#ffffff';
-      ctx.textBaseline='middle';
-      var clean=quoteStr.trim().toUpperCase();
-      if(clean.slice(-1)!=='·')clean+='   ·';
-      var fullRibbon=clean+'   ';
-      var fontSize=375;
-      ctx.font='700 '+fontSize+'px "Antonio", "Anton", "Impact", sans-serif';
-      var measuredWidth=ctx.measureText(fullRibbon).width;
-      var scaleX=(canvas.width*0.985)/Math.max(1, measuredWidth);
-      ctx.save();
-      ctx.translate(canvas.width*0.0075, canvas.height/2+14);
-      ctx.scale(scaleX, 1.15);
-      ctx.fillText(fullRibbon, 0, 0);
-      ctx.restore();
-      var texture=new THREE.CanvasTexture(canvas);
-      texture.wrapS=THREE.RepeatWrapping;
-      texture.wrapT=THREE.ClampToEdgeWrapping;
-      texture.anisotropy=maxAnisotropy;
-      texture.minFilter=THREE.LinearMipmapLinearFilter;
-      texture.magFilter=THREE.LinearFilter;
-      texture.needsUpdate=true;
-      return texture;
-    }
-    function createSmallMicroTexture(microStr, scaleMode){
-      var canvas=document.createElement('canvas');
-      canvas.width=4096;
-      canvas.height=256;
-      var ctx=canvas.getContext('2d');
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle='#ffffff';
-      ctx.textBaseline='middle';
-      var basePhrase=microStr.trim().toUpperCase();
-      if(basePhrase.slice(-1)!=='·')basePhrase+='   ·';
-      var spacedUnit=scaleMode==='small'?basePhrase+'      ':basePhrase+'    ';
-      var fullLoop=scaleMode==='small'?spacedUnit+spacedUnit:spacedUnit;
-      var fontSize=scaleMode==='small'?54:112;
-      ctx.font='600 '+fontSize+'px "Inter", -apple-system, sans-serif';
-      if('letterSpacing' in ctx)ctx.letterSpacing=scaleMode==='small'?'6px':'4px';
-      var measuredWidth=ctx.measureText(fullLoop).width;
-      var scaleX=(canvas.width*0.975)/Math.max(1, measuredWidth);
-      ctx.save();
-      ctx.translate(canvas.width*0.012, canvas.height/2);
-      ctx.scale(scaleX, 1.0);
-      ctx.fillText(fullLoop, 0, 0);
-      ctx.restore();
-      var texture=new THREE.CanvasTexture(canvas);
-      texture.wrapS=THREE.RepeatWrapping;
-      texture.wrapT=THREE.ClampToEdgeWrapping;
-      texture.anisotropy=maxAnisotropy;
-      texture.minFilter=THREE.LinearMipmapLinearFilter;
-      texture.magFilter=THREE.LinearFilter;
-      texture.needsUpdate=true;
-      return texture;
-    }
-
-    var sculptureRoot=new THREE.Group();
-    scene.add(sculptureRoot);
-    var quoteGimbalGroup=new THREE.Group();
-    sculptureRoot.add(quoteGimbalGroup);
-    var quoteBaseRadius=1.48;
-    var quoteCylinderHeight=0.86;
-    quoteGeo=new THREE.CylinderGeometry(quoteBaseRadius, quoteBaseRadius, quoteCylinderHeight, 180, 1, true);
-    quoteTexture=createBigQuoteTexture(state.bigQuoteText);
-    quoteBackMat=new THREE.MeshBasicMaterial({map:quoteTexture, color:new THREE.Color('#8c98ad'), side:THREE.BackSide, transparent:true, opacity:state.backWallOpacity, depthWrite:false, alphaTest:0.02});
-    quoteFrontMat=new THREE.MeshBasicMaterial({map:quoteTexture, color:new THREE.Color('#ffffff'), side:THREE.FrontSide, transparent:true, opacity:1.0, depthWrite:true, alphaTest:0.02});
-    var quoteBackMesh=new THREE.Mesh(quoteGeo, quoteBackMat);
-    var quoteFrontMesh=new THREE.Mesh(quoteGeo, quoteFrontMat);
-    quoteBackMesh.renderOrder=1;
-    quoteFrontMesh.renderOrder=3;
-    var quoteSpinGroup=new THREE.Group();
-    quoteSpinGroup.add(quoteBackMesh);
-    quoteSpinGroup.add(quoteFrontMesh);
-    quoteSpinGroup.rotation.y=0.42;
-    quoteGimbalGroup.add(quoteSpinGroup);
-
-    var microGimbalGroup=new THREE.Group();
-    sculptureRoot.add(microGimbalGroup);
-    var microBaseRadius=1.38;
-    var microCylinderHeight=0.18;
-    microGeo=new THREE.CylinderGeometry(microBaseRadius, microBaseRadius, microCylinderHeight, 160, 1, true);
-    microTexture=createSmallMicroTexture(state.microRingText, state.microScaleMode);
-    microBackMat=new THREE.MeshBasicMaterial({map:microTexture, color:new THREE.Color('#3d7eb3'), side:THREE.BackSide, transparent:true, opacity:0.52, depthWrite:false, alphaTest:0.02});
-    microFrontMat=new THREE.MeshBasicMaterial({map:microTexture, color:new THREE.Color('#5bb8ff'), side:THREE.FrontSide, transparent:true, opacity:0.98, depthWrite:true, alphaTest:0.02});
-    var microBackMesh=new THREE.Mesh(microGeo, microBackMat);
-    var microFrontMesh=new THREE.Mesh(microGeo, microFrontMat);
-    microBackMesh.renderOrder=2;
-    microFrontMesh.renderOrder=4;
-    var microSpinGroup=new THREE.Group();
-    microSpinGroup.add(microBackMesh);
-    microSpinGroup.add(microFrontMesh);
-    microSpinGroup.rotation.y=-0.35;
-    microGimbalGroup.add(microSpinGroup);
-
-    function refreshAllTextures(){
-      var newQuoteTex=createBigQuoteTexture(state.bigQuoteText);
-      var newMicroTex=createSmallMicroTexture(state.microRingText, state.microScaleMode);
-      quoteBackMat.map=newQuoteTex;
-      quoteFrontMat.map=newQuoteTex;
-      microBackMat.map=newMicroTex;
-      microFrontMat.map=newMicroTex;
-      quoteBackMat.needsUpdate=true;
-      quoteFrontMat.needsUpdate=true;
-      microBackMat.needsUpdate=true;
-      microFrontMat.needsUpdate=true;
-      if(quoteTexture)quoteTexture.dispose();
-      if(microTexture)microTexture.dispose();
-      quoteTexture=newQuoteTex;
-      microTexture=newMicroTex;
-    }
-    if(document.fonts&&document.fonts.ready)document.fonts.ready.then(refreshAllTextures);
-
-    var cursorRing=document.getElementById('ap-cursor-ring');
-    var cursorDot=document.getElementById('ap-cursor-dot');
-    var fine=window.matchMedia('(pointer:fine)').matches;
-    function onDown(e){
-      if(leaving||(e.button!=null&&e.button>0))return;
-      state.isDragging=true;
-      state.lastDragX=e.clientX;
-      state.lastDragY=e.clientY;
-      root.classList.add('is-grabbing');
-      if(cursorRing){cursorRing.style.width='22px';cursorRing.style.height='22px';cursorRing.style.borderColor='#5bb8ff';}
-      try{root.setPointerCapture(e.pointerId);}catch(err){}
-    }
-    function onMove(e){
-      if(leaving)return;
-      state.rawPxX=e.clientX;
-      state.rawPxY=e.clientY;
-      var nx=(e.clientX/Math.max(window.innerWidth,1))*2-1;
-      var ny=(e.clientY/Math.max(window.innerHeight,1))*2-1;
-      var dxNorm=nx-state.mouseX;
-      state.mouseX=nx;
-      state.mouseY=ny;
-      if(!reduce.matches && e.pointerType!=='touch')state.spinVelocity+=dxNorm*0.02;
-      if(state.isDragging){
-        var dx=e.clientX-state.lastDragX;
-        var dy=e.clientY-state.lastDragY;
-        state.lastDragX=e.clientX;
-        state.lastDragY=e.clientY;
-        if(e.pointerType==='touch')state.spinVelocity=dx*0.004;
-        else{
-          state.spinVelocity=dx*0.0042;
-          state.pitchOffset=Math.max(-0.65, Math.min(0.65, state.pitchOffset+dy*0.0035));
-        }
-      }
-    }
-    function onUp(){
-      state.isDragging=false;
-      root.classList.remove('is-grabbing');
-      if(cursorRing){cursorRing.style.width='30px';cursorRing.style.height='30px';cursorRing.style.borderColor='rgba(91, 184, 255, 0.45)';}
-    }
-    root.addEventListener('pointerdown', onDown);
-    root.addEventListener('pointermove', onMove);
-    root.addEventListener('pointerup', onUp);
-    root.addEventListener('pointercancel', onUp);
-    function onResize(){
-      if(!renderer||!camera)return;
-      camera.aspect=window.innerWidth/Math.max(window.innerHeight,1);
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    }
-    window.addEventListener('resize', onResize);
-
-    var lastNow=performance.now();
-    function easeOutCubic(t){return 1-Math.pow(1-t, 3);}
-    function pose(now){
-      var loadT=shownAt?Math.min(1, (now-shownAt)/5000):0;
-      var loadFactor=easeOutCubic(loadT);
-      var quotePitch=0.34+(1-loadFactor)*0.22+state.pitchOffset;
-      var quoteRoll=-0.15-(1-loadFactor)*0.18;
-      var quoteYaw=0;
-      var microPitch=0.62+Math.sin(now*0.0007)*0.04;
-      var microRoll=0.22+Math.cos(now*0.0006)*0.04;
-      var microYaw=0;
-      var activeEccentricity=state.eccentricity;
-      var verticalOpenScale=1;
-      var speedMultiplier=1;
-      if(!reduce.matches){
-        quotePitch+=state.mouseY*0.34;
-        quoteYaw+=state.mouseX*0.42;
-        quoteRoll+=-state.mouseX*0.18;
-        microPitch+=state.mouseY*0.26;
-        microYaw+=-state.mouseX*0.32;
-        microRoll+=state.mouseX*0.20;
-      }
-      var entranceScale=(0.76+0.24*easeOutCubic(Math.min(1, loadFactor*1.2)))*state.sculptureScale;
-      if(reduce.matches)entranceScale=state.sculptureScale;
-      sculptureRoot.scale.setScalar(entranceScale);
-      quoteGimbalGroup.scale.lerp(new THREE.Vector3(activeEccentricity, verticalOpenScale, 1.0), reduce.matches?1:0.12);
-      microGimbalGroup.scale.lerp(new THREE.Vector3(activeEccentricity*1.004, 1.0, 1.0), reduce.matches?1:0.12);
-      var rotEase=reduce.matches?1:0.09;
-      quoteGimbalGroup.rotation.x+=(quotePitch-quoteGimbalGroup.rotation.x)*rotEase;
-      quoteGimbalGroup.rotation.y+=(quoteYaw-quoteGimbalGroup.rotation.y)*rotEase;
-      quoteGimbalGroup.rotation.z+=(quoteRoll-quoteGimbalGroup.rotation.z)*rotEase;
-      var microEase=reduce.matches?1:0.08;
-      microGimbalGroup.rotation.x+=(microPitch-microGimbalGroup.rotation.x)*microEase;
-      microGimbalGroup.rotation.y+=(microYaw-microGimbalGroup.rotation.y)*microEase;
-      microGimbalGroup.rotation.z+=(microRoll-microGimbalGroup.rotation.z)*microEase;
-      var targetMicroY=-0.46-(reduce.matches?0:state.mouseY*0.06);
-      microGimbalGroup.position.y+=(targetMicroY-microGimbalGroup.position.y)*(reduce.matches?1:0.1);
-      return {loadFactor:loadFactor, speedMultiplier:speedMultiplier};
-    }
-    function frame(now){
-      if(!renderer||leaving)return;
-      raf=requestAnimationFrame(frame);
-      var dt=Math.min(0.05, (now-lastNow)/1000);
-      lastNow=now;
-      var posed=pose(now);
-      if(!reduce.matches){
-        var omega=state.baseOrbitSpeed*posed.speedMultiplier;
-        quoteSpinGroup.rotation.y-=omega*dt+state.spinVelocity;
-        microSpinGroup.rotation.y+=omega*0.68*dt+state.spinVelocity*0.55;
-        state.spinVelocity*=0.94;
-      }
-      if(fine&&cursorRing&&cursorDot){
-        state.cursorX+=(state.rawPxX-state.cursorX)*0.22;
-        state.cursorY+=(state.rawPxY-state.cursorY)*0.22;
-        cursorRing.style.transform='translate3d('+state.cursorX.toFixed(1)+'px, '+state.cursorY.toFixed(1)+'px, 0)';
-        cursorDot.style.transform='translate3d('+state.rawPxX.toFixed(1)+'px, '+state.rawPxY.toFixed(1)+'px, 0)';
-      }
-      renderer.render(scene, camera);
-      if(!shownAt)requestAnimationFrame(function(){markShown();});
-    }
-    raf=requestAnimationFrame(frame);
-    root._apRead=function(){
-      return {y:quoteSpinGroup.rotation.y, micro:microSpinGroup.rotation.y, x:quoteGimbalGroup.rotation.x, z:quoteGimbalGroup.rotation.z, dragging:state.isDragging, pct:displayed};
-    };
-    root._apDispose=function(){
-      if(raf){cancelAnimationFrame(raf);raf=0;}
-      root.removeEventListener('pointerdown', onDown);
-      root.removeEventListener('pointermove', onMove);
-      root.removeEventListener('pointerup', onUp);
-      root.removeEventListener('pointercancel', onUp);
-      window.removeEventListener('resize', onResize);
-      if(quoteGeo)quoteGeo.dispose();
-      if(microGeo)microGeo.dispose();
-      [quoteBackMat, quoteFrontMat, microBackMat, microFrontMat].forEach(function(m){if(m)m.dispose();});
-      if(quoteTexture)quoteTexture.dispose();
-      if(microTexture)microTexture.dispose();
-      if(renderer){renderer.dispose();if(renderer.domElement&&renderer.domElement.parentNode)renderer.domElement.parentNode.removeChild(renderer.domElement);renderer=null;}
-    };
-  }
-  function showFallback(){
-    var fb=document.getElementById('ap-fallback');
-    var gl=document.getElementById('ap-gl');
-    if(gl)gl.hidden=true;
-    if(fb)fb.hidden=false;
-    requestAnimationFrame(function(){requestAnimationFrame(function(){markShown();});});
-  }
-  var shownAt=0, assetsReady=false, safetyDue=false, exitTimer=0;
-  var MIN_VISIBLE=reduce.matches?0:900, HANG_AFTER=600;
-  function markShown(){
-    if(shownAt)return;
-    shownAt=performance.now();
-    root.dataset.visibleAt=String(Math.round(shownAt));
-    [0,10,20,30,40,50,60,70,80,90].forEach(function(n,i){
-      setTimeout(function(){if(!leaving)showPct(n);},i*120);
-    });
-    setTimeout(function(){safetyDue=true;tryLeave();},MIN_VISIBLE+HANG_AFTER);
-    tryLeave();
-  }
-  function beginLeave(){
-    if(leaving)return;
-    leaving=true;
-    storageSet(SEEN_KEY,'1');
-    root.setAttribute('aria-busy','false');
-    root.classList.add('is-leave');
-    root.classList.add('is-complete');
-    if(!root.dataset.handed){
-      root.dataset.handed='1';
-      setTimeout(function(){
-        if(window.runPostLoaderChoreography)window.runPostLoaderChoreography();
-      },180);
-    }
-    setTimeout(function(){
-      if(root._apDispose)root._apDispose();
-      if(root.parentNode)root.parentNode.removeChild(root);
-    },550);
-  }
-  function tryLeave(){
-    if(leaving||!shownAt)return;
-    var visibleFor=performance.now()-shownAt;
-    if(visibleFor<MIN_VISIBLE){
-      if(!exitTimer)exitTimer=setTimeout(function(){exitTimer=0;tryLeave();},MIN_VISIBLE-visibleFor);
-      return;
-    }
-    if(!assetsReady&&!safetyDue){showPct(Math.min(displayed,90));return;}
-    showPct(100);
-    setTimeout(beginLeave,80);
-  }
-  try{boot();}catch(err){showFallback();}
-  function tick(){got++;if(got>=total){assetsReady=true;tryLeave();}}
-  urls.forEach(function(src){
-    var img=new Image(), settled=false;
-    function mark(){if(settled)return;settled=true;tick();}
-    img.onload=mark;img.onerror=mark;img.src=src;
-    if(img.complete)mark();
-  });
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(tick,tick);
-  else tick();
-  if(reduce.matches)root.classList.add('is-still');
-})();
-</script>
-
 <header class="top">
   <div class="wrap">
     <div class="top-left"><a class="top-cv" href="assets/Anastasiia_Petrenko_CV_2026-11.pdf">CV</a><a class="top-name" href="#intro">Anastasiia Petrenko</a></div>
@@ -1620,1551 +1223,283 @@ body.is-sheet .back-bar{display:flex}
 <div class="back-bar" id="back-bar"><a id="back-link" href="#works" aria-label="Back to work"><span>Work</span></a><b id="back-label">Project</b></div>
 
 <!-- HERO -->
-<section class="hero" id="intro">
-  <div class="wrap hero-grid">
-    <div class="hero-col">
-      <div class="hero-head">
-        <div class="title-wave-clip-box">
-          <div class="spotlight-title-wrap" id="spotlightWrap">
-            <h1 class="spotlight-title" id="waveHeading" data-text="Creative strategist" aria-label="Creative strategist">Creative strategist</h1>
-          </div>
-        </div>
-        <p class="hero-k hero-spaced-sub">Paid social · AI production · Warsaw EU</p>
-        <div class="hero-proof-block">
-          <ul class="hero-proof">
-            <li><span class="num">−54%</span><span class="lbl">CPA on Meta in 6 weeks</span></li>
-            <li><span class="num">$471K</span><span class="lbl">subscription revenue since launch</span></li>
-            <li><span class="num">~75%</span><span class="lbl">faster publishing</span></li>
-          </ul>
-          <p class="hero-proof-note">Paid CPA on Meta · flagship revenue since launch · time saved with Postroom.</p>
-        </div>
-      </div>
-      <div class="hero-stage">
-        <figure class="hero-portrait hero-portrait-card"><img src="assets/img/portrait.jpg" alt="Portrait of Anastasiia Petrenko" width="340" height="340"></figure>
-        <div class="hero-quote-panel hero-lower-stack">
-          <p class="hook" id="hero-quote">I decode what makes top-performing ads convert—and build the creative systems to scale them.</p>
-          <p class="hero-bio">Four years leading paid social, short-form strategy and an 8–12 person content team for direct-to-consumer (DTC) lifestyle subscriptions &amp; creator-led brands. Over those four years the team worked on 50+ accounts; the cases here are selected examples, not that full set.</p>
-          <div class="lanes hero-ctas"><div class="sec-links"><a class="ulink hero-email-pill" href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a></div></div>
-                  </div>
-      </div>
-    </div>
-  </div>
-</section>
-<script>
-(function(){
-  var heading=document.getElementById('waveHeading');
-  if(!heading||heading.dataset.built)return;
-  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  function settle(){
-    document.body.classList.add('hero-stage-content','hero-stage-nav','hero-stage-spotlight');
-    heading.classList.add('is-still');
-  }
-  if(reduce){settle();return;}
-  heading.dataset.built='1';
-  var titleStr=heading.getAttribute('data-text')||'';
-  var chars=titleStr.split('');
-  var centerIdx=(chars.length-1)/2;
-  heading.textContent='';
-  chars.forEach(function(ch, idx){
-    var span=document.createElement('span');
-    span.className='hero-wave-char';
-    span.innerHTML=ch===' '?'&nbsp;':ch;
-    var normDist=centerIdx?Math.abs(idx-centerIdx)/centerIdx:0;
-    var delayMs=Math.pow(normDist,1.35)*340;
-    var dipPercent=(1-normDist)*11+2;
-    span.style.setProperty('--char-delay', delayMs.toFixed(0)+'ms');
-    span.style.setProperty('--char-dip', dipPercent.toFixed(1)+'%');
-    heading.appendChild(span);
-  });
-  document.body.classList.add('hero-armed');
-  var played=false;
-  window.runPostLoaderChoreography=function(){
-    if(played)return;
-    played=true;
-    var nodes=heading.querySelectorAll('.hero-wave-char');
-    var last=0;
-    for(var i=0;i<nodes.length;i++){
-      var d=parseFloat(nodes[i].style.getPropertyValue('--char-delay'))||0;
-      if(d>last)last=d;
-    }
-    var unlock=Math.max(1220, Math.round(last+880));
-    document.body.classList.add('hero-stage-wave');
-    setTimeout(function(){document.body.classList.add('hero-stage-content');},480);
-    setTimeout(function(){
-      document.body.classList.add('hero-stage-nav');
-      document.body.classList.add('hero-stage-spotlight');
-    }, unlock);
-  };
-  if(window.__apSkipLoader||!document.getElementById('ap-load'))window.runPostLoaderChoreography();
-})();
-</script>
-<section class="architect-scroll-track" id="scrollTrack">
-  <div class="StickyViewport">
-    <div class="recent-header-bar" id="recentHeaderBar">
-      <h2 class="wave-title" id="waveTitle" aria-label="Recent works"></h2>
-      <a href="#intro" class="room-backlink" id="roomBackLink">Back to introduction</a>
-    </div>
+<!-- HERO (upgrade v1) -->
+<section class="ph-hero" id="intro" aria-labelledby="ph-title">
+  <div class="ph-stage">
 
-    <div class="gallery-viewport" id="galleryViewport">
-      <div class="ceiling-rig-anchor" id="ceilingRig">
-        <div class="rig-vertical-rod"></div>
-        <div class="rig-lamp-head" id="rigLampHead"></div>
+    <div class="ph-top">
+      <h1 class="ph-title" id="ph-title">Creative strategist</h1>
+      <p class="ph-eyebrow">Paid social · AI production · Warsaw EU</p>
+      <p class="ph-hook">I decode what makes top-performing ads convert — and build the creative systems to scale them.</p>
+
+      <div class="ph-kpis" role="group" aria-label="Results">
+        <button type="button" class="ph-kpi" data-kpi="cpa" aria-expanded="false" aria-controls="ph-drawer">
+          <span class="ph-kpi-value" data-ph-count="54" data-prefix="−" data-suffix="%">−54%</span>
+          <span class="ph-kpi-label">CPA on Meta in 6 weeks</span>
+        </button>
+        <button type="button" class="ph-kpi" data-kpi="rev" aria-expanded="false" aria-controls="ph-drawer">
+          <span class="ph-kpi-value" data-ph-count="471" data-prefix="$" data-suffix="K">$471K</span>
+          <span class="ph-kpi-label">Subscription revenue since launch</span>
+        </button>
+        <button type="button" class="ph-kpi" data-kpi="ops" aria-expanded="false" aria-controls="ph-drawer">
+          <span class="ph-kpi-value" data-ph-count="75" data-prefix="~" data-suffix="%">~75%</span>
+          <span class="ph-kpi-label">Faster publishing with Postroom</span>
+        </button>
       </div>
-      <div class="spotlight-beam-overlay" id="spotlightOverlay"></div>
-      <div class="room-stage-3d" id="roomStage3D">
-        <div class="wall-back"></div>
-        <div class="wall-side wall-left"></div>
-        <div class="wall-side wall-right"></div>
-        <div class="room-floor" id="roomFloor">
-          <button type="button" class="floor-projection-ui" id="floorOpen">
-            <div class="floor-projection-count" id="floorCount">1 / 5</div>
-            <div class="floor-projection-cta">[ View case ]</div>
-          </button>
+
+      <div class="ph-drawer" id="ph-drawer" role="region" aria-label="Case proof" hidden>
+        <div class="ph-drawer-body">
+          <p class="ph-drawer-tag" id="ph-drawer-tag"></p>
+          <p class="ph-drawer-copy" id="ph-drawer-copy"></p>
         </div>
-        <div class="center-tube-light"></div>
-        <div class="cards-mount" id="cardsContainer">
-          <button type="button" class="case-frame slot-center" data-index="0" data-hash="#paid">
-            <div class="card-visual">
-              <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="62" y="4" width="36" height="56" rx="5" fill="none" stroke="#e0f2fe" stroke-width="1.6"/><polygon points="74,22 88,32 74,42" fill="#7dd3fc"/><rect x="10" y="16" width="40" height="28" rx="4" fill="none" stroke="#38bdf8" stroke-width="1.5"/><path d="M18 30 l6 6 14-14" fill="none" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/><rect x="110" y="20" width="40" height="24" rx="4" fill="none" stroke="#64748b" stroke-width="1.4"/><path d="M120 32 h20" stroke="#64748b" stroke-width="1.6" stroke-linecap="round"/></svg>
-              <div class="card-metric">−54%</div>
-              <div class="card-sub">CPA on Meta in 6 weeks</div>
-            </div>
-            <div class="card-footer-bar"><span>Paid social</span><span aria-hidden="true">↗</span></div>
-          </button>
-          <button type="button" class="case-frame slot-right" data-index="1" data-hash="#tool">
-            <div class="card-visual has-photo">
-              <img src="assets/img/tool/01-ai-caption-options.jpg" alt="">
-              <div class="card-copy"><div class="card-metric">~75%</div><div class="card-sub">faster publishing</div></div>
-            </div>
-            <div class="card-footer-bar"><span>Postroom</span><span aria-hidden="true">↗</span></div>
-          </button>
-          <button type="button" class="case-frame slot-hidden" data-index="2" data-hash="#hooklab">
-            <div class="card-visual has-photo">
-              <img src="assets/img/argo-video-poster.jpg" alt="">
-              <div class="card-copy"><div class="card-sub">Six pieces, one hook type each</div></div>
-            </div>
-            <div class="card-footer-bar"><span>Hook Lab</span><span aria-hidden="true">↗</span></div>
-          </button>
-          <button type="button" class="case-frame slot-hidden" data-index="3" data-hash="#ap-growth-case-study">
-            <div class="card-visual">
-              <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="8" y="36" width="18" height="24" rx="2" fill="#38bdf8" opacity=".4"/><rect x="34" y="24" width="18" height="36" rx="2" fill="#38bdf8" opacity=".7"/><rect x="60" y="10" width="18" height="50" rx="2" fill="#7dd3fc"/><path d="M12 42 L42 28 L70 16 L118 8 L150 4" fill="none" stroke="#e0f2fe" stroke-width="2"/><circle cx="150" cy="4" r="3" fill="#e0f2fe"/></svg>
-              <div class="card-metric">$471K</div>
-              <div class="card-sub">subscription revenue since launch</div>
-            </div>
-            <div class="card-footer-bar"><span>Growth case</span><span aria-hidden="true">↗</span></div>
-          </button>
-          <button type="button" class="case-frame slot-left" data-index="4" data-hash="#strategy">
-            <div class="card-visual">
-              <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="6" y="16" width="34" height="26" rx="4" fill="none" stroke="#7dd3fc" stroke-width="1.7"/><rect x="63" y="8" width="34" height="34" rx="4" fill="none" stroke="#e0f2fe" stroke-width="1.7"/><rect x="120" y="18" width="34" height="24" rx="4" fill="none" stroke="#7dd3fc" stroke-width="1.7"/><path d="M14 50h18M71 52h18M128 50h18" stroke="#38bdf8" stroke-width="2"/></svg>
-              <div class="card-metric">~1M</div>
-              <div class="card-sub">organic views in one month</div>
-            </div>
-            <div class="card-footer-bar"><span>Organic growth</span><span aria-hidden="true">↗</span></div>
-          </button>
-        </div>
-        <div class="pedestals-row" id="pedestalsRow">
-          <button type="button" class="pedestal-node active" data-index="0" aria-label="Show Paid social"></button>
-          <button type="button" class="pedestal-node" data-index="1" aria-label="Show Postroom"></button>
-          <button type="button" class="pedestal-node" data-index="2" aria-label="Show Hook Lab"></button>
-          <button type="button" class="pedestal-node" data-index="3" aria-label="Show Growth case"></button>
-          <button type="button" class="pedestal-node" data-index="4" aria-label="Show Organic growth"></button>
+        <div class="ph-drawer-links">
+          <a class="ph-drawer-case" id="ph-drawer-case" href="#paid">Read the case</a>
+          <a class="ph-drawer-room" id="ph-drawer-room" href="#work" data-room-target="paid">See it in the room</a>
         </div>
       </div>
     </div>
 
-    <div class="room-hud-bottom" id="roomHud" aria-hidden="true">
-      <div class="hud-stepper">
-        <button type="button" class="step-btn" id="prevBtn" aria-label="Previous work">←</button>
-        <span id="hudCounterText">1 / 5 · Paid social</span>
-        <button type="button" class="step-btn" id="nextBtn" aria-label="Next work">→</button>
+    <aside class="ph-monitor ph-monitor--hook" id="ph-monitor-hook" aria-labelledby="ph-hook-title" data-tilt>
+      <div class="ph-glare" aria-hidden="true"></div>
+      <header class="ph-mon-head">
+        <h2 class="ph-mon-title" id="ph-hook-title">Hook Lab · Ad Decoder</h2>
+        <span class="ph-chip ph-chip--blue" id="ph-hook-format">9:16</span>
+      </header>
+      <div class="ph-screen">
+        <p class="ph-piece" id="ph-hook-piece">ARGŌ golden body oil</p>
+        <p class="ph-piece-type" id="ph-hook-type">Macro Texture Reveal</p>
+        <svg class="ph-curve" viewBox="0 0 220 96" role="img" aria-labelledby="ph-curve-desc">
+          <desc id="ph-curve-desc">Illustrative viewer retention curve split into hook, turn and payoff segments.</desc>
+          <defs>
+            <linearGradient id="ph-ret-fill" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#3b82f6" stop-opacity=".34" />
+              <stop offset="100%" stop-color="#3b82f6" stop-opacity="0" />
+            </linearGradient>
+          </defs>
+          <g class="ph-curve-bands" aria-hidden="true">
+            <rect class="ph-band" data-band="0" x="0" y="0" width="44" height="96" />
+            <rect class="ph-band" data-band="1" x="44" y="0" width="66" height="96" />
+            <rect class="ph-band" data-band="2" x="110" y="0" width="110" height="96" />
+          </g>
+          <path class="ph-curve-area" id="ph-curve-area" d="" fill="url(#ph-ret-fill)" />
+          <path class="ph-curve-line" id="ph-curve-line" d="" />
+          <circle class="ph-playhead" id="ph-playhead" r="3.6" cx="0" cy="0" />
+        </svg>
+        <p class="ph-curve-note">Illustrative curve, not campaign data</p>
+        <ol class="ph-anatomy" aria-label="Hook anatomy">
+          <li><button type="button" class="ph-step" data-step="0" aria-pressed="true"><span>Hook</span><span class="ph-step-time">0–1s</span></button></li>
+          <li><button type="button" class="ph-step" data-step="1" aria-pressed="false"><span>Turn</span><span class="ph-step-time">1–3s</span></button></li>
+          <li><button type="button" class="ph-step" data-step="2" aria-pressed="false"><span>Why it works</span><span class="ph-step-time">3s+</span></button></li>
+        </ol>
+        <p class="ph-step-detail" id="ph-step-detail" aria-live="polite"></p>
       </div>
-      <button type="button" class="room-play" id="roomPlay" aria-pressed="false" aria-label="Play the works presentation">Play</button>
-      <div class="hud-pills" id="hudPills" role="tablist" aria-label="Works">
-        <a class="pill-tab active" role="tab" href="#paid" data-index="0" aria-selected="true">Paid social</a>
-        <a class="pill-tab" role="tab" href="#tool" data-index="1">Postroom</a>
-        <a class="pill-tab" role="tab" href="#hooklab" data-index="2">Hook Lab</a>
-        <a class="pill-tab" role="tab" href="#ap-growth-case-study" data-index="3">Growth case</a>
-        <a class="pill-tab" role="tab" href="#strategy" data-index="4">Organic growth</a>
-      </div>
-    </div>
-  </div>
-  <div id="works" class="works-anchor" tabindex="-1"></div>
-</section>
+      <button type="button" class="ph-mon-btn" id="ph-hook-next">Next hook</button>
+    </aside>
 
-
-<section class="skill-scroll-track" id="skillTrack" aria-label="Find the word">
-  <div class="StickyViewport">
-    <div class="physics-curtain-layer" id="physicsCurtain">
-<div class="skill-scene" id="skills">
-  <div class="skill-scene-inner">
-    <div class="skill-head">
-      <h2 class="skill-sr">Find the word</h2>
-      <p class="skill-sr" id="skill-how">Drag through each word, letter by letter</p>
-      <p class="skill-live" id="skill-live" aria-live="polite"></p>
-      <ul class="stack-filters" id="stack-filters" aria-label="Filter the stack"></ul>
-      <ul class="stack-legend" aria-label="Pillar colors">
-        <li><i class="lg-ai"></i>AI &amp; Code</li>
-        <li><i class="lg-paid"></i>Paid Social &amp; Creative</li>
-        <li><i class="lg-data"></i>Data &amp; Ops</li>
-        <li id="stack-bonus-legend" hidden><i class="lg-gold"></i>ROAS unlocked</li>
-      </ul>
-      <p class="stack-note" id="stack-note">Tap a capsule for workflow proof. Figures come from case notes, not a live dashboard.</p>
-      <p class="stack-egg"><span>Hidden letters: drag R-O-A-S down the filler tiles.</span><button type="button" id="stack-hint">Hint</button></p>
-      <div class="stack-banner" id="stack-banner">
-        <strong>ROAS capsule unlocked</strong>
-        <p>No public ROAS figure is shown here. The gold capsule marks the hidden letters. <a href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a> · <a href="#works">See the work</a></p>
+    <aside class="ph-monitor ph-monitor--pipe" id="ph-monitor-pipe" aria-labelledby="ph-pipe-title" data-tilt>
+      <div class="ph-glare" aria-hidden="true"></div>
+      <header class="ph-mon-head">
+        <h2 class="ph-mon-title" id="ph-pipe-title">Postroom × ComfyUI · AI Pipeline</h2>
+        <span class="ph-chip ph-chip--violet">Simulation</span>
+      </header>
+      <div class="ph-screen">
+        <div class="ph-pipe-stat">
+          <strong>~75%</strong>
+          <span>less end-to-end posting time</span>
+        </div>
+        <ol class="ph-nodes" id="ph-nodes" aria-label="Pipeline stages">
+          <li><button type="button" class="ph-node" data-node="0"><span class="ph-node-name">Brief &amp; hook angle</span><span class="ph-node-tool">Claude</span><span class="ph-node-bar" aria-hidden="true"></span></button></li>
+          <li><button type="button" class="ph-node" data-node="1"><span class="ph-node-name">Visuals</span><span class="ph-node-tool">ComfyUI · Higgsfield</span><span class="ph-node-bar" aria-hidden="true"></span></button></li>
+          <li><button type="button" class="ph-node" data-node="2"><span class="ph-node-name">AI caption options</span><span class="ph-node-tool">Postroom</span><span class="ph-node-bar" aria-hidden="true"></span></button></li>
+          <li><button type="button" class="ph-node" data-node="3"><span class="ph-node-name">Edit, approve, schedule</span><span class="ph-node-tool">Postroom</span><span class="ph-node-bar" aria-hidden="true"></span></button></li>
+          <li><button type="button" class="ph-node" data-node="4"><span class="ph-node-name">Publish</span><span class="ph-node-tool">Instagram API</span><span class="ph-node-bar" aria-hidden="true"></span></button></li>
+        </ol>
+        <p class="ph-pipe-log" id="ph-pipe-log" aria-live="polite">Pick a stage, or run a batch.</p>
       </div>
-      <ul class="skill-legend" aria-label="Skills">
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="strategy">Creative strategy</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="paid">Paid social</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="ai">AI production</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="meta">Meta Ads</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="tiktok">TikTok Ads</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="claude">Claude &amp; Claude Code</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="cursor">Cursor</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="field">Higgsfield &amp; ComfyUI</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="analytics">GA4 &amp; Looker Studio</button></li>
-        <li><button type="button" class="is-secret" tabindex="-1" data-skill="tools">CapCut, Canva &amp; Notion</button></li>
-      </ul>
+      <button type="button" class="ph-mon-btn" id="ph-run-batch">Run a batch</button>
+    </aside>
+
+    <div class="ph-bottom">
+      <figure class="ph-portrait">
+        <img src="assets/img/portrait-circle.webp" alt="Portrait of Anastasiia Petrenko" width="256" height="256" decoding="async" fetchpriority="high" />
+      </figure>
+      <p class="ph-bio">Four years leading paid social, short-form strategy and an 8–12 person content team for DTC lifestyle subscriptions and creator-led brands. The team worked on 50+ accounts; the cases here are selected examples.</p>
+      <div class="ph-ctas">
+        <a class="ph-btn-primary" href="#work">Explore Selected Work</a>
+        <button type="button" class="ph-btn-copy" id="ph-copy" data-email="apetrenko597@gmail.com" aria-describedby="ph-copy-status">
+          <span class="ph-copy-email">apetrenko597@gmail.com</span>
+          <span class="ph-copy-action" id="ph-copy-action">Copy</span>
+        </button>
+        <span class="ph-sr" id="ph-copy-status" aria-live="polite"></span>
+      </div>
     </div>
-    <div class="word-grid" id="skill-grid" tabindex="0" aria-label="Find the skills in the letters" aria-describedby="skill-how"></div>
-  </div>
-</div>
-      <div class="physics-floor-line" id="physicsFloorLine"></div>
-    </div>
+
   </div>
 </section>
 
+<!-- STACK MATRIX (upgrade v1) -->
+<section class="sm-section" id="stack" aria-labelledby="sm-title">
+  <div id="skills" class="sm-anchor" tabindex="-1"></div>
+  <div class="sm-wrap">
+    <div class="sm-head">
+      <div>
+        <h2 class="sm-title" id="sm-title">Creative &amp; AI stack</h2>
+        <p class="sm-sub">Hover or tap a word for proof from the work. One more word is hiding in column 9.</p>
+      </div>
+      <div class="sm-filters" role="group" aria-label="Filter the stack by pillar">
+        <button type="button" class="sm-pill" data-filter="all" aria-pressed="true">All stack</button>
+        <button type="button" class="sm-pill" data-filter="ai" aria-pressed="false"><i class="sm-dot sm-dot--ai" aria-hidden="true"></i>AI &amp; Ops</button>
+        <button type="button" class="sm-pill" data-filter="paid" aria-pressed="false"><i class="sm-dot sm-dot--paid" aria-hidden="true"></i>Paid Social &amp; Strategy</button>
+        <button type="button" class="sm-pill" data-filter="data" aria-pressed="false"><i class="sm-dot sm-dot--data" aria-hidden="true"></i>Data</button>
+      </div>
+    </div>
 
+    <div class="sm-frame" id="sm-frame">
+      <div class="sm-board" id="sm-board">
+        <div class="sm-caps" id="sm-caps"></div>
+      </div>
+    </div>
 
+    <div class="sm-foot">
+      <p class="sm-legend"><span><i class="sm-dot sm-dot--ai" aria-hidden="true"></i>AI &amp; Ops</span><span><i class="sm-dot sm-dot--paid" aria-hidden="true"></i>Paid Social &amp; Strategy</span><span><i class="sm-dot sm-dot--data" aria-hidden="true"></i>Data</span></p>
+      <p class="sm-egg">
+        <span id="sm-egg-status">Hidden word: click or drag R, O, A, S down column 9 (0/4)</span>
+        <button type="button" class="sm-hint" id="sm-hint">Hint</button>
+      </p>
+    </div>
+    <p class="sm-sr" id="sm-live" aria-live="polite"></p>
+  </div>
 
-<script>
-(function(){
-  var GROUPS=[
-    {id:'strategy',words:['STRATEGY']},
-    {id:'paid',words:['PAID','SOCIAL']},
-    {id:'ai',words:['PRODUCTION']},
-    {id:'meta',words:['META']},
-    {id:'tiktok',words:['TIKTOK']},
-    {id:'claude',words:['CLAUDE']},
-    {id:'cursor',words:['CURSOR']},
-    {id:'field',words:['HIGGSFIELD','COMFYUI']},
-    {id:'analytics',words:['GA4','LOOKER']},
-    {id:'tools',words:['CAPCUT','CANVA','NOTION']}
-  ];
-  var board=document.querySelector('.skill-scene');
-  var gridEl=document.getElementById('skill-grid');
-  var buttons=[].slice.call(document.querySelectorAll('.skill-legend button'));
-  if(!board||!gridEl)return;
-  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  var cells=[],hoverId=null,found={},cursor=0,said={};
-  var skillLive=document.getElementById('skill-live');
-  function putWord(grid,word,id,x,y,dx,dy){
-    for(var i=0;i<word.length;i++){
-      grid[y+dy*i][x+dx*i]={ch:word[i],ids:[id],word:word,n:i};
-    }
-  }
-  function placeWide(){
-    var grid=Array.from({length:7},function(){return Array(15).fill(null);});
-    putWord(grid,'HIGGSFIELD','field',0,0,1,0);
-    putWord(grid,'META','meta',11,0,1,0);
-    putWord(grid,'PRODUCTION','ai',0,1,1,0);
-    putWord(grid,'PAID','paid',11,1,1,0);
-    putWord(grid,'STRATEGY','strategy',0,2,1,0);
-    putWord(grid,'CLAUDE','claude',9,2,1,0);
-    putWord(grid,'COMFYUI','field',0,3,1,0);
-    putWord(grid,'TIKTOK','tiktok',8,3,1,0);
-    putWord(grid,'CAPCUT','tools',0,4,1,0);
-    putWord(grid,'LOOKER','analytics',8,4,1,0);
-    putWord(grid,'CURSOR','cursor',0,5,1,0);
-    putWord(grid,'NOTION','tools',8,5,1,0);
-    putWord(grid,'SOCIAL','paid',0,6,1,0);
-    putWord(grid,'CANVA','tools',8,6,1,0);
-    putWord(grid,'GA4','analytics',14,4,0,1);
-    return grid;
-  }
-  function placePhone(){
-    var grid=Array.from({length:12},function(){return Array(9).fill(null);});
-    putWord(grid,'HIGGSFIELD','field',0,0,0,1);
-    putWord(grid,'PRODUCTION','ai',1,0,0,1);
-    putWord(grid,'COMFYUI','field',2,0,1,0);
-    [['TIKTOK','tiktok'],['CLAUDE','claude'],['CURSOR','cursor'],['LOOKER','analytics'],['CAPCUT','tools'],['NOTION','tools'],['SOCIAL','paid']].forEach(function(w,i){
-      putWord(grid,w[0],w[1],2,1+i,1,0);
-    });
-    putWord(grid,'CANVA','tools',2,8,1,0);
-    putWord(grid,'PAID','paid',2,9,1,0);
-    putWord(grid,'GA4','analytics',8,1,0,1);
-    putWord(grid,'STRATEGY','strategy',0,10,1,0);
-    putWord(grid,'META','meta',0,11,1,0);
-    return grid;
-  }
-  function box(){
-    return {w:gridEl.clientWidth-6,h:gridEl.clientHeight-6};
-  }
-  function fit(w,h,cols,rows){
-    var ratio=w>=720?0.4:0.32;
-    var minGap=w>=720?12:6;
-    var cell=Math.floor(Math.min(w/(cols+(cols-1)*ratio),h/(rows+(rows-1)*ratio)));
-    cell=Math.max(16,cell);
-    var gapX=Math.max(minGap,Math.round(cell*ratio));
-    var gapY=gapX;
-    var roomX=cols>1?(w-cols*cell)/(cols-1):gapX;
-    var roomY=rows>1?(h-rows*cell)/(rows-1):gapY;
-    var cap=Math.round(cell*0.72);
-    if(roomX>=minGap)gapX=Math.max(gapX,Math.min(cap,Math.floor(roomX)));
-    if(roomY>=minGap)gapY=Math.max(gapY,Math.min(cap,Math.floor(roomY)));
-    var guard=0;
-    while(guard++<48&&(cols*cell+(cols-1)*gapX>w+1||rows*cell+(rows-1)*gapY>h+1)){
-      if(gapX>minGap)gapX--;
-      else if(gapY>minGap)gapY--;
-      else if(cell>16)cell--;
-      else break;
-    }
-    return {cell:cell,gapX:gapX,gapY:gapY};
-  }
-  function metrics(){
-    var b=box();
-    if(b.w>=760){
-      var wide=fit(b.w,b.h,15,7);
-      if(wide.cell>=30)return {kind:'wide',cols:15,rows:7,cell:wide.cell,gapX:wide.gapX,gapY:wide.gapY};
-    }
-    var phone=fit(b.w,b.h,9,12);
-    return {kind:'phone',cols:9,rows:12,cell:phone.cell,gapX:phone.gapX,gapY:phone.gapY};
-  }
-  var built='';
-  function render(){
-    var space=box();
-    if(space.w<80||space.h<80)return;
-    var m=metrics();
-    var key=m.kind+':'+m.cols+'x'+m.rows;
-    gridEl.style.setProperty('--cols',m.cols);
-    gridEl.style.setProperty('--cell',m.cell+'px');
-    gridEl.style.setProperty('--gap-x',m.gapX+'px');
-    gridEl.style.setProperty('--gap-y',m.gapY+'px');
-    if(key===built&&cells.length)return;
-    var g=m.kind==='wide'?placeWide():placePhone();
-    if(!g)return;
-    built=key;
-    var keptSolved={};
-    for(var sk in solved) if(solved[sk]) keptSolved[sk]=true;
-    var keptSaid={};
-    for(var saidKey in said) keptSaid[saidKey]=said[saidKey];
-    var resumeDemo=demoStarted&&!demoDone&&!demoYielded;
-    stopDemo();
-    hideAutoCursor();
-    found={};
-    solved=keptSolved;
-    path=[];
-    said=keptSaid;
-    buttons.forEach(function(b){b.classList.add('is-secret');});
-    gridEl.innerHTML='';
-    var letters='ABCDEFGHJKLMNPQRSTUVWXYZ';
-    var n=1;
-    for(var y=0;y<g.length;y++){
-      for(var x=0;x<g[0].length;x++){
-        var cell=document.createElement('span');
-        cell.className='cell letter-tile';
-        var tilt=((x*3+y*5)%5)-2; if(tilt===0)tilt=1;
-        cell.style.setProperty('--tilt',tilt+'deg');
-        cell.style.setProperty('--skew',(Math.max(-0.35,Math.min(0.35,tilt*0.12))).toFixed(2)+'deg');
-        if(g[y][x]){
-          cell.textContent=g[y][x].ch;
-          cell.dataset.skill=g[y][x].ids.join(' ');
-          cell.dataset.word=g[y][x].word;
-          cell.dataset.n=g[y][x].n;
-        }else{
-          var ch=letters[(n*17+x*13+y*19)%letters.length];
-          var left=x>0?gridEl.children[gridEl.children.length-1]:null;
-          if(left&&left.textContent===ch)ch=letters[(letters.indexOf(ch)+7)%letters.length];
-          var egg=m.kind==='wide'&&x===7&&y>=3&&y<=6?'ROAS'[y-3]:m.kind==='phone'&&x===8&&y>=4&&y<=7?'ROAS'[y-4]:'';
-          if(egg){ch=egg;cell.dataset.egg='roas';cell.dataset.eggN=String(egg==='R'?0:egg==='O'?1:egg==='A'?2:3);}
-          cell.textContent=ch;
-          n++;
-        }
-        gridEl.appendChild(cell);
-      }
-    }
-    cells=[].slice.call(gridEl.children);
-    if(reduce.matches)gridEl.classList.add('is-static');
-    else gridEl.classList.remove('is-static');
-    ensureAutoCursor();
-    paint();
-    placeCursor(0);
-    if(resumeDemo && !demoBlocked()) demoTimer=setTimeout(runSequence, 360);
-    else maybeDemo();
-  }
-  var demoTimer=0,demoStarted=false,demoDone=false,demoYielded=false,autoCursor=null;
-  function stopDemo(){if(demoTimer){clearTimeout(demoTimer);demoTimer=0;}}
-  function ensureAutoCursor(){
-    if(autoCursor&&autoCursor.isConnected)return autoCursor;
-    autoCursor=document.createElement('span');
-    autoCursor.className='skill-auto-cursor';
-    autoCursor.setAttribute('aria-hidden','true');
-    document.body.appendChild(autoCursor);
-    return autoCursor;
-  }
-  function hideAutoCursor(){if(autoCursor)autoCursor.classList.remove('is-on');}
-  function placeAutoCursor(cell){
-    if(!cell||!gridEl.contains(cell))return;
-    var el=ensureAutoCursor();
-    var r=cell.getBoundingClientRect();
-    el.style.transform='translate3d('+(r.left+r.width/2)+'px,'+(r.top+r.height/2)+'px,0)';
-    el.classList.add('is-on');
-  }
-  function wordPaths(){
-    var map={};
-    cells.forEach(function(c){
-      var w=c.dataset.word;
-      if(!w)return;
-      (map[w]=map[w]||[]).push(c);
-    });
-    var list=[];
-    Object.keys(map).forEach(function(w){
-      var seq=map[w].sort(function(a,b){return (+a.dataset.n)-(+b.dataset.n);});
-      if(seq.length!==w.length)return;
-      if(!seq.every(function(c,i){return +c.dataset.n===i;}))return;
-      list.push({word:w,cells:seq});
-    });
-    list.sort(function(a,b){return cells.indexOf(a.cells[0])-cells.indexOf(b.cells[0]);});
-    return list;
-  }
-  function trackProgress(){
-    var track=document.getElementById('skillTrack')||document.getElementById('scrollTrack');
-    if(!track)return 0;
-    var total=track.offsetHeight-window.innerHeight;
-    return Math.max(0,Math.min(1,-track.getBoundingClientRect().top/Math.max(1,total)));
-  }
-  function gridInView(){
-    if(document.getElementById('ap-load'))return false;
-    var r=gridEl.getBoundingClientRect();
-    if(r.height<40||r.width<40)return false;
-    var vis=Math.min(r.bottom,innerHeight)-Math.max(r.top,0);
-    return vis>=Math.min(r.height,innerHeight)*0.55;
-  }
-  function skillPhase(p){return p*0.70;}
-  function fallUnderway(){return skillPhase(trackProgress())>0.38;}
-  function demoBlocked(){
-    return reduce.matches||demoYielded||demoDone||dragging||document.hidden||fallUnderway()||!gridInView();
-  }
-  function pauseDemo(){
-    stopDemo();
-    path=[];
-    hideAutoCursor();
-    paint();
-  }
-  function yieldDemo(){
-    if(demoDone)return;
-    demoYielded=true;
-    pauseDemo();
-  }
-  function markFound(word,sample){
-    solved[word]=true;
-    path=[];
-    paint();
-    var skill=sample&&sample.dataset.skill||'';
-    if(skill&&groupDone(skill))buttons.forEach(function(b){if(b.dataset.skill===skill)b.classList.remove('is-secret');});
-    if(skillLive&&!said[word]){said[word]=true;skillLive.textContent='Found '+nice(word);}
-    scheduleFit();
-  }
-  function scheduleFit(){
-    requestAnimationFrame(function(){if(!fallUnderway())render();});
-  }
-  function traceWord(entry,letter,done){
-    if(demoYielded||demoDone||dragging||reduce.matches){yieldDemo();return;}
-    if(document.hidden||fallUnderway()||!gridInView()){pauseDemo();return;}
-    if(letter>=entry.cells.length){
-      markFound(entry.word,entry.cells[0]);
-      hideAutoCursor();
-      demoTimer=setTimeout(done,460);
-      return;
-    }
-    var cell=entry.cells[letter];
-    if(!cell||!gridEl.contains(cell)){yieldDemo();return;}
-    placeAutoCursor(cell);
-    path=entry.cells.slice(0,letter+1);
-    paint();
-    demoTimer=setTimeout(function(){traceWord(entry,letter+1,done);},260);
-  }
-  function runSequence(){
-    if(demoYielded||demoDone||dragging||reduce.matches){yieldDemo();return;}
-    if(document.hidden||fallUnderway()||!gridInView()){pauseDemo();return;}
-    var paths=wordPaths();
-    var next=null;
-    for(var i=0;i<paths.length;i++) if(!solved[paths[i].word]){next=paths[i];break;}
-    if(!next){demoDone=true;path=[];hideAutoCursor();paint();return;}
-    traceWord(next,0,runSequence);
-  }
-  function maybeDemo(){
-    if(reduce.matches||demoStarted||demoDone||demoYielded||dragging||document.hidden)return;
-    if(!gridInView()||fallUnderway())return;
-    if(!wordPaths().length)return;
-    demoStarted=true;
-    demoTimer=setTimeout(runSequence,720);
-  }
-  var path=[],solved={},dragging=false,gesture=null;
-  function colsNow(){return parseInt(getComputedStyle(gridEl).getPropertyValue('--cols'),10)||1;}
-  function xy(cell){var i=cells.indexOf(cell),c=colsNow();return {x:i%c,y:Math.floor(i/c)};}
-  function paint(){
-    cells.forEach(function(c){
-      var real=!!c.dataset.word;
-      var kept=real&&!!solved[c.dataset.word];
-      var tracing=real&&path.indexOf(c)>=0&&!kept;
-      c.classList.toggle('on',kept);
-      c.classList.toggle('found',kept);
-      c.classList.toggle('tracing',tracing);
-      c.classList.toggle('is-accent',kept||tracing);
-    });
-  }
-  function groupDone(id){
-    var g=null;
-    for(var i=0;i<GROUPS.length;i++)if(GROUPS[i].id===id)g=GROUPS[i];
-    return !!g&&g.words.every(function(w){return solved[w];});
-  }
-  function nice(word){return word.charAt(0)+word.slice(1).toLowerCase();}
-  function finishIfWord(){
-    if(path.length<2)return false;
-    var word=path[0].dataset.word;
-    if(!word||path.length!==word.length)return false;
-    if(!path.every(function(c){return c.dataset.word===word;}))return false;
-    var forward=path.every(function(c,i){return +c.dataset.n===i;});
-    var back=path.every(function(c,i){return +c.dataset.n===word.length-1-i;});
-    if(!forward&&!back)return false;
-    solved[word]=true;
-    var skill=path[0].dataset.skill||'';
-    path=[];
-    paint();
-    if(groupDone(skill))buttons.forEach(function(b){if(b.dataset.skill===skill)b.classList.remove('is-secret');});
-    if(skillLive&&!said[word]){said[word]=true;skillLive.textContent='Found '+nice(word);}
-    scheduleFit();
-    return true;
-  }
-  function flash(list){
-    list.forEach(function(c){c.classList.add('bad');});
-    var clear=function(){list.forEach(function(c){c.classList.remove('bad');});};
-    if(reduce.matches)clear();
-    else setTimeout(clear,280);
-  }
-  function continues(cell){
-    if(!path.length)return true;
-    var last=xy(path[path.length-1]), next=xy(cell);
-    var dx=next.x-last.x, dy=next.y-last.y;
-    if(Math.abs(dx)+Math.abs(dy)!==1)return false;
-    if(path.length<2)return true;
-    var a=xy(path[0]), b=xy(path[1]);
-    return dx===Math.sign(b.x-a.x)&&dy===Math.sign(b.y-a.y);
-  }
-  function addCell(cell){
-    if(!cell)return;
-    var at=path.indexOf(cell);
-    if(at>=0){path=path.slice(0,at+1);return;}
-    if(!continues(cell)){flash(path.slice());path=cell?[cell]:[];return;}
-    path.push(cell);
-  }
-  function resetPartial(){
-    if(!path.length)return;
-    var doomed=path.slice();
-    path=[];
-    paint();
-    flash(doomed);
-  }
-  function placeCursor(i){
-    if(!cells.length)return;
-    cursor=Math.max(0,Math.min(cells.length-1,i));
-    var focused=gridEl.contains(document.activeElement);
-    cells.forEach(function(c,n){
-      c.tabIndex=n===cursor?0:-1;
-      c.classList.toggle('is-cursor',focused&&n===cursor);
-    });
-  }
-  function cellFromPoint(x,y){
-    var gr=gridEl.getBoundingClientRect();
-    if(x<gr.left-12||x>gr.right+12||y<gr.top-12||y>gr.bottom+12)return null;
-    var el=document.elementFromPoint(x,y);
-    var direct=el&&el.closest&&el.closest('.cell');
-    if(direct&&gridEl.contains(direct))return direct;
-    var best=null,bestD=1e9;
-    for(var i=0;i<cells.length;i++){
-      var r=cells[i].getBoundingClientRect();
-      var d=Math.hypot(x-(r.left+r.width/2), y-(r.top+r.height/2));
-      var reach=(Math.max(r.width,r.height)+20)/2;
-      if(d<bestD&&d<=reach){bestD=d;best=cells[i];}
-    }
-    return best;
-  }
-  function extendTo(cell){
-    if(!cell||!path.length)return;
-    if(path.indexOf(cell)>=0)return;
-    var last=xy(path[path.length-1]), next=xy(cell);
-    var dx=next.x-last.x, dy=next.y-last.y;
-    if(dx&&dy)return;
-    var steps=Math.max(Math.abs(dx),Math.abs(dy));
-    if(!steps||steps>4)return;
-    if(path.length>=2){
-      var a=xy(path[0]), b=xy(path[1]);
-      if(Math.sign(dx)!==Math.sign(b.x-a.x)||Math.sign(dy)!==Math.sign(b.y-a.y))return;
-    }
-    var sx=Math.sign(dx), sy=Math.sign(dy), c=colsNow();
-    for(var s=1;s<=steps;s++){
-      var n=cells[(last.y+sy*s)*c+(last.x+sx*s)];
-      if(n&&path.indexOf(n)<0)path.push(n);
-    }
-  }
-  function armTrace(e,cell){
-    yieldDemo();
-    dragging=true;
-    path=[cell];
-    paint();
-    gesture=null;
-    if(gridEl.setPointerCapture){try{gridEl.setPointerCapture(e.pointerId);}catch(err){}}
-  }
-  function decideGesture(id,x,y){
-    if(!gesture||gesture.id!==id||gesture.decided)return;
-    var dx=x-gesture.x, dy=y-gesture.y;
-    if(Math.hypot(dx,dy)<10)return;
-    var vertical=Math.abs(dy)>Math.abs(dx);
-    if(!vertical){
-      gesture.decided=true;
-      armTrace({pointerId:id},gesture.cell);
-      return;
-    }
-    var elapsed=Math.max(16,(window.performance?performance.now():Date.now())-gesture.t);
-    var speed=Math.abs(dy)/elapsed;
-    var next=cellFromPoint(x,y);
-    var wordStep=Math.abs(dx)<28&&next&&next!==gesture.cell&&gesture.cell.dataset.word&&next.dataset.word===gesture.cell.dataset.word;
-    if(wordStep&&speed<0.45&&Math.abs(dy)<78){
-      gesture.decided=true;
-      armTrace({pointerId:id},gesture.cell);
-      return;
-    }
-    if(Math.abs(dy)>24||speed>0.4)gesture=null;
-  }
-  gridEl.addEventListener('pointerdown',function(e){
-    if(e.button!=null&&e.button!==0)return;
-    var cell=cellFromPoint(e.clientX,e.clientY);
-    if(!cell)return;
-    if(e.pointerType==='touch'){
-      dragging=false;
-      gesture={id:e.pointerId,x:e.clientX,y:e.clientY,cell:cell,decided:false,t:(window.performance?performance.now():Date.now())};
-      return;
-    }
-    armTrace(e,cell);
-    e.preventDefault();
-  });
-  gridEl.addEventListener('pointermove',function(e){
-    if(gesture&&e.pointerId===gesture.id)decideGesture(e.pointerId,e.clientX,e.clientY);
-    if(!dragging)return;
-    var cell=cellFromPoint(e.clientX,e.clientY);
-    if(!cell)return;
-    extendTo(cell);
-    paint();
-  });
-  gridEl.addEventListener('touchmove',function(e){
-    if(gesture&&!gesture.decided&&e.changedTouches&&e.changedTouches[0]){
-      var t=e.changedTouches[0];
-      decideGesture(gesture.id,t.clientX,t.clientY);
-    }
-    if(dragging)e.preventDefault();
-  },{passive:false});
-  function endDrag(e){
-    if(gesture&&(!e||e.pointerId==null||e.pointerId===gesture.id))gesture=null;
-    if(!dragging)return;
-    dragging=false;
-    if(!finishIfWord())resetPartial();
-  }
-  gridEl.addEventListener('pointerup',endDrag);
-  gridEl.addEventListener('pointercancel',endDrag);
-  gridEl.addEventListener('keydown',function(e){
-    yieldDemo();
-    if(e.key==='Escape'){e.preventDefault();path=[];paint();return;}
-    if(e.key==='Backspace'){e.preventDefault();path.pop();paint();return;}
-    if(e.key===' '||e.key==='Enter'){
-      e.preventDefault();
-      addCell(cells[cursor]);
-      paint();
-      finishIfWord();
-      return;
-    }
-    var step=e.key==='ArrowRight'?1:e.key==='ArrowLeft'?-1:e.key==='ArrowDown'?colsNow():e.key==='ArrowUp'?-colsNow():0;
-    if(!step)return;
-    e.preventDefault();
-    placeCursor(cursor+step);
-    cells[cursor].focus();
-  });
-  gridEl.addEventListener('focusin',function(e){
-    var cell=e.target.closest&&e.target.closest('.cell');
-    if(!cell)return;
-    placeCursor(cells.indexOf(cell));
-  });
-  window.addEventListener('resize',function(){render();},{passive:true});
-  if(reduce.addEventListener)reduce.addEventListener('change',function(){built='';render();});
-  render();
-  requestAnimationFrame(function(){render();});
-  if('IntersectionObserver' in window){
-    var demoWatch=new IntersectionObserver(function(entries){if(entries[0].isIntersecting)maybeDemo();},{threshold:[0.45,0.7]});
-    demoWatch.observe(gridEl);
-  }
-  window.addEventListener('scroll',function(){
-    if(demoYielded||demoDone||reduce.matches)return;
-    if(fallUnderway()||!gridInView()){
-      if(demoStarted)pauseDemo();
-      return;
-    }
-    if(demoStarted){
-      if(!demoTimer)demoTimer=setTimeout(runSequence,400);
-    }else maybeDemo();
-  },{passive:true});
-  document.addEventListener('visibilitychange',function(){
-    if(document.hidden){pauseDemo();return;}
-    if(demoYielded||demoDone||reduce.matches)return;
-    if(fallUnderway()||!gridInView())return;
-    if(demoStarted){if(!demoTimer)demoTimer=setTimeout(runSequence,400);}
-    else maybeDemo();
-  });
-  var demoMut=new MutationObserver(function(){maybeDemo();});
-  demoMut.observe(document.body,{childList:true});
-})();
-</script>
-<script>
-(function(){
-  var grid=document.getElementById('skill-grid');
-  if(!grid)return;
-  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  var INFO={
-    HIGGSFIELD:{pillar:'ai',badge:'AI & Code',metric:'',desc:'Directed AI motion for hooks, without sending a shoot back out. The moving mark in the card is illustrative, not a measured result.'},
-    COMFYUI:{pillar:'ai',badge:'AI & Code',metric:'',desc:'Node-based stills and motion that keep the product recognizable. The diagram is illustrative, not a node count.'},
-    CLAUDE:{pillar:'ai',badge:'AI & Code',metric:'',desc:'Research and customer language turned into modular ad scripts. No volume figure is claimed here.'},
-    CURSOR:{pillar:'ai',badge:'AI & Code',metric:'~75% faster publishing',desc:'Postroom, the internal publishing tool built in Cursor, cut end-to-end posting time by about 75%.'},
-    PRODUCTION:{pillar:'ai',badge:'AI & Code',metric:'Team of 8–12',desc:'The content team behind the subscription work. The pipeline sketch is illustrative, not a weekly output count.'},
-    META:{pillar:'paid',badge:'Paid Social & Creative',metric:'CPA $48 → $22 (−54%)',desc:'Hook-type A/B test on Meta. Same audiences and budgets; the product-demo hook won on cost per paid subscription.'},
-    PAID:{pillar:'paid',badge:'Paid Social & Creative',metric:'~$43K paid spend in a month',desc:'October 2026 paid spend on the subscription account. No extra conversion rate is invented here.'},
-    SOCIAL:{pillar:'paid',badge:'Paid Social & Creative',metric:'~1M organic views',desc:'About 1M organic views in one month across 3 accounts. A separate creator-led account went from 0 to about 5k followers in a month. Names stay private.'},
-    STRATEGY:{pillar:'paid',badge:'Paid Social & Creative',metric:'~30% won back',desc:'About 30% of expired subscribers came back through win-back offers. The sketch is illustrative, not a funnel chart.'},
-    TIKTOK:{pillar:'paid',badge:'Paid Social & Creative',metric:'',desc:'Native short-form for TikTok and Reels. No thumbstop or spend multiple is claimed.'},
-    CAPCUT:{pillar:'paid',badge:'Paid Social & Creative',metric:'',desc:'Cuts, captions, and hook swaps for the feed. The timeline is illustrative.'},
-    CANVA:{pillar:'paid',badge:'Paid Social & Creative',metric:'',desc:'Static layouts for headlines, badges, and offers. No system count is claimed.'},
-    LOOKER:{pillar:'data',badge:'Data & Ops',metric:'',desc:'Creative reporting in Looker Studio, read next to GA4. The grid is illustrative, not a live scorecard.'},
-    GA4:{pillar:'data',badge:'Data & Ops',metric:'',desc:'Checks what happens after the click, instead of trusting the in-platform view alone.'},
-    NOTION:{pillar:'data',badge:'Data & Ops',metric:'',desc:'Briefs, roadmaps, and post-mortems in one workspace.'},
-    ROAS:{pillar:'bonus',badge:'Hidden letters',metric:'',desc:'The gold capsule only marks the hidden R-O-A-S letters. No ROAS number is published on this card. The bars are illustrative.'}
-  };
-  var FILTERS=[{id:'all',label:'All stack'},{id:'ai',label:'AI & Code'},{id:'paid',label:'Paid Social & Creative'},{id:'data',label:'Data & Ops'}];
-  var filter='all', pinned=null, eggPath=[], layer=null, card=null, builtFor='';
-  var bar=document.getElementById('stack-filters');
-  var note=document.getElementById('stack-note');
-  FILTERS.forEach(function(f){
-    var b=document.createElement('button');
-    b.type='button';
-    b.textContent=f.label;
-    b.dataset.filter=f.id;
-    if(f.id==='all')b.classList.add('is-on');
-    b.addEventListener('click',function(){setFilter(f.id);});
-    bar.appendChild(b);
-  });
-  card=document.createElement('aside');
-  card.className='proof-card';
-  card.hidden=true;
-  card.innerHTML='<div class="proof-kicker"></div><h3></h3><div class="proof-metric" hidden></div><div class="proof-visual" aria-hidden="true"><div class="proof-bars"><b style="height:40%"></b><b style="height:70%"></b><b style="height:55%"></b><b style="height:88%"></b></div><span class="proof-motion" hidden></span><i>Illustrative</i></div><p></p>';
-  document.body.appendChild(card);
-  function cells(){return [].slice.call(grid.querySelectorAll(':scope > .cell'));}
-  function physicsOn(){return cells().some(function(c){return !!c.style.transform;});}
-  function wordsNow(){
-    var map={};
-    cells().forEach(function(c){
-      if(!c.dataset.word)return;
-      (map[c.dataset.word]=map[c.dataset.word]||[]).push(c);
-    });
-    return map;
-  }
-  function layout(){
-    if(grid.clientWidth<40||grid.clientHeight<40)return;
-    var falling=physicsOn();
-    if(!layer||!layer.isConnected){
-      layer=document.createElement('div');
-      layer.className='capsules-layer';
-      layer.id='stack-capsules';
-    }
-    if(layer.parentNode!==grid)grid.appendChild(layer);
-    layer.style.visibility=falling?'hidden':'visible';
-    layer.innerHTML='';
-    cells().forEach(function(c){c.classList.remove('has-capsule');});
-    if(falling){return;}
-    var map=wordsNow();
-    Object.keys(map).forEach(function(word){
-      var list=map[word];
-      if(!INFO[word]||list.length!==word.length)return;
-      var gr=grid.getBoundingClientRect();
-      var left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
-      list.forEach(function(c){
-        var r=c.getBoundingClientRect();
-        left=Math.min(left,r.left); top=Math.min(top,r.top); right=Math.max(right,r.right); bottom=Math.max(bottom,r.bottom);
-        c.classList.add('has-capsule');
-      });
-      var cap=document.createElement('button');
-      cap.type='button';
-      cap.className='word-capsule capsule-'+INFO[word].pillar+(filter!=='all'&&INFO[word].pillar!==filter?' is-dimmed':'');
-      cap.dataset.word=word;
-      cap.setAttribute('aria-label',word+' workflow proof');
-      cap.style.left=(left-gr.left)+'px';
-      cap.style.top=(top-gr.top)+'px';
-      cap.style.width=(right-left)+'px';
-      cap.style.height=(bottom-top)+'px';
-      cap.addEventListener('pointerenter',function(e){if(e.pointerType==='touch'||pinned)return; show(word,cap,false);});
-      cap.addEventListener('pointerleave',function(){if(!pinned)hide();});
-      cap.addEventListener('click',function(e){e.preventDefault();e.stopPropagation(); if(pinned===word){pinned=null;hide();cap.classList.remove('is-active');}else{pin(word,cap);} });
-      layer.appendChild(cap);
-    });
-    if(document.getElementById('stack-banner').classList.contains('is-on')) placeEggCapsule();
-    builtFor=grid.innerText.length+':'+grid.clientWidth;
-  }
-  function placeEggCapsule(){
-    var eggs=cells().filter(function(c){return c.dataset.egg==='roas';}).sort(function(a,b){return (+a.dataset.eggN)-(+b.dataset.eggN);});
-    if(eggs.length<4||!layer)return;
-    var gr=grid.getBoundingClientRect();
-    var left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
-    eggs.forEach(function(c){var r=c.getBoundingClientRect(); left=Math.min(left,r.left); top=Math.min(top,r.top); right=Math.max(right,r.right); bottom=Math.max(bottom,r.bottom); c.classList.add('has-capsule');});
-    var cap=document.createElement('button');
-    cap.type='button';
-    cap.className='word-capsule capsule-bonus';
-    cap.dataset.word='ROAS';
-    cap.setAttribute('aria-label','Unlocked ROAS capsule');
-    cap.style.left=(left-gr.left)+'px';
-    cap.style.top=(top-gr.top)+'px';
-    cap.style.width=(right-left)+'px';
-    cap.style.height=(bottom-top)+'px';
-    cap.addEventListener('click',function(e){e.preventDefault();e.stopPropagation(); pin('ROAS',cap);});
-    layer.appendChild(cap);
-  }
-  function show(word,cap,isPin){
-    var info=INFO[word];
-    if(!info)return;
-    card.hidden=false;
-    card.querySelector('.proof-kicker').textContent='Workflow proof · '+info.badge;
-    card.querySelector('h3').textContent=word;
-    var metric=card.querySelector('.proof-metric');
-    metric.hidden=!info.metric;
-    metric.textContent=info.metric;
-    card.querySelector('p').textContent=info.desc;
-    card.querySelector('.proof-motion').hidden=!!reduce.matches;
-    [].slice.call(layer.querySelectorAll('.word-capsule')).forEach(function(el){el.classList.toggle('is-active',el===cap);});
-    var r=cap.getBoundingClientRect();
-    var w=card.offsetWidth||300, h=card.offsetHeight||180;
-    var left=Math.max(8,Math.min(r.left+r.width/2-w/2, window.innerWidth-w-8));
-    var top=r.bottom+8;
-    if(top+h>window.innerHeight-8)top=r.top-h-8;
-    top=Math.max(8,Math.min(top, window.innerHeight-h-8));
-    card.style.left=left+'px';
-    card.style.top=top+'px';
-    if(note)note.textContent=isPin?'Pinned. Tap outside to close.':'Workflow proof. Tap the capsule to pin it.';
-  }
-  function hide(){card.hidden=true; if(layer)[].slice.call(layer.querySelectorAll('.word-capsule')).forEach(function(el){el.classList.remove('is-active');});}
-  function pin(word,cap){pinned=word; show(word,cap,true);}
-  function setFilter(id){
-    filter=id;
-    [].slice.call(bar.children).forEach(function(b){b.classList.toggle('is-on',b.dataset.filter===id);});
-    layout();
-  }
-  document.addEventListener('pointerdown',function(e){
-    if(card.hidden)return;
-    if(card.contains(e.target)||(e.target.closest&&e.target.closest('.word-capsule')))return;
-    pinned=null; hide();
-  });
-  grid.addEventListener('pointerdown',function(e){
-    var cell=e.target.closest&&e.target.closest('.cell');
-    if(!cell||cell.dataset.egg!=='roas'){eggPath=[];return;}
-    e.stopPropagation();
-    var n=+cell.dataset.eggN;
-    if(n===0||(eggPath.length&&n===+eggPath[eggPath.length-1].dataset.eggN+1))eggPath.push(cell);
-    else eggPath=[cell];
-    cells().forEach(function(c){c.classList.remove('is-egg-hot');});
-    eggPath.forEach(function(c){c.classList.add('is-egg-hot');});
-    if(eggPath.length===4 && eggPath.map(function(c){return c.textContent;}).join('')==='ROAS'){
-      document.getElementById('stack-banner').classList.add('is-on');
-      document.getElementById('stack-bonus-legend').hidden=false;
-      layout();
-      var gold=layer.querySelector('[data-word="ROAS"]');
-      if(gold)pin('ROAS',gold);
-    }
-  },true);
-  var hint=document.getElementById('stack-hint');
-  if(hint)hint.addEventListener('click',function(){
-    cells().forEach(function(c){if(c.dataset.egg==='roas')c.classList.add('is-egg-hot');});
-    setTimeout(function(){cells().forEach(function(c){c.classList.remove('is-egg-hot');});}, reduce.matches?0:1200);
-  });
-  var mo=new MutationObserver(function(records){
-    var cellsChanged=records.some(function(r){
-      return [].slice.call(r.addedNodes).concat([].slice.call(r.removedNodes)).some(function(n){
-        return n.nodeType===1 && n.classList && (n.classList.contains('cell')||(n.querySelector&&n.querySelector('.cell')));
-      });
-    });
-    if(cellsChanged)layout();
-  });
-  mo.observe(grid,{childList:true});
-  if(window.ResizeObserver)new ResizeObserver(function(){layout();}).observe(grid);
-  var wasFalling=false;
-  function watchFall(){
-    var on=physicsOn();
-    if(on&&!wasFalling){
-      if(layer)layer.style.visibility='hidden';
-      cells().forEach(function(c){c.classList.remove('has-capsule');});
-    }else if(!on&&wasFalling)layout();
-    wasFalling=on;
-    requestAnimationFrame(watchFall);
-  }
-  requestAnimationFrame(watchFall);
-  layout();
-})();
-</script>
+  <div class="sm-card" id="sm-card" role="dialog" aria-labelledby="sm-card-name" hidden>
+    <p class="sm-card-tag" id="sm-card-tag"></p>
+    <h3 class="sm-card-name" id="sm-card-name"></h3>
+    <p class="sm-card-desc" id="sm-card-desc"></p>
+    <p class="sm-card-foot"><span class="sm-card-kpi" id="sm-card-kpi"></span><a class="sm-card-link" id="sm-card-link" href="#">Open case</a></p>
+    <button type="button" class="sm-card-close" id="sm-card-close" aria-label="Close proof card">×</button>
+  </div>
+</section>
 
-<script src="assets/vendor/matter-0.19.0.min.js"></script>
-<script>
-(function(){
-  var CASES=[
-    {title:'Paid social', hash:'#paid'},
-    {title:'Postroom', hash:'#tool'},
-    {title:'Hook Lab', hash:'#hooklab'},
-    {title:'Growth case', hash:'#ap-growth-case-study'},
-    {title:'Organic growth', hash:'#strategy'}
-  ];
-  var activeCaseIndex=1;
-  var scrollTrack=document.getElementById('scrollTrack');
-  var physicsCurtain=document.getElementById('physicsCurtain');
-  var physicsFloorLine=document.getElementById('physicsFloorLine');
-  var skillHead=document.querySelector('#physicsCurtain .skill-head');
-  var roomStage3D=document.getElementById('roomStage3D');
-  var ceilingRig=document.getElementById('ceilingRig');
-  var rigLampHead=document.getElementById('rigLampHead');
-  var spotlightOverlay=document.getElementById('spotlightOverlay');
-  var roomFloor=document.getElementById('roomFloor');
-  var backLink=document.getElementById('roomBackLink');
-  var roomHud=document.getElementById('roomHud');
-  var waveTitleEl=document.getElementById('waveTitle');
-  var gridEl=document.getElementById('skill-grid');
-  if(!scrollTrack||!physicsCurtain||!roomStage3D||!waveTitleEl)return;
+<!-- RECENT WORKS SHOWROOM (upgrade v1) -->
+<section class="vr-section" id="work" aria-labelledby="vr-title">
+  <div id="works" class="vr-anchor" tabindex="-1"></div>
+  <div class="vr-stage" id="vr-stage" tabindex="0" aria-describedby="vr-help" aria-roledescription="3D showroom">
+    <div class="vr-webgl" id="vr-webgl"></div>
+    <div class="vr-css" id="vr-css"></div>
+    <div class="vr-bars" aria-hidden="true"><i></i><i></i></div>
 
-  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
-  var waveCharEls=Array.prototype.map.call('Recent works', function(ch){
-    var span=document.createElement('span');
-    span.className='wave-char';
-    span.innerHTML=ch===' '?'&nbsp;':ch;
-    waveTitleEl.appendChild(span);
-    return span;
-  });
+    <div class="vr-hud-top">
+      <div class="vr-heading">
+        <h2 class="vr-title" id="vr-title">Recent works</h2>
+        <p class="vr-help" id="vr-help">Swipe sideways or drag to look around. WASD to walk. Click a pedestal to go to it.</p>
+        <button type="button" class="vr-mode-btn" id="vr-walk" aria-pressed="false">Walk mode: off</button>
+      </div>
+      <div class="vr-radar">
+        <canvas id="vr-radar" width="120" height="92" aria-hidden="true"></canvas>
+        <span>Room map</span>
+      </div>
+    </div>
 
-  var Engine, World, Bodies, Body, Composite, engine=null;
-  var tileBodies=[], floorBody=null, tileElements=[], initialTileRects=[];
-  if(window.Matter && !reduce.matches){
-    Engine=Matter.Engine; World=Matter.World; Bodies=Matter.Bodies; Body=Matter.Body; Composite=Matter.Composite;
-    engine=Engine.create({positionIterations:8, velocityIterations:6});
-    engine.gravity.y=1.4;
-  }
+    <nav class="vr-dock" id="vr-dock" aria-label="Go to a case"></nav>
+    <p class="vr-sr" id="vr-live" aria-live="polite"></p>
+  </div>
 
-  var simTiles=[], homePositions=[], simMetrics={rows:7, cols:15, cell:48};
-  function gridCells(){
-    return gridEl?[].slice.call(gridEl.querySelectorAll(':scope > .cell')):[];
-  }
-  function homesStale(){
-    var m=readGridMetrics();
-    return !simMetrics||simMetrics.cols!==m.cols||Math.abs((simMetrics.cell||0)-m.cell)>0.5||Math.abs((simMetrics.gapY||0)-m.gapY)>0.5;
-  }
-  function readGridMetrics(){
-    var cols=parseInt(getComputedStyle(gridEl).getPropertyValue('--cols'),10)||15;
-    var cell=parseFloat(getComputedStyle(gridEl).getPropertyValue('--cell'))||48;
-    var gapX=parseFloat(getComputedStyle(gridEl).getPropertyValue('--gap-x'))||8;
-    var gapY=parseFloat(getComputedStyle(gridEl).getPropertyValue('--gap-y'))||gapX;
-    var list=gridCells();
-    var rows=Math.max(1, Math.ceil(list.length/cols));
-    return {cols:cols, rows:rows, cell:cell, gapX:gapX, gapY:gapY, list:list};
-  }
-  var localHomes=[];
-  var homesCaptured=false;
-  var lastFloorY=null;
-  function skillStickyEl(){
-    return skillTrack?skillTrack.querySelector('.StickyViewport'):null;
-  }
-  function stickyBox(){
-    var s=skillStickyEl();
-    if(!s)return {x:0,y:0,top:9999,bottom:-9999,pinned:false};
-    var r=s.getBoundingClientRect();
-    return {x:r.left,y:r.top,top:r.top,bottom:r.bottom,pinned:r.top<=6&&r.bottom>=window.innerHeight-24};
-  }
-  function rowLocalOrigin(m){
-    var sticky=skillStickyEl();
-    var x=0, y=0, n=gridEl;
-    while(n && n!==sticky && n!==document.body){
-      x+=n.offsetLeft;
-      y+=n.offsetTop;
-      n=n.offsetParent;
-    }
-    var gridW=m.cols*m.cell+(m.cols-1)*m.gapX;
-    var gridH=m.rows*m.cell+(m.rows-1)*m.gapY;
-    x+=(gridEl.clientWidth-gridW)/2+m.cell/2;
-    y+=(gridEl.clientHeight-gridH)/2+m.cell/2;
-    return {x:x, y:y};
-  }
-  function writeRowHomes(m){
-    var origin=rowLocalOrigin(m);
-    localHomes=[];
-    for(var i=0;i<m.list.length;i++){
-      var col=i%m.cols, row=Math.floor(i/m.cols);
-      localHomes.push({cx:origin.x+col*(m.cell+m.gapX), cy:origin.y+row*(m.cell+m.gapY)});
-    }
-    homesCaptured=!!localHomes.length && localHomes[0].cy>8 && gridEl.clientHeight>40;
-  }
-  function buildPhysicsWorld(){
-    if(!Engine||!gridEl)return;
-    var m=readGridMetrics();
-    if(!m.list.length||!(m.cell>=8))return;
-    if(gridEl.clientWidth<40||gridEl.clientHeight<40)return;
-    lastFloorY=null;
-    engine=Engine.create({positionIterations:8, velocityIterations:6});
-    engine.gravity.y=1.4;
-    tileBodies=[];
-    simTiles=[];
-    homePositions=[];
-    localHomes=[];
-    homesCaptured=false;
-    simMetrics=m;
-    writeRowHomes(m);
-    var box=stickyBox();
-    var vw=window.innerWidth, vh=window.innerHeight, isMobile=vw<=900;
-    var floorY=vh*0.84;
-    floorBody=Bodies.rectangle(vw/2, floorY+60, vw*3, 120, {isStatic:true, friction:0.3});
-    var leftWall=Bodies.rectangle(-60, vh/2, 120, vh*6, {isStatic:true});
-    var rightWall=Bodies.rectangle(vw+60, vh/2, 120, vh*6, {isStatic:true});
-    World.add(engine.world, [floorBody, leftWall, rightWall]);
-    var chamfer=Math.min(isMobile?4:8, m.cell*0.3);
-    m.list.forEach(function(el, i){
-      var local=localHomes[i];
-      el.style.transform='';
-      var cx=local.cx+box.x, cy=local.cy+box.y;
-      homePositions.push({cx:cx, cy:cy});
-      simTiles.push({el:el, row:Math.floor(i/m.cols), col:i%m.cols, released:false});
-      var body=Bodies.rectangle(cx, cy, m.cell*0.92, m.cell*0.92, {
-        isStatic:true,
-        chamfer:{radius:chamfer},
-        restitution:0.28,
-        friction:0.08,
-        frictionAir:0.014,
-        slop:0.04
-      });
-      tileBodies.push(body);
-      World.add(engine.world, body);
-    });
-  }
-  function captureLocalHomes(){
-    if(!simTiles.length)return;
-    for(var k=0;k<simTiles.length;k++) if(!simTiles[k].released) simTiles[k].el.style.transform='';
-    writeRowHomes(simMetrics);
-  }
-  function parkUnreleased(){
-    var o=stickyBox();
-    for(var i=0;i<simTiles.length;i++){
-      if(simTiles[i].released)continue;
-      var local=localHomes[i], b=tileBodies[i];
-      if(!local||!b)continue;
-      if(!b.isStatic)Body.setStatic(b, true);
-      Body.setPosition(b, {x:local.cx+o.x, y:local.cy+o.y});
-      Body.setVelocity(b, {x:0, y:0});
-      Body.setAngle(b, 0);
-      Body.setAngularVelocity(b, 0);
-    }
-  }
-  function clearTileTransforms(){
-    for(var i=0;i<simTiles.length;i++){
-      if(simTiles[i].el.style.transform)simTiles[i].el.style.transform='';
-    }
-  }
-  function anyTileMoving(){
-    for(var i=0;i<simTiles.length;i++){
-      if(!simTiles[i].released)continue;
-      var b=tileBodies[i];
-      if(!b)continue;
-      if(Math.hypot(b.velocity.x,b.velocity.y)>0.4||Math.abs(b.angularVelocity)>0.04)return true;
-    }
-    return false;
-  }
-  function simCurrent(){
-    var list=gridCells();
-    if(!simTiles.length||simTiles.length!==list.length)return false;
-    if(!simTiles[0].el.isConnected)return false;
-    return simTiles[0].el===list[0];
-  }
-  window.addEventListener('load', buildPhysicsWorld);
-  window.addEventListener('resize', function(){
-    simTiles.forEach(function(item){item.el.style.transform='';});
-    buildPhysicsWorld();
-  });
-  buildPhysicsWorld();
+  <div class="vr-cards" id="vr-cards">
+    <article class="vr-card" data-id="paid" data-label="Paid social" data-angle="-64" data-accent="blue">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">Meta &amp; TikTok ads</p>
+        <h3 class="vr-card-title">Paid social</h3>
+        <p class="vr-card-stat"><strong>−54%</strong> CPA on Meta in 6 weeks</p>
+        <p class="vr-card-desc">Ad sets split by hook type, 8–10 new variants a week. Budget moved to the product-demo hook: CPA ~$48 → ~$22.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="#paid">Open case</a>
+        </div>
+      </div>
+      <div class="vr-card-media">
+        <video muted loop playsinline preload="none" poster="assets/img/argo-video-poster.jpg" data-src="assets/video/argo-loop.mp4" aria-label="Product-demo hook example: ARGŌ golden body oil"></video>
+      </div>
+    </article>
 
-  var cardEls=[].slice.call(document.querySelectorAll('#cardsContainer .case-frame'));
-  var pedestalEls=[].slice.call(document.querySelectorAll('#pedestalsRow .pedestal-node'));
-  var pillEls=[].slice.call(document.querySelectorAll('#hudPills .pill-tab'));
+    <article class="vr-card" data-id="hooklab" data-label="Hook Lab" data-angle="-32" data-accent="violet">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">AI production, no shoot</p>
+        <h3 class="vr-card-title">Hook Lab</h3>
+        <p class="vr-card-stat"><strong>6</strong> pieces, one hook type each</p>
+        <p class="vr-card-desc">Macro reveals, question hooks, scene switches and outcome claims, made with ComfyUI, Higgsfield, Nano Banana and Veo.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="#hooklab">Open Hook Lab</a>
+        </div>
+      </div>
+      <div class="vr-card-media">
+        <video muted loop playsinline preload="none" poster="assets/img/outfit-transition.jpg" data-src="assets/video/outfit-loop.mp4" aria-label="Hook Lab: outfit transition"></video>
+      </div>
+    </article>
 
-  function openActive(){
-    location.hash=CASES[activeCaseIndex].hash;
-  }
-  function selectCase(newIndex){
-    activeCaseIndex=(newIndex+CASES.length)%CASES.length;
-    var leftIdx=(activeCaseIndex-1+CASES.length)%CASES.length;
-    var rightIdx=(activeCaseIndex+1)%CASES.length;
-    cardEls.forEach(function(el, idx){
-      el.classList.remove('slot-center','slot-left','slot-right','slot-hidden');
-      if(idx===activeCaseIndex)el.classList.add('slot-center');
-      else if(idx===leftIdx)el.classList.add('slot-left');
-      else if(idx===rightIdx)el.classList.add('slot-right');
-      else el.classList.add('slot-hidden');
-      var open=idx===activeCaseIndex;
-      el.setAttribute('aria-label', (open?'Open ':'Show ')+CASES[idx].title);
-      el.tabIndex=el.classList.contains('slot-hidden')?-1:0;
-    });
-    pedestalEls.forEach(function(el, idx){
-      var on=idx===activeCaseIndex;
-      el.classList.toggle('active', on);
-      el.setAttribute('aria-current', on?'true':'false');
-    });
-    pillEls.forEach(function(el, idx){
-      var on=idx===activeCaseIndex;
-      el.classList.toggle('active', on);
-      el.setAttribute('aria-selected', on?'true':'false');
-    });
-    var label=(activeCaseIndex+1)+' / '+CASES.length+' · '+CASES[activeCaseIndex].title;
-    document.getElementById('hudCounterText').textContent=label;
-    document.getElementById('floorCount').textContent=(activeCaseIndex+1)+' / '+CASES.length;
-    document.getElementById('floorOpen').setAttribute('aria-label','Open '+CASES[activeCaseIndex].title);
-  }
-  var roomAuto={timer:0,userHold:false,paused:false,hover:0,over:null,started:false,steps:0,lastPointer:0};
-  var ROOM_DWELL=5600;
-  var ROOM_FIRST=7200;
-  function roomShowing(){
-    if(reduce.matches||document.hidden||document.body.classList.contains('is-sheet'))return false;
-    var stage=roomStage3D.getBoundingClientRect();
-    if(stage.height<window.innerHeight*0.62)return false;
-    if(stage.top>72 || stage.bottom<window.innerHeight-72)return false;
-    var op=parseFloat(roomStage3D.style.opacity||window.getComputedStyle(roomStage3D).opacity||'0');
-    return op>=0.98;
-  }
-  function syncPlayButton(){
-    var btn=document.getElementById('roomPlay');
-    if(!btn)return;
-    var playing=!!roomAuto.timer && !roomAuto.userHold && !roomAuto.paused;
-    btn.textContent=playing?'Pause':'Play';
-    btn.setAttribute('aria-pressed', playing?'true':'false');
-    btn.setAttribute('aria-label', playing?'Pause the works presentation':'Play the works presentation');
-  }
-  function scheduleRoom(){
-    clearTimeout(roomAuto.timer);
-    roomAuto.timer=0;
-    if(!roomShowing()||roomAuto.userHold||roomAuto.paused||(roomAuto.started&&roomAuto.hover)){syncPlayButton();return;}
-    var wait=roomAuto.steps?ROOM_DWELL:ROOM_FIRST;
-    roomAuto.timer=setTimeout(function(){
-      roomAuto.timer=0;
-      if(!roomShowing()||roomAuto.userHold||roomAuto.paused||(roomAuto.started&&roomAuto.hover)){syncPlayButton();return;}
-      roomAuto.steps++;
-      selectCase(activeCaseIndex+1);
-      scheduleRoom();
-    }, wait);
-    roomAuto.started=true;
-    syncPlayButton();
-  }
-  function holdRoom(){
-    roomAuto.userHold=true;
-    clearTimeout(roomAuto.timer);
-    roomAuto.timer=0;
-    syncPlayButton();
-  }
-  function manualSelect(idx){holdRoom();selectCase(idx);}
-  function bindRoomPause(el){
-    if(!el)return;
-    el.addEventListener('pointermove', function(e){
-      if(!roomAuto.started)return;
-      if(roomAuto.px==null){roomAuto.px=e.clientX;roomAuto.py=e.clientY;return;}
-      var dx=Math.abs(e.clientX-roomAuto.px), dy=Math.abs(e.clientY-roomAuto.py);
-      roomAuto.px=e.clientX; roomAuto.py=e.clientY;
-      if(dx+dy<8)return;
-      if(roomAuto.over===el)return;
-      roomAuto.over=el;
-      roomAuto.hover=1;
-      clearTimeout(roomAuto.timer);
-      roomAuto.timer=0;
-      syncPlayButton();
-    });
-    el.addEventListener('pointerleave', function(){
-      if(roomAuto.over!==el)return;
-      roomAuto.over=null;
-      roomAuto.hover=0;
-      if(!roomAuto.userHold&&!roomAuto.paused)scheduleRoom();
-      else syncPlayButton();
-    });
-    el.addEventListener('focusin', function(){
-      if(!roomAuto.started)return;
-      roomAuto.hover=1;
-      clearTimeout(roomAuto.timer);
-      roomAuto.timer=0;
-      syncPlayButton();
-    });
-    el.addEventListener('focusout', function(){
-      roomAuto.hover=0;
-      if(!roomAuto.userHold&&!roomAuto.paused)scheduleRoom();
-      else syncPlayButton();
-    });
-  }
-  cardEls.forEach(function(card){
-    bindRoomPause(card);
-    card.addEventListener('click', function(){
-      var idx=+card.dataset.index;
-      if(card.classList.contains('slot-center'))openActive();
-      else manualSelect(idx);
-    });
-  });
-  pedestalEls.forEach(function(ped){
-    bindRoomPause(ped);
-    ped.addEventListener('click', function(){manualSelect(+ped.dataset.index);});
-  });
-  pillEls.forEach(function(pill){
-    bindRoomPause(pill);
-    pill.addEventListener('click', function(e){
-      if(e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;
-      e.preventDefault();
-      manualSelect(+pill.dataset.index);
-    });
-  });
-  bindRoomPause(document.getElementById('prevBtn'));
-  bindRoomPause(document.getElementById('nextBtn'));
-  bindRoomPause(document.getElementById('floorOpen'));
-  document.getElementById('prevBtn').addEventListener('click', function(){manualSelect(activeCaseIndex-1);});
-  document.getElementById('nextBtn').addEventListener('click', function(){manualSelect(activeCaseIndex+1);});
-  document.getElementById('floorOpen').addEventListener('click', openActive);
-  document.getElementById('roomPlay').addEventListener('click', function(){
-    if(roomAuto.userHold||roomAuto.paused||!roomAuto.timer){
-      roomAuto.userHold=false;
-      roomAuto.paused=false;
-      roomAuto.hover=0;
-      scheduleRoom();
-    }else{
-      roomAuto.paused=true;
-      clearTimeout(roomAuto.timer);
-      roomAuto.timer=0;
-      syncPlayButton();
-    }
-  });
-  document.addEventListener('visibilitychange', function(){
-    if(document.hidden){clearTimeout(roomAuto.timer);roomAuto.timer=0;syncPlayButton();}
-  });
-  function caseIndexFromHash(){
-    var raw=(location.hash||'').replace(/^#/,'').split(/[?&]/)[0];
-    var map={paid:0,tool:1,'content-ops-tool':1,hooklab:2,'ap-growth-case-study':3,growth:3,strategy:4};
-    return Object.prototype.hasOwnProperty.call(map,raw)?map[raw]:-1;
-  }
-  selectCase(0);
-  var hashCase=caseIndexFromHash();
-  if(hashCase>=0)selectCase(hashCase);
-  window.addEventListener('hashchange',function(){
-    var idx=caseIndexFromHash();
-    if(idx>=0)selectCase(idx);
-  });
+    <article class="vr-card" data-id="growth" data-label="$471K Growth case" data-angle="0" data-accent="violet">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">Subscription business</p>
+        <h3 class="vr-card-title">Growth case</h3>
+        <p class="vr-card-stat"><strong>$471K</strong> subscription revenue since launch</p>
+        <p class="vr-card-desc">Co-founded and ran the revenue side: pricing, post-purchase lifecycle and CRM funnel, retention.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="#ap-growth-case-study">Open case</a>
+        </div>
+      </div>
+      <div class="vr-card-media vr-card-media--stats">
+        <dl>
+          <div><dt>Platform rank</dt><dd>Top 2%</dd></div>
+          <div><dt>From lifecycle &amp; CRM</dt><dd>86%</dd></div>
+          <div><dt>Chargebacks</dt><dd>0%</dd></div>
+          <div><dt>Creator roster, first 3 months</dt><dd>$126K</dd></div>
+        </dl>
+      </div>
+    </article>
 
-  var mouseState={x:window.innerWidth/2, y:window.innerHeight/2, lerpX:window.innerWidth/2, lerpY:window.innerHeight/2};
-  var physicsActive=false, pNow=0;
-  var skillTrack=document.getElementById('skillTrack');
-  window.addEventListener('pointermove', function(e){
-    roomAuto.lastPointer=performance.now();
-    mouseState.x=e.clientX;
-    mouseState.y=e.clientY;
-    if(physicsActive && Body){
-      simTiles.forEach(function(item, i){
-        if(!item.released)return;
-        var body=tileBodies[i];
-        if(!body)return;
-        var dx=body.position.x-e.clientX, dy=body.position.y-e.clientY;
-        var dist=Math.hypot(dx, dy);
-        if(dist<85 && dist>1){
-          Body.applyForce(body, body.position, {x:(dx/dist)*0.005, y:(dy/dist)*0.005-0.002});
-        }
-      });
-    }
-  });
-  var drag=null;
-  var gallery=document.getElementById('galleryViewport');
-  if(gallery){
-    gallery.addEventListener('pointerdown', function(e){drag={x:e.clientX,y:e.clientY};});
-    gallery.addEventListener('pointerup', function(e){
-      if(!drag||!roomShowing()){drag=null;return;}
-      var dx=e.clientX-drag.x, dy=e.clientY-drag.y;
-      if(Math.abs(dx)>56 && Math.abs(dx)>Math.abs(dy))manualSelect(activeCaseIndex+(dx<0?1:-1));
-      drag=null;
-    });
-  }
-  window.addEventListener('keydown', function(e){
-    if(!roomShowing())return;
-    if(e.target.closest && e.target.closest('#skill-grid, .skill-legend, .top'))return;
-    if(e.key==='ArrowLeft'){e.preventDefault();manualSelect(activeCaseIndex-1);}
-    if(e.key==='ArrowRight'){e.preventDefault();manualSelect(activeCaseIndex+1);}
-  });
+    <article class="vr-card" data-id="organic" data-label="~1M Organic growth" data-angle="32" data-accent="emerald">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">Short-form strategy</p>
+        <h3 class="vr-card-title">Organic growth</h3>
+        <p class="vr-card-stat"><strong>~1M</strong> organic views in one month</p>
+        <p class="vr-card-desc">Across 3 accounts: market research, brand voice, a publishing plan, then adjust on the numbers.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="#strategy">Open case</a>
+        </div>
+      </div>
+      <div class="vr-card-media vr-card-media--stats">
+        <dl>
+          <div><dt>Creator-led brand</dt><dd>0 → 5k</dd></div>
+          <div><dt>Followers, in about</dt><dd>1 month</dd></div>
+          <div><dt>Accounts</dt><dd>3</dd></div>
+        </dl>
+      </div>
+    </article>
 
-  function clamp(val, min, max){return Math.max(min, Math.min(max, val));}
-  function rowThreshold(item){
-    var inverted=(simMetrics.rows-1)-item.row;
-    return inverted/Math.max(1, simMetrics.rows)*0.75+(item.col%3)*0.05;
-  }
-  function placeFloor(p, vw, vh){
-    var wipeProgress=clamp((p-0.52)/0.12, 0, 1);
-    var start=vh*0.84;
-    var currentFloorY=start+(-220-start)*wipeProgress;
-    if(lastFloorY!=null && currentFloorY<lastFloorY && wipeProgress>0){
-      var lift=currentFloorY-lastFloorY;
-      for(var i=0;i<simTiles.length;i++){
-        if(!simTiles[i].released)continue;
-        var b=tileBodies[i];
-        if(!b)continue;
-        Body.setPosition(b, {x:b.position.x, y:b.position.y+lift});
-        Body.setVelocity(b, {x:b.velocity.x, y:Math.min(0, b.velocity.y)});
-      }
-    }
-    lastFloorY=currentFloorY;
-    if(floorBody)Body.setPosition(floorBody, {x:vw/2, y:currentFloorY+60});
-    physicsFloorLine.style.top=currentFloorY+'px';
-    physicsFloorLine.style.opacity=wipeProgress>=0.95?'0':'1';
-    return {y:currentFloorY, wipeProgress:wipeProgress};
-  }
-  function footerEntering(){
-    var footer=document.querySelector('.contact');
-    if(!footer)return false;
-    return footer.getBoundingClientRect().top<window.innerHeight*0.85;
-  }
-  function hidePhysicsLayer(){
-    physicsActive=false;
-    clearTileTransforms();
-    physicsFloorLine.style.opacity='0';
-    if(!physicsCurtain)return;
-    physicsCurtain.style.opacity='0';
-    physicsCurtain.style.visibility='hidden';
-    physicsCurtain.style.pointerEvents='none';
-    physicsCurtain.setAttribute('inert','');
-    physicsCurtain.setAttribute('aria-hidden','true');
-  }
-  function showPhysicsLayer(interactive){
-    if(!physicsCurtain)return;
-    physicsCurtain.style.opacity='1';
-    physicsCurtain.style.visibility='visible';
-    physicsCurtain.style.pointerEvents=interactive?'auto':'none';
-    if(interactive)physicsCurtain.removeAttribute('inert');
-    else physicsCurtain.setAttribute('inert','');
-    physicsCurtain.setAttribute('aria-hidden', interactive?'false':'true');
-  }
-  var physicsWasHidden=false;
-  function releaseOneBand(releaseProgress){
-    var band=null;
-    for(var i=0;i<simTiles.length;i++){
-      var item=simTiles[i];
-      if(item.released||releaseProgress<rowThreshold(item))continue;
-      if(band===null||item.row>band)band=item.row;
-    }
-    if(band===null)return false;
-    for(var j=0;j<simTiles.length;j++){
-      var tile=simTiles[j];
-      if(tile.released||tile.row!==band)continue;
-      tile.released=true;
-      var b=tileBodies[j];
-      var local=localHomes[j];
-      var o=stickyBox();
-      if(local)Body.setPosition(b, {x:local.cx+o.x, y:local.cy+o.y});
-      Body.setStatic(b, false);
-      Body.setVelocity(b, {x:(Math.random()-0.5)*3.8, y:1.5+Math.random()*2.5});
-      Body.setAngularVelocity(b, (Math.random()-0.5)*0.12);
-    }
-    return true;
-  }
-  function paintSimTiles(){
-    var o=stickyBox();
-    if(!o.pinned){clearTileTransforms();return;}
-    for(var i=0;i<simTiles.length;i++){
-      var item=simTiles[i], b=tileBodies[i], local=localHomes[i];
-      if(!item.released||!b||!local){item.el.style.transform='';continue;}
-      var dx=b.position.x-(local.cx+o.x), dy=b.position.y-(local.cy+o.y);
-      item.el.style.transform='translate3d('+dx.toFixed(1)+'px, '+dy.toFixed(1)+'px, 0) rotate('+b.angle.toFixed(3)+'rad)';
-    }
-  }
-  function resetSimTiles(){
-    physicsActive=false;
-    homesCaptured=false;
-    for(var i=0;i<simTiles.length;i++){
-      var item=simTiles[i], b=tileBodies[i];
-      item.released=false;
-      item.el.style.transform='';
-      if(b){
-        Body.setStatic(b, true);
-        Body.setVelocity(b, {x:0, y:0});
-        Body.setAngle(b, 0);
-        Body.setAngularVelocity(b, 0);
-      }
-    }
-  }
+    <article class="vr-card" data-id="postroom" data-label="Postroom" data-angle="64" data-accent="violet">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">Built in Cursor</p>
+        <h3 class="vr-card-title">Postroom</h3>
+        <p class="vr-card-stat"><strong>~75%</strong> faster publishing</p>
+        <p class="vr-card-desc">AI captions, approval, scheduling and Instagram API publishing in one workspace. Used in production.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="work/postroom/">Try the demo</a>
+        </div>
+      </div>
+      <div class="vr-card-media">
+        <video muted loop playsinline preload="none" poster="assets/img/postroom-poster.jpg" data-src="assets/video/postroom-loop.mp4" aria-label="Postroom promo"></video>
+      </div>
+    </article>
+  </div>
+</section>
 
-  function renderLoop(){
-    if(document.body.classList.contains('is-sheet') || scrollTrack.offsetHeight<10){
-      if(roomAuto.timer||roomAuto.started){
-        clearTimeout(roomAuto.timer);
-        roomAuto.timer=0;
-        roomAuto.hover=0;
-        roomAuto.over=null;
-        syncPlayButton();
-      }
-      requestAnimationFrame(renderLoop);
-      return;
-    }
-    var rect=scrollTrack.getBoundingClientRect();
-    var totalScrollable=scrollTrack.offsetHeight-window.innerHeight;
-    var p=clamp(-rect.top/Math.max(1, totalScrollable), 0, 1);
-    pNow=p;
-    var skillRect=skillTrack?skillTrack.getBoundingClientRect():null;
-    var skillTotal=skillTrack?skillTrack.offsetHeight-window.innerHeight:1;
-    var skillP=skillRect?clamp(-skillRect.top/Math.max(1, skillTotal), 0, 1):0;
-    var phase=skillP*0.70;
-    var roomNear=rect.bottom>-80 && rect.top<window.innerHeight+80;
-    var skillNear=skillRect && skillRect.bottom>-80 && skillRect.top<window.innerHeight+80;
-    if(!roomNear && !skillNear){
-      physicsActive=false;
-      clearTileTransforms();
-      if(footerEntering() || phase>0.65){
-        hidePhysicsLayer();
-        physicsWasHidden=true;
-      }
-      requestAnimationFrame(renderLoop);
-      return;
-    }
-    var vh=window.innerHeight, vw=window.innerWidth;
-    var motion=!reduce.matches && !!engine;
-
-    if(skillNear){
-      var stickyNow=stickyBox();
-      var skillPinned=stickyNow.pinned;
-      if(motion && !simCurrent())buildPhysicsWorld();
-      var floorState=placeFloor(phase, vw, vh);
-      var wipeProgress=floorState.wipeProgress;
-      if(phase>0.65 || wipeProgress>=0.95){
-        hidePhysicsLayer();
-        physicsWasHidden=true;
-      }else{
-        if(physicsWasHidden && motion){
-          buildPhysicsWorld();
-          physicsWasHidden=false;
-          floorState=placeFloor(phase, vw, vh);
-        }else physicsWasHidden=false;
-        showPhysicsLayer(phase<=0.38);
-        if(!skillPinned){
-          physicsActive=false;
-          clearTileTransforms();
-          if(motion && phase<=0.38 && (!homesCaptured || simTiles.some(function(t){return t.released;}) || !simCurrent() || homesStale()))buildPhysicsWorld();
-          if(skillHead)skillHead.style.opacity='1';
-          physicsFloorLine.style.opacity='0';
-        }else if(motion && phase<=0.38){
-          if(!homesCaptured || !simCurrent() || simTiles.some(function(t){return t.released;}) || homesStale())buildPhysicsWorld();
-          else clearTileTransforms();
-          if(skillHead)skillHead.style.opacity='1';
-          physicsFloorLine.style.opacity='0';
-        }else if(motion && phase>0.38 && simTiles.length){
-          if(!homesCaptured)captureLocalHomes();
-          if(homesCaptured){
-            parkUnreleased();
-            var inWindow=phase<0.72;
-            var moving=anyTileMoving() || wipeProgress>0;
-            if(inWindow||moving){
-              physicsActive=true;
-              var releaseProgress=inWindow?clamp((phase-0.38)/0.14, 0, 1):1;
-              var catchup=releaseProgress>=1;
-              var steps=0;
-              while(steps<=simMetrics.rows){
-                var didRelease=inWindow?releaseOneBand(releaseProgress):false;
-                placeFloor(phase, vw, vh);
-                var sub=didRelease&&catchup?10:1;
-                for(var s=0;s<sub;s++){
-                  try{Engine.update(engine, 1000/60);}
-                  catch(err){buildPhysicsWorld();didRelease=false;break;}
-                }
-                steps++;
-                if(!didRelease)break;
-              }
-              if(!inWindow && !anyTileMoving() && wipeProgress>=0.95)physicsActive=false;
-            }else{
-              physicsActive=false;
-              placeFloor(phase, vw, vh);
-            }
-            if(skillHead)skillHead.style.opacity=String(clamp(1-(phase-0.38)*4, 0, 1));
-            paintSimTiles();
-          }
-        }
-      }
-    }else if(footerEntering() || phase>0.65){
-      hidePhysicsLayer();
-      physicsWasHidden=true;
-    }
-
-    if(roomNear){
-    waveTitleEl.style.transform='translate3d(0px, 0px, 0)';
-    waveCharEls.forEach(function(span){
-      span.style.opacity='1';
-      span.style.transform='none';
-    });
-    backLink.style.opacity='1';
-    backLink.style.pointerEvents='auto';
-    roomStage3D.style.opacity='1';
-    var depthT=motion?clamp(p/0.32,0,1):0;
-    var depth=depthT*depthT*(3-2*depthT);
-    if(gallery){
-      gallery.style.setProperty('--room-push',(depth*80).toFixed(1)+'px');
-      gallery.style.setProperty('--room-persp',Math.round(1350-depth*180)+'px');
-      gallery.style.setProperty('--room-origin',(42+depth*6).toFixed(2)+'%');
-    }
-    roomStage3D.style.transform=depth>0.001?'translate3d(0,'+(-depth*8).toFixed(1)+'px,0)':'none';
-    ceilingRig.style.transform='translate3d(-50%, 0px, 0)';
-    roomHud.style.opacity='1';
-    roomHud.style.pointerEvents='auto';
-    roomHud.setAttribute('aria-hidden','false');
-    }else if(gallery&&gallery.style.getPropertyValue('--room-push')&&gallery.style.getPropertyValue('--room-push')!=='0px'){
-      gallery.style.setProperty('--room-push','0px');
-      gallery.style.setProperty('--room-persp','1350px');
-      gallery.style.setProperty('--room-origin','42%');
-      roomStage3D.style.transform='none';
-    }
-
-    var roomReady=roomShowing();
-    if(roomReady){
-      roomAuto.miss=0;
-      roomAuto.away=false;
-      if(!roomAuto.timer && !roomAuto.userHold && !roomAuto.paused && !(roomAuto.started && roomAuto.hover))scheduleRoom();
-    }else{
-      roomAuto.miss=(roomAuto.miss||0)+1;
-      if(roomAuto.miss>18 && !roomAuto.away){
-        roomAuto.away=true;
-        clearTimeout(roomAuto.timer);
-        roomAuto.timer=0;
-        roomAuto.started=false;
-        roomAuto.steps=0;
-        roomAuto.hover=0;
-        roomAuto.over=null;
-        syncPlayButton();
-      }
-    }
-    if(roomAuto.timer && performance.now()-roomAuto.lastPointer>1400){
-      var glowT=performance.now()/1000;
-      mouseState.x=vw*(0.5+0.06*Math.sin(glowT*0.35));
-      mouseState.y=vh*(0.42+0.035*Math.cos(glowT*0.27));
-    }
-    mouseState.lerpX+=(mouseState.x-mouseState.lerpX)*(motion?0.08:1);
-    mouseState.lerpY+=(mouseState.y-mouseState.lerpY)*(motion?0.08:1);
-    var normX=(mouseState.lerpX/vw-0.5)*2;
-    var normY=(mouseState.lerpY/vh-0.5)*2;
-    rigLampHead.style.transform='rotateY('+(-normX*32).toFixed(2)+'deg) rotateX('+(normY*22).toFixed(2)+'deg)';
-    spotlightOverlay.style.setProperty('--cursor-x', mouseState.lerpX.toFixed(1)+'px');
-    spotlightOverlay.style.setProperty('--cursor-y', mouseState.lerpY.toFixed(1)+'px');
-    roomFloor.style.setProperty('--spot-x', (50+normX*28).toFixed(1)+'%');
-    roomFloor.style.setProperty('--spot-y', (38+normY*22).toFixed(1)+'%');
-    requestAnimationFrame(renderLoop);
-  }
-  requestAnimationFrame(renderLoop);
-})();
-
-</script>
+<script src="assets/vendor/three.r128.min.js" defer></script>
+<script src="assets/vendor/css3d-renderer.r128.js" defer></script>
+<script src="assets/js/hero.js" defer></script>
+<script src="assets/js/stack-matrix.js" defer></script>
+<script src="assets/js/showroom.js" defer></script>
 
 <!-- PAID SOCIAL -->
 <section class="block paid sheet" id="paid">
