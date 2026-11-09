@@ -845,6 +845,24 @@ a.ba-art{text-decoration:none;color:inherit;cursor:pointer}
 .room-backlink{font-family:var(--mono);font-size:11.5px;letter-spacing:.14em;color:var(--text-muted);text-decoration:none;text-transform:uppercase;pointer-events:none;opacity:0}
 .room-backlink:hover{color:var(--accent)}
 .gallery-viewport{position:absolute;inset:0;perspective:var(--room-persp,1350px);perspective-origin:50% var(--room-origin,42%);overflow:hidden;z-index:10;touch-action:pan-y}
+.hall-canvas{position:absolute;inset:0;z-index:0;pointer-events:auto;touch-action:pan-y}
+.room-wing{position:absolute;top:28%;width:min(210px,24vw);z-index:8;padding:12px 14px;border-radius:14px;background:rgba(8,14,26,.88);border:1px solid rgba(125,196,255,.35);color:#e7eef8;box-shadow:0 16px 40px rgba(0,0,0,.35)}
+.room-wing.west{left:18px}
+.room-wing.east{right:18px}
+.room-wing h3{margin:0 0 6px;font:600 13px/1.3 var(--sans)}
+.room-wing p,.room-wing a{margin:0;font:12px/1.45 var(--sans);color:#d5deea}
+.room-wing a{color:#9fd2ff}
+.room-minimap{position:absolute;top:86px;right:18px;z-index:20;width:92px;height:92px;border-radius:50%;border:1px solid rgba(125,196,255,.35);background:rgba(6,10,18,.72);pointer-events:none}
+.room-minimap span{position:absolute;left:50%;top:50%;width:2px;height:28px;background:#7dd3fc;transform-origin:50% 0;transform:translate(-50%,0) rotate(var(--yaw,0deg))}
+.room-reel{display:none;position:absolute;left:8px;right:8px;bottom:8px;margin:0;padding:6px 8px;border-radius:8px;background:rgba(5,8,14,.78);color:#f3f6fc;font:12px/1.35 var(--sans);text-align:left}
+body.room-reel-on .case-frame.slot-center .room-reel{display:block}
+body.room-reel-on .spotlight-beam-overlay{background:radial-gradient(520px circle at var(--cursor-x,50vw) var(--cursor-y,44vh),rgba(77,166,255,.28) 0%,rgba(77,166,255,.08) 42%,rgba(5,7,12,.55) 85%)}
+@media (max-width:700px){
+  .hall-canvas,.room-wing,.room-minimap{display:none!important}
+}
+@media (prefers-reduced-motion:reduce){
+  .hall-canvas,.room-minimap{display:none!important}
+}
 .room-stage-3d{position:absolute;inset:0;transform-style:preserve-3d;opacity:0;will-change:transform;pointer-events:none}
 .wall-back{position:absolute;top:13%;left:16%;width:68%;height:58%;background:radial-gradient(circle at 50% 45%,#151e30 0%,#090d15 78%);border:1px solid rgba(255,255,255,.05);transform:translateZ(calc(-260px - var(--room-push,0px)));box-shadow:inset 0 0 110px rgba(0,0,0,.85)}
 .wall-side{position:absolute;top:13%;width:min(420px,42vw);height:58%;background:linear-gradient(to bottom,#0b101b,#070a11);border-top:1px solid rgba(255,255,255,.03);pointer-events:none}
@@ -1722,12 +1740,22 @@ body.is-sheet .back-bar{display:flex}
           </button>
         </div>
         <div class="center-tube-light"></div>
+        <aside class="room-wing west" id="roomWingWest">
+          <h3>West wing · how it’s made</h3>
+          <p>Higgsfield, ComfyUI, Claude, Cursor, CapCut, Looker Studio, and GA4. No extra performance figure is posted on this wall.</p>
+        </aside>
+        <aside class="room-wing east" id="roomWingEast">
+          <h3>East wing · contact</h3>
+          <p><a href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a><br><a href="#works">See the work</a></p>
+        </aside>
+        <div class="room-minimap" id="roomMinimap" aria-hidden="true"><span></span></div>
         <div class="cards-mount" id="cardsContainer">
           <button type="button" class="case-frame slot-center" data-index="0" data-hash="#paid">
             <div class="card-visual">
               <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="62" y="4" width="36" height="56" rx="5" fill="none" stroke="#e0f2fe" stroke-width="1.6"/><polygon points="74,22 88,32 74,42" fill="#7dd3fc"/><rect x="10" y="16" width="40" height="28" rx="4" fill="none" stroke="#38bdf8" stroke-width="1.5"/><path d="M18 30 l6 6 14-14" fill="none" stroke="#7dd3fc" stroke-width="1.8" stroke-linecap="round"/><rect x="110" y="20" width="40" height="24" rx="4" fill="none" stroke="#64748b" stroke-width="1.4"/><path d="M120 32 h20" stroke="#64748b" stroke-width="1.6" stroke-linecap="round"/></svg>
               <div class="card-metric">−54%</div>
               <div class="card-sub">CPA on Meta in 6 weeks</div>
+              <p class="room-reel">CPA about $48 to $22. About $43K paid spend in October 2026. Hook type was the variable.</p>
             </div>
             <div class="card-footer-bar"><span>Paid social</span><span aria-hidden="true">↗</span></div>
           </button>
@@ -1735,6 +1763,7 @@ body.is-sheet .back-bar{display:flex}
             <div class="card-visual has-photo">
               <img src="assets/img/tool/01-ai-caption-options.jpg" alt="">
               <div class="card-copy"><div class="card-metric">~75%</div><div class="card-sub">faster publishing</div></div>
+              <p class="room-reel">Postroom, built in Cursor, cut end-to-end posting time by about 75%.</p>
             </div>
             <div class="card-footer-bar"><span>Postroom</span><span aria-hidden="true">↗</span></div>
           </button>
@@ -1742,6 +1771,7 @@ body.is-sheet .back-bar{display:flex}
             <div class="card-visual has-photo">
               <img src="assets/img/argo-video-poster.jpg" alt="">
               <div class="card-copy"><div class="card-sub">Six pieces, one hook type each</div></div>
+              <p class="room-reel">Six pieces, one hook type each. The campaign frames stay unnamed.</p>
             </div>
             <div class="card-footer-bar"><span>Hook Lab</span><span aria-hidden="true">↗</span></div>
           </button>
@@ -1750,6 +1780,7 @@ body.is-sheet .back-bar{display:flex}
               <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="8" y="36" width="18" height="24" rx="2" fill="#38bdf8" opacity=".4"/><rect x="34" y="24" width="18" height="36" rx="2" fill="#38bdf8" opacity=".7"/><rect x="60" y="10" width="18" height="50" rx="2" fill="#7dd3fc"/><path d="M12 42 L42 28 L70 16 L118 8 L150 4" fill="none" stroke="#e0f2fe" stroke-width="2"/><circle cx="150" cy="4" r="3" fill="#e0f2fe"/></svg>
               <div class="card-metric">$471K</div>
               <div class="card-sub">subscription revenue since launch</div>
+              <p class="room-reel">$471K subscription revenue since launch. A team of 8–12. About 30% of expired subscribers came back through win-back offers.</p>
             </div>
             <div class="card-footer-bar"><span>Growth case</span><span aria-hidden="true">↗</span></div>
           </button>
@@ -1758,6 +1789,7 @@ body.is-sheet .back-bar{display:flex}
               <svg viewBox="0 0 160 64" aria-hidden="true"><rect x="6" y="16" width="34" height="26" rx="4" fill="none" stroke="#7dd3fc" stroke-width="1.7"/><rect x="63" y="8" width="34" height="34" rx="4" fill="none" stroke="#e0f2fe" stroke-width="1.7"/><rect x="120" y="18" width="34" height="24" rx="4" fill="none" stroke="#7dd3fc" stroke-width="1.7"/><path d="M14 50h18M71 52h18M128 50h18" stroke="#38bdf8" stroke-width="2"/></svg>
               <div class="card-metric">~1M</div>
               <div class="card-sub">organic views in one month</div>
+              <p class="room-reel">About 1M organic views in one month across 3 accounts. One creator-led account went from 0 to about 5k followers in a month. Names stay private.</p>
             </div>
             <div class="card-footer-bar"><span>Organic growth</span><span aria-hidden="true">↗</span></div>
           </button>
@@ -2750,6 +2782,7 @@ body.is-sheet .back-bar{display:flex}
     btn.textContent=playing?'Pause':'Play';
     btn.setAttribute('aria-pressed', playing?'true':'false');
     btn.setAttribute('aria-label', playing?'Pause the works presentation':'Play the works presentation');
+    document.body.classList.toggle('room-reel-on', playing);
   }
   function scheduleRoom(){
     clearTimeout(roomAuto.timer);
@@ -3743,6 +3776,87 @@ document.querySelectorAll('.cr .cr-spec').forEach(function(b){
     if(reduce.matches)still();
     else requestAnimationFrame(animateSpotlight);
   });
+})();
+</script>
+<script>
+(function(){
+  var gallery=document.getElementById('galleryViewport');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
+  if(!gallery||!window.THREE||!THREE.WebGLRenderer)return;
+  if(reduce.matches||window.innerWidth<700)return;
+  var canvas=document.createElement('canvas');
+  canvas.className='hall-canvas';
+  canvas.setAttribute('aria-hidden','true');
+  gallery.insertBefore(canvas, gallery.firstChild);
+  var renderer;
+  try{
+    renderer=new THREE.WebGLRenderer({canvas:canvas,alpha:true,antialias:true,powerPreference:'low-power'});
+  }catch(err){canvas.remove();return;}
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1, 1.5));
+  renderer.setClearColor(0x07090e, 1);
+  var scene=new THREE.Scene();
+  var camera=new THREE.PerspectiveCamera(48, 1, 0.1, 40);
+  var wall=new THREE.Mesh(new THREE.CylinderGeometry(7.2, 7.2, 3.4, 40, 1, true), new THREE.MeshBasicMaterial({color:0x10192b,side:THREE.BackSide}));
+  scene.add(wall);
+  var floor=new THREE.Mesh(new THREE.CircleGeometry(7, 40), new THREE.MeshBasicMaterial({color:0x0c121c}));
+  floor.rotation.x=-Math.PI/2;
+  floor.position.y=-1.5;
+  scene.add(floor);
+  var angles=[-66,-33,0,33,66,-102,102];
+  angles.forEach(function(deg){
+    var a=deg*Math.PI/180;
+    var ped=new THREE.Mesh(new THREE.BoxGeometry(0.28, 0.55, 0.28), new THREE.MeshBasicMaterial({color:deg===33?0x4da6ff:0x243044}));
+    ped.position.set(Math.sin(a)*4.2, -1.2, Math.cos(a)*4.2);
+    scene.add(ped);
+  });
+  var key=new THREE.PointLight(0x8ec7ff, 1.1, 18);
+  key.position.set(0, 3.2, 2);
+  scene.add(key);
+  var look=0, armed=false, drag=null;
+  function resize(){
+    var w=gallery.clientWidth, h=gallery.clientHeight;
+    if(w<10||h<10)return;
+    renderer.setSize(w, h, false);
+    camera.aspect=w/h;
+    camera.updateProjectionMatrix();
+  }
+  canvas.addEventListener('pointerdown', function(e){
+    if(e.target!==canvas)return;
+    armed=true;
+    drag={x:e.clientX,y:e.clientY,id:e.pointerId};
+  });
+  window.addEventListener('pointermove', function(e){
+    if(!drag||e.pointerId!==drag.id)return;
+    var dx=e.clientX-drag.x, dy=e.clientY-drag.y;
+    drag.x=e.clientX; drag.y=e.clientY;
+    if(Math.abs(dx)>Math.abs(dy))look=Math.max(-0.45, Math.min(0.45, look+dx*0.0025));
+  });
+  window.addEventListener('pointerup', function(){drag=null;});
+  window.addEventListener('keydown', function(e){
+    if(!armed)return;
+    if(e.key==='Escape'){armed=false;look=0;return;}
+    var step=e.key==='a'||e.key==='A'?-0.04:e.key==='d'||e.key==='D'?0.04:e.key==='w'||e.key==='W'?-0.03:e.key==='s'||e.key==='S'?0.03:0;
+    if(!step)return;
+    look=Math.max(-0.45, Math.min(0.45, look+step));
+  });
+  window.addEventListener('blur', function(){armed=false;});
+  function frame(){
+    requestAnimationFrame(frame);
+    var rect=gallery.getBoundingClientRect();
+    var on=rect.bottom>0&&rect.top<window.innerHeight;
+    if(!on||document.hidden||window.innerWidth<700||reduce.matches)return;
+    resize();
+    var push=parseFloat(getComputedStyle(gallery).getPropertyValue('--room-push'))||0;
+    var yaw=(push/80)*0.62+look;
+    var dist=6.4-(push/80)*1.3;
+    camera.position.set(Math.sin(yaw)*dist, 1.15, Math.cos(yaw)*dist);
+    camera.lookAt(0, 0.2, 0);
+    key.intensity=document.body.classList.contains('room-reel-on')?2.4:1.1;
+    var map=document.getElementById('roomMinimap');
+    if(map)map.style.setProperty('--yaw', (yaw*180/Math.PI).toFixed(1)+'deg');
+    renderer.render(scene, camera);
+  }
+  requestAnimationFrame(frame);
 })();
 </script>
 <script>
