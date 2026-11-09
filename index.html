@@ -1050,6 +1050,47 @@ body.hero-armed.hero-stage-content .hero .hero-lower-stack{opacity:1;transform:t
 .word-grid .cell{box-sizing:border-box;width:var(--cell,56px);height:var(--cell,56px);display:grid;place-items:center;font-size:calc(var(--cell,56px) * .5);font-weight:650;line-height:1;letter-spacing:0;transition:background-color .2s ease,color .2s ease,border-color .2s ease;will-change:transform}
 .letter-tile{background:#111722;border:1px solid rgba(255,255,255,0.09);border-radius:9px;color:#8b95a7}
 .letter-tile.is-accent{background:#4da6ff;border-color:#7cc0ff;color:#041022}
+.capsules-layer{position:absolute;inset:0;z-index:1;pointer-events:none}
+.word-grid .cell{z-index:2}
+.word-grid .cell.has-capsule:not(.is-accent):not(.tracing):not(.on){background:transparent;border-color:transparent;box-shadow:none}
+.word-grid .cell.has-capsule{pointer-events:none}
+.word-capsule{position:absolute;border-radius:12px;pointer-events:auto;cursor:pointer;touch-action:pan-y;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);transition:opacity .25s ease,transform .24s cubic-bezier(.22,1,.36,1),box-shadow .24s ease,filter .24s ease}
+.word-capsule::before{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(180deg,rgba(255,255,255,.16),transparent 46%);pointer-events:none}
+.capsule-ai{background:linear-gradient(135deg,rgba(139,92,246,.32),rgba(109,40,217,.18));border:1.5px solid rgba(167,139,250,.7);box-shadow:0 4px 16px -6px rgba(139,92,246,.45)}
+.capsule-paid{background:linear-gradient(135deg,rgba(59,130,246,.32),rgba(29,78,216,.18));border:1.5px solid rgba(96,165,250,.7);box-shadow:0 4px 16px -6px rgba(59,130,246,.4)}
+.capsule-data{background:linear-gradient(135deg,rgba(16,185,129,.3),rgba(5,150,105,.16));border:1.5px solid rgba(52,211,153,.7);box-shadow:0 4px 16px -6px rgba(16,185,129,.4)}
+.capsule-bonus{background:linear-gradient(180deg,rgba(245,158,11,.4),rgba(217,119,6,.22));border:1.5px solid rgba(251,191,36,.9);box-shadow:0 6px 18px -4px rgba(245,158,11,.55)}
+.word-capsule.is-dimmed{opacity:.16;pointer-events:none;filter:grayscale(.5)}
+.word-capsule.is-active{transform:translateY(-2px)}
+.stack-filters{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;margin:0;padding:0;list-style:none}
+.stack-filters button{font:600 12px/1.2 var(--sans);color:#d5deea;background:rgba(15,22,35,.72);border:1px solid rgba(255,255,255,.12);border-radius:999px;padding:6px 10px;cursor:pointer}
+.stack-filters button.is-on{color:#041022;background:#e7eef8;border-color:#e7eef8}
+.stack-legend{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 12px;margin:0;padding:0;list-style:none;font:500 11px/1.3 var(--sans);color:#9aa6b8}
+.stack-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+.stack-legend .lg-ai{background:#8b5cf6}.stack-legend .lg-paid{background:#3b82f6}.stack-legend .lg-data{background:#10b981}.stack-legend .lg-gold{background:#f59e0b}
+.stack-note{margin:0;font:13px/1.4 var(--sans);color:#9aa6b8;text-align:center}
+.stack-egg{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:8px;margin:0;font:12px/1.4 var(--sans);color:#c5d0e0}
+.stack-egg button{font:600 11px/1 var(--sans);color:#fcd34d;background:rgba(245,158,11,.12);border:1px solid rgba(245,158,11,.35);border-radius:999px;padding:5px 8px;cursor:pointer}
+.stack-banner{display:none;width:min(100%,720px);margin:0 auto;padding:10px 12px;border-radius:14px;border:1px solid rgba(251,191,36,.45);background:linear-gradient(90deg,rgba(245,158,11,.16),rgba(15,22,35,.92));text-align:left}
+.stack-banner.is-on{display:block}
+.stack-banner p{margin:4px 0 0;font:13px/1.4 var(--sans);color:#e7eef8}
+.stack-banner a{color:#fde68a}
+.proof-card{position:fixed;z-index:80;width:min(320px,calc(100vw - 24px));padding:12px 14px;border-radius:16px;background:rgba(13,18,29,.96);border:1px solid rgba(148,163,184,.35);box-shadow:0 18px 40px rgba(0,0,0,.45);color:#e7eef8;pointer-events:auto}
+.proof-card[hidden]{display:none}
+.proof-card .proof-kicker{font:600 10px/1.2 var(--sans);letter-spacing:.08em;text-transform:uppercase;color:#9aa6b8}
+.proof-card h3{margin:4px 0;font:650 16px/1.2 var(--sans)}
+.proof-card .proof-metric{display:inline-block;margin:0 0 8px;padding:3px 8px;border-radius:999px;background:rgba(16,185,129,.15);color:#a7f3d0;font:600 12px/1.3 var(--sans)}
+.proof-card .proof-visual{height:72px;border-radius:10px;background:#070a10;border:1px solid rgba(255,255,255,.08);margin:0 0 8px;overflow:hidden;position:relative}
+.proof-card .proof-visual i{position:absolute;font-style:normal;left:8px;bottom:6px;font:10px/1 var(--mono);color:#8b95a7}
+.proof-card p{margin:0;font:13px/1.45 var(--sans);color:#d5deea}
+.proof-bars{display:flex;align-items:flex-end;gap:6px;height:100%;padding:10px 12px 18px}
+.proof-bars b{display:block;width:14px;border-radius:4px 4px 0 0;background:#4da6ff}
+.proof-motion{position:absolute;left:16%;top:40%;width:16px;height:16px;border-radius:50%;background:#c4b5fd;animation:proof-drift 1.6s ease-in-out infinite alternate}
+@keyframes proof-drift{to{transform:translateX(72px)}}
+.cell.is-egg-hot{outline:2px solid #fbbf24;outline-offset:-2px}
+@media (prefers-reduced-motion:reduce){
+  .word-capsule,.proof-motion{transition:none;animation:none}
+}
 .word-grid .cell.on{position:relative;z-index:1;box-shadow:0 0 18px rgba(77,166,255,.35)}
 .word-grid .cell.tracing{position:relative;z-index:2}
 .word-grid .cell.bad{background:#1e293b;color:#e2e8f0;position:relative;z-index:2}
@@ -1760,6 +1801,19 @@ body.is-sheet .back-bar{display:flex}
       <h2 class="skill-sr">Find the word</h2>
       <p class="skill-sr" id="skill-how">Drag through each word, letter by letter</p>
       <p class="skill-live" id="skill-live" aria-live="polite"></p>
+      <ul class="stack-filters" id="stack-filters" aria-label="Filter the stack"></ul>
+      <ul class="stack-legend" aria-label="Pillar colors">
+        <li><i class="lg-ai"></i>AI &amp; Code</li>
+        <li><i class="lg-paid"></i>Paid Social &amp; Creative</li>
+        <li><i class="lg-data"></i>Data &amp; Ops</li>
+        <li id="stack-bonus-legend" hidden><i class="lg-gold"></i>ROAS unlocked</li>
+      </ul>
+      <p class="stack-note" id="stack-note">Tap a capsule for workflow proof. Figures come from case notes, not a live dashboard.</p>
+      <p class="stack-egg"><span>Hidden letters: drag R-O-A-S down the filler tiles.</span><button type="button" id="stack-hint">Hint</button></p>
+      <div class="stack-banner" id="stack-banner">
+        <strong>ROAS capsule unlocked</strong>
+        <p>No public ROAS figure is shown here. The gold capsule marks the hidden letters. <a href="mailto:apetrenko597@gmail.com">apetrenko597@gmail.com</a> · <a href="#works">See the work</a></p>
+      </div>
       <ul class="skill-legend" aria-label="Skills">
         <li><button type="button" class="is-secret" tabindex="-1" data-skill="strategy">Creative strategy</button></li>
         <li><button type="button" class="is-secret" tabindex="-1" data-skill="paid">Paid social</button></li>
@@ -1821,11 +1875,11 @@ body.is-sheet .back-bar{display:flex}
     putWord(grid,'COMFYUI','field',0,3,1,0);
     putWord(grid,'TIKTOK','tiktok',8,3,1,0);
     putWord(grid,'CAPCUT','tools',0,4,1,0);
-    putWord(grid,'LOOKER','analytics',7,4,1,0);
+    putWord(grid,'LOOKER','analytics',8,4,1,0);
     putWord(grid,'CURSOR','cursor',0,5,1,0);
-    putWord(grid,'NOTION','tools',7,5,1,0);
+    putWord(grid,'NOTION','tools',8,5,1,0);
     putWord(grid,'SOCIAL','paid',0,6,1,0);
-    putWord(grid,'CANVA','tools',7,6,1,0);
+    putWord(grid,'CANVA','tools',8,6,1,0);
     putWord(grid,'GA4','analytics',14,4,0,1);
     return grid;
   }
@@ -1922,6 +1976,8 @@ body.is-sheet .back-bar{display:flex}
           var ch=letters[(n*17+x*13+y*19)%letters.length];
           var left=x>0?gridEl.children[gridEl.children.length-1]:null;
           if(left&&left.textContent===ch)ch=letters[(letters.indexOf(ch)+7)%letters.length];
+          var egg=m.kind==='wide'&&x===7&&y>=3&&y<=6?'ROAS'[y-3]:m.kind==='phone'&&x===8&&y>=4&&y<=7?'ROAS'[y-4]:'';
+          if(egg){ch=egg;cell.dataset.egg='roas';cell.dataset.eggN=String(egg==='R'?0:egg==='O'?1:egg==='A'?2:3);}
           cell.textContent=ch;
           n++;
         }
@@ -2266,6 +2322,196 @@ body.is-sheet .back-bar{display:flex}
   });
   var demoMut=new MutationObserver(function(){maybeDemo();});
   demoMut.observe(document.body,{childList:true});
+})();
+</script>
+<script>
+(function(){
+  var grid=document.getElementById('skill-grid');
+  if(!grid)return;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)');
+  var INFO={
+    HIGGSFIELD:{pillar:'ai',badge:'AI & Code',metric:'',desc:'Directed AI motion for hooks, without sending a shoot back out. The moving mark in the card is illustrative, not a measured result.'},
+    COMFYUI:{pillar:'ai',badge:'AI & Code',metric:'',desc:'Node-based stills and motion that keep the product recognizable. The diagram is illustrative, not a node count.'},
+    CLAUDE:{pillar:'ai',badge:'AI & Code',metric:'',desc:'Research and customer language turned into modular ad scripts. No volume figure is claimed here.'},
+    CURSOR:{pillar:'ai',badge:'AI & Code',metric:'~75% faster publishing',desc:'Postroom, the internal publishing tool built in Cursor, cut end-to-end posting time by about 75%.'},
+    PRODUCTION:{pillar:'ai',badge:'AI & Code',metric:'Team of 8–12',desc:'The content team behind the subscription work. The pipeline sketch is illustrative, not a weekly output count.'},
+    META:{pillar:'paid',badge:'Paid Social & Creative',metric:'CPA $48 → $22 (−54%)',desc:'Hook-type A/B test on Meta. Same audiences and budgets; the product-demo hook won on cost per paid subscription.'},
+    PAID:{pillar:'paid',badge:'Paid Social & Creative',metric:'~$43K paid spend in a month',desc:'October 2026 paid spend on the subscription account. No extra conversion rate is invented here.'},
+    SOCIAL:{pillar:'paid',badge:'Paid Social & Creative',metric:'~1M organic views',desc:'About 1M organic views in one month across 3 accounts. A separate creator-led account went from 0 to about 5k followers in a month. Names stay private.'},
+    STRATEGY:{pillar:'paid',badge:'Paid Social & Creative',metric:'~30% won back',desc:'About 30% of expired subscribers came back through win-back offers. The sketch is illustrative, not a funnel chart.'},
+    TIKTOK:{pillar:'paid',badge:'Paid Social & Creative',metric:'',desc:'Native short-form for TikTok and Reels. No thumbstop or spend multiple is claimed.'},
+    CAPCUT:{pillar:'paid',badge:'Paid Social & Creative',metric:'',desc:'Cuts, captions, and hook swaps for the feed. The timeline is illustrative.'},
+    CANVA:{pillar:'paid',badge:'Paid Social & Creative',metric:'',desc:'Static layouts for headlines, badges, and offers. No system count is claimed.'},
+    LOOKER:{pillar:'data',badge:'Data & Ops',metric:'',desc:'Creative reporting in Looker Studio, read next to GA4. The grid is illustrative, not a live scorecard.'},
+    GA4:{pillar:'data',badge:'Data & Ops',metric:'',desc:'Checks what happens after the click, instead of trusting the in-platform view alone.'},
+    NOTION:{pillar:'data',badge:'Data & Ops',metric:'',desc:'Briefs, roadmaps, and post-mortems in one workspace.'},
+    ROAS:{pillar:'bonus',badge:'Hidden letters',metric:'',desc:'The gold capsule only marks the hidden R-O-A-S letters. No ROAS number is published on this card. The bars are illustrative.'}
+  };
+  var FILTERS=[{id:'all',label:'All stack'},{id:'ai',label:'AI & Code'},{id:'paid',label:'Paid Social & Creative'},{id:'data',label:'Data & Ops'}];
+  var filter='all', pinned=null, eggPath=[], layer=null, card=null, builtFor='';
+  var bar=document.getElementById('stack-filters');
+  var note=document.getElementById('stack-note');
+  FILTERS.forEach(function(f){
+    var b=document.createElement('button');
+    b.type='button';
+    b.textContent=f.label;
+    b.dataset.filter=f.id;
+    if(f.id==='all')b.classList.add('is-on');
+    b.addEventListener('click',function(){setFilter(f.id);});
+    bar.appendChild(b);
+  });
+  card=document.createElement('aside');
+  card.className='proof-card';
+  card.hidden=true;
+  card.innerHTML='<div class="proof-kicker"></div><h3></h3><div class="proof-metric" hidden></div><div class="proof-visual" aria-hidden="true"><div class="proof-bars"><b style="height:40%"></b><b style="height:70%"></b><b style="height:55%"></b><b style="height:88%"></b></div><span class="proof-motion" hidden></span><i>Illustrative</i></div><p></p>';
+  document.body.appendChild(card);
+  function cells(){return [].slice.call(grid.querySelectorAll(':scope > .cell'));}
+  function physicsOn(){return cells().some(function(c){return !!c.style.transform;});}
+  function wordsNow(){
+    var map={};
+    cells().forEach(function(c){
+      if(!c.dataset.word)return;
+      (map[c.dataset.word]=map[c.dataset.word]||[]).push(c);
+    });
+    return map;
+  }
+  function layout(){
+    if(grid.clientWidth<40||grid.clientHeight<40)return;
+    var falling=physicsOn();
+    if(!layer||!layer.isConnected){
+      layer=document.createElement('div');
+      layer.className='capsules-layer';
+      layer.id='stack-capsules';
+    }
+    if(layer.parentNode!==grid)grid.appendChild(layer);
+    layer.style.visibility=falling?'hidden':'visible';
+    layer.innerHTML='';
+    cells().forEach(function(c){c.classList.remove('has-capsule');});
+    if(falling){return;}
+    var map=wordsNow();
+    Object.keys(map).forEach(function(word){
+      var list=map[word];
+      if(!INFO[word]||list.length!==word.length)return;
+      var gr=grid.getBoundingClientRect();
+      var left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
+      list.forEach(function(c){
+        var r=c.getBoundingClientRect();
+        left=Math.min(left,r.left); top=Math.min(top,r.top); right=Math.max(right,r.right); bottom=Math.max(bottom,r.bottom);
+        c.classList.add('has-capsule');
+      });
+      var cap=document.createElement('button');
+      cap.type='button';
+      cap.className='word-capsule capsule-'+INFO[word].pillar+(filter!=='all'&&INFO[word].pillar!==filter?' is-dimmed':'');
+      cap.dataset.word=word;
+      cap.setAttribute('aria-label',word+' workflow proof');
+      cap.style.left=(left-gr.left)+'px';
+      cap.style.top=(top-gr.top)+'px';
+      cap.style.width=(right-left)+'px';
+      cap.style.height=(bottom-top)+'px';
+      cap.addEventListener('pointerenter',function(e){if(e.pointerType==='touch'||pinned)return; show(word,cap,false);});
+      cap.addEventListener('pointerleave',function(){if(!pinned)hide();});
+      cap.addEventListener('click',function(e){e.preventDefault();e.stopPropagation(); if(pinned===word){pinned=null;hide();cap.classList.remove('is-active');}else{pin(word,cap);} });
+      layer.appendChild(cap);
+    });
+    if(document.getElementById('stack-banner').classList.contains('is-on')) placeEggCapsule();
+    builtFor=grid.innerText.length+':'+grid.clientWidth;
+  }
+  function placeEggCapsule(){
+    var eggs=cells().filter(function(c){return c.dataset.egg==='roas';}).sort(function(a,b){return (+a.dataset.eggN)-(+b.dataset.eggN);});
+    if(eggs.length<4||!layer)return;
+    var gr=grid.getBoundingClientRect();
+    var left=Infinity,top=Infinity,right=-Infinity,bottom=-Infinity;
+    eggs.forEach(function(c){var r=c.getBoundingClientRect(); left=Math.min(left,r.left); top=Math.min(top,r.top); right=Math.max(right,r.right); bottom=Math.max(bottom,r.bottom); c.classList.add('has-capsule');});
+    var cap=document.createElement('button');
+    cap.type='button';
+    cap.className='word-capsule capsule-bonus';
+    cap.dataset.word='ROAS';
+    cap.setAttribute('aria-label','Unlocked ROAS capsule');
+    cap.style.left=(left-gr.left)+'px';
+    cap.style.top=(top-gr.top)+'px';
+    cap.style.width=(right-left)+'px';
+    cap.style.height=(bottom-top)+'px';
+    cap.addEventListener('click',function(e){e.preventDefault();e.stopPropagation(); pin('ROAS',cap);});
+    layer.appendChild(cap);
+  }
+  function show(word,cap,isPin){
+    var info=INFO[word];
+    if(!info)return;
+    card.hidden=false;
+    card.querySelector('.proof-kicker').textContent='Workflow proof · '+info.badge;
+    card.querySelector('h3').textContent=word;
+    var metric=card.querySelector('.proof-metric');
+    metric.hidden=!info.metric;
+    metric.textContent=info.metric;
+    card.querySelector('p').textContent=info.desc;
+    card.querySelector('.proof-motion').hidden=!!reduce.matches;
+    [].slice.call(layer.querySelectorAll('.word-capsule')).forEach(function(el){el.classList.toggle('is-active',el===cap);});
+    var r=cap.getBoundingClientRect();
+    var w=card.offsetWidth||300, h=card.offsetHeight||180;
+    var left=Math.max(8,Math.min(r.left+r.width/2-w/2, window.innerWidth-w-8));
+    var top=r.bottom+8;
+    if(top+h>window.innerHeight-8)top=r.top-h-8;
+    top=Math.max(8,Math.min(top, window.innerHeight-h-8));
+    card.style.left=left+'px';
+    card.style.top=top+'px';
+    if(note)note.textContent=isPin?'Pinned. Tap outside to close.':'Workflow proof. Tap the capsule to pin it.';
+  }
+  function hide(){card.hidden=true; if(layer)[].slice.call(layer.querySelectorAll('.word-capsule')).forEach(function(el){el.classList.remove('is-active');});}
+  function pin(word,cap){pinned=word; show(word,cap,true);}
+  function setFilter(id){
+    filter=id;
+    [].slice.call(bar.children).forEach(function(b){b.classList.toggle('is-on',b.dataset.filter===id);});
+    layout();
+  }
+  document.addEventListener('pointerdown',function(e){
+    if(card.hidden)return;
+    if(card.contains(e.target)||(e.target.closest&&e.target.closest('.word-capsule')))return;
+    pinned=null; hide();
+  });
+  grid.addEventListener('pointerdown',function(e){
+    var cell=e.target.closest&&e.target.closest('.cell');
+    if(!cell||cell.dataset.egg!=='roas'){eggPath=[];return;}
+    e.stopPropagation();
+    var n=+cell.dataset.eggN;
+    if(n===0||(eggPath.length&&n===+eggPath[eggPath.length-1].dataset.eggN+1))eggPath.push(cell);
+    else eggPath=[cell];
+    cells().forEach(function(c){c.classList.remove('is-egg-hot');});
+    eggPath.forEach(function(c){c.classList.add('is-egg-hot');});
+    if(eggPath.length===4 && eggPath.map(function(c){return c.textContent;}).join('')==='ROAS'){
+      document.getElementById('stack-banner').classList.add('is-on');
+      document.getElementById('stack-bonus-legend').hidden=false;
+      layout();
+      var gold=layer.querySelector('[data-word="ROAS"]');
+      if(gold)pin('ROAS',gold);
+    }
+  },true);
+  var hint=document.getElementById('stack-hint');
+  if(hint)hint.addEventListener('click',function(){
+    cells().forEach(function(c){if(c.dataset.egg==='roas')c.classList.add('is-egg-hot');});
+    setTimeout(function(){cells().forEach(function(c){c.classList.remove('is-egg-hot');});}, reduce.matches?0:1200);
+  });
+  var mo=new MutationObserver(function(records){
+    var cellsChanged=records.some(function(r){
+      return [].slice.call(r.addedNodes).concat([].slice.call(r.removedNodes)).some(function(n){
+        return n.nodeType===1 && n.classList && (n.classList.contains('cell')||(n.querySelector&&n.querySelector('.cell')));
+      });
+    });
+    if(cellsChanged)layout();
+  });
+  mo.observe(grid,{childList:true});
+  if(window.ResizeObserver)new ResizeObserver(function(){layout();}).observe(grid);
+  var wasFalling=false;
+  function watchFall(){
+    var on=physicsOn();
+    if(on&&!wasFalling){
+      if(layer)layer.style.visibility='hidden';
+      cells().forEach(function(c){c.classList.remove('has-capsule');});
+    }else if(!on&&wasFalling)layout();
+    wasFalling=on;
+    requestAnimationFrame(watchFall);
+  }
+  requestAnimationFrame(watchFall);
+  layout();
 })();
 </script>
 
