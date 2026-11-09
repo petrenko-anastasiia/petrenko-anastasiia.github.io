@@ -1,4 +1,9 @@
-/* Stack matrix — connected word capsules (upgrade v1) */
+/* Stack matrix — word search with connected capsules (upgrade v2)
+ * Every letter looks the same until a word is found. HIGGSFIELD starts found.
+ * Find a word by dragging across it, tapping its first and last letter,
+ * or with the keyboard (arrows + Enter). Found words become pillar-coloured
+ * capsules that open a proof-of-work card.
+ */
 (function () {
   'use strict';
   var section = document.getElementById('stack');
@@ -46,40 +51,40 @@
     desc: 'ROAS held at 2.5–4.0× while CPA fell ~54% in the six-week Meta test. Full breakdown on request.',
     kpi: '2.5–4.0×', href: 'mailto:apetrenko597@gmail.com?subject=ROAS%20breakdown', cta: 'Ask for it' };
 
+  var ALL = WORDS.concat([EGG]);
   var FILLER = 'KVXWQZBNJLPYRHD';
   var reduceMQ = window.matchMedia('(prefers-reduced-motion: reduce)');
 
   /* ---------- Build the matrix ---------- */
   var cells = [];
-  for (var r = 0; r < ROWS; r++) {
+  var r, c;
+  for (r = 0; r < ROWS; r++) {
     cells[r] = [];
-    for (var c = 0; c < COLS; c++) {
-      cells[r][c] = { ch: FILLER[(r * 7 + c * 3) % FILLER.length], pillars: [], egg: -1 };
-    }
+    for (c = 0; c < COLS; c++) cells[r][c] = { ch: FILLER[(r * 7 + c * 3) % FILLER.length] };
   }
-  function eachCell(w, fn) {
+  function wordCells(w) {
+    var out = [];
     for (var i = 0; i < w.word.length; i++) {
-      var rr = w.dir === 'v' ? w.row + i : w.row;
-      var cc = w.dir === 'h' ? w.col + i : w.col;
-      fn(cells[rr][cc], i, rr, cc);
+      out.push([w.dir === 'v' ? w.row + i : w.row, w.dir === 'h' ? w.col + i : w.col]);
     }
+    return out;
   }
-  WORDS.forEach(function (w) {
-    eachCell(w, function (cell, i) { cell.ch = w.word[i]; cell.pillars.push(w.pillar); });
+  ALL.forEach(function (w) {
+    wordCells(w).forEach(function (rc, i) { cells[rc[0]][rc[1]].ch = w.word[i]; });
   });
-  eachCell(EGG, function (cell, i) { cell.ch = EGG.word[i]; cell.egg = i; });
 
   var tiles = [];
   var frag = document.createDocumentFragment();
   for (r = 0; r < ROWS; r++) {
     tiles[r] = [];
     for (c = 0; c < COLS; c++) {
-      var info = cells[r][c];
       var t = document.createElement('div');
-      t.className = 'sm-tile' + (info.pillars.length ? ' is-word' : '') + (info.egg >= 0 ? ' is-egg' : '');
-      t.textContent = info.ch;
+      t.className = 'sm-tile';
+      t.id = 'sm-t-' + r + '-' + c;
+      t.textContent = cells[r][c].ch;
       t.setAttribute('aria-hidden', 'true');
-      if (info.egg >= 0) t.setAttribute('data-egg', String(info.egg));
+      t.setAttribute('data-r', r);
+      t.setAttribute('data-c', c);
       frag.appendChild(t);
       tiles[r][c] = t;
     }
@@ -89,6 +94,7 @@
   /* ---------- Capsules, synced to tile geometry ---------- */
   var capsLayer = document.getElementById('sm-caps');
   var caps = [];
+  var found = {};
 
   function makeCapsule(w) {
     var b = document.createElement('button');
@@ -128,7 +134,6 @@
       cap.el.style.height = (z.offsetTop + z.offsetHeight - a.offsetTop + pad * 2) + 'px';
     });
   }
-  WORDS.forEach(makeCapsule);
   if ('ResizeObserver' in window) new ResizeObserver(layout).observe(board);
   else window.addEventListener('resize', layout);
 
@@ -233,26 +238,200 @@
   });
   window.addEventListener('scroll', function () { if (pinned) placeAt(pinned.el); }, { passive: true });
 
-  /* ---------- Filters ---------- */
-  var filter = 'all';
-  var pills = Array.prototype.slice.call(section.querySelectorAll('.sm-pill'));
-  function applyFilter() {
-    caps.forEach(function (cap) {
-      cap.el.classList.toggle('is-dimmed', filter !== 'all' && cap.w.pillar !== filter);
-    });
-    for (var rr = 0; rr < ROWS; rr++) for (var cc = 0; cc < COLS; cc++) {
-      var cell = cells[rr][cc];
-      var match = filter === 'all' || cell.pillars.indexOf(filter) >= 0;
-      tiles[rr][cc].classList.toggle('is-dimmed', !match);
-    }
+  /* ---------- Finding words ---------- */
+  var progress = document.getElementById('sm-progress');
+  var live = document.getElementById('sm-live');
+  var revealBtn = document.getElementById('sm-reveal');
+  var eggStatus = document.getElementById('sm-egg-status');
+  var hintBtn = document.getElementById('sm-hint');
+
+  function updateProgress() {
+    var n = WORDS.filter(function (w) { return found[w.word]; }).length;
+    progress.textContent = n === WORDS.length ? 'All ' + n + ' found' : n + ' of ' + WORDS.length + ' found';
+    if (n === WORDS.length) revealBtn.hidden = true;
   }
-  pills.forEach(function (p) {
-    p.addEventListener('click', function () {
-      filter = p.getAttribute('data-filter');
-      pills.forEach(function (o) { o.setAttribute('aria-pressed', String(o === p)); });
-      if (pinned && pinned.w.pillar !== filter && filter !== 'all') unpin(false);
-      applyFilter();
+
+  function markFound(w, opts) {
+    if (found[w.word]) return null;
+    found[w.word] = true;
+    wordCells(w).forEach(function (rc) {
+      var tile = tiles[rc[0]][rc[1]];
+      tile.classList.add('is-word');
+      tile.classList.remove('is-hinted');
     });
+    var cap = makeCapsule(w);
+    if (w.pillar === 'egg') {
+      section.querySelector('.sm-egg').classList.add('is-found');
+      eggStatus.textContent = 'Bonus found: ROAS. Open the gold capsule.';
+      hintBtn.hidden = true;
+    } else {
+      updateProgress();
+    }
+    if (opts && opts.announce) {
+      live.textContent = 'Found ' + w.word + '.';
+      if (!reduceMQ.matches) {
+        cap.el.classList.add('is-new');
+        window.setTimeout(function () { cap.el.classList.remove('is-new'); }, 900);
+      }
+    }
+    if (opts && opts.open) pin(cap, false);
+    return cap;
+  }
+
+  // Selection runs in a straight line from the first cell, snapped to the
+  // row or column the pointer has moved along most.
+  var selStart = null;
+  var selEnd = null;
+  var selCells = [];
+
+  function lineCells(a, b) {
+    var dr = b[0] - a[0], dc = b[1] - a[1];
+    var out = [];
+    if (Math.abs(dc) >= Math.abs(dr)) {
+      var step = dc >= 0 ? 1 : -1;
+      for (var cc = a[1]; cc !== b[1] + step; cc += step) out.push([a[0], cc]);
+    } else {
+      var stepR = dr >= 0 ? 1 : -1;
+      for (var rr = a[0]; rr !== b[0] + stepR; rr += stepR) out.push([rr, a[1]]);
+    }
+    return out;
+  }
+  function paintSelection() {
+    section.querySelectorAll('.sm-tile.is-selecting').forEach(function (el) { el.classList.remove('is-selecting'); });
+    selCells.forEach(function (rc) { tiles[rc[0]][rc[1]].classList.add('is-selecting'); });
+  }
+  function setSelection(a, b) {
+    selStart = a; selEnd = b;
+    selCells = a ? lineCells(a, b || a) : [];
+    paintSelection();
+  }
+  function sameCells(x, y) {
+    if (x.length !== y.length) return false;
+    for (var i = 0; i < x.length; i++) if (x[i][0] !== y[i][0] || x[i][1] !== y[i][1]) return false;
+    return true;
+  }
+  function checkSelection() {
+    var picked = selCells.slice();
+    var rev = picked.slice().reverse();
+    var hit = null;
+    ALL.forEach(function (w) {
+      if (hit || found[w.word]) return;
+      var wc = wordCells(w);
+      if (sameCells(wc, picked) || sameCells(wc, rev)) hit = w;
+    });
+    if (hit) {
+      setSelection(null);
+      markFound(hit, { announce: true, open: true });
+      return true;
+    }
+    if (picked.length > 1) {
+      picked.forEach(function (rc) {
+        var tile = tiles[rc[0]][rc[1]];
+        tile.classList.remove('is-miss');
+        void tile.offsetWidth;
+        tile.classList.add('is-miss');
+      });
+      live.textContent = 'Not a word from the stack. Try again.';
+    }
+    setSelection(null);
+    return false;
+  }
+
+  function tileAt(x, y) {
+    var el = document.elementFromPoint(x, y);
+    var t = el && el.closest && el.closest('.sm-tile');
+    if (!t || !board.contains(t)) return null;
+    return [Number(t.getAttribute('data-r')), Number(t.getAttribute('data-c'))];
+  }
+
+  // Pointer: drag across a word, or tap the first and last letter
+  var drag = null;      // { start, moved }
+  var tapStart = null;  // first letter of a two-tap selection
+  board.addEventListener('pointerdown', function (e) {
+    if (e.button !== 0) return;
+    var t = e.target.closest('.sm-tile');
+    if (!t || t.classList.contains('is-word')) return;
+    var rc = [Number(t.getAttribute('data-r')), Number(t.getAttribute('data-c'))];
+    if (pinned) unpin(false);
+    drag = { start: tapStart || rc, origin: rc, moved: false, id: e.pointerId };
+    setSelection(drag.start, rc);
+    if (e.pointerType === 'mouse') e.preventDefault();
+  });
+  board.addEventListener('pointermove', function (e) {
+    if (!drag || e.pointerId !== drag.id) return;
+    var rc = tileAt(e.clientX, e.clientY);
+    if (!rc) return;
+    if (rc[0] !== drag.origin[0] || rc[1] !== drag.origin[1]) drag.moved = true;
+    setSelection(drag.start, rc);
+  });
+  function endDrag(e) {
+    if (!drag || (e && e.pointerId !== drag.id)) return;
+    var d = drag;
+    drag = null;
+    if (d.moved) { tapStart = null; checkSelection(); return; }
+    if (!tapStart) {
+      tapStart = d.origin;          // first tap: remember the first letter
+      setSelection(tapStart, tapStart);
+      return;
+    }
+    var hit = checkSelection();    // second tap: check first → this letter
+    tapStart = null;
+    if (!hit) setSelection(null);
+  }
+  window.addEventListener('pointerup', endDrag);
+  window.addEventListener('pointercancel', function () { drag = null; });
+
+  // Keyboard: arrows move a cursor, Enter/Space marks first then last letter
+  var cursor = [0, 0];
+  var keyStart = null;
+  function paintCursor() {
+    section.querySelectorAll('.sm-tile.is-cursor').forEach(function (el) { el.classList.remove('is-cursor'); });
+    var t = tiles[cursor[0]][cursor[1]];
+    t.classList.add('is-cursor');
+    board.setAttribute('aria-activedescendant', t.id);
+    live.textContent = 'Row ' + (cursor[0] + 1) + ', column ' + (cursor[1] + 1) + ', ' + cells[cursor[0]][cursor[1]].ch + (keyStart ? '. Selecting' : '');
+  }
+  board.addEventListener('focus', function () { if (board.matches(':focus-visible')) paintCursor(); });
+  board.addEventListener('blur', function () {
+    section.querySelectorAll('.sm-tile.is-cursor').forEach(function (el) { el.classList.remove('is-cursor'); });
+  });
+  board.addEventListener('keydown', function (e) {
+    var moves = { ArrowUp: [-1, 0], ArrowDown: [1, 0], ArrowLeft: [0, -1], ArrowRight: [0, 1] };
+    if (moves[e.key]) {
+      e.preventDefault();
+      cursor = [Math.min(ROWS - 1, Math.max(0, cursor[0] + moves[e.key][0])), Math.min(COLS - 1, Math.max(0, cursor[1] + moves[e.key][1]))];
+      if (keyStart) setSelection(keyStart, cursor);
+      paintCursor();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (!keyStart) { keyStart = cursor.slice(); setSelection(keyStart, keyStart); paintCursor(); }
+      else { setSelection(keyStart, cursor); keyStart = null; checkSelection(); }
+    } else if (e.key === 'Escape' && keyStart) {
+      keyStart = null; setSelection(null);
+    }
+  });
+
+  /* ---------- Show all, and the bonus hint ---------- */
+  revealBtn.addEventListener('click', function () {
+    WORDS.forEach(function (w) { markFound(w, {}); });
+    live.textContent = 'All words shown.';
+  });
+  var hinted = false;
+  hintBtn.addEventListener('click', function () {
+    if (found[EGG.word]) return;
+    if (!hinted) {
+      hinted = true;
+      wordCells(EGG).forEach(function (rc) {
+        var tile = tiles[rc[0]][rc[1]];
+        tile.classList.remove('is-hinted');
+        void tile.offsetWidth;
+        tile.classList.add('is-hinted');
+      });
+      hintBtn.textContent = 'Reveal it';
+      live.textContent = 'The bonus word is highlighted in column 9.';
+    } else {
+      markFound(EGG, { announce: true, open: true });
+    }
   });
 
   /* ---------- Cursor glow across the dark tiles ---------- */
@@ -277,82 +456,8 @@
     board.style.removeProperty('--by');
   });
 
-  /* ---------- Hidden ROAS: click or drag R → O → A → S down column 9 ---------- */
-  var eggTiles = [0, 1, 2, 3].map(function (i) { return tiles[EGG.row + i][EGG.col]; });
-  var eggStep = 0;
-  var eggFound = false;
-  var dragging = false;
-  var status = document.getElementById('sm-egg-status');
-  var live = document.getElementById('sm-live');
-  var BASE = 'Hidden word: click or drag R, O, A, S down column 9';
-
-  function resetEgg() {
-    eggStep = 0;
-    eggTiles.forEach(function (t) { t.classList.remove('is-picked'); });
-    status.textContent = BASE + ' (0/4)';
-  }
-  function pick(idx) {
-    if (eggFound) return;
-    if (idx === eggStep) {
-      eggTiles[idx].classList.add('is-picked');
-      eggStep += 1;
-      status.textContent = BASE + ' (' + eggStep + '/4)';
-      if (eggStep === 4) unlock();
-    } else if (idx !== eggStep - 1) {
-      resetEgg();
-      if (idx === 0) pick(0);
-    }
-  }
-  function unlock() {
-    eggFound = true;
-    dragging = false;
-    eggTiles.forEach(function (t) { t.classList.remove('is-picked', 'is-hinted'); t.classList.add('is-word'); t.classList.remove('is-egg'); });
-    var cap = makeCapsule(EGG);
-    applyFilter();
-    section.querySelector('.sm-egg').classList.add('is-found');
-    status.textContent = 'ROAS unlocked. Open the gold capsule.';
-    live.textContent = 'ROAS capsule unlocked.';
-    document.getElementById('sm-hint').hidden = true;
-    pin(cap, false);
-  }
-  eggTiles.forEach(function (t, i) {
-    t.addEventListener('pointerdown', function (e) {
-      if (eggFound) return;
-      e.preventDefault();
-      dragging = true;
-      if (t.releasePointerCapture && t.hasPointerCapture && t.hasPointerCapture(e.pointerId)) t.releasePointerCapture(e.pointerId);
-      pick(i);
-    });
-  });
-  board.addEventListener('pointermove', function (e) {
-    if (!dragging || eggFound) return;
-    var el = document.elementFromPoint(e.clientX, e.clientY);
-    var tile = el && el.closest && el.closest('.sm-tile.is-egg');
-    if (tile) pick(Number(tile.getAttribute('data-egg')));
-  });
-  window.addEventListener('pointerup', function () { dragging = false; });
-  window.addEventListener('pointercancel', function () { dragging = false; });
-
-  // Hint: first press highlights the four tiles; second press reveals the word (keyboard path)
-  var hint = document.getElementById('sm-hint');
-  var hinted = false;
-  hint.addEventListener('click', function () {
-    if (eggFound) return;
-    if (!hinted) {
-      hinted = true;
-      eggTiles.forEach(function (t) {
-        t.classList.remove('is-hinted');
-        void t.offsetWidth;
-        t.classList.add('is-hinted');
-      });
-      hint.textContent = 'Reveal it';
-      live.textContent = 'The hidden letters are highlighted in column 9.';
-    } else {
-      unlock();
-    }
-  });
-
-  resetEgg();
-  // keep the reduced-motion preference live
+  // HIGGSFIELD is found from the start, as the example
+  markFound(WORDS[0], {});
+  updateProgress();
   if (reduceMQ.addEventListener) reduceMQ.addEventListener('change', layout);
 })();
