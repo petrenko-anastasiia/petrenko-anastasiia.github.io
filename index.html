@@ -1321,7 +1321,10 @@ body.is-sheet .back-bar{display:flex}
 
     <div class="ph-bottom">
       <button type="button" class="ph-scan" id="ph-scan" aria-pressed="false" aria-label="Portrait of Anastasiia Petrenko. Run face scan">
-        <img src="assets/img/portrait-scan.webp" alt="" width="360" height="360" decoding="async" fetchpriority="high" />
+        <picture>
+          <source srcset="assets/img/portrait.webp" type="image/webp" />
+          <img src="assets/img/portrait.jpg" alt="Anastasiia Petrenko" width="600" height="600" decoding="async" fetchpriority="high" />
+        </picture>
         <span class="ph-scan-tint" aria-hidden="true"></span>
         <span class="ph-scan-ring" aria-hidden="true"></span>
         <span class="ph-scan-line" aria-hidden="true"></span>

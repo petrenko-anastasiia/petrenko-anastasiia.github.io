@@ -184,16 +184,16 @@ body.is-sheet .vr-section { display: none; }
 
 /* Portrait face-scan card: idle shows the photo, hover/tap runs the scan */
 .ph-scan {
-  --scan-size: 132px;
+  --scan-size: 200px;
   position: relative;
   display: block;
   width: var(--scan-size);
   height: var(--scan-size);
   margin: 16px 0 14px;
   padding: 0;
-  border-radius: 22px;
+  border-radius: 50%;
   overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  border: 2px solid rgba(125, 211, 252, 0.55);
   background:
     radial-gradient(70% 60% at 30% 30%, rgba(245, 158, 11, 0.16), transparent 60%),
     radial-gradient(80% 70% at 75% 60%, rgba(139, 92, 246, 0.28), transparent 65%),
@@ -210,6 +210,8 @@ body.is-sheet .vr-section { display: none; }
   height: 100%;
   max-width: none;
   object-fit: cover;
+  object-position: 50% 35%;
+  border-radius: 50%;
   display: block;
   transition: filter 0.35s ease;
 }
@@ -567,6 +569,7 @@ body.is-sheet .vr-section { display: none; }
   .ph-drawer-links { flex-direction: row; gap: 16px; }
   .ph-monitor { min-height: 0; }
   .ph-btn-copy .ph-copy-email { font-size: 12px; }
+  .ph-scan { --scan-size: 150px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
