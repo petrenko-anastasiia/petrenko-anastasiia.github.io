@@ -169,6 +169,19 @@ async function open(browser, opts) {
     check('keyboard (arrows + Enter) finds STRATEGY', (await capNames()).includes('STRATEGY'));
     await page.keyboard.press('Escape');
 
+    // Hint walks through the next unfound word (PRODUCTION) in three steps
+    const hintTiles = (n) => page.evaluate((n) => [...document.querySelectorAll('.sm-tile')].slice(15, 15 + n).filter((t) => t.classList.contains('is-hinted')).length, n);
+    await page.click('#sm-hint');
+    const h1 = { first: await hintTiles(1), rest: await hintTiles(10), text: await page.textContent('#sm-hint-text'), label: await page.textContent('#sm-hint') };
+    check('Hint 1: pulses the first letter and gives a clue', h1.first === 1 && h1.rest === 1 && /10 letters/.test(h1.text) && /across/.test(h1.text) && /starting with P/.test(h1.text) && h1.label === 'More', JSON.stringify(h1));
+    await page.click('#sm-hint');
+    check('Hint 2: pulses every letter of the word', (await hintTiles(10)) === 10 && (await page.textContent('#sm-hint')) === 'Reveal');
+    await page.click('#sm-hint');
+    await page.waitForTimeout(150);
+    const h3 = { found: (await capNames()).includes('PRODUCTION'), text: await page.textContent('#sm-hint-text'), pulsing: await hintTiles(10), label: await page.textContent('#sm-hint') };
+    check('Hint 3: reveals the word and resets the hint', h3.found && h3.text === '' && h3.pulsing === 0 && h3.label === 'Hint', JSON.stringify(h3));
+    await page.keyboard.press('Escape');
+
     await dragCells([3, 8], [6, 8]);
     check('dragging R-O-A-S unlocks the gold capsule', await page.evaluate(() => !!document.querySelector('.sm-cap[data-pillar="egg"]')));
     await page.keyboard.press('Escape');
@@ -225,7 +238,17 @@ async function open(browser, opts) {
       return { overflow: document.documentElement.scrollWidth - innerWidth, kpis: r('.ph-kpis').bottom, mon: r('.ph-monitor--hook').top, portrait: r('.ph-scan').top, monEnd: r('.ph-monitor--pipe').bottom };
     });
     check(vp.width + 'px: no sideways scroll', m.overflow <= 0, String(m.overflow));
-    check(vp.width + 'px: monitors sit below the KPIs, above the portrait', m.mon > m.kpis && m.portrait > m.monEnd, JSON.stringify(m));
+    if (vp.width < 681) {
+      const t = await page.evaluate(() => {
+        const r = (s) => document.querySelector(s).getBoundingClientRect();
+        const sc = r('.ph-scan');
+        return { title: r('.ph-title').bottom, scan: sc.top, scanEnd: sc.bottom, eyebrow: r('.ph-eyebrow').top, centred: Math.abs((sc.left + sc.right) / 2 - innerWidth / 2) < 2 };
+      });
+      check(vp.width + 'px: photo sits right under the title, centred', t.scan >= t.title && t.scan - t.title < 30 && t.eyebrow > t.scanEnd && t.centred, JSON.stringify(t));
+      check(vp.width + 'px: monitors sit below the KPIs', m.mon > m.kpis, JSON.stringify(m));
+    } else {
+      check(vp.width + 'px: monitors sit below the KPIs, above the portrait', m.mon > m.kpis && m.portrait > m.monEnd, JSON.stringify(m));
+    }
     check(vp.width + 'px: no console errors', errors.length === 0, errors.join(' | '));
     await ctx.close();
   }
