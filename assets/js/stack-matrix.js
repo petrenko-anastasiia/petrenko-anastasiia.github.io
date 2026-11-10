@@ -268,6 +268,7 @@
     }
     if (hintWord === w) clearHint();
     if (!nextWord()) hintBtn.hidden = true;
+    if (opts && opts.announce && !demoOn) scheduleNudge();
     if (opts && opts.announce) {
       live.textContent = 'Found ' + w.word + '.';
       if (!reduceMQ.matches) {
@@ -486,6 +487,139 @@
     board.style.removeProperty('--bx');
     board.style.removeProperty('--by');
   });
+
+  /* ---------- Cursor demo: selects a word, then points at the next one ---------- */
+  var ghost = document.getElementById('sm-ghost');
+  var demoOn = false;
+  var demoDone = reduceMQ.matches;   // reduced motion: no automatic demo
+  var demoToken = 0;
+  var startTimer = 0;
+  var nudgeTimer = 0;
+  var ghostFade = 0;
+  var stackVisible = false;
+
+  function dWait(token, ms, fn) {
+    window.setTimeout(function () { if (token === demoToken) fn(); }, ms);
+  }
+  function ghostAt(rc, fast) {
+    var t = tiles[rc[0]][rc[1]];
+    ghost.style.transitionDuration = fast ? '0.16s' : '';
+    ghost.style.transform = 'translate(' + Math.round(t.offsetLeft + t.offsetWidth * 0.5) + 'px,' + Math.round(t.offsetTop + t.offsetHeight * 0.5) + 'px)';
+  }
+  function ghostJump(rc) {
+    ghost.style.transition = 'none';
+    ghostAt(rc);
+    void ghost.offsetWidth;
+    ghost.style.transition = '';
+  }
+  function ghostShow() { window.clearTimeout(ghostFade); ghost.classList.add('is-on'); }
+  function ghostHide() { window.clearTimeout(ghostFade); ghost.classList.remove('is-on', 'is-down'); }
+
+  // Press on the first letter, drag across the word, release: the word is found
+  function demoSelect(w, token, done) {
+    var list = wordCells(w);
+    ghostAt(list[0]);
+    dWait(token, 1100, function () {
+      ghost.classList.add('is-down');
+      setSelection(list[0], list[0]);
+      var i = 1;
+      (function step() {
+        if (token !== demoToken) return;
+        if (i >= list.length) {
+          dWait(token, 350, function () {
+            ghost.classList.remove('is-down');
+            setSelection(null);
+            markFound(w, { announce: true });
+            dWait(token, 700, done);
+          });
+          return;
+        }
+        ghostAt(list[i], true);
+        setSelection(list[0], list[i]);
+        i += 1;
+        dWait(token, 170, step);
+      })();
+    });
+  }
+
+  // Point at the first letter of the next word and show its clue
+  function demoHint(token, done) {
+    var w = nextWord();
+    if (!w) { done(); return; }
+    hintBtn.click();
+    ghostAt(wordCells(w)[0]);
+    dWait(token, 4200, done);
+  }
+
+  function endDemo() {
+    demoToken += 1;
+    demoOn = false;
+    ghostHide();
+    scheduleNudge();
+  }
+  function startDemo() {
+    if (demoOn || demoDone) return;
+    demoOn = true;
+    demoDone = true;
+    var token = (demoToken += 1);
+    ghostJump([0, 14]);
+    ghostShow();
+    var w = null;
+    WORDS.forEach(function (x) { if (x.word === 'PRODUCTION' && !found[x.word]) w = x; });
+    if (!w) w = nextWord();
+    if (!w) { endDemo(); return; }
+    live.textContent = 'Demo: a cursor selects ' + w.word + ', then points at the next word. Touch anything to take over.';
+    demoSelect(w, token, function () {
+      demoHint(token, function () { if (token === demoToken) endDemo(); });
+    });
+  }
+  function stopDemo() {
+    if (!demoOn) return;
+    demoToken += 1;
+    demoOn = false;
+    setSelection(null);
+    ghostHide();
+  }
+
+  // After a find (or a quiet spell), nudge once: point at the next word's first letter
+  function scheduleNudge() {
+    window.clearTimeout(nudgeTimer);
+    if (reduceMQ.matches) return;
+    nudgeTimer = window.setTimeout(function () {
+      if (demoOn || pinned || hintWord || document.hidden || !stackVisible) return;
+      var w = nextWord();
+      if (!w) return;
+      hintBtn.click();
+      ghostJump(wordCells(w)[0]);
+      ghostShow();
+      ghostFade = window.setTimeout(ghostHide, 4000);
+    }, 10000);
+  }
+
+  // Real input from the visitor: stop the demo, never start it later, reset the nudge timer
+  function onStackInput() {
+    window.clearTimeout(startTimer);
+    if (demoOn) stopDemo(); else ghostHide();
+    demoDone = true;
+    scheduleNudge();
+  }
+  ['pointerdown', 'touchstart', 'keydown'].forEach(function (type) {
+    section.addEventListener(type, onStackInput, { passive: true, capture: true });
+  });
+
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      var en = entries[0];
+      stackVisible = en.isIntersecting;
+      if (en.isIntersecting && en.intersectionRatio >= 0.6 && !demoDone && !demoOn) {
+        window.clearTimeout(startTimer);
+        startTimer = window.setTimeout(startDemo, 1200);
+      } else if (!en.isIntersecting) {
+        window.clearTimeout(startTimer);
+        stopDemo();
+      }
+    }, { threshold: [0, 0.6] }).observe(document.getElementById('sm-frame'));
+  }
 
   // HIGGSFIELD is found from the start, as the example
   markFound(WORDS[0], {});
