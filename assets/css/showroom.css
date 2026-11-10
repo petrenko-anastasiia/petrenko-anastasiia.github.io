@@ -1,8 +1,8 @@
 /* Recent works — gallery hall (upgrade v8) */
 .vr-section {
   position: relative;
-  background: #050505;
-  color: #f3f3f3;
+  background: #07090e;
+  color: #f3f5f9;
   font-family: var(--sans, "Instrument Sans", "Helvetica Neue", Arial, sans-serif);
   --mono-face: var(--mono, ui-monospace, "SF Mono", Menlo, Consolas, monospace);
 }
@@ -11,7 +11,7 @@
   position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
-.vr-section :focus-visible { outline: none; box-shadow: 0 0 0 2px #050505, 0 0 0 4px var(--ap-accent-soft, #7dd3fc); }
+.vr-section :focus-visible { outline: none; box-shadow: 0 0 0 2px #07090e, 0 0 0 4px var(--ap-accent-soft, #7dd3fc); }
 
 .vr-stage {
   position: relative;
@@ -37,7 +37,7 @@
   height: 320px;
   z-index: 10;
   pointer-events: none;
-  background: linear-gradient(180deg, rgba(5, 5, 5, 0.92) 0%, rgba(5, 5, 5, 0.6) 55%, rgba(5, 5, 5, 0) 100%);
+  background: linear-gradient(180deg, rgba(7, 9, 14, 0.92) 0%, rgba(7, 9, 14, 0.6) 55%, rgba(7, 9, 14, 0) 100%);
 }
 .vr-webgl canvas { display: block; }
 .vr-css { pointer-events: none; }
@@ -97,7 +97,7 @@
   line-height: 1.7;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #b4b4b4;
+  color: #a3adbf;
   margin: 12px 0 0;
 }
 .vr-mode-btn {
@@ -106,15 +106,15 @@
   padding: 4px 0;
   border: 0;
   background: none;
-  color: #e2e2e2;
+  color: #e2e8f0;
   font-family: var(--mono-face);
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   cursor: pointer;
 }
-.vr-mode-btn::before { content: "[ "; color: #6f6f6f; }
-.vr-mode-btn::after { content: " ]"; color: #6f6f6f; }
+.vr-mode-btn::before { content: "[ "; color: #5b6578; }
+.vr-mode-btn::after { content: " ]"; color: #5b6578; }
 .vr-mode-btn + .vr-mode-btn { margin-left: 18px; }
 .vr-mode-btn:hover { color: var(--ap-accent-soft, #7dd3fc); }
 .vr-mode-btn[aria-pressed="true"] { color: var(--ap-accent-soft, #7dd3fc); text-decoration: underline; text-underline-offset: 4px; }
@@ -122,8 +122,8 @@
 .vr-radar {
   pointer-events: auto;
   flex-shrink: 0;
-  background: rgba(8, 8, 8, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(11, 14, 20, 0.72);
+  border: 1px solid rgba(125, 211, 252, 0.2);
   border-radius: 3px;
   padding: 10px 10px 8px;
   -webkit-backdrop-filter: blur(8px);
@@ -169,26 +169,26 @@
   width: 48px;
   height: 48px;
   padding: 0;
-  border: 1px solid rgba(214, 236, 255, 0.32);
+  border: 1px solid rgba(125, 211, 252, 0.35);
   border-radius: 50%;
-  background: rgba(5, 5, 5, 0.55);
-  color: #f3f3f3;
+  background: rgba(11, 14, 20, 0.6);
+  color: #f3f5f9;
   cursor: pointer;
   touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
   transition: color 0.2s, border-color 0.2s, background-color 0.2s, transform 0.15s;
 }
 .vr-arrow svg { display: block; }
-.vr-arrow:hover { color: var(--ap-accent-soft, #7dd3fc); border-color: var(--ap-accent-soft, #7dd3fc); background: rgba(5, 5, 5, 0.8); }
+.vr-arrow:hover { color: var(--ap-accent-soft, #7dd3fc); border-color: var(--ap-accent-soft, #7dd3fc); background: rgba(11, 14, 20, 0.85); }
 .vr-arrow:active { transform: scale(0.94); }
-.vr-section .vr-arrow:focus-visible { box-shadow: 0 0 0 2px #050505, 0 0 0 4px var(--ap-accent-soft, #7dd3fc); }
+.vr-section .vr-arrow:focus-visible { box-shadow: 0 0 0 2px #07090e, 0 0 0 4px var(--ap-accent-soft, #7dd3fc); }
 .vr-count {
   margin: 0;
   min-width: 4ch;
   font-family: var(--mono-face);
   font-size: 13px;
   letter-spacing: 0.1em;
-  color: #cfcfcf;
+  color: #cbd5e1;
   font-variant-numeric: tabular-nums;
 }
 .vr-view {
@@ -197,7 +197,7 @@
   font-family: var(--mono-face);
   font-size: 16px;
   letter-spacing: 0.14em;
-  color: #f3f3f3;
+  color: #f3f5f9;
   text-decoration: none;
   padding: 4px 6px;
 }
@@ -224,7 +224,7 @@
   padding: 4px 0;
   border: 0;
   background: none;
-  color: #7d7d7d;
+  color: #7b879b;
   font-family: var(--mono-face);
   font-size: 11px;
   letter-spacing: 0.1em;
@@ -246,10 +246,10 @@
   display: flex;
   gap: 18px;
   position: relative;
-  background: #efede7;
-  color: #0d0d0d;
+  background: #121721;
+  color: #f3f5f9;
   border-radius: 2px;
-  box-shadow: 0 40px 90px rgba(0, 0, 0, 0.75);
+  box-shadow: 0 0 0 1px #232c3d, 0 40px 90px rgba(0, 0, 0, 0.75);
   opacity: var(--fade, 1);
   transition: box-shadow 0.25s, opacity 0.35s;
   -webkit-user-select: none;
@@ -259,7 +259,7 @@
   content: "";
   position: absolute;
   inset: 9px;
-  border: 1.5px solid #141414;
+  border: 1px solid #2a3447;
   pointer-events: none;
 }
 .vr-card.is-focused {
@@ -274,26 +274,26 @@
   font-size: 10px;
   letter-spacing: 0.14em;
   text-transform: uppercase;
-  color: #666;
+  color: #7dd3fc;
 }
 .vr-card-title {
   font-family: var(--serif, "Instrument Serif", Georgia, serif);
   font-weight: 400;
   font-size: 34px;
   line-height: 1.02;
-  color: #0d0d0d;
+  color: #f3f5f9;
   margin: 6px 0 8px;
 }
-.vr-card-stat { margin: 0 0 6px; font-size: 13px; color: #333; }
-.vr-card-stat strong { font-size: 22px; font-weight: 600; color: #0d0d0d; margin-right: 4px; letter-spacing: -0.02em; }
-.vr-card-desc { margin: 0; font-size: 12.5px; line-height: 1.45; color: #555; }
+.vr-card-stat { margin: 0 0 6px; font-size: 13px; color: #cbd5e1; }
+.vr-card-stat strong { font-size: 22px; font-weight: 600; color: #7dd3fc; margin-right: 4px; letter-spacing: -0.02em; }
+.vr-card-desc { margin: 0; font-size: 12.5px; line-height: 1.45; color: #949db0; }
 .vr-card-actions { margin-top: auto; display: flex; align-items: center; gap: 18px; }
 .vr-play, .vr-open {
   appearance: none;
   padding: 0;
   border: 0;
   background: none;
-  color: #0d0d0d;
+  color: #f3f5f9;
   font-family: var(--mono-face);
   font-size: 11px;
   letter-spacing: 0.1em;
@@ -301,22 +301,22 @@
   text-decoration: none;
   cursor: pointer;
 }
-.vr-play::before, .vr-open::before { content: "[ "; color: #888; }
-.vr-play::after, .vr-open::after { content: " ]"; color: #888; }
-.vr-play:hover, .vr-open:hover { color: var(--ap-accent-deep, #0284c7); text-decoration: underline; text-underline-offset: 4px; }
+.vr-play::before, .vr-open::before { content: "[ "; color: #5b6578; }
+.vr-play::after, .vr-open::after { content: " ]"; color: #5b6578; }
+.vr-play:hover, .vr-open:hover { color: var(--ap-accent-soft, #7dd3fc); text-decoration: underline; text-underline-offset: 4px; }
 .vr-play[aria-pressed="true"] { text-decoration: underline; text-underline-offset: 4px; }
 
 .vr-card-media {
   width: 140px;
   flex-shrink: 0;
   overflow: hidden;
-  background: #111;
-  border: 1px solid #141414;
+  background: #0b0e14;
+  border: 1px solid #232c3d;
 }
 .vr-card-media video { width: 100%; height: 100%; object-fit: cover; display: block; }
-.vr-card-media--stats { display: flex; align-items: center; padding: 12px; background: #111; color: #f2f2f2; }
+.vr-card-media--stats { display: flex; align-items: center; padding: 12px; background: #0b0e14; color: #f3f5f9; }
 .vr-card-media dl { margin: 0; display: grid; gap: 10px; }
-.vr-card-media dt { font-size: 10.5px; line-height: 1.25; color: #9a9a9a; }
+.vr-card-media dt { font-size: 10.5px; line-height: 1.25; color: #949db0; }
 .vr-card-media dd { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: -0.02em; color: #fff; }
 
 /* Guided tour: a ghost cursor that shows the cases */
@@ -354,7 +354,7 @@
 }
 .vr-ghost.is-click .vr-ghost-ripple { animation: vr-ripple 0.7s ease-out; }
 @keyframes vr-ripple { 0% { opacity: 0.9; transform: scale(0.3); } 100% { opacity: 0; transform: scale(1.4); } }
-.vr-card .is-ghost-hover { outline: 2px solid var(--ap-accent-deep, #0284c7); outline-offset: 4px; }
+.vr-card .is-ghost-hover { outline: 2px solid var(--ap-accent, #38bdf8); outline-offset: 4px; }
 
 /* Flat fallback (no WebGL, or three.js missing) */
 .vr-section.is-flat .vr-stage { display: none; }
@@ -404,3 +404,8 @@
   white-space: nowrap;
 }
 .vr-section.vr-loading .vr-foot { visibility: hidden; }
+
+/* Entry from above: the counter and case names fade in as the camera lands */
+.vr-dock { transition: opacity 0.6s; }
+.vr-section.is-intro .vr-foot,
+.vr-section.is-intro .vr-dock { opacity: 0; }

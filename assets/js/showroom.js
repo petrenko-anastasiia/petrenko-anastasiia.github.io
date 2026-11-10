@@ -66,7 +66,7 @@
   var H = stage.clientHeight || window.innerHeight;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
   renderer.setSize(W, H);
-  renderer.setClearColor(0x050505, 1);
+  renderer.setClearColor(0x07090e, 1);
   webglHost.appendChild(renderer.domElement);
   renderer.domElement.setAttribute('aria-hidden', 'true');
 
@@ -75,7 +75,7 @@
   cssHost.appendChild(cssRenderer.domElement);
 
   var scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x050505, 12, 58);
+  scene.fog = new THREE.Fog(0x07090e, 12, 58);
   var cssScene = new THREE.Scene();
   var camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 120);
   camera.rotation.order = 'YXZ';
@@ -91,13 +91,13 @@
     var TW = 2048, TH = 512;
     var c = makeCanvas(TW, TH);
     var g = c.getContext('2d');
-    g.fillStyle = '#2b2b2b';
+    g.fillStyle = '#18202f';
     g.fillRect(0, 0, TW, TH);
     // a long soft wash, strongest near the entrance
     var along = g.createLinearGradient(isLeft ? 0 : TW, 0, isLeft ? TW : 0, 0);
-    along.addColorStop(0, 'rgba(214,236,255,0.42)');
-    along.addColorStop(0.5, 'rgba(214,236,255,0.2)');
-    along.addColorStop(1, 'rgba(214,236,255,0.05)');
+    along.addColorStop(0, 'rgba(125,211,252,0.34)');
+    along.addColorStop(0.5, 'rgba(125,211,252,0.16)');
+    along.addColorStop(1, 'rgba(125,211,252,0.04)');
     g.fillStyle = along;
     g.fillRect(0, 0, TW, TH);
     // a pool of light on the wall beside each case
@@ -107,9 +107,9 @@
       g.translate(px, TH * 0.56);
       g.scale(3.2, 1);
       var rg = g.createRadialGradient(0, 0, 0, 0, 0, 150);
-      rg.addColorStop(0, 'rgba(214,236,255,0.8)');
-      rg.addColorStop(0.45, 'rgba(214,236,255,0.38)');
-      rg.addColorStop(1, 'rgba(214,236,255,0)');
+      rg.addColorStop(0, 'rgba(186,230,253,0.72)');
+      rg.addColorStop(0.45, 'rgba(56,189,248,0.32)');
+      rg.addColorStop(1, 'rgba(56,189,248,0)');
       g.fillStyle = rg;
       g.beginPath();
       g.arc(0, 0, 150, 0, Math.PI * 2);
@@ -118,10 +118,10 @@
     });
     // darker toward the ceiling and the floor
     var vg = g.createLinearGradient(0, 0, 0, TH);
-    vg.addColorStop(0, 'rgba(0,0,0,0.9)');
+    vg.addColorStop(0, 'rgba(7,9,14,0.9)');
     vg.addColorStop(0.32, 'rgba(0,0,0,0.05)');
     vg.addColorStop(0.78, 'rgba(0,0,0,0.12)');
-    vg.addColorStop(1, 'rgba(0,0,0,0.7)');
+    vg.addColorStop(1, 'rgba(7,9,14,0.7)');
     g.fillStyle = vg;
     g.fillRect(0, 0, TW, TH);
     return makeTexture(c);
@@ -130,10 +130,10 @@
   function floorTexture() {
     var c = makeCanvas(512, 2048);
     var g = c.getContext('2d');
-    g.fillStyle = '#0e0e0e';
+    g.fillStyle = '#0b0e14';
     g.fillRect(0, 0, 512, 2048);
     for (var i = 0; i < 3200; i++) {
-      g.fillStyle = 'rgba(214,236,255,' + (Math.random() * 0.05).toFixed(3) + ')';
+      g.fillStyle = 'rgba(125,211,252,' + (Math.random() * 0.06).toFixed(3) + ')';
       g.fillRect(Math.random() * 512, Math.random() * 2048, 1.4, 1.4);
     }
     return makeTexture(c);
@@ -143,9 +143,9 @@
     var c = makeCanvas(256, 256);
     var g = c.getContext('2d');
     var rg = g.createRadialGradient(128, 128, 0, 128, 128, 128);
-    rg.addColorStop(0, 'rgba(214,236,255,' + alpha + ')');
-    rg.addColorStop(0.5, 'rgba(214,236,255,' + (alpha * 0.35).toFixed(3) + ')');
-    rg.addColorStop(1, 'rgba(214,236,255,0)');
+    rg.addColorStop(0, 'rgba(125,211,252,' + alpha + ')');
+    rg.addColorStop(0.5, 'rgba(56,189,248,' + (alpha * 0.35).toFixed(3) + ')');
+    rg.addColorStop(1, 'rgba(56,189,248,0)');
     g.fillStyle = rg;
     g.fillRect(0, 0, 256, 256);
     return makeTexture(c);
@@ -155,8 +155,8 @@
     var c = makeCanvas(64, 4);
     var g = c.getContext('2d');
     var lg = g.createLinearGradient(brightAtStart ? 0 : 64, 0, brightAtStart ? 64 : 0, 0);
-    lg.addColorStop(0, 'rgba(125,211,252,0.7)');
-    lg.addColorStop(1, 'rgba(214,236,255,0)');
+    lg.addColorStop(0, 'rgba(56,189,248,0.75)');
+    lg.addColorStop(1, 'rgba(56,189,248,0)');
     g.fillStyle = lg;
     g.fillRect(0, 0, 64, 4);
     return makeTexture(c);
@@ -165,11 +165,11 @@
   function feltTexture() {
     var c = makeCanvas(128, 128);
     var g = c.getContext('2d');
-    g.fillStyle = '#303030';
+    g.fillStyle = '#1c2434';
     g.fillRect(0, 0, 128, 128);
     for (var i = 0; i < 2600; i++) {
-      var v = 30 + Math.floor(Math.random() * 40);
-      g.fillStyle = 'rgb(' + v + ',' + v + ',' + v + ')';
+      var v = Math.floor(Math.random() * 30);
+      g.fillStyle = 'rgb(' + (22 + v) + ',' + (30 + v) + ',' + (46 + v) + ')';
       g.fillRect(Math.random() * 128, Math.random() * 128, 1.5, 1.5);
     }
     var t = makeTexture(c);
@@ -196,17 +196,17 @@
   wallR.position.set(HALL.w / 2, HALL.h / 2, MID_Z);
   scene.add(wallR);
 
-  var ceiling = new THREE.Mesh(new THREE.PlaneGeometry(HALL.w, LEN), new THREE.MeshBasicMaterial({ color: 0x050505, side: THREE.DoubleSide }));
+  var ceiling = new THREE.Mesh(new THREE.PlaneGeometry(HALL.w, LEN), new THREE.MeshBasicMaterial({ color: 0x07090e, side: THREE.DoubleSide }));
   ceiling.rotation.x = Math.PI / 2;
   ceiling.position.set(0, HALL.h, MID_Z);
   scene.add(ceiling);
-  var endWall = new THREE.Mesh(new THREE.PlaneGeometry(HALL.w, HALL.h), new THREE.MeshBasicMaterial({ color: 0x090909 }));
+  var endWall = new THREE.Mesh(new THREE.PlaneGeometry(HALL.w, HALL.h), new THREE.MeshBasicMaterial({ color: 0x0b0e14 }));
   endWall.position.set(0, HALL.h / 2, HALL.far);
   scene.add(endWall);
 
   // glowing white lines where the walls meet the floor
   [-1, 1].forEach(function (side) {
-    var line = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.1, LEN), new THREE.MeshBasicMaterial({ color: 0xcdeaff }));
+    var line = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.1, LEN), new THREE.MeshBasicMaterial({ color: 0x7dd3fc }));
     line.position.set(side * (HALL.w / 2 - 0.04), 0.05, MID_Z);
     scene.add(line);
     var glow = new THREE.Mesh(new THREE.PlaneGeometry(1.2, LEN), new THREE.MeshBasicMaterial({
@@ -217,7 +217,7 @@
     scene.add(glow);
   });
 
-  var ambient = new THREE.AmbientLight(0xe8f3ff, 0.5);
+  var ambient = new THREE.AmbientLight(0xdbeafe, 0.5);
   scene.add(ambient);
 
   /* ---------- Cases, projectors, stools ---------- */
@@ -227,7 +227,7 @@
   var pickables = [];
   var poolTex = radialTexture(0.34);
   var feltMat = new THREE.MeshLambertMaterial({ map: feltTexture() });
-  var feltTop = new THREE.MeshLambertMaterial({ color: 0x303030 });
+  var feltTop = new THREE.MeshLambertMaterial({ color: 0x1c2434 });
   var STOOLS = [[2.4, 2.6, 0.46, 0.5], [-2.0, 3.9, 0.4, 0.62], [0.9, 5.4, 0.5, 0.46]];
 
   function viewFor(i, dist) {
@@ -253,7 +253,7 @@
     // ceiling projector on a cable, and its cone of light
     var proj = new THREE.Group();
     proj.position.set(s.x, 5.2, s.z + 0.3);
-    var body = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.2, 0.36), new THREE.MeshBasicMaterial({ color: 0xdadada }));
+    var body = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.2, 0.36), new THREE.MeshBasicMaterial({ color: 0xcbd5e1 }));
     proj.add(body);
     var lens = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.08, 0.04), new THREE.MeshBasicMaterial({ color: 0x0c0c0c }));
     lens.position.set(0, -0.02, 0.2);
@@ -264,12 +264,12 @@
     scene.add(proj);
 
     var cone = new THREE.Mesh(new THREE.ConeGeometry(2.4, 4.7, 40, 1, true), new THREE.MeshBasicMaterial({
-      color: 0xbfe3ff, transparent: true, opacity: 0.03, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending
+      color: 0x7dd3fc, transparent: true, opacity: 0.03, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending
     }));
     cone.position.set(s.x, 2.85, s.z + 0.3);
     scene.add(cone);
 
-    var light = new THREE.PointLight(0xdff1ff, 0.5, 11);
+    var light = new THREE.PointLight(0xbae6fd, 0.5, 11);
     light.position.set(s.x, 4.4, s.z + 1.6);
     scene.add(light);
 
@@ -313,7 +313,7 @@
 
   /* ---------- Camera state ---------- */
   var v0 = viewFor(0, VIEW_DIST);
-  var cam = { x: v0.x, z: v0.z, yaw: v0.yaw, pitch: 0, tx: v0.x, tz: v0.z, tyaw: v0.yaw, tpitch: 0 };
+  var cam = { x: v0.x, y: EYE_Y, z: v0.z, yaw: v0.yaw, pitch: 0, tx: v0.x, ty: EYE_Y, tz: v0.z, tyaw: v0.yaw, tpitch: 0 };
   var activeIdx = -1;
   var cinemaIdx = -1;
   var dirty = true;
@@ -389,9 +389,42 @@
     return from + d;
   }
 
+  /* ---------- Entry: the room shows up from above ---------- */
+  var INTRO_MS = 3400;
+  var intro = null;
+  var introPlayed = false;
+  function easeInOut(u) { return u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2; }
+  function startIntro() {
+    if (introPlayed || reduced()) return false;
+    introPlayed = true;
+    var v = viewFor(0, VIEW_DIST);
+    setActive(0);
+    intro = { t0: 0, x: v.x, yaw: v.yaw, y0: HALL.h - 0.45, y1: EYE_Y, z0: v.z + 1.6, z1: v.z, p0: -1.05, p1: 0 };
+    cam.x = cam.tx = v.x;
+    cam.yaw = cam.tyaw = v.yaw;
+    cam.y = cam.ty = intro.y0;
+    cam.z = cam.tz = intro.z0;
+    cam.pitch = cam.tpitch = intro.p0;
+    section.classList.add('is-intro');
+    dirty = true;
+    start();
+    return true;
+  }
+  // soft: hand the rest of the move to the normal easing (the visitor took over)
+  function endIntro(soft) {
+    if (!intro) return;
+    var it = intro;
+    intro = null;
+    section.classList.remove('is-intro');
+    cam.tx = it.x; cam.ty = it.y1; cam.tz = it.z1; cam.tpitch = it.p1;
+    if (!soft) { cam.y = it.y1; cam.z = it.z1; cam.pitch = it.p1; }
+    dirty = true;
+  }
+
   function focusStation(idx, opts) {
     var st = stations[idx];
     if (!st) return;
+    if (intro) endIntro(true);
     if (cinemaIdx >= 0 && cinemaIdx !== idx) stopCinema(true);
     var v = viewFor(idx, VIEW_DIST);
     cam.tx = v.x;
@@ -460,6 +493,7 @@
     drag.x = e.clientX; drag.y = e.clientY;
     if (!drag.moved && Math.hypot(e.clientX - drag.sx, e.clientY - drag.sy) > 6) {
       drag.moved = true;
+      endIntro(true);
       stage.classList.add('is-dragging');
       try { stage.setPointerCapture(e.pointerId); } catch (err) { /* ignore */ }
       if (cinemaIdx >= 0) stopCinema(true);
@@ -492,6 +526,7 @@
     var ax = Math.abs(e.deltaX), ay = Math.abs(e.deltaY);
     if (ax > ay) {
       e.preventDefault();
+      endIntro(true);
       cam.tyaw -= e.deltaX * 0.0022;
       dirty = true;
     } else if (walkMode) {
@@ -529,6 +564,7 @@
     // Up/Down arrows scroll the page unless Walk mode is on
     if ((e.code === 'ArrowUp' || e.code === 'ArrowDown') && !walkMode) return;
     e.preventDefault();
+    endIntro(true);
     keys[e.code] = true;
     if (cinemaIdx >= 0) stopCinema(true);
   });
@@ -573,7 +609,7 @@
     var cy = RH / 2;
     function mx(z) { return 7 + (HALL.near - z) * k; }
     function my(x) { return cy + x * 3; }
-    rctx.strokeStyle = 'rgba(214,236,255,0.3)';
+    rctx.strokeStyle = 'rgba(125,211,252,0.3)';
     rctx.lineWidth = 1;
     rctx.strokeRect(mx(HALL.near) + 0.5, my(-HALL.w / 2) + 0.5, LEN * k, HALL.w * 3);
 
@@ -581,8 +617,8 @@
     var hfov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * camera.aspect);
     var look = -cam.yaw;
     var grad = rctx.createRadialGradient(px, py, 0, px, py, 30);
-    grad.addColorStop(0, 'rgba(214,236,255,0.4)');
-    grad.addColorStop(1, 'rgba(214,236,255,0)');
+    grad.addColorStop(0, 'rgba(125,211,252,0.4)');
+    grad.addColorStop(1, 'rgba(125,211,252,0)');
     rctx.fillStyle = grad;
     rctx.beginPath();
     rctx.moveTo(px, py);
@@ -591,7 +627,7 @@
     rctx.fill();
 
     stations.forEach(function (st, i) {
-      rctx.fillStyle = i === activeIdx || i === cinemaIdx ? '#7dd3fc' : '#7a8794';
+      rctx.fillStyle = i === activeIdx || i === cinemaIdx ? '#7dd3fc' : '#64748b';
       rctx.beginPath();
       rctx.arc(mx(st.z), my(st.x), i === activeIdx ? 3 : 2.2, 0, Math.PI * 2);
       rctx.fill();
@@ -624,16 +660,29 @@
     if (keys.KeyA || keys.ArrowLeft) { cam.tx -= rx * speed; cam.tz -= rz * speed; moving = true; }
     if (keys.KeyD || keys.ArrowRight) { cam.tx += rx * speed; cam.tz += rz * speed; moving = true; }
 
+    if (intro) {
+      if (!intro.t0) intro.t0 = now;
+      var u = Math.min(1, (now - intro.t0) / INTRO_MS);
+      var e = easeInOut(u);
+      cam.y = cam.ty = intro.y0 + (intro.y1 - intro.y0) * e;
+      cam.z = cam.tz = intro.z0 + (intro.z1 - intro.z0) * e;
+      // look down at the floor first, lift the gaze a little later than the drop
+      var ep2 = easeInOut(Math.max(0, (u - 0.12) / 0.88));
+      cam.pitch = cam.tpitch = intro.p0 + (intro.p1 - intro.p0) * ep2;
+      moving = true;
+      if (u >= 1) endIntro(false);
+    }
+
     cam.tx = clamp(cam.tx, -BOUND_X, BOUND_X);
     cam.tz = clamp(cam.tz, HALL.far + 4, HALL.near - 1.5);
 
     var k = reduced() ? 1 : 1 - Math.pow(1 - 0.08, dt);
-    var ex = cam.tx - cam.x, ez = cam.tz - cam.z, ey = cam.tyaw - cam.yaw, ep = cam.tpitch - cam.pitch;
-    var settling = Math.abs(ex) + Math.abs(ez) + Math.abs(ey) + Math.abs(ep) > 0.0005;
+    var ex = cam.tx - cam.x, ez = cam.tz - cam.z, ey = cam.tyaw - cam.yaw, ep = cam.tpitch - cam.pitch, eh = cam.ty - cam.y;
+    var settling = Math.abs(ex) + Math.abs(ez) + Math.abs(ey) + Math.abs(ep) + Math.abs(eh) > 0.0005;
     if (!settling && !moving && !dirty) return;
-    cam.x += ex * k; cam.z += ez * k; cam.yaw += ey * k; cam.pitch += ep * k;
+    cam.x += ex * k; cam.z += ez * k; cam.yaw += ey * k; cam.pitch += ep * k; cam.y += eh * k;
 
-    camera.position.set(cam.x, EYE_Y, cam.z);
+    camera.position.set(cam.x, cam.y, cam.z);
     camera.rotation.y = cam.yaw;
     camera.rotation.x = cam.pitch;
     camera.updateMatrixWorld();
@@ -842,11 +891,12 @@
       if (en.intersectionRatio >= 0.4) {
         if (!inRoom) {
           inRoom = true;
+          var flying = startIntro();    // first arrival: drop in from above
           if (tourAuto && !tourOn && !tourPlayedHere) {
             window.clearTimeout(startTimer);
             startTimer = window.setTimeout(function () {
               if (visible && inRoom && tourAuto && !tourOn && !tourPlayedHere) startTour();
-            }, 800);
+            }, flying ? INTRO_MS + 600 : 800);
           }
         }
       } else if (en.intersectionRatio < 0.15) {
@@ -862,6 +912,7 @@
 
   /* ---------- Requests from elsewhere on the page (hero drawer links) ---------- */
   window.addEventListener('showroom:focus', function (e) {
+    introPlayed = true;       // a specific case was asked for: skip the entry
     stopTour(false);
     window.clearTimeout(startTimer);
     tourPlayedHere = true;    // you asked for a specific case: don't start the tour over it

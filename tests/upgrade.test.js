@@ -345,6 +345,8 @@ async function open(browser, opts) {
     const hasRoom = await page.evaluate(() => !!window.THREE && !!document.querySelector('#vr-webgl canvas'));
     if (hasRoom) {
       await page.evaluate(() => document.getElementById('work').scrollIntoView({ behavior: 'instant' }));
+      check('room: drops in from above on arrival', await waitOk(page, () => document.getElementById('work').classList.contains('is-intro'), 3000));
+      check('room: lands at eye level, counter shown', await waitOk(page, () => !document.getElementById('work').classList.contains('is-intro'), 6000));
       check('tour: starts by itself when the room comes into view', await waitOk(page, () => document.getElementById('vr-ghost').classList.contains('is-on'), 6000));
       await page.evaluate(() => window.scrollTo(0, 0));
       check('tour: stops when you leave the room', await waitOk(page, () => !document.getElementById('vr-ghost').classList.contains('is-on'), 3000));
