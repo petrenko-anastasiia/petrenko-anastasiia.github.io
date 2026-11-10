@@ -324,6 +324,17 @@ async function open(browser, opts) {
     await ctx.close();
   }
 
+  /* ---------- Cache: asset links carry a current version tag ---------- */
+  {
+    const fs = require('fs');
+    const path = require('path');
+    const root = path.resolve(__dirname, '..');
+    const { stamp } = require(path.join(root, 'tools', 'stamp-versions.js'));
+    const html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+    const stamped = stamp(html, (p) => fs.readFileSync(path.join(root, p)));
+    check('asset links carry current version tags (fix: node tools/stamp-versions.js)', stamped === html);
+  }
+
   await browser.close();
   console.log(failures ? '\n' + failures + ' check(s) failed' : '\nAll checks passed');
   process.exit(failures ? 1 : 0);
