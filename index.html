@@ -1402,7 +1402,7 @@ body.is-sheet .back-bar{display:flex}
     <div class="vr-hud-top">
       <div class="vr-heading">
         <h2 class="vr-title" id="vr-title">Recent works</h2>
-        <p class="vr-help" id="vr-help">Swipe sideways or drag to look around. WASD to walk. Click a pedestal to go to it.</p>
+        <p class="vr-help" id="vr-help">Swipe sideways or drag to look around. WASD to walk. Click a pool of light to go there.</p>
         <button type="button" class="vr-mode-btn" id="vr-walk" aria-pressed="false">Walk mode: off</button>
         <button type="button" class="vr-mode-btn" id="vr-tour">Play tour</button>
       </div>
@@ -1410,6 +1410,11 @@ body.is-sheet .back-bar{display:flex}
         <canvas id="vr-radar" width="120" height="92" aria-hidden="true"></canvas>
         <span>Room map</span>
       </div>
+    </div>
+
+    <div class="vr-foot">
+      <p class="vr-count" id="vr-count">1/5</p>
+      <a class="vr-view" id="vr-view" href="#paid"><span id="vr-view-text" aria-hidden="true">[ VIEW CASE ]</span></a>
     </div>
 
     <nav class="vr-dock" id="vr-dock" aria-label="Go to a case"></nav>

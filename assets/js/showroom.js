@@ -1,5 +1,6 @@
-/* Recent works — spatial 3D showroom (upgrade v1)
- * WebGLRenderer (room, pedestals, light cones) + CSS3DRenderer (real DOM case cards)
+/* Recent works — spatial 3D showroom (upgrade v8: gallery hall)
+ * A long monochrome hall. The cases stand one after another down it, each under its own
+ * ceiling projector. WebGLRenderer (hall, props, light) + CSS3DRenderer (the real DOM cards)
  * share one camera. Needs assets/vendor/three.r128.min.js and css3d-renderer.r128.js.
  */
 (function () {
@@ -42,18 +43,30 @@
     goFlat();
     return;
   }
+  var clamp = THREE.MathUtils.clamp;
 
-  /* ---------- Scene ---------- */
+  /* ---------- Layout of the hall ---------- */
+  var EYE_Y = 2.35;
+  var CARD_Y = 2.15;
+  var CARD_SCALE = 0.009;
+  var VIEW_DIST = 7.0;        // how far in front of a case you stand to look at it
+  var CINEMA_DIST = 5.0;
+  var SPACING = 11;           // distance between cases along the hall
+  var FIRST_Z = -9;
+  var COUNT = cardEls.length;
+  var slots = cardEls.map(function (card, i) {
+    return { x: (i % 2 === 0 ? -1 : 1) * 1.3, z: FIRST_Z - SPACING * i };
+  });
+  var HALL = { w: 9, h: 6.5, near: 9, far: FIRST_Z - SPACING * (COUNT - 1) - 9 };
+  var LEN = HALL.near - HALL.far;
+  var MID_Z = (HALL.near + HALL.far) / 2;
+  var BOUND_X = 4.0;
+
   var W = stage.clientWidth || window.innerWidth;
   var H = stage.clientHeight || window.innerHeight;
-  var ROOM_R = 11.8;
-  var EYE_Y = 2.35;
-  var WALK_R = 8.2;
-  var CARD_SCALE = 0.009;
-
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.75));
   renderer.setSize(W, H);
-  renderer.setClearColor(0x05070b, 1);
+  renderer.setClearColor(0x050505, 1);
   webglHost.appendChild(renderer.domElement);
   renderer.domElement.setAttribute('aria-hidden', 'true');
 
@@ -62,97 +75,217 @@
   cssHost.appendChild(cssRenderer.domElement);
 
   var scene = new THREE.Scene();
-  scene.fog = new THREE.FogExp2(0x05070b, 0.035);
+  scene.fog = new THREE.Fog(0x050505, 12, 58);
   var cssScene = new THREE.Scene();
-  var camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 100);
+  var camera = new THREE.PerspectiveCamera(52, W / H, 0.1, 120);
   camera.rotation.order = 'YXZ';
 
-  var wall = new THREE.Mesh(
-    new THREE.CylinderGeometry(ROOM_R + 1.2, ROOM_R + 1.2, 9, 72, 1, true),
-    new THREE.MeshStandardMaterial({ color: 0x0b0f1a, side: THREE.BackSide, roughness: 0.85 })
-  );
-  wall.position.y = 3.5;
-  scene.add(wall);
+  /* ---------- Textures drawn in code: wall washes, floor, light pools, felt ---------- */
+  function makeCanvas(w, h) { var c = document.createElement('canvas'); c.width = w; c.height = h; return c; }
+  function makeTexture(c) { var t = new THREE.CanvasTexture(c); t.anisotropy = 4; return t; }
 
-  var floor = new THREE.Mesh(
-    new THREE.CircleGeometry(ROOM_R + 1.2, 72),
-    new THREE.MeshStandardMaterial({ color: 0x070a12, roughness: 0.4, metalness: 0.3 })
-  );
+  // u runs along the hall: for the left wall it starts at the entrance, for the right wall at the far end
+  function zToU(z, isLeft) { return isLeft ? (HALL.near - z) / LEN : (z - HALL.far) / LEN; }
+
+  function wallTexture(isLeft) {
+    var TW = 2048, TH = 512;
+    var c = makeCanvas(TW, TH);
+    var g = c.getContext('2d');
+    g.fillStyle = '#2b2b2b';
+    g.fillRect(0, 0, TW, TH);
+    // a long soft wash, strongest near the entrance
+    var along = g.createLinearGradient(isLeft ? 0 : TW, 0, isLeft ? TW : 0, 0);
+    along.addColorStop(0, 'rgba(255,255,255,0.42)');
+    along.addColorStop(0.5, 'rgba(255,255,255,0.2)');
+    along.addColorStop(1, 'rgba(255,255,255,0.05)');
+    g.fillStyle = along;
+    g.fillRect(0, 0, TW, TH);
+    // a pool of light on the wall beside each case
+    slots.forEach(function (s) {
+      var px = zToU(s.z + 2.5, isLeft) * TW;
+      g.save();
+      g.translate(px, TH * 0.56);
+      g.scale(3.2, 1);
+      var rg = g.createRadialGradient(0, 0, 0, 0, 0, 150);
+      rg.addColorStop(0, 'rgba(255,255,255,0.8)');
+      rg.addColorStop(0.45, 'rgba(255,255,255,0.38)');
+      rg.addColorStop(1, 'rgba(255,255,255,0)');
+      g.fillStyle = rg;
+      g.beginPath();
+      g.arc(0, 0, 150, 0, Math.PI * 2);
+      g.fill();
+      g.restore();
+    });
+    // darker toward the ceiling and the floor
+    var vg = g.createLinearGradient(0, 0, 0, TH);
+    vg.addColorStop(0, 'rgba(0,0,0,0.9)');
+    vg.addColorStop(0.32, 'rgba(0,0,0,0.05)');
+    vg.addColorStop(0.78, 'rgba(0,0,0,0.12)');
+    vg.addColorStop(1, 'rgba(0,0,0,0.7)');
+    g.fillStyle = vg;
+    g.fillRect(0, 0, TW, TH);
+    return makeTexture(c);
+  }
+
+  function floorTexture() {
+    var c = makeCanvas(512, 2048);
+    var g = c.getContext('2d');
+    g.fillStyle = '#0e0e0e';
+    g.fillRect(0, 0, 512, 2048);
+    for (var i = 0; i < 3200; i++) {
+      g.fillStyle = 'rgba(255,255,255,' + (Math.random() * 0.05).toFixed(3) + ')';
+      g.fillRect(Math.random() * 512, Math.random() * 2048, 1.4, 1.4);
+    }
+    return makeTexture(c);
+  }
+
+  function radialTexture(alpha) {
+    var c = makeCanvas(256, 256);
+    var g = c.getContext('2d');
+    var rg = g.createRadialGradient(128, 128, 0, 128, 128, 128);
+    rg.addColorStop(0, 'rgba(255,255,255,' + alpha + ')');
+    rg.addColorStop(0.5, 'rgba(255,255,255,' + (alpha * 0.35).toFixed(3) + ')');
+    rg.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = rg;
+    g.fillRect(0, 0, 256, 256);
+    return makeTexture(c);
+  }
+
+  function edgeGlowTexture(brightAtStart) {
+    var c = makeCanvas(64, 4);
+    var g = c.getContext('2d');
+    var lg = g.createLinearGradient(brightAtStart ? 0 : 64, 0, brightAtStart ? 64 : 0, 0);
+    lg.addColorStop(0, 'rgba(255,255,255,0.6)');
+    lg.addColorStop(1, 'rgba(255,255,255,0)');
+    g.fillStyle = lg;
+    g.fillRect(0, 0, 64, 4);
+    return makeTexture(c);
+  }
+
+  function feltTexture() {
+    var c = makeCanvas(128, 128);
+    var g = c.getContext('2d');
+    g.fillStyle = '#303030';
+    g.fillRect(0, 0, 128, 128);
+    for (var i = 0; i < 2600; i++) {
+      var v = 30 + Math.floor(Math.random() * 40);
+      g.fillStyle = 'rgb(' + v + ',' + v + ',' + v + ')';
+      g.fillRect(Math.random() * 128, Math.random() * 128, 1.5, 1.5);
+    }
+    var t = makeTexture(c);
+    t.wrapS = t.wrapT = THREE.RepeatWrapping;
+    t.repeat.set(3, 1);
+    return t;
+  }
+
+  /* ---------- The hall ---------- */
+  var hallMats = [];
+  function basic(opts) { var m = new THREE.MeshBasicMaterial(opts); hallMats.push(m); return m; }
+
+  var floor = new THREE.Mesh(new THREE.PlaneGeometry(HALL.w, LEN), basic({ map: floorTexture() }));
   floor.rotation.x = -Math.PI / 2;
+  floor.position.set(0, 0, MID_Z);
   scene.add(floor);
 
-  var grid = new THREE.PolarGridHelper(ROOM_R + 1.2, 24, 10, 72, 0x1e293b, 0x111827);
-  grid.position.y = 0.01;
-  scene.add(grid);
+  var wallL = new THREE.Mesh(new THREE.PlaneGeometry(LEN, HALL.h), basic({ map: wallTexture(true), side: THREE.DoubleSide }));
+  wallL.rotation.y = Math.PI / 2;
+  wallL.position.set(-HALL.w / 2, HALL.h / 2, MID_Z);
+  scene.add(wallL);
+  var wallR = new THREE.Mesh(new THREE.PlaneGeometry(LEN, HALL.h), basic({ map: wallTexture(false), side: THREE.DoubleSide }));
+  wallR.rotation.y = -Math.PI / 2;
+  wallR.position.set(HALL.w / 2, HALL.h / 2, MID_Z);
+  scene.add(wallR);
 
-  // skirting light where wall meets floor
-  var skirt = new THREE.Mesh(
-    new THREE.TorusGeometry(ROOM_R + 1.15, 0.02, 6, 120),
-    new THREE.MeshBasicMaterial({ color: 0x334155, transparent: true, opacity: 0.6 })
-  );
-  skirt.rotation.x = Math.PI / 2;
-  skirt.position.y = 0.05;
-  scene.add(skirt);
+  var ceiling = new THREE.Mesh(new THREE.PlaneGeometry(HALL.w, LEN), new THREE.MeshBasicMaterial({ color: 0x050505, side: THREE.DoubleSide }));
+  ceiling.rotation.x = Math.PI / 2;
+  ceiling.position.set(0, HALL.h, MID_Z);
+  scene.add(ceiling);
+  var endWall = new THREE.Mesh(new THREE.PlaneGeometry(HALL.w, HALL.h), new THREE.MeshBasicMaterial({ color: 0x090909 }));
+  endWall.position.set(0, HALL.h / 2, HALL.far);
+  scene.add(endWall);
 
-  var ambient = new THREE.AmbientLight(0x94a3b8, 0.45);
+  // glowing white lines where the walls meet the floor
+  [-1, 1].forEach(function (side) {
+    var line = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.1, LEN), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+    line.position.set(side * (HALL.w / 2 - 0.04), 0.05, MID_Z);
+    scene.add(line);
+    var glow = new THREE.Mesh(new THREE.PlaneGeometry(1.2, LEN), new THREE.MeshBasicMaterial({
+      map: edgeGlowTexture(side < 0), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending
+    }));
+    glow.rotation.x = -Math.PI / 2;
+    glow.position.set(side * (HALL.w / 2 - 0.6), 0.015, MID_Z);
+    scene.add(glow);
+  });
+
+  var ambient = new THREE.AmbientLight(0xffffff, 0.5);
   scene.add(ambient);
 
-  /* ---------- Stations ---------- */
-  var ACCENT = { blue: 0x3b82f6, violet: 0x8b5cf6, emerald: 0x10b981 };
+  /* ---------- Cases, projectors, stools ---------- */
   var dock = document.getElementById('vr-dock');
   var live = document.getElementById('vr-live');
   var stations = [];
   var pickables = [];
+  var poolTex = radialTexture(0.34);
+  var feltMat = new THREE.MeshLambertMaterial({ map: feltTexture() });
+  var feltTop = new THREE.MeshLambertMaterial({ color: 0x303030 });
+  var STOOLS = [[2.4, 2.6, 0.46, 0.5], [-2.0, 3.9, 0.4, 0.62], [0.9, 5.4, 0.5, 0.46]];
+
+  function viewFor(i, dist) {
+    var s = slots[i];
+    var fx = s.x * 0.55;
+    var fz = s.z + dist;
+    return { x: fx, z: fz, yaw: Math.atan2(-(s.x - fx), -(s.z - fz)) };
+  }
 
   cardEls.forEach(function (card, idx) {
-    var deg = Number(card.getAttribute('data-angle'));
-    var rad = THREE.MathUtils.degToRad(deg);
-    var sx = Math.sin(rad) * ROOM_R;
-    var sz = -Math.cos(rad) * ROOM_R;
-    var center = deg === 0;
-    var color = ACCENT[card.getAttribute('data-accent')] || ACCENT.violet;
+    var s = slots[idx];
 
-    var ped = new THREE.Mesh(
-      new THREE.CylinderGeometry(1.05, 1.2, 0.36, 40),
-      new THREE.MeshStandardMaterial({ color: 0x131a2b, metalness: 0.5, roughness: 0.35 })
-    );
-    ped.position.set(sx, 0.18, sz);
-    ped.userData.station = idx;
-    scene.add(ped);
-    pickables.push(ped);
+    // a pool of light on the floor in front of the case (also what you click to go there)
+    var pool = new THREE.Mesh(new THREE.CircleGeometry(3.3, 48), new THREE.MeshBasicMaterial({
+      map: poolTex, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, opacity: 0.2
+    }));
+    pool.rotation.x = -Math.PI / 2;
+    pool.position.set(s.x, 0.02, s.z + 3.2);
+    pool.userData.station = idx;
+    scene.add(pool);
+    pickables.push(pool);
 
-    var ring = new THREE.Mesh(
-      new THREE.RingGeometry(1.22, 1.3, 48),
-      new THREE.MeshBasicMaterial({ color: color, side: THREE.DoubleSide, transparent: true, opacity: 0.55 })
-    );
-    ring.rotation.x = -Math.PI / 2;
-    ring.position.set(sx, 0.02, sz);
-    ring.userData.station = idx;
-    scene.add(ring);
-    pickables.push(ring);
+    // ceiling projector on a cable, and its cone of light
+    var proj = new THREE.Group();
+    proj.position.set(s.x, 5.2, s.z + 0.3);
+    var body = new THREE.Mesh(new THREE.BoxGeometry(0.58, 0.2, 0.36), new THREE.MeshBasicMaterial({ color: 0xdadada }));
+    proj.add(body);
+    var lens = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.08, 0.04), new THREE.MeshBasicMaterial({ color: 0x0c0c0c }));
+    lens.position.set(0, -0.02, 0.2);
+    proj.add(lens);
+    var cable = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.014, HALL.h - 5.2, 6), new THREE.MeshBasicMaterial({ color: 0x050505 }));
+    cable.position.set(0, (HALL.h - 5.2) / 2 + 0.1, 0);
+    proj.add(cable);
+    scene.add(proj);
 
-    var cone = new THREE.Mesh(
-      new THREE.ConeGeometry(2.5, 6.2, 40, 1, true),
-      new THREE.MeshBasicMaterial({
-        color: center ? 0x8b5cf6 : 0x60a5fa,
-        transparent: true,
-        opacity: center ? 0.09 : 0.04,
-        side: THREE.DoubleSide,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending
-      })
-    );
-    cone.position.set(sx, 3.3, sz);
+    var cone = new THREE.Mesh(new THREE.ConeGeometry(2.4, 4.7, 40, 1, true), new THREE.MeshBasicMaterial({
+      color: 0xffffff, transparent: true, opacity: 0.03, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending
+    }));
+    cone.position.set(s.x, 2.85, s.z + 0.3);
     scene.add(cone);
 
-    var spot = new THREE.PointLight(0x8b5cf6, center ? 2.4 : 0.9, 10);
-    spot.position.set(sx, 4.6, sz + 0.8);
-    scene.add(spot);
+    var light = new THREE.PointLight(0xffffff, 0.5, 11);
+    light.position.set(s.x, 4.4, s.z + 1.6);
+    scene.add(light);
 
+    // felt stools near each case
+    STOOLS.forEach(function (st, k) {
+      var sign = (idx + k) % 2 === 0 ? 1 : -1;
+      var stool = new THREE.Mesh(new THREE.CylinderGeometry(st[2], st[2] * 1.04, st[3], 28), [feltMat, feltTop, feltMat]);
+      stool.position.set(s.x + st[0] * sign * 0.9, st[3] / 2, s.z + st[1]);
+      scene.add(stool);
+    });
+
+    var view = viewFor(idx, VIEW_DIST);
     var obj = new THREE.CSS3DObject(card);
     obj.scale.setScalar(CARD_SCALE);
-    obj.position.set(sx, 2.55, sz);
-    obj.lookAt(0, 2.55, 0);
+    obj.position.set(s.x, CARD_Y, s.z);
+    obj.lookAt(view.x, CARD_Y, view.z);
     cssScene.add(obj);
 
     var pill = document.createElement('button');
@@ -174,26 +307,66 @@
       if (activeIdx !== idx && cinemaIdx === -1) focusStation(idx, {});
     });
 
-    stations.push({ id: card.getAttribute('data-id'), label: card.getAttribute('data-label'), rad: rad, sx: sx, sz: sz,
-      cone: cone, spot: spot, ring: ring, card: card, obj: obj, pill: pill, video: card.querySelector('video'), center: center });
+    stations.push({ id: card.getAttribute('data-id'), label: card.getAttribute('data-label'), x: s.x, z: s.z,
+      cone: cone, pool: pool, light: light, card: card, obj: obj, pill: pill, video: card.querySelector('video'), center: idx === 0, fade: 1 });
   });
 
   /* ---------- Camera state ---------- */
-  var cam = { x: 0, z: 3.8, yaw: 0, pitch: 0, tx: 0, tz: 3.8, tyaw: 0, tpitch: 0 };
+  var v0 = viewFor(0, VIEW_DIST);
+  var cam = { x: v0.x, z: v0.z, yaw: v0.yaw, pitch: 0, tx: v0.x, tz: v0.z, tyaw: v0.yaw, tpitch: 0 };
   var activeIdx = -1;
   var cinemaIdx = -1;
+  var dirty = true;
+
+  /* ---------- Counter and [ VIEW CASE ] ---------- */
+  var countEl = document.getElementById('vr-count');
+  var viewEl = document.getElementById('vr-view');
+  var viewText = document.getElementById('vr-view-text');
+  var VIEW_LABEL = '[ VIEW CASE ]';
+  var scrambleTimer = 0;
+  function scramble(el, text) {
+    window.clearInterval(scrambleTimer);
+    if (reduced()) { el.textContent = text; return; }
+    var pool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    var frames = 0;
+    scrambleTimer = window.setInterval(function () {
+      frames += 1;
+      var out = '';
+      for (var i = 0; i < text.length; i++) {
+        var ch = text.charAt(i);
+        out += (i < frames / 1.4 || ch === ' ' || ch === '[' || ch === ']') ? ch : pool.charAt(Math.floor(Math.random() * pool.length));
+      }
+      el.textContent = out;
+      if (frames > text.length * 1.4) { window.clearInterval(scrambleTimer); el.textContent = text; }
+    }, 40);
+  }
+  function updateFoot(idx, animate) {
+    var st = stations[idx];
+    if (!st) return;
+    countEl.textContent = (idx + 1) + '/' + stations.length;
+    var open = st.card.querySelector('.vr-open');
+    if (open) viewEl.setAttribute('href', open.getAttribute('href'));
+    viewEl.setAttribute('aria-label', 'Open the case: ' + st.label);
+    if (animate) scramble(viewText, VIEW_LABEL);
+  }
+  viewEl.addEventListener('mouseenter', function () { scramble(viewText, VIEW_LABEL); });
 
   function setActive(idx) {
+    var changed = idx !== activeIdx;
     activeIdx = idx;
     stations.forEach(function (st, i) {
       var on = i === idx;
+      var playing = i === cinemaIdx;
       st.card.classList.toggle('is-focused', on);
       if (on) st.pill.setAttribute('aria-current', 'true'); else st.pill.removeAttribute('aria-current');
-      var playing = i === cinemaIdx;
-      st.cone.material.opacity = playing ? 0.16 : on ? 0.1 : (cinemaIdx >= 0 ? 0.015 : st.center ? 0.06 : 0.035);
-      st.spot.intensity = playing ? 3.2 : on ? 2.8 : (cinemaIdx >= 0 ? 0.25 : st.center ? 1.6 : 0.8);
+      st.cone.material.opacity = playing ? 0.12 : on ? 0.075 : (cinemaIdx >= 0 ? 0.012 : 0.03);
+      st.pool.material.opacity = playing ? 0.55 : on ? 0.45 : (cinemaIdx >= 0 ? 0.08 : 0.2);
+      st.light.intensity = playing ? 1.5 : on ? 1.2 : (cinemaIdx >= 0 ? 0.15 : 0.5);
     });
-    ambient.intensity = cinemaIdx >= 0 ? 0.18 : 0.45;
+    ambient.intensity = cinemaIdx >= 0 ? 0.2 : 0.5;
+    var shade = cinemaIdx >= 0 ? 0.32 : 1;
+    hallMats.forEach(function (m) { m.color.setScalar(shade); });
+    updateFoot(idx, changed);
     dirty = true;
   }
 
@@ -208,9 +381,10 @@
     var st = stations[idx];
     if (!st) return;
     if (cinemaIdx >= 0 && cinemaIdx !== idx) stopCinema(true);
-    cam.tx = Math.sin(st.rad) * 2.2;
-    cam.tz = 3.2 - Math.cos(st.rad) * 1.2;
-    cam.tyaw = shortestYaw(cam.yaw, -st.rad);
+    var v = viewFor(idx, VIEW_DIST);
+    cam.tx = v.x;
+    cam.tz = v.z;
+    cam.tyaw = shortestYaw(cam.yaw, v.yaw);
     cam.tpitch = 0;
     setActive(idx);
     if (opts && opts.announce) live.textContent = st.label;
@@ -220,10 +394,10 @@
     var st = stations[idx];
     if (cinemaIdx >= 0) stopCinema(true);
     cinemaIdx = idx;
-    var dist = 5.6;
-    cam.tx = st.sx - Math.sin(st.rad) * dist;
-    cam.tz = st.sz + Math.cos(st.rad) * dist;
-    cam.tyaw = shortestYaw(cam.yaw, -st.rad);
+    var v = viewFor(idx, CINEMA_DIST);
+    cam.tx = st.x * 0.2;
+    cam.tz = v.z;
+    cam.tyaw = shortestYaw(cam.yaw, Math.atan2(-(st.x - cam.tx), -(st.z - v.z)));
     cam.tpitch = 0;
     section.classList.add('is-cinema');
     st.card.classList.add('is-playing');
@@ -241,6 +415,7 @@
   function stopCinema(keepPosition) {
     if (cinemaIdx < 0) return;
     var st = stations[cinemaIdx];
+    var idx = cinemaIdx;
     cinemaIdx = -1;
     section.classList.remove('is-cinema');
     st.card.classList.remove('is-playing');
@@ -248,11 +423,11 @@
     if (btn) { btn.setAttribute('aria-pressed', 'false'); btn.textContent = 'Play'; }
     if (st.video) st.video.pause();
     if (!keepPosition) {
-      var dist = 7.6;
-      cam.tx = st.sx - Math.sin(st.rad) * dist;
-      cam.tz = st.sz + Math.cos(st.rad) * dist;
+      var v = viewFor(idx, VIEW_DIST + 1.2);
+      cam.tx = v.x;
+      cam.tz = v.z;
     }
-    setActive(stations.indexOf(st));
+    setActive(idx);
   }
 
   /* ---------- Look: drag, trackpad, wheel ---------- */
@@ -279,7 +454,7 @@
     }
     if (!drag.moved) return;
     cam.tyaw += dx * 0.004;
-    if (drag.type === 'mouse') cam.tpitch = THREE.MathUtils.clamp(cam.tpitch + dy * 0.0025, -0.3, 0.3);
+    if (drag.type === 'mouse') cam.tpitch = clamp(cam.tpitch + dy * 0.0025, -0.3, 0.3);
     dirty = true;
   });
   function endDrag(e) {
@@ -288,7 +463,7 @@
     suppressClick = drag.moved;
     stage.classList.remove('is-dragging');
     drag = null;
-    if (wasClick && e && e.type === 'pointerup' && !e.target.closest('.vr-card, .vr-hud-top, .vr-dock')) clickPick(e);
+    if (wasClick && e && e.type === 'pointerup' && !e.target.closest('.vr-card, .vr-hud-top, .vr-dock, .vr-foot')) clickPick(e);
     window.setTimeout(function () { suppressClick = false; }, 0);
   }
   stage.addEventListener('pointerup', endDrag);
@@ -348,7 +523,7 @@
   stage.addEventListener('keyup', function (e) { delete keys[e.code]; });
   stage.addEventListener('focusout', function (e) { if (!stage.contains(e.relatedTarget)) keys = {}; });
 
-  /* ---------- Pedestal picking ---------- */
+  /* ---------- Picking the pools of light ---------- */
   var raycaster = new THREE.Raycaster();
   var ndc = new THREE.Vector2();
   function pickAt(e) {
@@ -364,7 +539,7 @@
     if (e.pointerType !== 'mouse' || hoverRaf) return;
     hoverRaf = requestAnimationFrame(function () {
       hoverRaf = 0;
-      var over = !e.target.closest('.vr-card, .vr-hud-top, .vr-dock') && pickAt(e) >= 0;
+      var over = !e.target.closest('.vr-card, .vr-hud-top, .vr-dock, .vr-foot') && pickAt(e) >= 0;
       stage.classList.toggle('is-over-pedestal', over);
     });
   }
@@ -373,7 +548,7 @@
     if (idx >= 0) focusStation(idx, { announce: true });
   }
 
-  /* ---------- Radar ---------- */
+  /* ---------- Map: the hall from above ---------- */
   var radar = document.getElementById('vr-radar');
   var rctx = radar.getContext('2d');
   var RW = 120, RH = 92;
@@ -382,23 +557,20 @@
   function drawRadar() {
     rctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     rctx.clearRect(0, 0, RW, RH);
-    var cx = RW / 2, cy = 58, s = 3.4;
-    rctx.strokeStyle = 'rgba(148,163,184,0.3)';
-    rctx.lineWidth = 1.5;
-    rctx.beginPath();
-    rctx.arc(cx, cy, ROOM_R * s, Math.PI * 1.08, Math.PI * 1.92);
-    rctx.stroke();
-    rctx.strokeStyle = 'rgba(148,163,184,0.12)';
-    rctx.beginPath();
-    rctx.arc(cx, cy, WALK_R * s, 0, Math.PI * 2);
-    rctx.stroke();
+    var k = (RW - 14) / LEN;
+    var cy = RH / 2;
+    function mx(z) { return 7 + (HALL.near - z) * k; }
+    function my(x) { return cy + x * 3; }
+    rctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    rctx.lineWidth = 1;
+    rctx.strokeRect(mx(HALL.near) + 0.5, my(-HALL.w / 2) + 0.5, LEN * k, HALL.w * 3);
 
-    var px = cx + cam.x * s, py = cy + cam.z * s;
+    var px = mx(cam.z), py = my(cam.x);
     var hfov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * camera.aspect);
-    var look = -Math.PI / 2 - cam.yaw;
+    var look = -cam.yaw;
     var grad = rctx.createRadialGradient(px, py, 0, px, py, 30);
-    grad.addColorStop(0, 'rgba(139,92,246,0.4)');
-    grad.addColorStop(1, 'rgba(139,92,246,0)');
+    grad.addColorStop(0, 'rgba(255,255,255,0.4)');
+    grad.addColorStop(1, 'rgba(255,255,255,0)');
     rctx.fillStyle = grad;
     rctx.beginPath();
     rctx.moveTo(px, py);
@@ -407,19 +579,18 @@
     rctx.fill();
 
     stations.forEach(function (st, i) {
-      rctx.fillStyle = i === cinemaIdx ? '#fcd34d' : i === activeIdx ? '#a78bfa' : '#60a5fa';
+      rctx.fillStyle = i === activeIdx || i === cinemaIdx ? '#ffffff' : '#7a7a7a';
       rctx.beginPath();
-      rctx.arc(cx + st.sx * s, cy + st.sz * s, i === activeIdx ? 3.6 : 2.8, 0, Math.PI * 2);
+      rctx.arc(mx(st.z), my(st.x), i === activeIdx ? 3 : 2.2, 0, Math.PI * 2);
       rctx.fill();
     });
-    rctx.fillStyle = '#34d399';
+    rctx.fillStyle = '#ffffff';
     rctx.beginPath();
-    rctx.arc(px, py, 3.4, 0, Math.PI * 2);
+    rctx.arc(px, py, 2.6, 0, Math.PI * 2);
     rctx.fill();
   }
 
   /* ---------- Loop (runs only while the room is on screen) ---------- */
-  var dirty = true;
   var visible = false;
   var running = false;
   var fwd = new THREE.Vector3();
@@ -441,8 +612,8 @@
     if (keys.KeyA || keys.ArrowLeft) { cam.tx -= rx * speed; cam.tz -= rz * speed; moving = true; }
     if (keys.KeyD || keys.ArrowRight) { cam.tx += rx * speed; cam.tz += rz * speed; moving = true; }
 
-    var r = Math.hypot(cam.tx, cam.tz);
-    if (r > WALK_R) { cam.tx = cam.tx / r * WALK_R; cam.tz = cam.tz / r * WALK_R; }
+    cam.tx = clamp(cam.tx, -BOUND_X, BOUND_X);
+    cam.tz = clamp(cam.tz, HALL.far + 4, HALL.near - 1.5);
 
     var k = reduced() ? 1 : 1 - Math.pow(1 - 0.08, dt);
     var ex = cam.tx - cam.x, ez = cam.tz - cam.z, ey = cam.tyaw - cam.yaw, ep = cam.tpitch - cam.pitch;
@@ -455,11 +626,18 @@
     camera.rotation.x = cam.pitch;
     camera.updateMatrixWorld();
 
-    // hide cards that are behind or far to the side of the camera (CSS3D has no clipping)
+    // cases behind you or far down the hall are hidden or faded (DOM cards ignore fog)
     camera.getWorldDirection(fwd);
     stations.forEach(function (st) {
-      toCard.set(st.sx - cam.x, 0, st.sz - cam.z).normalize();
-      st.obj.visible = fwd.x * toCard.x + fwd.z * toCard.z > 0.05;
+      var dx = st.x - cam.x, dz = st.z - cam.z;
+      var dist = Math.sqrt(dx * dx + dz * dz);
+      toCard.set(dx, 0, dz).normalize();
+      st.obj.visible = fwd.x * toCard.x + fwd.z * toCard.z > 0.05 && dist < 30;
+      var fade = dist < 16 ? 1 : Math.max(0, 1 - (dist - 16) / 12);
+      if (Math.abs(fade - st.fade) > 0.02) {
+        st.fade = fade;
+        st.card.style.setProperty('--fade', fade.toFixed(2));
+      }
     });
 
     renderer.render(scene, camera);
@@ -525,7 +703,7 @@
     (function poll() {
       if (token !== tourToken) return;
       var d = Math.abs(cam.tx - cam.x) + Math.abs(cam.tz - cam.z) + Math.abs(cam.tyaw - cam.yaw);
-      if (d < 0.03 || Date.now() - t0 > 3500) fn(); else window.setTimeout(poll, 100);
+      if (d < 0.03 || Date.now() - t0 > 4500) fn(); else window.setTimeout(poll, 100);
     })();
   }
   function ghostTo(el) {
@@ -544,7 +722,7 @@
     ghost.classList.add('is-click');
   }
 
-  // One station: glide there, point at Play, press it (cases with a video), point at the media
+  // One station: walk there, point at Play, press it (cases with a video), point at the media
   function tourStation(idx, token, done) {
     var st = stations[idx];
     focusStation(idx, {});
@@ -613,9 +791,7 @@
     (function next() {
       if (token !== tourToken) return;
       if (n >= order.length) {
-        var c = 0;
-        stations.forEach(function (st, k) { if (st.center) c = k; });
-        focusStation(c, {});
+        focusStation(0, {});
         endTour();
         tourAuto = false;         // played through once; Replay is manual
         return;
@@ -676,9 +852,7 @@
     else if (walkMode) setWalk(false);
   });
 
-  // start framed on the centre spotlight
-  var centre = 0;
-  stations.forEach(function (st, i) { if (st.center) centre = i; });
-  setActive(centre);
+  // start in front of the first case
+  setActive(0);
   live.textContent = '';
 })();

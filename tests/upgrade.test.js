@@ -212,6 +212,11 @@ async function open(browser, opts) {
       const vr = await page.evaluate(() => ({ canvas: !!document.querySelector('#vr-webgl canvas'), pills: document.querySelectorAll('.vr-pill').length,
         cards3d: document.querySelectorAll('#vr-css .vr-card').length }));
       check('showroom renders WebGL + 5 CSS3D cards', vr.canvas && vr.pills === 5 && vr.cards3d === 5, JSON.stringify(vr));
+      await page.click('.vr-pill >> nth=2');
+      await page.waitForTimeout(400);
+      const foot = await page.evaluate(() => ({ count: document.getElementById('vr-count').textContent, href: document.getElementById('vr-view').getAttribute('href'),
+        want: document.querySelector('#vr-css .vr-card[data-id="growth"] .vr-open').getAttribute('href') }));
+      check('counter and [ VIEW CASE ] follow the focused case', foot.count === '3/5' && foot.href === foot.want, JSON.stringify(foot));
       const wheel = await page.evaluate(() => {
         const s = document.getElementById('vr-stage');
         const v = new WheelEvent('wheel', { deltaY: 120, bubbles: true, cancelable: true });
