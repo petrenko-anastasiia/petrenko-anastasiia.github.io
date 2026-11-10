@@ -452,11 +452,11 @@
     if (hintStage === 1) {
       pulse(w, 1);
       hintText.textContent = 'Next up: ' + (/^[AEIOU]/.test(PILLAR[w.pillar]) ? 'an ' : 'a ') + PILLAR[w.pillar] + ' word, ' + w.word.length + ' letters, running ' +
-        (w.dir === 'h' ? 'across' : 'down') + ', starting with ' + w.word.charAt(0) + '. Its first letter is pulsing.';
+        (w.dir === 'h' ? 'across' : 'down') + ', starting with ' + w.word.charAt(0) + '. Its first letter is blinking.';
       hintBtn.textContent = 'More';
     } else if (hintStage === 2) {
       pulse(w, w.word.length);
-      hintText.textContent = 'All of its letters are pulsing now. Select them from one end to the other.';
+      hintText.textContent = 'All of its letters are blinking now. Select them from one end to the other.';
       hintBtn.textContent = 'Reveal';
     } else {
       var target = w;
@@ -491,6 +491,7 @@
   /* ---------- Cursor demo: selects a word, then points at the next one ---------- */
   var ghost = document.getElementById('sm-ghost');
   var demoOn = false;
+  var demoOwnsHint = false;          // the demo started the hint that is blinking
   var demoDone = reduceMQ.matches;   // reduced motion: no automatic demo
   var demoToken = 0;
   var startTimer = 0;
@@ -516,10 +517,11 @@
   function ghostHide() { window.clearTimeout(ghostFade); ghost.classList.remove('is-on', 'is-down'); }
 
   // Press on the first letter, drag across the word, release: the word is found
-  function demoSelect(w, token, done) {
+  function demoSelect(w, token, done, startDelay) {
     var list = wordCells(w);
     ghostAt(list[0]);
-    dWait(token, 1100, function () {
+    dWait(token, startDelay === undefined ? 1100 : startDelay, function () {
+      if (hintWord === w) pulse(w, 0);   // the blinking stops as the cursor presses down
       ghost.classList.add('is-down');
       setSelection(list[0], list[0]);
       var i = 1;
@@ -542,13 +544,20 @@
     });
   }
 
-  // Point at the first letter of the next word and show its clue
+  // The next word: its first letter blinks orange with the clue, then the whole word blinks,
+  // then the cursor drags across it and the word is found
   function demoHint(token, done) {
     var w = nextWord();
     if (!w) { done(); return; }
-    hintBtn.click();
+    demoOwnsHint = true;
+    hintBtn.click();                       // step 1: clue, first letter blinks orange
     ghostAt(wordCells(w)[0]);
-    dWait(token, 4200, done);
+    dWait(token, 1900, function () {
+      hintBtn.click();                     // step 2: every letter of the word blinks orange
+      dWait(token, 2400, function () {
+        demoSelect(w, token, function () { demoOwnsHint = false; done(); }, 250);
+      });
+    });
   }
 
   function endDemo() {
@@ -568,7 +577,7 @@
     WORDS.forEach(function (x) { if (x.word === 'PRODUCTION' && !found[x.word]) w = x; });
     if (!w) w = nextWord();
     if (!w) { endDemo(); return; }
-    live.textContent = 'Demo: a cursor selects ' + w.word + ', then points at the next word. Touch anything to take over.';
+    live.textContent = 'Demo: a cursor selects ' + w.word + ', then the next word blinks orange and gets selected too. Touch anything to take over.';
     demoSelect(w, token, function () {
       demoHint(token, function () { if (token === demoToken) endDemo(); });
     });
@@ -578,6 +587,7 @@
     demoToken += 1;
     demoOn = false;
     setSelection(null);
+    if (demoOwnsHint) { demoOwnsHint = false; clearHint(); }
     ghostHide();
   }
 
