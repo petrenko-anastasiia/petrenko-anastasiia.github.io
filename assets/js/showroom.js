@@ -95,9 +95,9 @@
     g.fillRect(0, 0, TW, TH);
     // a long soft wash, strongest near the entrance
     var along = g.createLinearGradient(isLeft ? 0 : TW, 0, isLeft ? TW : 0, 0);
-    along.addColorStop(0, 'rgba(255,255,255,0.42)');
-    along.addColorStop(0.5, 'rgba(255,255,255,0.2)');
-    along.addColorStop(1, 'rgba(255,255,255,0.05)');
+    along.addColorStop(0, 'rgba(214,236,255,0.42)');
+    along.addColorStop(0.5, 'rgba(214,236,255,0.2)');
+    along.addColorStop(1, 'rgba(214,236,255,0.05)');
     g.fillStyle = along;
     g.fillRect(0, 0, TW, TH);
     // a pool of light on the wall beside each case
@@ -107,9 +107,9 @@
       g.translate(px, TH * 0.56);
       g.scale(3.2, 1);
       var rg = g.createRadialGradient(0, 0, 0, 0, 0, 150);
-      rg.addColorStop(0, 'rgba(255,255,255,0.8)');
-      rg.addColorStop(0.45, 'rgba(255,255,255,0.38)');
-      rg.addColorStop(1, 'rgba(255,255,255,0)');
+      rg.addColorStop(0, 'rgba(214,236,255,0.8)');
+      rg.addColorStop(0.45, 'rgba(214,236,255,0.38)');
+      rg.addColorStop(1, 'rgba(214,236,255,0)');
       g.fillStyle = rg;
       g.beginPath();
       g.arc(0, 0, 150, 0, Math.PI * 2);
@@ -133,7 +133,7 @@
     g.fillStyle = '#0e0e0e';
     g.fillRect(0, 0, 512, 2048);
     for (var i = 0; i < 3200; i++) {
-      g.fillStyle = 'rgba(255,255,255,' + (Math.random() * 0.05).toFixed(3) + ')';
+      g.fillStyle = 'rgba(214,236,255,' + (Math.random() * 0.05).toFixed(3) + ')';
       g.fillRect(Math.random() * 512, Math.random() * 2048, 1.4, 1.4);
     }
     return makeTexture(c);
@@ -143,9 +143,9 @@
     var c = makeCanvas(256, 256);
     var g = c.getContext('2d');
     var rg = g.createRadialGradient(128, 128, 0, 128, 128, 128);
-    rg.addColorStop(0, 'rgba(255,255,255,' + alpha + ')');
-    rg.addColorStop(0.5, 'rgba(255,255,255,' + (alpha * 0.35).toFixed(3) + ')');
-    rg.addColorStop(1, 'rgba(255,255,255,0)');
+    rg.addColorStop(0, 'rgba(214,236,255,' + alpha + ')');
+    rg.addColorStop(0.5, 'rgba(214,236,255,' + (alpha * 0.35).toFixed(3) + ')');
+    rg.addColorStop(1, 'rgba(214,236,255,0)');
     g.fillStyle = rg;
     g.fillRect(0, 0, 256, 256);
     return makeTexture(c);
@@ -155,8 +155,8 @@
     var c = makeCanvas(64, 4);
     var g = c.getContext('2d');
     var lg = g.createLinearGradient(brightAtStart ? 0 : 64, 0, brightAtStart ? 64 : 0, 0);
-    lg.addColorStop(0, 'rgba(255,255,255,0.6)');
-    lg.addColorStop(1, 'rgba(255,255,255,0)');
+    lg.addColorStop(0, 'rgba(125,211,252,0.7)');
+    lg.addColorStop(1, 'rgba(214,236,255,0)');
     g.fillStyle = lg;
     g.fillRect(0, 0, 64, 4);
     return makeTexture(c);
@@ -206,7 +206,7 @@
 
   // glowing white lines where the walls meet the floor
   [-1, 1].forEach(function (side) {
-    var line = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.1, LEN), new THREE.MeshBasicMaterial({ color: 0xffffff }));
+    var line = new THREE.Mesh(new THREE.BoxGeometry(0.07, 0.1, LEN), new THREE.MeshBasicMaterial({ color: 0xcdeaff }));
     line.position.set(side * (HALL.w / 2 - 0.04), 0.05, MID_Z);
     scene.add(line);
     var glow = new THREE.Mesh(new THREE.PlaneGeometry(1.2, LEN), new THREE.MeshBasicMaterial({
@@ -217,7 +217,7 @@
     scene.add(glow);
   });
 
-  var ambient = new THREE.AmbientLight(0xffffff, 0.5);
+  var ambient = new THREE.AmbientLight(0xe8f3ff, 0.5);
   scene.add(ambient);
 
   /* ---------- Cases, projectors, stools ---------- */
@@ -264,12 +264,12 @@
     scene.add(proj);
 
     var cone = new THREE.Mesh(new THREE.ConeGeometry(2.4, 4.7, 40, 1, true), new THREE.MeshBasicMaterial({
-      color: 0xffffff, transparent: true, opacity: 0.03, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending
+      color: 0xbfe3ff, transparent: true, opacity: 0.03, side: THREE.DoubleSide, depthWrite: false, blending: THREE.AdditiveBlending
     }));
     cone.position.set(s.x, 2.85, s.z + 0.3);
     scene.add(cone);
 
-    var light = new THREE.PointLight(0xffffff, 0.5, 11);
+    var light = new THREE.PointLight(0xdff1ff, 0.5, 11);
     light.position.set(s.x, 4.4, s.z + 1.6);
     scene.add(light);
 
@@ -561,7 +561,7 @@
     var cy = RH / 2;
     function mx(z) { return 7 + (HALL.near - z) * k; }
     function my(x) { return cy + x * 3; }
-    rctx.strokeStyle = 'rgba(255,255,255,0.3)';
+    rctx.strokeStyle = 'rgba(214,236,255,0.3)';
     rctx.lineWidth = 1;
     rctx.strokeRect(mx(HALL.near) + 0.5, my(-HALL.w / 2) + 0.5, LEN * k, HALL.w * 3);
 
@@ -569,8 +569,8 @@
     var hfov = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(camera.fov) / 2) * camera.aspect);
     var look = -cam.yaw;
     var grad = rctx.createRadialGradient(px, py, 0, px, py, 30);
-    grad.addColorStop(0, 'rgba(255,255,255,0.4)');
-    grad.addColorStop(1, 'rgba(255,255,255,0)');
+    grad.addColorStop(0, 'rgba(214,236,255,0.4)');
+    grad.addColorStop(1, 'rgba(214,236,255,0)');
     rctx.fillStyle = grad;
     rctx.beginPath();
     rctx.moveTo(px, py);
@@ -579,12 +579,12 @@
     rctx.fill();
 
     stations.forEach(function (st, i) {
-      rctx.fillStyle = i === activeIdx || i === cinemaIdx ? '#ffffff' : '#7a7a7a';
+      rctx.fillStyle = i === activeIdx || i === cinemaIdx ? '#7dd3fc' : '#7a8794';
       rctx.beginPath();
       rctx.arc(mx(st.z), my(st.x), i === activeIdx ? 3 : 2.2, 0, Math.PI * 2);
       rctx.fill();
     });
-    rctx.fillStyle = '#ffffff';
+    rctx.fillStyle = '#bae6fd';
     rctx.beginPath();
     rctx.arc(px, py, 2.6, 0, Math.PI * 2);
     rctx.fill();
@@ -686,6 +686,8 @@
   var tourOn = false;
   var tourAuto = !reduced();      // may start by itself; reduced motion = manual only
   var tourStarted = false;
+  var tourPlayedHere = false;     // finished a run during this visit to the room
+  var inRoom = false;
   var tourToken = 0;
   var tourCinema = false;
   var tourHover = null;
@@ -763,7 +765,7 @@
   function scheduleResume() {
     window.clearTimeout(idleTimer);
     idleTimer = window.setTimeout(function () {
-      if (tourAuto && visible && !tourOn && !document.hidden) startTour();
+      if (tourAuto && !tourPlayedHere && visible && !tourOn && !document.hidden) startTour();
     }, 12000);
   }
   function stopTour(resumeLater) {
@@ -779,6 +781,7 @@
     window.clearTimeout(startTimer);
     tourOn = true;
     tourStarted = true;
+    tourPlayedHere = false;
     setTourLabel();
     var token = (tourToken += 1);
     ghost.style.transform = 'translate(' + Math.round(stage.clientWidth * 0.5) + 'px,' + Math.round(stage.clientHeight * 0.6) + 'px)';
@@ -793,7 +796,7 @@
       if (n >= order.length) {
         focusStation(0, {});
         endTour();
-        tourAuto = false;         // played through once; Replay is manual
+        tourPlayedHere = true;    // played through; it plays again on the next arrival
         return;
       }
       tourStation(order[n], token, next);
@@ -820,26 +823,36 @@
     else { tourAuto = true; startTour(); }
   });
 
-  // Starts by itself the first time the room is mostly in view
+  // Starts by itself each time you arrive at the room (unless you paused it, or reduced motion is on)
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
       var en = entries[0];
-      if (en.isIntersecting && en.intersectionRatio >= 0.55) {
-        if (!tourStarted && tourAuto && !tourOn) {
-          window.clearTimeout(startTimer);
-          startTimer = window.setTimeout(function () { if (visible && !tourStarted && tourAuto) startTour(); }, 1200);
+      if (en.intersectionRatio >= 0.4) {
+        if (!inRoom) {
+          inRoom = true;
+          if (tourAuto && !tourOn && !tourPlayedHere) {
+            window.clearTimeout(startTimer);
+            startTimer = window.setTimeout(function () {
+              if (visible && inRoom && tourAuto && !tourOn && !tourPlayedHere) startTour();
+            }, 800);
+          }
         }
-      } else if (!en.isIntersecting) {
+      } else if (en.intersectionRatio < 0.15) {
+        inRoom = false;
+        tourPlayedHere = false;
         window.clearTimeout(idleTimer);
+        window.clearTimeout(startTimer);
         stopTour(false);
       }
-    }, { threshold: [0, 0.55] }).observe(stage);
+    }, { threshold: [0, 0.15, 0.4] }).observe(stage);
   }
   setTourLabel();
 
   /* ---------- Requests from elsewhere on the page (hero drawer links) ---------- */
   window.addEventListener('showroom:focus', function (e) {
     stopTour(false);
+    window.clearTimeout(startTimer);
+    tourPlayedHere = true;    // you asked for a specific case: don't start the tour over it
     var id = e.detail && e.detail.id;
     for (var i = 0; i < stations.length; i++) {
       if (stations[i].id === id) { focusStation(i, { announce: true }); return; }
