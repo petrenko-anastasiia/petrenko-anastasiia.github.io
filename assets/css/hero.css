@@ -477,3 +477,25 @@ body.is-sheet .vr-section { display: none; }
   .ph-curve-line.is-drawing { animation: none; }
   .ph-node.is-running .ph-node-bar { transform: scaleX(1); }
 }
+
+/* Phones: one column, photo directly under the title */
+@media (max-width: 680px) {
+  .ph-stage {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: none;
+    row-gap: 0;
+    justify-items: center;
+    text-align: center;
+  }
+  .ph-top, .ph-bottom { display: contents; }
+  .ph-title { order: 1; }
+  .ph-scan { order: 2; margin: 6px 0 20px; }
+  .ph-eyebrow { order: 3; }
+  .ph-hook { order: 4; }
+  .ph-kpis { order: 5; }
+  .ph-drawer { order: 6; }
+  .ph-monitor--hook { order: 7; grid-area: auto; width: 100%; margin-top: 14px; }
+  .ph-monitor--pipe { order: 8; grid-area: auto; width: 100%; margin-top: 16px; }
+  .ph-bio { order: 9; margin-top: 22px; }
+  .ph-ctas { order: 10; }
+}
