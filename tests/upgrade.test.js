@@ -310,6 +310,23 @@ async function open(browser, opts) {
     await second.ctx.close();
   }
 
+  /* ---------- Tour: starts by itself on every arrival ---------- */
+  {
+    const waitOk = (page, fn, ms) => page.waitForFunction(fn, null, { timeout: ms }).then(() => true, () => false);
+    const { ctx, page, errors } = await open(browser);
+    const hasRoom = await page.evaluate(() => !!window.THREE && !!document.querySelector('#vr-webgl canvas'));
+    if (hasRoom) {
+      await page.evaluate(() => document.getElementById('work').scrollIntoView({ behavior: 'instant' }));
+      check('tour: starts by itself when the room comes into view', await waitOk(page, () => document.getElementById('vr-ghost').classList.contains('is-on'), 6000));
+      await page.evaluate(() => window.scrollTo(0, 0));
+      check('tour: stops when you leave the room', await waitOk(page, () => !document.getElementById('vr-ghost').classList.contains('is-on'), 3000));
+      await page.evaluate(() => document.getElementById('work').scrollIntoView({ behavior: 'instant' }));
+      check('tour: starts again on the next arrival', await waitOk(page, () => document.getElementById('vr-ghost').classList.contains('is-on'), 6000));
+    }
+    check('no console errors (tour autostart)', errors.length === 0, errors.join(' | '));
+    await ctx.close();
+  }
+
   /* ---------- Reduced motion ---------- */
   {
     const { ctx, page, errors } = await open(browser, { reducedMotion: 'reduce' });
