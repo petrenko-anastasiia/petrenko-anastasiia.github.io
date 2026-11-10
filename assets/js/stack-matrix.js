@@ -243,7 +243,6 @@
   var live = document.getElementById('sm-live');
   var revealBtn = document.getElementById('sm-reveal');
   var eggStatus = document.getElementById('sm-egg-status');
-  var hintBtn = document.getElementById('sm-hint');
 
   function updateProgress() {
     var n = WORDS.filter(function (w) { return found[w.word]; }).length;
@@ -257,7 +256,6 @@
     wordCells(w).forEach(function (rc) {
       var tile = tiles[rc[0]][rc[1]];
       tile.classList.add('is-word');
-      tile.classList.remove('is-hinted');
     });
     var cap = makeCapsule(w);
     if (w.pillar === 'egg') {
@@ -266,8 +264,6 @@
     } else {
       updateProgress();
     }
-    if (hintWord === w) clearHint();
-    if (!nextWord()) hintBtn.hidden = true;
     if (opts && opts.announce && !demoOn) scheduleNudge();
     if (opts && opts.announce) {
       live.textContent = 'Found ' + w.word + '.';
@@ -413,58 +409,15 @@
     }
   });
 
-  /* ---------- Show all, and the bonus hint ---------- */
+  /* ---------- Show all ---------- */
   revealBtn.addEventListener('click', function () {
     WORDS.forEach(function (w) { markFound(w, {}); });
     live.textContent = 'All words shown.';
   });
-  /* ---------- Hint: points at the next unfound word, in three steps ---------- */
-  var hintText = document.getElementById('sm-hint-text');
-  var hintWord = null;
-  var hintStage = 0;
-
   function nextWord() {
     for (var i = 0; i < WORDS.length; i++) if (!found[WORDS[i].word]) return WORDS[i];
     return found[EGG.word] ? null : EGG;
   }
-  function pulse(w, count) {
-    wordCells(w).forEach(function (rc, i) {
-      var tile = tiles[rc[0]][rc[1]];
-      tile.classList.remove('is-hinted');
-      if (i < count) {
-        void tile.offsetWidth;
-        tile.classList.add('is-hinted');
-      }
-    });
-  }
-  function clearHint() {
-    if (hintWord) pulse(hintWord, 0);
-    hintWord = null;
-    hintStage = 0;
-    hintText.textContent = '';
-    hintBtn.textContent = 'Hint';
-  }
-  hintBtn.addEventListener('click', function () {
-    var w = hintWord && !found[hintWord.word] ? hintWord : nextWord();
-    if (!w) return;
-    if (hintWord !== w) { if (hintWord) pulse(hintWord, 0); hintWord = w; hintStage = 0; }
-    hintStage += 1;
-    if (hintStage === 1) {
-      pulse(w, 1);
-      hintText.textContent = 'Next up: ' + (/^[AEIOU]/.test(PILLAR[w.pillar]) ? 'an ' : 'a ') + PILLAR[w.pillar] + ' word, ' + w.word.length + ' letters, running ' +
-        (w.dir === 'h' ? 'across' : 'down') + ', starting with ' + w.word.charAt(0) + '. Its first letter is blinking.';
-      hintBtn.textContent = 'More';
-    } else if (hintStage === 2) {
-      pulse(w, w.word.length);
-      hintText.textContent = 'All of its letters are blinking now. Select them from one end to the other.';
-      hintBtn.textContent = 'Reveal';
-    } else {
-      var target = w;
-      clearHint();
-      markFound(target, { announce: true, open: true });
-    }
-    live.textContent = hintText.textContent || live.textContent;
-  });
 
   /* ---------- Cursor glow across the dark tiles ---------- */
   var frame = document.getElementById('sm-frame');
@@ -491,7 +444,6 @@
   /* ---------- Cursor demo: selects a word, then points at the next one ---------- */
   var ghost = document.getElementById('sm-ghost');
   var demoOn = false;
-  var demoOwnsHint = false;          // the demo started the hint that is blinking
   var demoDone = reduceMQ.matches;   // reduced motion: no automatic demo
   var demoToken = 0;
   var startTimer = 0;
@@ -521,7 +473,6 @@
     var list = wordCells(w);
     ghostAt(list[0]);
     dWait(token, startDelay === undefined ? 560 : startDelay, function () {
-      if (hintWord === w) pulse(w, 0);   // the blinking stops as the cursor presses down
       ghost.classList.add('is-down');
       setSelection(list[0], list[0]);
       var i = 1;
@@ -544,20 +495,12 @@
     });
   }
 
-  // The next word: its first letter blinks orange with the clue, then the whole word blinks,
-  // then the cursor drags across it and the word is found
-  function demoHint(token, done) {
+  // The next word: the cursor points at its first letter, then drags across it
+  function demoNext(token, done) {
     var w = nextWord();
     if (!w) { done(); return; }
-    demoOwnsHint = true;
-    hintBtn.click();                       // step 1: clue, first letter blinks orange
     ghostAt(wordCells(w)[0]);
-    dWait(token, 800, function () {
-      hintBtn.click();                     // step 2: every letter of the word blinks orange
-      dWait(token, 1300, function () {
-        demoSelect(w, token, function () { demoOwnsHint = false; done(); }, 120);
-      });
-    });
+    dWait(token, 900, function () { demoSelect(w, token, done, 300); });
   }
 
   function endDemo() {
@@ -577,9 +520,9 @@
     WORDS.forEach(function (x) { if (x.word === 'PRODUCTION' && !found[x.word]) w = x; });
     if (!w) w = nextWord();
     if (!w) { endDemo(); return; }
-    live.textContent = 'Demo: a cursor selects ' + w.word + ', then the next word blinks orange and gets selected too. Touch anything to take over.';
+    live.textContent = 'Demo: a cursor selects ' + w.word + ', then points at the next word and selects it too. Touch anything to take over.';
     demoSelect(w, token, function () {
-      demoHint(token, function () { if (token === demoToken) endDemo(); });
+      demoNext(token, function () { if (token === demoToken) endDemo(); });
     });
   }
   function stopDemo() {
@@ -587,7 +530,6 @@
     demoToken += 1;
     demoOn = false;
     setSelection(null);
-    if (demoOwnsHint) { demoOwnsHint = false; clearHint(); }
     ghostHide();
   }
 
@@ -596,10 +538,9 @@
     window.clearTimeout(nudgeTimer);
     if (reduceMQ.matches) return;
     nudgeTimer = window.setTimeout(function () {
-      if (demoOn || pinned || hintWord || document.hidden || !stackVisible) return;
+      if (demoOn || pinned || document.hidden || !stackVisible) return;
       var w = nextWord();
       if (!w) return;
-      hintBtn.click();
       ghostJump(wordCells(w)[0]);
       ghostShow();
       ghostFade = window.setTimeout(ghostHide, 4000);

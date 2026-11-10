@@ -20,6 +20,7 @@ async function open(browser, opts) {
   page.on('console', (m) => { if (m.type() === 'error' && !/Failed to load resource/.test(m.text())) errors.push(m.text()); });
   page.on('response', (r) => { if (r.status() >= 400 && !process.env.ALLOW_404) errors.push(r.status() + ' ' + r.url()); });
   await page.goto(URL, { waitUntil: 'load' });
+  await page.waitForFunction(() => !document.getElementById('pl'), null, { timeout: 5000 }).catch(() => {});
   await page.waitForTimeout(400);
   return { ctx, page, errors };
 }
@@ -183,18 +184,7 @@ async function open(browser, opts) {
     check('keyboard (arrows + Enter) finds STRATEGY', (await capNames()).includes('STRATEGY'));
     await page.keyboard.press('Escape');
 
-    // Hint walks through the next unfound word (PRODUCTION) in three steps
-    const hintTiles = (n) => page.evaluate((n) => [...document.querySelectorAll('.sm-tile')].slice(15, 15 + n).filter((t) => t.classList.contains('is-hinted')).length, n);
-    await page.click('#sm-hint');
-    const h1 = { first: await hintTiles(1), rest: await hintTiles(10), text: await page.textContent('#sm-hint-text'), label: await page.textContent('#sm-hint') };
-    check('Hint 1: pulses the first letter and gives a clue', h1.first === 1 && h1.rest === 1 && /10 letters/.test(h1.text) && /across/.test(h1.text) && /starting with P/.test(h1.text) && h1.label === 'More', JSON.stringify(h1));
-    await page.click('#sm-hint');
-    check('Hint 2: pulses every letter of the word', (await hintTiles(10)) === 10 && (await page.textContent('#sm-hint')) === 'Reveal');
-    await page.click('#sm-hint');
-    await page.waitForTimeout(150);
-    const h3 = { found: (await capNames()).includes('PRODUCTION'), text: await page.textContent('#sm-hint-text'), pulsing: await hintTiles(10), label: await page.textContent('#sm-hint') };
-    check('Hint 3: reveals the word and resets the hint', h3.found && h3.text === '' && h3.pulsing === 0 && h3.label === 'Hint', JSON.stringify(h3));
-    await page.keyboard.press('Escape');
+    check('no Hint button and no lit-up hint letters', await page.evaluate(() => !document.getElementById('sm-hint') && !document.getElementById('sm-hint-text') && !document.querySelector('.sm-tile.is-hinted')));
 
     await dragCells([3, 8], [6, 8]);
     check('dragging R-O-A-S unlocks the gold capsule', await page.evaluate(() => !!document.querySelector('.sm-cap[data-pillar="egg"]')));
@@ -210,7 +200,7 @@ async function open(browser, opts) {
     const hasThree = await page.evaluate(() => !!window.THREE);
     if (hasThree) {
       const vr = await page.evaluate(() => ({ canvas: !!document.querySelector('#vr-webgl canvas'), pills: document.querySelectorAll('.vr-pill').length,
-        cards3d: document.querySelectorAll('#vr-css .vr-card').length }));
+        cards3d: document.querySelectorAll('.vr-card').length }));
       check('showroom renders WebGL + 5 CSS3D cards', vr.canvas && vr.pills === 5 && vr.cards3d === 5, JSON.stringify(vr));
       const firstId = await page.evaluate(() => document.querySelector('#vr-css .vr-card').getAttribute('data-id'));
       check('the $471K Growth case comes first', firstId === 'growth', firstId);
@@ -244,8 +234,7 @@ async function open(browser, opts) {
       await page.click('#vr-walk');
       await page.click('.vr-pill >> nth=1');
       await page.waitForTimeout(1600);
-      const play = await page.$('#vr-css .vr-card[data-id="paid"] .vr-play');
-      await play.click();
+      await page.$eval('.vr-card[data-id="paid"] .vr-play', (b) => b.click());
       await page.waitForTimeout(400);
       check('Play enters cinema mode', await page.evaluate(() => document.getElementById('work').classList.contains('is-cinema')));
       await page.keyboard.press('Escape');
@@ -289,8 +278,10 @@ async function open(browser, opts) {
     } else {
       check(vp.width + 'px: monitors sit below the KPIs, above the portrait', m.mon > m.kpis && m.portrait > m.monEnd, JSON.stringify(m));
     }
-    if (await page.evaluate(() => !!document.querySelector('#vr-webgl canvas'))) {
-      await page.evaluate(() => document.getElementById('work').scrollIntoView({ behavior: 'instant' }));
+    await page.evaluate(() => document.getElementById('work').scrollIntoView({ behavior: 'instant' }));
+    const roomUp = await page.waitForFunction(() => !!document.querySelector('#vr-webgl canvas'), null, { timeout: 8000 }).then(() => true, () => false);
+    check(vp.width + 'px: the 3D room loads once you scroll to it', roomUp);
+    if (roomUp) {
       await page.waitForTimeout(500);
       const nav = await page.evaluate(() => {
         const r = (s) => document.querySelector(s).getBoundingClientRect();
@@ -302,6 +293,7 @@ async function open(browser, opts) {
       await page.waitForTimeout(200);
       check(vp.width + 'px: next arrow moves to case 2', (await page.textContent('#vr-count')) === '2/5');
     }
+    check(vp.width + 'px: loading screen is gone after load', await page.evaluate(() => !document.getElementById('pl') && !document.documentElement.classList.contains('pl-on')));
     check(vp.width + 'px: no console errors', errors.length === 0, errors.join(' | '));
     await ctx.close();
   }
@@ -313,12 +305,8 @@ async function open(browser, opts) {
     await page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
     check('demo: a ghost cursor appears when the word search is in view', await waitOk(page, () => document.getElementById('sm-ghost').classList.contains('is-on'), 5000));
     check('demo: the cursor selects PRODUCTION', await waitOk(page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'PRODUCTION'), 10000));
-    check('demo: then the next word is hinted', await waitOk(page, () => /starting with M/.test(document.getElementById('sm-hint-text').textContent), 5000));
-    const pulsing = await page.evaluate(() => document.querySelectorAll('.sm-tile.is-hinted').length);
-    check('demo: only its first letter blinks at first', pulsing === 1, String(pulsing));
-    check('demo: then the whole word blinks orange', await waitOk(page, () => document.querySelectorAll('.sm-tile.is-hinted').length === 4, 4000));
-    check('demo: then the cursor selects it', await waitOk(page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'META'), 6000));
-    check('demo: the blinking stops once it is found', await page.evaluate(() => document.querySelectorAll('.sm-tile.is-hinted').length === 0 && document.getElementById('sm-hint-text').textContent === ''));
+    check('demo: then the cursor selects the next word (META)', await waitOk(page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'META'), 8000));
+    check('demo: no letters are lit up or blink orange on their own', await page.evaluate(() => document.querySelectorAll('.sm-tile.is-hinted').length === 0));
     check('demo: the cursor leaves afterwards', await waitOk(page, () => !document.getElementById('sm-ghost').classList.contains('is-on'), 12000));
     check('no console errors (demo)', errors.length === 0, errors.join(' | '));
     await ctx.close();
@@ -326,7 +314,7 @@ async function open(browser, opts) {
     const second = await open(browser);
     await second.page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
     await waitOk(second.page, () => document.getElementById('sm-ghost').classList.contains('is-on'), 5000);
-    await second.page.waitForTimeout(1700);
+    await second.page.waitForTimeout(900);   // mid-drag across PRODUCTION
     await second.page.evaluate(() => document.getElementById('stack').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })));
     await second.page.waitForTimeout(300);
     const cut = await second.page.evaluate(() => ({ ghost: document.getElementById('sm-ghost').classList.contains('is-on'), selecting: document.querySelectorAll('.sm-tile.is-selecting').length,

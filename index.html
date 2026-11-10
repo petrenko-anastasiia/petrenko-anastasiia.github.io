@@ -23,10 +23,26 @@
 <link rel="icon" href="/favicon-16.png" type="image/png" sizes="16x16">
 <link rel="icon" href="/favicon.ico" sizes="any">
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+<link rel="preload" href="assets/fonts/InstrumentSans-Variable.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="assets/fonts/InstrumentSerif-Regular.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-@font-face{font-family:"Instrument Serif";src:url("assets/fonts/InstrumentSerif-Regular.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
-@font-face{font-family:"Instrument Serif";src:url("assets/fonts/InstrumentSerif-Italic.ttf") format("truetype");font-weight:400;font-style:italic;font-display:swap}
-@font-face{font-family:"Instrument Sans";src:url("assets/fonts/InstrumentSans-Variable.ttf") format("truetype");font-weight:400 700;font-stretch:75% 100%;font-display:swap}
+/* loading screen: only shown when the inline script below turns it on */
+.pl{display:none}
+.pl-on .pl{display:flex;position:fixed;inset:0;z-index:5000;align-items:center;justify-content:center;background:#0b0e14;pointer-events:none;transition:opacity .45s ease,visibility .45s}
+.pl.is-done{opacity:0;visibility:hidden}
+.pl-in{text-align:center;padding:0 24px}
+.pl-name{font-family:"Instrument Sans","Helvetica Neue",Arial,sans-serif;font-weight:700;font-stretch:78%;text-transform:uppercase;font-size:clamp(30px,8vw,60px);line-height:1;letter-spacing:-.01em;color:#f1f5f9}
+.pl-k{margin-top:16px;font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:12px;letter-spacing:.22em;text-transform:uppercase;color:#94a3b8}
+.pl-bar{display:block;width:160px;height:2px;margin:18px auto 0;background:rgba(214,236,255,.14);border-radius:2px;overflow:hidden}
+.pl-bar b{display:block;width:100%;height:100%;background:#7dd3fc;transform-origin:left;transform:scaleX(.06);animation:pl-grow 2.8s cubic-bezier(.2,.7,.2,1) forwards}
+.pl.is-done .pl-bar b{animation:none;transform:scaleX(1);transition:transform .2s}
+@keyframes pl-grow{to{transform:scaleX(.9)}}
+@media (prefers-reduced-motion:reduce){.pl-bar b{animation:none;transform:scaleX(.5)}.pl-on .pl{transition:none}}
+</style>
+<style>
+@font-face{font-family:"Instrument Serif";src:url("assets/fonts/InstrumentSerif-Regular.woff2") format("woff2"),url("assets/fonts/InstrumentSerif-Regular.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:"Instrument Serif";src:url("assets/fonts/InstrumentSerif-Italic.woff2") format("woff2"),url("assets/fonts/InstrumentSerif-Italic.ttf") format("truetype");font-weight:400;font-style:italic;font-display:swap}
+@font-face{font-family:"Instrument Sans";src:url("assets/fonts/InstrumentSans-Variable.woff2") format("woff2"),url("assets/fonts/InstrumentSans-Variable.ttf") format("truetype");font-weight:400 700;font-stretch:75% 100%;font-display:swap}
 
 :root{
   --cream:#0b0e14; --paper:#121721; --sand:#161d2a;
@@ -1208,10 +1224,42 @@ body.is-sheet .back-bar{display:flex}
 
 </style>
 <link rel="stylesheet" href="assets/css/hero.css?v=3c33fc95">
-<link rel="stylesheet" href="assets/css/stack-matrix.css?v=fb6dcbde">
-<link rel="stylesheet" href="assets/css/showroom.css?v=1717439f">
+<link rel="stylesheet" href="assets/css/stack-matrix.css?v=4f196a56">
+<link rel="stylesheet" href="assets/css/showroom.css?v=8e2079e3">
 </head>
 <body class="screen-intro">
+<div class="pl" id="pl" aria-hidden="true"><div class="pl-in"><p class="pl-name">Anastasiia Petrenko</p><p class="pl-k">[ Loading ]</p><i class="pl-bar"><b></b></i></div></div>
+<script>
+/* Loading screen: covers the first paint until the fonts and portrait are in (at most 3s),
+   then fades out. Shown once per visit; skipped when coming back to the page. */
+(function () {
+  var root = document.documentElement, el = document.getElementById('pl');
+  var seen = false;
+  try { seen = sessionStorage.getItem('pl-seen') === '1'; sessionStorage.setItem('pl-seen', '1'); } catch (e) {}
+  if (seen || !el) { if (el) el.parentNode.removeChild(el); return; }
+  root.classList.add('pl-on');
+  var t0 = Date.now(), done = false, left = 2;
+  function hide() {
+    if (done) return;
+    done = true;
+    window.setTimeout(function () {
+      el.classList.add('is-done');
+      window.setTimeout(function () { root.classList.remove('pl-on'); if (el.parentNode) el.parentNode.removeChild(el); }, 480);
+    }, Math.max(0, 450 - (Date.now() - t0)));
+  }
+  function one() { left -= 1; if (left <= 0) hide(); }
+  window.setTimeout(hide, 3000);
+  window.addEventListener('load', hide);
+  document.addEventListener('DOMContentLoaded', function () {
+    if (document.fonts && document.fonts.load) {
+      Promise.all([document.fonts.load('700 1em "Instrument Sans"'), document.fonts.load('1em "Instrument Serif"')]).then(one, one);
+    } else one();
+    var img = document.querySelector('.ph-scan img');
+    if (!img || img.complete) one();
+    else { img.addEventListener('load', one); img.addEventListener('error', one); }
+  });
+})();
+</script>
 <noscript><style>#ap-load{display:none!important}</style></noscript>
 <header class="top">
   <div class="wrap">
@@ -1351,7 +1399,6 @@ body.is-sheet .back-bar{display:flex}
       </div>
       <div class="sm-tally">
         <p class="sm-progress" id="sm-progress" aria-live="polite">1 of 10 found</p>
-        <button type="button" class="sm-hint" id="sm-hint">Hint</button>
         <button type="button" class="sm-pill" id="sm-reveal">Show all</button>
       </div>
     </div>
@@ -1366,7 +1413,6 @@ body.is-sheet .back-bar{display:flex}
       </div>
     </div>
 
-    <p class="sm-hint-text" id="sm-hint-text" aria-live="polite"></p>
 
     <div class="sm-foot">
       <p class="sm-legend"><span><i class="sm-dot sm-dot--ai" aria-hidden="true"></i>AI &amp; Ops</span><span><i class="sm-dot sm-dot--paid" aria-hidden="true"></i>Paid Social &amp; Strategy</span><span><i class="sm-dot sm-dot--data" aria-hidden="true"></i>Data</span></p>
@@ -1517,11 +1563,51 @@ body.is-sheet .back-bar{display:flex}
   </div>
 </section>
 
-<script src="assets/vendor/three.r128.min.js?v=9274bbce" defer></script>
-<script src="assets/vendor/css3d-renderer.r128.js?v=00971138" defer></script>
+<script type="text/x-lazy" data-room-js src="assets/vendor/three.r128.min.js?v=9274bbce"></script>
+<script type="text/x-lazy" data-room-js src="assets/vendor/css3d-renderer.r128.js?v=00971138"></script>
 <script src="assets/js/hero.js?v=39b5d518" defer></script>
-<script src="assets/js/stack-matrix.js?v=44b56ef6" defer></script>
-<script src="assets/js/showroom.js?v=ed0673c3" defer></script>
+<script src="assets/js/stack-matrix.js?v=1aa19418" defer></script>
+<script type="text/x-lazy" data-room-js src="assets/js/showroom.js?v=ed0673c3"></script>
+<script>
+/* The 3D room (three.js, ~600 KB) loads only when the visitor gets near it, when a link asks
+   for it, or quietly a few seconds after the rest of the page has loaded. */
+(function () {
+  var tags = [].slice.call(document.querySelectorAll('script[data-room-js]'));
+  var sec = document.getElementById('work');
+  if (!sec || !tags.length) return;
+  var started = false, pending = null;
+  sec.classList.add('vr-loading');
+  function remember(e) { pending = e.detail; }
+  window.addEventListener('showroom:focus', remember);
+  function load() {
+    if (started) return;
+    started = true;
+    var i = 0;
+    (function next() {
+      if (i >= tags.length) {
+        sec.classList.remove('vr-loading');
+        window.removeEventListener('showroom:focus', remember);
+        if (pending) window.dispatchEvent(new CustomEvent('showroom:focus', { detail: pending }));
+        return;
+      }
+      var s = document.createElement('script');
+      s.src = tags[i].getAttribute('src');
+      i += 1;
+      s.onload = s.onerror = next;
+      document.body.appendChild(s);
+    })();
+  }
+  window.addEventListener('showroom:focus', load);
+  if ('IntersectionObserver' in window) {
+    var io = new IntersectionObserver(function (en) {
+      if (en[0].isIntersecting) { io.disconnect(); load(); }
+    }, { rootMargin: '1200px 0px' });
+    io.observe(sec);
+  } else load();
+  var saveData = navigator.connection && navigator.connection.saveData;
+  if (!saveData) window.addEventListener('load', function () { window.setTimeout(load, 2500); });
+})();
+</script>
 
 <!-- PAID SOCIAL -->
 <section class="block paid sheet" id="paid">
@@ -1621,12 +1707,12 @@ body.is-sheet .back-bar{display:flex}
         <p class="cr-sub">AI-produced, no shoot. Tap <span class="cr-spec-demo">Details</span> on a card for the hook, stack and strategic angle.</p>
       </div>
       <div class="cr-row">
-        <a class="cr" data-view="" data-video="assets/video/outfit.mp4" href="assets/video/outfit.mp4"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="assets/img/outfit-transition.jpg" src="assets/video/outfit-loop.mp4" data-sound="assets/video/outfit-loop-audio.mp4?v=3" aria-label="AI-generated outfit transition clip"></video><span class="tg-k">Hook · Transition</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>Outfit transition</b><small>Trend-format hook</small><div class="cr-tags"><span>Before/After Transition</span><span>ComfyUI</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><div class="cr-bd"><p><i>Hook:</i> Visual: white dress, then a black chained look on the beat at ~3s.</p><p><i>Hook Type:</i> Before/After Transition</p><p><i>AI Stack &amp; Production:</i> ComfyUI</p><p><i>Strategic Angle:</i> A plain look in a crimson set builds a change viewers wait for.</p></div></a>
-        <a class="cr" data-view="" href="work/argo/"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="assets/img/argo-video-poster.jpg?v=5" src="assets/video/argo-loop.mp4?v=5" data-sound="assets/video/argo-loop-audio.mp4?v=5" aria-label="ARGŌ golden body oil spec ad, AI-generated: a drop of gold oil lands in a miniature golden pool"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>ARGŌ golden body oil</b><small>Miniature-world spec ad, 9:16</small><div class="cr-tags"><span>Macro Texture Reveal</span><span>Nano Banana · Veo</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><span class="cr-btn">Read Case Study <span aria-hidden="true">→</span></span><div class="cr-bd"><p><i>Hook:</i> Visual: macro of a gold oil drop swelling, then a hard cut to the splash.</p><p><i>Hook Type:</i> Macro Texture Reveal</p><p><i>AI Stack &amp; Production:</i> Nano Banana · Veo · ffmpeg edit · Claude · no shoot</p><p><i>Strategic Angle:</i> One glittering drop in extreme macro sells texture and builds tension.</p></div></a>
-        <a class="cr" data-view="" href="work/zola/"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="work/zola/poster.jpg" src="assets/video/zola-loop.mp4" data-sound="assets/video/zola-loop-audio.mp4?v=3" aria-label="ZOLA Brow Soap 15-second spec ad"></video><span class="tg-k">Spec ad · 15s</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>ZOLA Brow Soap Mini</b><small>Unofficial spec ad, 9:16</small><div class="cr-tags"><span>Question Hook</span><span>Higgsfield · animated graphics</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><span class="cr-btn">Read Case Study <span aria-hidden="true">→</span></span><div class="cr-bd"><p><i>Hook:</i> “Brows with attitude?” (on-screen)</p><p><i>Hook Type:</i> Question Hook</p><p><i>AI Stack &amp; Production:</i> Higgsfield · animated graphics · synthesized soundtrack · no shoot</p><p><i>Strategic Angle:</i> A bold question in giant type, with the product already in frame.</p></div></a>
-        <a class="cr" data-view="" data-video="assets/video/ltheanine.mp4" href="assets/video/ltheanine.mp4"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="assets/img/ltheanine-poster.jpg" src="assets/video/ltheanine-loop.mp4" data-sound="assets/video/ltheanine-loop-audio.mp4?v=3" aria-label="L-Theanine drink spec ad"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>L-Theanine drink</b><small>Spec ad, 9:16</small><div class="cr-tags"><span>Before/After Scene Switch</span><span>Higgsfield</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><div class="cr-bd"><p><i>Hook:</i> “What 200mg of L-Theanine actually feels like.” (on-screen)</p><p><i>Hook Type:</i> Before/After Scene Switch</p><p><i>AI Stack &amp; Production:</i> Higgsfield · no shoot</p><p><i>Strategic Angle:</i> An office desk flips to a calm garden in about 2s, so the swap is the payoff.</p></div></a>
-        <a class="cr" data-view="" data-video="assets/video/solene.mp4" href="assets/video/solene.mp4"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="assets/img/solene-poster.jpg" src="assets/video/solene-loop.mp4" data-sound="assets/video/solene-loop-audio.mp4?v=3" aria-label="SOLÈNE fig fragrance spec ad, AI-generated"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>SOLÈNE fragrance</b><small>Luxury spec ad, 16:9</small><div class="cr-tags"><span>Sensory Reveal</span><span>Higgsfield</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><div class="cr-bd"><p><i>Hook:</i> Visual: mist sprays from an amber bottle, then a cut to dewy figs.</p><p><i>Hook Type:</i> Sensory Reveal</p><p><i>AI Stack &amp; Production:</i> Higgsfield · no shoot</p><p><i>Strategic Angle:</i> Visible mist in warm light lets a silent scroller imagine the scent.</p></div></a>
-        <a class="cr" data-view="" href="work/postroom/"><div class="cf"><video autoplay="" loop="" muted="" playsinline="" preload="metadata" poster="assets/img/postroom-poster.jpg" src="assets/video/postroom-loop.mp4" data-sound="assets/video/postroom-loop-audio.mp4?v=3" aria-label="AI promo for Postroom, the publishing tool she built"></video><span class="tg-k">Promo · My tool</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>Postroom promo</b><small>Ad for my own tool</small><div class="cr-tags"><span>Outcome Claim</span><span>Higgsfield (AI-generated promo) · tool built in Cursor</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><span class="cr-btn">Read Case Study <span aria-hidden="true">→</span></span><div class="cr-bd"><p><i>Hook:</i> “75% less posting time.” (on-screen)</p><p><i>Hook Type:</i> Outcome Claim</p><p><i>AI Stack &amp; Production:</i> Higgsfield (AI-generated promo) · tool built in Cursor</p><p><i>Strategic Angle:</i> Leads with the outcome in big type over a dashboard.</p></div></a>
+        <a class="cr" data-view="" data-video="assets/video/outfit.mp4" href="assets/video/outfit.mp4"><div class="cf"><video loop="" muted="" playsinline="" preload="none" poster="assets/img/outfit-transition.jpg" data-lazy-src="assets/video/outfit-loop.mp4" data-sound="assets/video/outfit-loop-audio.mp4?v=3" aria-label="AI-generated outfit transition clip"></video><span class="tg-k">Hook · Transition</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>Outfit transition</b><small>Trend-format hook</small><div class="cr-tags"><span>Before/After Transition</span><span>ComfyUI</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><div class="cr-bd"><p><i>Hook:</i> Visual: white dress, then a black chained look on the beat at ~3s.</p><p><i>Hook Type:</i> Before/After Transition</p><p><i>AI Stack &amp; Production:</i> ComfyUI</p><p><i>Strategic Angle:</i> A plain look in a crimson set builds a change viewers wait for.</p></div></a>
+        <a class="cr" data-view="" href="work/argo/"><div class="cf"><video loop="" muted="" playsinline="" preload="none" poster="assets/img/argo-video-poster.jpg?v=5" data-lazy-src="assets/video/argo-loop.mp4?v=5" data-sound="assets/video/argo-loop-audio.mp4?v=5" aria-label="ARGŌ golden body oil spec ad, AI-generated: a drop of gold oil lands in a miniature golden pool"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>ARGŌ golden body oil</b><small>Miniature-world spec ad, 9:16</small><div class="cr-tags"><span>Macro Texture Reveal</span><span>Nano Banana · Veo</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><span class="cr-btn">Read Case Study <span aria-hidden="true">→</span></span><div class="cr-bd"><p><i>Hook:</i> Visual: macro of a gold oil drop swelling, then a hard cut to the splash.</p><p><i>Hook Type:</i> Macro Texture Reveal</p><p><i>AI Stack &amp; Production:</i> Nano Banana · Veo · ffmpeg edit · Claude · no shoot</p><p><i>Strategic Angle:</i> One glittering drop in extreme macro sells texture and builds tension.</p></div></a>
+        <a class="cr" data-view="" href="work/zola/"><div class="cf"><video loop="" muted="" playsinline="" preload="none" poster="work/zola/poster.jpg" data-lazy-src="assets/video/zola-loop.mp4" data-sound="assets/video/zola-loop-audio.mp4?v=3" aria-label="ZOLA Brow Soap 15-second spec ad"></video><span class="tg-k">Spec ad · 15s</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>ZOLA Brow Soap Mini</b><small>Unofficial spec ad, 9:16</small><div class="cr-tags"><span>Question Hook</span><span>Higgsfield · animated graphics</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><span class="cr-btn">Read Case Study <span aria-hidden="true">→</span></span><div class="cr-bd"><p><i>Hook:</i> “Brows with attitude?” (on-screen)</p><p><i>Hook Type:</i> Question Hook</p><p><i>AI Stack &amp; Production:</i> Higgsfield · animated graphics · synthesized soundtrack · no shoot</p><p><i>Strategic Angle:</i> A bold question in giant type, with the product already in frame.</p></div></a>
+        <a class="cr" data-view="" data-video="assets/video/ltheanine.mp4" href="assets/video/ltheanine.mp4"><div class="cf"><video loop="" muted="" playsinline="" preload="none" poster="assets/img/ltheanine-poster.jpg" data-lazy-src="assets/video/ltheanine-loop.mp4" data-sound="assets/video/ltheanine-loop-audio.mp4?v=3" aria-label="L-Theanine drink spec ad"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>L-Theanine drink</b><small>Spec ad, 9:16</small><div class="cr-tags"><span>Before/After Scene Switch</span><span>Higgsfield</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><div class="cr-bd"><p><i>Hook:</i> “What 200mg of L-Theanine actually feels like.” (on-screen)</p><p><i>Hook Type:</i> Before/After Scene Switch</p><p><i>AI Stack &amp; Production:</i> Higgsfield · no shoot</p><p><i>Strategic Angle:</i> An office desk flips to a calm garden in about 2s, so the swap is the payoff.</p></div></a>
+        <a class="cr" data-view="" data-video="assets/video/solene.mp4" href="assets/video/solene.mp4"><div class="cf"><video loop="" muted="" playsinline="" preload="none" poster="assets/img/solene-poster.jpg" data-lazy-src="assets/video/solene-loop.mp4" data-sound="assets/video/solene-loop-audio.mp4?v=3" aria-label="SOLÈNE fig fragrance spec ad, AI-generated"></video><span class="tg-k">Spec ad · AI</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>SOLÈNE fragrance</b><small>Luxury spec ad, 16:9</small><div class="cr-tags"><span>Sensory Reveal</span><span>Higgsfield</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><div class="cr-bd"><p><i>Hook:</i> Visual: mist sprays from an amber bottle, then a cut to dewy figs.</p><p><i>Hook Type:</i> Sensory Reveal</p><p><i>AI Stack &amp; Production:</i> Higgsfield · no shoot</p><p><i>Strategic Angle:</i> Visible mist in warm light lets a silent scroller imagine the scent.</p></div></a>
+        <a class="cr" data-view="" href="work/postroom/"><div class="cf"><video loop="" muted="" playsinline="" preload="none" poster="assets/img/postroom-poster.jpg" data-lazy-src="assets/video/postroom-loop.mp4" data-sound="assets/video/postroom-loop-audio.mp4?v=3" aria-label="AI promo for Postroom, the publishing tool she built"></video><span class="tg-k">Promo · My tool</span><span class="cr-mute" role="button" tabindex="0" aria-label="Tap for sound" title="Tap for sound" aria-pressed="false"><svg class="i-off" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M17 9l5 6M22 9l-5 6"></path></svg><svg class="i-on" viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"></path><path d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"></path></svg></span></div><b>Postroom promo</b><small>Ad for my own tool</small><div class="cr-tags"><span>Outcome Claim</span><span>Higgsfield (AI-generated promo) · tool built in Cursor</span><button class="cr-spec" type="button" aria-expanded="false">Details</button></div><span class="cr-btn">Read Case Study <span aria-hidden="true">→</span></span><div class="cr-bd"><p><i>Hook:</i> “75% less posting time.” (on-screen)</p><p><i>Hook Type:</i> Outcome Claim</p><p><i>AI Stack &amp; Production:</i> Higgsfield (AI-generated promo) · tool built in Cursor</p><p><i>Strategic Angle:</i> Leads with the outcome in big type over a dashboard.</p></div></a>
       </div>
       <div class="cr-nav"><button type="button" data-cr="-1" aria-label="Previous">←</button><button type="button" data-cr="1" aria-label="Next">→</button></div>
     </div>
@@ -1972,6 +2058,25 @@ document.querySelectorAll('.frame[data-drive]').forEach(function(f){
     b.addEventListener('mouseleave',function(){var c=document.querySelector('.view-cur');if(c&&b.closest('.cr').matches(':hover'))c.classList.add('on')});
   });
   document.querySelectorAll('[data-video]').forEach(function(a){a.addEventListener('click',function(){muteAll(null)})});
+})();
+</script>
+<script>
+/* Hook Lab videos: fetched only when they come near the screen, paused when they leave it */
+(function () {
+  var vids = [].slice.call(document.querySelectorAll('video[data-lazy-src]'));
+  function start(v) {
+    if (!v.getAttribute('src')) v.setAttribute('src', v.getAttribute('data-lazy-src'));
+    if (v.paused) { var p = v.play(); if (p && p.catch) p.catch(function () {}); }
+  }
+  if (!('IntersectionObserver' in window)) { vids.forEach(start); return; }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      var v = e.target;
+      if (e.isIntersecting) start(v);
+      else if (v.getAttribute('src') && v.muted && !v.paused) v.pause();
+    });
+  }, { rootMargin: '300px 0px' });
+  vids.forEach(function (v) { io.observe(v); });
 })();
 </script>
 <div class="vbox" id="vbox" aria-hidden="true"><button type="button" aria-label="Close">×</button><video controls="" playsinline=""></video></div>
