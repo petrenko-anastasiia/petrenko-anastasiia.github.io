@@ -222,6 +222,18 @@ async function open(browser, opts) {
       check('Play enters cinema mode', await page.evaluate(() => document.getElementById('work').classList.contains('is-cinema')));
       await page.keyboard.press('Escape');
       check('Escape leaves cinema mode', await page.evaluate(() => !document.getElementById('work').classList.contains('is-cinema')));
+
+      // guided tour: a ghost cursor runs on its own, and any key hands control back
+      if ((await page.textContent('#vr-tour')) === 'Pause tour') await page.click('#vr-tour');
+      await page.click('#vr-tour');
+      await page.waitForTimeout(800);
+      const tour = await page.evaluate(() => ({ on: document.getElementById('vr-ghost').classList.contains('is-on'), label: document.getElementById('vr-tour').textContent }));
+      check('guided tour shows a ghost cursor', tour.on && tour.label === 'Pause tour', JSON.stringify(tour));
+      await page.focus('#vr-stage');
+      await page.keyboard.press('KeyD');
+      await page.waitForTimeout(300);
+      const taken = await page.evaluate(() => ({ on: document.getElementById('vr-ghost').classList.contains('is-on'), label: document.getElementById('vr-tour').textContent }));
+      check('any key takes over from the tour', !taken.on && taken.label !== 'Pause tour', JSON.stringify(taken));
     } else {
       check('showroom falls back to a flat card row without three.js', await page.evaluate(() => document.getElementById('work').classList.contains('is-flat')));
     }
