@@ -502,8 +502,168 @@
   else window.addEventListener('resize', resize);
   resize();
 
+  /* ---------- Guided tour: a ghost cursor shows the cases until the visitor takes over ---------- */
+  var tourBtn = document.getElementById('vr-tour');
+  var ghost = document.getElementById('vr-ghost');
+  var tourOn = false;
+  var tourAuto = !reduced();      // may start by itself; reduced motion = manual only
+  var tourStarted = false;
+  var tourToken = 0;
+  var tourCinema = false;
+  var tourHover = null;
+  var idleTimer = 0;
+  var startTimer = 0;
+
+  function setTourLabel() {
+    tourBtn.textContent = tourOn ? 'Pause tour' : (tourStarted ? 'Replay tour' : 'Play tour');
+  }
+  function tourWait(token, ms, fn) {
+    window.setTimeout(function () { if (token === tourToken) fn(); }, ms);
+  }
+  function tourSettled(token, fn) {
+    var t0 = Date.now();
+    (function poll() {
+      if (token !== tourToken) return;
+      var d = Math.abs(cam.tx - cam.x) + Math.abs(cam.tz - cam.z) + Math.abs(cam.tyaw - cam.yaw);
+      if (d < 0.03 || Date.now() - t0 > 3500) fn(); else window.setTimeout(poll, 100);
+    })();
+  }
+  function ghostTo(el) {
+    if (!el) return;
+    var r = el.getBoundingClientRect();
+    var s = stage.getBoundingClientRect();
+    if (!r.width) return;
+    ghost.style.transform = 'translate(' + Math.round(r.left + r.width * 0.5 - s.left) + 'px,' + Math.round(r.top + r.height * 0.5 - s.top) + 'px)';
+    if (tourHover) tourHover.classList.remove('is-ghost-hover');
+    tourHover = el;
+    el.classList.add('is-ghost-hover');
+  }
+  function ghostClick() {
+    ghost.classList.remove('is-click');
+    void ghost.offsetWidth;
+    ghost.classList.add('is-click');
+  }
+
+  // One station: glide there, point at Play, press it (cases with a video), point at the media
+  function tourStation(idx, token, done) {
+    var st = stations[idx];
+    focusStation(idx, {});
+    tourSettled(token, function () {
+      tourWait(token, 350, function () {
+        ghostTo(st.card.querySelector('.vr-play'));
+        tourWait(token, 1100, function () {
+          var media = st.card.querySelector('.vr-card-media');
+          if (st.video) {
+            ghostClick();
+            startCinema(idx);
+            tourCinema = true;
+            tourSettled(token, function () {
+              ghostTo(st.card.querySelector('.vr-card-media'));
+              tourWait(token, 3600, function () {
+                stopCinema(true);
+                tourCinema = false;
+                tourWait(token, 500, done);
+              });
+            });
+          } else {
+            ghostTo(media);
+            tourWait(token, 2200, done);
+          }
+        });
+      });
+    });
+  }
+
+  function endTour() {
+    tourToken += 1;
+    tourOn = false;
+    if (tourCinema) { stopCinema(true); tourCinema = false; }
+    if (tourHover) { tourHover.classList.remove('is-ghost-hover'); tourHover = null; }
+    ghost.classList.remove('is-on');
+    setTourLabel();
+  }
+  function scheduleResume() {
+    window.clearTimeout(idleTimer);
+    idleTimer = window.setTimeout(function () {
+      if (tourAuto && visible && !tourOn && !document.hidden) startTour();
+    }, 12000);
+  }
+  function stopTour(resumeLater) {
+    window.clearTimeout(startTimer);
+    if (!tourOn) return;
+    endTour();
+    live.textContent = 'Tour stopped. You are in control.';
+    if (resumeLater && tourAuto) scheduleResume();
+  }
+  function startTour() {
+    if (tourOn) return;
+    window.clearTimeout(idleTimer);
+    window.clearTimeout(startTimer);
+    tourOn = true;
+    tourStarted = true;
+    setTourLabel();
+    var token = (tourToken += 1);
+    ghost.style.transform = 'translate(' + Math.round(stage.clientWidth * 0.5) + 'px,' + Math.round(stage.clientHeight * 0.6) + 'px)';
+    ghost.classList.add('is-on');
+    live.textContent = 'Guided tour started. Press a key, drag, or swipe sideways to take over.';
+    var order = [];
+    var i;
+    for (i = 0; i < stations.length; i++) order.push(i);
+    var n = 0;
+    (function next() {
+      if (token !== tourToken) return;
+      if (n >= order.length) {
+        var c = 0;
+        stations.forEach(function (st, k) { if (st.center) c = k; });
+        focusStation(c, {});
+        endTour();
+        tourAuto = false;         // played through once; Replay is manual
+        return;
+      }
+      tourStation(order[n], token, next);
+      n += 1;
+    })();
+  }
+
+  // Any real input from the visitor hands control back (and resumes after 12s idle)
+  function onUserInput(e) {
+    if (e && e.target && tourBtn.contains(e.target)) return;
+    window.clearTimeout(startTimer);
+    if (tourOn) stopTour(true);
+    else if (tourAuto) scheduleResume();
+  }
+  ['pointerdown', 'touchstart', 'keydown'].forEach(function (type) {
+    stage.addEventListener(type, onUserInput, { passive: true, capture: true });
+  });
+  stage.addEventListener('wheel', function (e) {
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY) || walkMode) onUserInput(e);
+  }, { passive: true, capture: true });
+
+  tourBtn.addEventListener('click', function () {
+    if (tourOn) { tourAuto = false; stopTour(false); }
+    else { tourAuto = true; startTour(); }
+  });
+
+  // Starts by itself the first time the room is mostly in view
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (entries) {
+      var en = entries[0];
+      if (en.isIntersecting && en.intersectionRatio >= 0.55) {
+        if (!tourStarted && tourAuto && !tourOn) {
+          window.clearTimeout(startTimer);
+          startTimer = window.setTimeout(function () { if (visible && !tourStarted && tourAuto) startTour(); }, 1200);
+        }
+      } else if (!en.isIntersecting) {
+        window.clearTimeout(idleTimer);
+        stopTour(false);
+      }
+    }, { threshold: [0, 0.55] }).observe(stage);
+  }
+  setTourLabel();
+
   /* ---------- Requests from elsewhere on the page (hero drawer links) ---------- */
   window.addEventListener('showroom:focus', function (e) {
+    stopTour(false);
     var id = e.detail && e.detail.id;
     for (var i = 0; i < stations.length; i++) {
       if (stations[i].id === id) { focusStation(i, { announce: true }); return; }
