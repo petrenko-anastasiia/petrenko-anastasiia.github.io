@@ -293,8 +293,11 @@ async function open(browser, opts) {
     check('demo: the cursor selects PRODUCTION', await waitOk(page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'PRODUCTION'), 10000));
     check('demo: then the next word is hinted', await waitOk(page, () => /starting with M/.test(document.getElementById('sm-hint-text').textContent), 5000));
     const pulsing = await page.evaluate(() => document.querySelectorAll('.sm-tile.is-hinted').length);
-    check('demo: only its first letter pulses', pulsing === 1, String(pulsing));
-    check('demo: the cursor leaves afterwards', await waitOk(page, () => !document.getElementById('sm-ghost').classList.contains('is-on'), 8000));
+    check('demo: only its first letter blinks at first', pulsing === 1, String(pulsing));
+    check('demo: then the whole word blinks orange', await waitOk(page, () => document.querySelectorAll('.sm-tile.is-hinted').length === 4, 4000));
+    check('demo: then the cursor selects it', await waitOk(page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'META'), 6000));
+    check('demo: the blinking stops once it is found', await page.evaluate(() => document.querySelectorAll('.sm-tile.is-hinted').length === 0 && document.getElementById('sm-hint-text').textContent === ''));
+    check('demo: the cursor leaves afterwards', await waitOk(page, () => !document.getElementById('sm-ghost').classList.contains('is-on'), 12000));
     check('no console errors (demo)', errors.length === 0, errors.join(' | '));
     await ctx.close();
 
