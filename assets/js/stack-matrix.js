@@ -504,7 +504,7 @@
   }
   function ghostAt(rc, fast) {
     var t = tiles[rc[0]][rc[1]];
-    ghost.style.transitionDuration = fast ? '0.16s' : '';
+    ghost.style.transitionDuration = fast ? '0.07s' : '0.5s';
     ghost.style.transform = 'translate(' + Math.round(t.offsetLeft + t.offsetWidth * 0.5) + 'px,' + Math.round(t.offsetTop + t.offsetHeight * 0.5) + 'px)';
   }
   function ghostJump(rc) {
@@ -520,7 +520,7 @@
   function demoSelect(w, token, done, startDelay) {
     var list = wordCells(w);
     ghostAt(list[0]);
-    dWait(token, startDelay === undefined ? 1100 : startDelay, function () {
+    dWait(token, startDelay === undefined ? 560 : startDelay, function () {
       if (hintWord === w) pulse(w, 0);   // the blinking stops as the cursor presses down
       ghost.classList.add('is-down');
       setSelection(list[0], list[0]);
@@ -528,18 +528,18 @@
       (function step() {
         if (token !== demoToken) return;
         if (i >= list.length) {
-          dWait(token, 350, function () {
+          dWait(token, 150, function () {
             ghost.classList.remove('is-down');
             setSelection(null);
             markFound(w, { announce: true });
-            dWait(token, 700, done);
+            dWait(token, 300, done);
           });
           return;
         }
         ghostAt(list[i], true);
         setSelection(list[0], list[i]);
         i += 1;
-        dWait(token, 170, step);
+        dWait(token, 70, step);
       })();
     });
   }
@@ -552,10 +552,10 @@
     demoOwnsHint = true;
     hintBtn.click();                       // step 1: clue, first letter blinks orange
     ghostAt(wordCells(w)[0]);
-    dWait(token, 1900, function () {
+    dWait(token, 800, function () {
       hintBtn.click();                     // step 2: every letter of the word blinks orange
-      dWait(token, 2400, function () {
-        demoSelect(w, token, function () { demoOwnsHint = false; done(); }, 250);
+      dWait(token, 1300, function () {
+        demoSelect(w, token, function () { demoOwnsHint = false; done(); }, 120);
       });
     });
   }
@@ -623,7 +623,7 @@
       stackVisible = en.isIntersecting;
       if (en.isIntersecting && en.intersectionRatio >= 0.6 && !demoDone && !demoOn) {
         window.clearTimeout(startTimer);
-        startTimer = window.setTimeout(startDemo, 1200);
+        startTimer = window.setTimeout(startDemo, 600);
       } else if (!en.isIntersecting) {
         window.clearTimeout(startTimer);
         stopDemo();
