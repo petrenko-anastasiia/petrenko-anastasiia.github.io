@@ -414,10 +414,6 @@
     WORDS.forEach(function (w) { markFound(w, {}); });
     live.textContent = 'All words shown.';
   });
-  function nextWord() {
-    for (var i = 0; i < WORDS.length; i++) if (!found[WORDS[i].word]) return WORDS[i];
-    return found[EGG.word] ? null : EGG;
-  }
 
   /* ---------- Cursor glow across the dark tiles ---------- */
   var frame = document.getElementById('sm-frame');
@@ -441,10 +437,10 @@
     board.style.removeProperty('--by');
   });
 
-  /* ---------- Cursor demo: selects a word, then points at the next one ---------- */
+  /* ---------- Cursor demo: finds every tool, one after another ---------- */
   var ghost = document.getElementById('sm-ghost');
   var demoOn = false;
-  var demoDone = reduceMQ.matches;   // reduced motion: no automatic demo
+  var tookOver = reduceMQ.matches;   // the visitor took over (or reduced motion): no automatic demo
   var demoToken = 0;
   var startTimer = 0;
   var nudgeTimer = 0;
@@ -495,12 +491,20 @@
     });
   }
 
-  // The next word: the cursor points at its first letter, then drags across it
-  function demoNext(token, done) {
-    var w = nextWord();
-    if (!w) { done(); return; }
+  // The next tool still hidden (the bonus word is left for the visitor)
+  function nextTool() {
+    for (var i = 0; i < WORDS.length; i++) if (!found[WORDS[i].word]) return WORDS[i];
+    return null;
+  }
+  // Point at the next tool's first letter, drag across it, then move on to the one after
+  function demoRun(token) {
+    if (token !== demoToken) return;
+    var w = nextTool();
+    if (!w) { endDemo(); return; }
     ghostAt(wordCells(w)[0]);
-    dWait(token, 900, function () { demoSelect(w, token, done, 300); });
+    dWait(token, 650, function () {
+      demoSelect(w, token, function () { demoRun(token); }, 250);
+    });
   }
 
   function endDemo() {
@@ -510,20 +514,13 @@
     scheduleNudge();
   }
   function startDemo() {
-    if (demoOn || demoDone) return;
+    if (demoOn || tookOver || !nextTool()) return;
     demoOn = true;
-    demoDone = true;
     var token = (demoToken += 1);
     ghostJump([0, 14]);
     ghostShow();
-    var w = null;
-    WORDS.forEach(function (x) { if (x.word === 'PRODUCTION' && !found[x.word]) w = x; });
-    if (!w) w = nextWord();
-    if (!w) { endDemo(); return; }
-    live.textContent = 'Demo: a cursor selects ' + w.word + ', then points at the next word and selects it too. Touch anything to take over.';
-    demoSelect(w, token, function () {
-      demoNext(token, function () { if (token === demoToken) endDemo(); });
-    });
+    live.textContent = 'Demo: a cursor finds each tool in turn. Touch anything to take over.';
+    demoRun(token);
   }
   function stopDemo() {
     if (!demoOn) return;
@@ -539,7 +536,7 @@
     if (reduceMQ.matches) return;
     nudgeTimer = window.setTimeout(function () {
       if (demoOn || pinned || document.hidden || !stackVisible) return;
-      var w = nextWord();
+      var w = nextTool();
       if (!w) return;
       ghostJump(wordCells(w)[0]);
       ghostShow();
@@ -551,7 +548,7 @@
   function onStackInput() {
     window.clearTimeout(startTimer);
     if (demoOn) stopDemo(); else ghostHide();
-    demoDone = true;
+    tookOver = true;
     scheduleNudge();
   }
   ['pointerdown', 'touchstart', 'keydown'].forEach(function (type) {
@@ -562,7 +559,7 @@
     new IntersectionObserver(function (entries) {
       var en = entries[0];
       stackVisible = en.isIntersecting;
-      if (en.isIntersecting && en.intersectionRatio >= 0.6 && !demoDone && !demoOn) {
+      if (en.isIntersecting && en.intersectionRatio >= 0.6 && !tookOver && !demoOn) {
         window.clearTimeout(startTimer);
         startTimer = window.setTimeout(startDemo, 600);
       } else if (!en.isIntersecting) {

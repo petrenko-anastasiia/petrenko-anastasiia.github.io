@@ -272,3 +272,5 @@
   .sm-ghost.is-down .sm-ghost-ripple { animation: none; }
   .sm-cap:hover, .sm-cap.is-active, .sm-card { transform: none !important; }
 }
+
+.sm-pill[hidden] { display: none; }
