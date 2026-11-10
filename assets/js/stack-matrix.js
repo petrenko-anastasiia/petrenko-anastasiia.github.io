@@ -263,10 +263,11 @@
     if (w.pillar === 'egg') {
       section.querySelector('.sm-egg').classList.add('is-found');
       eggStatus.textContent = 'Bonus found: ROAS. Open the gold capsule.';
-      hintBtn.hidden = true;
     } else {
       updateProgress();
     }
+    if (hintWord === w) clearHint();
+    if (!nextWord()) hintBtn.hidden = true;
     if (opts && opts.announce) {
       live.textContent = 'Found ' + w.word + '.';
       if (!reduceMQ.matches) {
@@ -416,22 +417,52 @@
     WORDS.forEach(function (w) { markFound(w, {}); });
     live.textContent = 'All words shown.';
   });
-  var hinted = false;
-  hintBtn.addEventListener('click', function () {
-    if (found[EGG.word]) return;
-    if (!hinted) {
-      hinted = true;
-      wordCells(EGG).forEach(function (rc) {
-        var tile = tiles[rc[0]][rc[1]];
-        tile.classList.remove('is-hinted');
+  /* ---------- Hint: points at the next unfound word, in three steps ---------- */
+  var hintText = document.getElementById('sm-hint-text');
+  var hintWord = null;
+  var hintStage = 0;
+
+  function nextWord() {
+    for (var i = 0; i < WORDS.length; i++) if (!found[WORDS[i].word]) return WORDS[i];
+    return found[EGG.word] ? null : EGG;
+  }
+  function pulse(w, count) {
+    wordCells(w).forEach(function (rc, i) {
+      var tile = tiles[rc[0]][rc[1]];
+      tile.classList.remove('is-hinted');
+      if (i < count) {
         void tile.offsetWidth;
         tile.classList.add('is-hinted');
-      });
-      hintBtn.textContent = 'Reveal it';
-      live.textContent = 'The bonus word is highlighted in column 9.';
+      }
+    });
+  }
+  function clearHint() {
+    if (hintWord) pulse(hintWord, 0);
+    hintWord = null;
+    hintStage = 0;
+    hintText.textContent = '';
+    hintBtn.textContent = 'Hint';
+  }
+  hintBtn.addEventListener('click', function () {
+    var w = hintWord && !found[hintWord.word] ? hintWord : nextWord();
+    if (!w) return;
+    if (hintWord !== w) { if (hintWord) pulse(hintWord, 0); hintWord = w; hintStage = 0; }
+    hintStage += 1;
+    if (hintStage === 1) {
+      pulse(w, 1);
+      hintText.textContent = 'Next up: ' + (/^[AEIOU]/.test(PILLAR[w.pillar]) ? 'an ' : 'a ') + PILLAR[w.pillar] + ' word, ' + w.word.length + ' letters, running ' +
+        (w.dir === 'h' ? 'across' : 'down') + ', starting with ' + w.word.charAt(0) + '. Its first letter is pulsing.';
+      hintBtn.textContent = 'More';
+    } else if (hintStage === 2) {
+      pulse(w, w.word.length);
+      hintText.textContent = 'All of its letters are pulsing now. Select them from one end to the other.';
+      hintBtn.textContent = 'Reveal';
     } else {
-      markFound(EGG, { announce: true, open: true });
+      var target = w;
+      clearHint();
+      markFound(target, { announce: true, open: true });
     }
+    live.textContent = hintText.textContent || live.textContent;
   });
 
   /* ---------- Cursor glow across the dark tiles ---------- */

@@ -117,7 +117,7 @@
 .sm-tile.is-cursor { box-shadow: 0 0 0 2px #c4b5fd; color: #e2e8f0; }
 .sm-tile.is-miss { animation: sm-miss 0.38s ease; }
 @keyframes sm-miss { 20%, 60% { transform: translateX(-3px); border-color: rgba(248, 113, 113, 0.7); } 40%, 80% { transform: translateX(3px); border-color: rgba(248, 113, 113, 0.7); } }
-.sm-tile.is-hinted { animation: sm-hint 1.6s ease-in-out 2; }
+.sm-tile.is-hinted { animation: sm-hint 1.3s ease-in-out infinite; }
 .sm-tile.is-dimmed { opacity: 0.22; }
 @keyframes sm-hint { 50% { color: #fde68a; border-color: rgba(245, 158, 11, 0.6); } }
 
@@ -144,6 +144,8 @@
 @keyframes sm-pop { 0% { transform: scale(0.94); filter: brightness(1.8); } 100% { transform: none; filter: none; } }
 .sm-section .sm-board:focus-visible { box-shadow: 0 0 0 2px #0a0d16, 0 0 0 4px #c4b5fd; }
 .sm-tally { display: flex; align-items: center; gap: 12px; }
+.sm-hint-text { margin: 12px 0 0; font-size: 13px; line-height: 1.45; color: #fcd34d; }
+.sm-hint-text:empty { display: none; }
 .sm-progress { margin: 0; font-size: 13px; color: #cbd5e1; font-variant-numeric: tabular-nums; }
 
 .sm-foot {
