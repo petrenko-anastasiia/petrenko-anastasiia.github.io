@@ -330,6 +330,20 @@ async function open(browser, opts) {
     await ctx.close();
   }
 
+  /* ---------- Hero on short desktop windows: the photo stays medium ---------- */
+  {
+    for (const [w, h] of [[1204, 600], [1204, 720], [1440, 800]]) {
+      const { ctx, page } = await open(browser, { viewport: { width: w, height: h } });
+      const m = await page.evaluate(() => {
+        const sc = document.querySelector('.ph-scan').getBoundingClientRect();
+        const c = document.querySelector('.ph-ctas').getBoundingClientRect();
+        return { photo: Math.round(sc.width), ctasBottom: Math.round(c.bottom) };
+      });
+      check('short window ' + w + 'x' + h + ': photo is medium (130-200px) and the hero fits', m.photo >= 130 && m.photo <= 200 && m.ctasBottom <= h, JSON.stringify(m));
+      await ctx.close();
+    }
+  }
+
   /* ---------- Reduced motion ---------- */
   {
     const { ctx, page, errors } = await open(browser, { reducedMotion: 'reduce' });
