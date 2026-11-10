@@ -429,7 +429,7 @@ body.is-sheet .vr-section { display: none; }
 @media (min-width: 1180px) and (max-height: 820px) {
   .ph-title { font-size: clamp(46px, 4.8vw, 72px); }
   .ph-hook { margin-bottom: 16px; }
-  .ph-scan { --scan-size: 104px; margin: 10px 0; }
+  .ph-scan { --scan-size: 160px; margin: 8px 0 10px; }
   .ph-bio { margin-bottom: 12px; }
   .ph-monitor { max-height: calc(100svh - var(--ap-header-h) - 40px); }
   .ph-step-detail { min-height: 3em; }
@@ -452,7 +452,7 @@ body.is-sheet .vr-section { display: none; }
   .ph-hook { font-size: clamp(18px, 1.7vw, 22px); margin-bottom: 12px; }
   .ph-kpi { padding: 9px 8px; }
   .ph-kpi-value { font-size: 24px; }
-  .ph-scan { --scan-size: 80px; margin: 8px 0; }
+  .ph-scan { --scan-size: 140px; margin: 6px 0 8px; }
   .ph-bio { font-size: 13px; margin-bottom: 10px; }
   .ph-monitor { padding: 10px; }
   .ph-step-detail { min-height: 0; }
@@ -524,4 +524,15 @@ body.is-sheet .vr-section { display: none; }
   .ph-monitor--pipe { order: 8; grid-area: auto; width: 100%; margin-top: 16px; }
   .ph-bio { order: 9; margin-top: 22px; }
   .ph-ctas { order: 10; }
+}
+
+/* Short desktop windows: the photo stays medium, and the text around it tightens so the hero still fits one screen */
+@media (min-width: 1180px) and (max-height: 820px) {
+  .ph-bio { font-size: 13px; line-height: 1.5; margin-bottom: 10px; max-width: 72ch; }
+  .ph-hook { max-width: 44ch; }
+  .ph-kpi { padding: 10px 8px; }
+}
+@media (min-width: 1180px) and (max-height: 700px) {
+  .ph-hook { font-size: clamp(18px, 1.6vw, 21px); max-width: 54ch; margin-bottom: 10px; }
+  .ph-kpis { margin-bottom: 6px; }
 }
