@@ -293,8 +293,11 @@ async function open(browser, opts) {
     check('demo: the cursor selects PRODUCTION', await waitOk(page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'PRODUCTION'), 10000));
     check('demo: then the next word is hinted', await waitOk(page, () => /starting with M/.test(document.getElementById('sm-hint-text').textContent), 5000));
     const pulsing = await page.evaluate(() => document.querySelectorAll('.sm-tile.is-hinted').length);
-    check('demo: only its first letter pulses', pulsing === 1, String(pulsing));
-    check('demo: the cursor leaves afterwards', await waitOk(page, () => !document.getElementById('sm-ghost').classList.contains('is-on'), 8000));
+    check('demo: only its first letter blinks at first', pulsing === 1, String(pulsing));
+    check('demo: then the whole word blinks orange', await waitOk(page, () => document.querySelectorAll('.sm-tile.is-hinted').length === 4, 4000));
+    check('demo: then the cursor selects it', await waitOk(page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'META'), 6000));
+    check('demo: the blinking stops once it is found', await page.evaluate(() => document.querySelectorAll('.sm-tile.is-hinted').length === 0 && document.getElementById('sm-hint-text').textContent === ''));
+    check('demo: the cursor leaves afterwards', await waitOk(page, () => !document.getElementById('sm-ghost').classList.contains('is-on'), 12000));
     check('no console errors (demo)', errors.length === 0, errors.join(' | '));
     await ctx.close();
 
@@ -308,6 +311,37 @@ async function open(browser, opts) {
       caps: [...document.querySelectorAll('.sm-cap')].map((c) => c.textContent).join() }));
     check('demo: touching anything stops it and clears the selection', !cut.ghost && cut.selecting === 0 && cut.caps === 'HIGGSFIELD', JSON.stringify(cut));
     await second.ctx.close();
+  }
+
+  /* ---------- Tour: starts by itself on every arrival ---------- */
+  {
+    const waitOk = (page, fn, ms) => page.waitForFunction(fn, null, { timeout: ms }).then(() => true, () => false);
+    const { ctx, page, errors } = await open(browser);
+    const hasRoom = await page.evaluate(() => !!window.THREE && !!document.querySelector('#vr-webgl canvas'));
+    if (hasRoom) {
+      await page.evaluate(() => document.getElementById('work').scrollIntoView({ behavior: 'instant' }));
+      check('tour: starts by itself when the room comes into view', await waitOk(page, () => document.getElementById('vr-ghost').classList.contains('is-on'), 6000));
+      await page.evaluate(() => window.scrollTo(0, 0));
+      check('tour: stops when you leave the room', await waitOk(page, () => !document.getElementById('vr-ghost').classList.contains('is-on'), 3000));
+      await page.evaluate(() => document.getElementById('work').scrollIntoView({ behavior: 'instant' }));
+      check('tour: starts again on the next arrival', await waitOk(page, () => document.getElementById('vr-ghost').classList.contains('is-on'), 6000));
+    }
+    check('no console errors (tour autostart)', errors.length === 0, errors.join(' | '));
+    await ctx.close();
+  }
+
+  /* ---------- Hero on short desktop windows: the photo stays medium ---------- */
+  {
+    for (const [w, h] of [[1204, 600], [1204, 720], [1440, 800]]) {
+      const { ctx, page } = await open(browser, { viewport: { width: w, height: h } });
+      const m = await page.evaluate(() => {
+        const sc = document.querySelector('.ph-scan').getBoundingClientRect();
+        const c = document.querySelector('.ph-ctas').getBoundingClientRect();
+        return { photo: Math.round(sc.width), ctasBottom: Math.round(c.bottom) };
+      });
+      check('short window ' + w + 'x' + h + ': photo is medium (130-200px) and the hero fits', m.photo >= 130 && m.photo <= 200 && m.ctasBottom <= h, JSON.stringify(m));
+      await ctx.close();
+    }
   }
 
   /* ---------- Reduced motion ---------- */

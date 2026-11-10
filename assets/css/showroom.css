@@ -11,7 +11,7 @@
   position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
-.vr-section :focus-visible { outline: none; box-shadow: 0 0 0 2px #050505, 0 0 0 4px #fff; }
+.vr-section :focus-visible { outline: none; box-shadow: 0 0 0 2px #050505, 0 0 0 4px var(--ap-accent-soft, #7dd3fc); }
 
 .vr-stage {
   position: relative;
@@ -27,7 +27,7 @@
 }
 .vr-stage.is-dragging { cursor: grabbing; }
 .vr-stage.is-over-pedestal { cursor: pointer; }
-.vr-section .vr-stage:focus-visible { box-shadow: inset 0 0 0 2px #fff; }
+.vr-section .vr-stage:focus-visible { box-shadow: inset 0 0 0 2px var(--ap-accent-soft, #7dd3fc); }
 
 .vr-webgl, .vr-css { position: absolute; inset: 0; }
 .vr-stage::before {
@@ -116,8 +116,8 @@
 .vr-mode-btn::before { content: "[ "; color: #6f6f6f; }
 .vr-mode-btn::after { content: " ]"; color: #6f6f6f; }
 .vr-mode-btn + .vr-mode-btn { margin-left: 18px; }
-.vr-mode-btn:hover { color: #fff; }
-.vr-mode-btn[aria-pressed="true"] { color: #fff; text-decoration: underline; text-underline-offset: 4px; }
+.vr-mode-btn:hover { color: var(--ap-accent-soft, #7dd3fc); }
+.vr-mode-btn[aria-pressed="true"] { color: var(--ap-accent-soft, #7dd3fc); text-decoration: underline; text-underline-offset: 4px; }
 
 .vr-radar {
   pointer-events: auto;
@@ -169,7 +169,7 @@
   text-decoration: none;
   padding: 4px 6px;
 }
-.vr-view:hover { text-decoration: underline; text-underline-offset: 6px; }
+.vr-view:hover { color: var(--ap-accent-soft, #7dd3fc); text-decoration: underline; text-underline-offset: 6px; }
 
 /* Bottom dock: just labels */
 .vr-dock {
@@ -203,7 +203,7 @@
 }
 .vr-pill::before { content: "[ "; }
 .vr-pill::after { content: " ]"; }
-.vr-pill:hover, .vr-pill[aria-current="true"] { color: #fff; }
+.vr-pill:hover, .vr-pill[aria-current="true"] { color: var(--ap-accent-soft, #7dd3fc); }
 
 /* Cases: a white framed piece, like a printed poster standing in the hall */
 .vr-cards { display: none; }
@@ -231,7 +231,7 @@
   pointer-events: none;
 }
 .vr-card.is-focused {
-  box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.9), 0 0 80px rgba(255, 255, 255, 0.2), 0 40px 90px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 0 0 1px rgba(var(--ap-accent-rgb, 56, 189, 248), 0.9), 0 0 80px rgba(var(--ap-accent-rgb, 56, 189, 248), 0.3), 0 40px 90px rgba(0, 0, 0, 0.8);
 }
 .vr-section.is-cinema .vr-card:not(.is-playing) { opacity: calc(var(--fade, 1) * 0.28); }
 
@@ -271,7 +271,7 @@
 }
 .vr-play::before, .vr-open::before { content: "[ "; color: #888; }
 .vr-play::after, .vr-open::after { content: " ]"; color: #888; }
-.vr-play:hover, .vr-open:hover { text-decoration: underline; text-underline-offset: 4px; }
+.vr-play:hover, .vr-open:hover { color: var(--ap-accent-deep, #0284c7); text-decoration: underline; text-underline-offset: 4px; }
 .vr-play[aria-pressed="true"] { text-decoration: underline; text-underline-offset: 4px; }
 
 .vr-card-media {
@@ -316,13 +316,13 @@
   width: 36px;
   height: 36px;
   border-radius: 50%;
-  border: 2px solid rgba(255, 255, 255, 0.9);
+  border: 2px solid rgba(var(--ap-accent-rgb, 56, 189, 248), 0.95);
   opacity: 0;
   transform: scale(0.3);
 }
 .vr-ghost.is-click .vr-ghost-ripple { animation: vr-ripple 0.7s ease-out; }
 @keyframes vr-ripple { 0% { opacity: 0.9; transform: scale(0.3); } 100% { opacity: 0; transform: scale(1.4); } }
-.vr-card .is-ghost-hover { outline: 2px solid #0d0d0d; outline-offset: 4px; }
+.vr-card .is-ghost-hover { outline: 2px solid var(--ap-accent-deep, #0284c7); outline-offset: 4px; }
 
 /* Flat fallback (no WebGL, or three.js missing) */
 .vr-section.is-flat .vr-stage { display: none; }
