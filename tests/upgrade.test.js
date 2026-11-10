@@ -99,6 +99,8 @@ async function open(browser, opts) {
 
     /* Stack matrix */
     await page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
+    // a first touch cancels the automatic cursor demo so the checks below start from a known state
+    await page.evaluate(() => document.getElementById('stack').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })));
     await page.waitForTimeout(300);
     const counts = await page.evaluate(() => ({ tiles: document.querySelectorAll('.sm-tile').length, caps: [...document.querySelectorAll('.sm-cap')].map((c) => c.textContent),
       progress: document.getElementById('sm-progress').textContent }));
@@ -265,6 +267,32 @@ async function open(browser, opts) {
     await ctx.close();
   }
 
+  /* ---------- Stack demo: a cursor selects a word, then points at the next ---------- */
+  {
+    const waitOk = (page, fn, ms) => page.waitForFunction(fn, null, { timeout: ms }).then(() => true, () => false);
+    const { ctx, page, errors } = await open(browser);
+    await page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
+    check('demo: a ghost cursor appears when the word search is in view', await waitOk(page, () => document.getElementById('sm-ghost').classList.contains('is-on'), 5000));
+    check('demo: the cursor selects PRODUCTION', await waitOk(page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'PRODUCTION'), 10000));
+    check('demo: then the next word is hinted', await waitOk(page, () => /starting with M/.test(document.getElementById('sm-hint-text').textContent), 5000));
+    const pulsing = await page.evaluate(() => document.querySelectorAll('.sm-tile.is-hinted').length);
+    check('demo: only its first letter pulses', pulsing === 1, String(pulsing));
+    check('demo: the cursor leaves afterwards', await waitOk(page, () => !document.getElementById('sm-ghost').classList.contains('is-on'), 8000));
+    check('no console errors (demo)', errors.length === 0, errors.join(' | '));
+    await ctx.close();
+
+    const second = await open(browser);
+    await second.page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
+    await waitOk(second.page, () => document.getElementById('sm-ghost').classList.contains('is-on'), 5000);
+    await second.page.waitForTimeout(1700);
+    await second.page.evaluate(() => document.getElementById('stack').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })));
+    await second.page.waitForTimeout(300);
+    const cut = await second.page.evaluate(() => ({ ghost: document.getElementById('sm-ghost').classList.contains('is-on'), selecting: document.querySelectorAll('.sm-tile.is-selecting').length,
+      caps: [...document.querySelectorAll('.sm-cap')].map((c) => c.textContent).join() }));
+    check('demo: touching anything stops it and clears the selection', !cut.ghost && cut.selecting === 0 && cut.caps === 'HIGGSFIELD', JSON.stringify(cut));
+    await second.ctx.close();
+  }
+
   /* ---------- Reduced motion ---------- */
   {
     const { ctx, page, errors } = await open(browser, { reducedMotion: 'reduce' });
@@ -272,6 +300,9 @@ async function open(browser, opts) {
     check('reduced motion: KPIs show final values at once', t === '−54%|$471K|~75%', t);
     const tr = await page.evaluate(() => getComputedStyle(document.querySelector('.ph-monitor')).transitionDuration);
     check('reduced motion: monitor transitions off', /^0s/.test(tr), tr);
+    await page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
+    await page.waitForTimeout(2800);
+    check('reduced motion: no automatic cursor demo', await page.evaluate(() => !document.getElementById('sm-ghost').classList.contains('is-on') && document.querySelectorAll('.sm-cap').length === 1));
     check('no console errors (reduced motion)', errors.length === 0, errors.join(' | '));
     await ctx.close();
   }
