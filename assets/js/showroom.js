@@ -351,6 +351,18 @@
   }
   viewEl.addEventListener('mouseenter', function () { scramble(viewText, VIEW_LABEL); });
 
+  /* ---------- Previous / next arrows beside the counter (wrap around both ways) ---------- */
+  function stepCase(delta) {
+    var n = stations.length;
+    if (!n) return;
+    var from = activeIdx < 0 ? 0 : activeIdx;
+    focusStation(((from + delta) % n + n) % n, { announce: true });
+  }
+  var prevBtn = document.getElementById('vr-prev');
+  var nextBtn = document.getElementById('vr-next');
+  if (prevBtn) prevBtn.addEventListener('click', function () { stepCase(-1); });
+  if (nextBtn) nextBtn.addEventListener('click', function () { stepCase(1); });
+
   function setActive(idx) {
     var changed = idx !== activeIdx;
     activeIdx = idx;

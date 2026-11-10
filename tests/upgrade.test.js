@@ -212,11 +212,20 @@ async function open(browser, opts) {
       const vr = await page.evaluate(() => ({ canvas: !!document.querySelector('#vr-webgl canvas'), pills: document.querySelectorAll('.vr-pill').length,
         cards3d: document.querySelectorAll('#vr-css .vr-card').length }));
       check('showroom renders WebGL + 5 CSS3D cards', vr.canvas && vr.pills === 5 && vr.cards3d === 5, JSON.stringify(vr));
-      await page.click('.vr-pill >> nth=2');
+      const firstId = await page.evaluate(() => document.querySelector('#vr-css .vr-card').getAttribute('data-id'));
+      check('the $471K Growth case comes first', firstId === 'growth', firstId);
+      await page.click('.vr-pill >> nth=0');
       await page.waitForTimeout(400);
       const foot = await page.evaluate(() => ({ count: document.getElementById('vr-count').textContent, href: document.getElementById('vr-view').getAttribute('href'),
         want: document.querySelector('#vr-css .vr-card[data-id="growth"] .vr-open').getAttribute('href') }));
-      check('counter and [ VIEW CASE ] follow the focused case', foot.count === '3/5' && foot.href === foot.want, JSON.stringify(foot));
+      check('counter and [ VIEW CASE ] follow the focused case', foot.count === '1/5' && foot.href === foot.want, JSON.stringify(foot));
+      const arrows = await page.evaluate(() => ['vr-prev', 'vr-next'].map((id) => { const r = document.getElementById(id).getBoundingClientRect(); return { w: r.width, h: r.height }; }));
+      check('prev/next arrows are at least 44px to tap', arrows.every((a) => a.w >= 44 && a.h >= 44), JSON.stringify(arrows));
+      const counts = [];
+      await page.click('#vr-prev'); counts.push(await page.textContent('#vr-count'));
+      await page.click('#vr-next'); counts.push(await page.textContent('#vr-count'));
+      await page.click('#vr-next'); counts.push(await page.textContent('#vr-count'));
+      check('arrows step through cases and wrap both ways', counts.join() === '5/5,1/5,2/5', counts.join());
       const wheel = await page.evaluate(() => {
         const s = document.getElementById('vr-stage');
         const v = new WheelEvent('wheel', { deltaY: 120, bubbles: true, cancelable: true });
@@ -233,7 +242,7 @@ async function open(browser, opts) {
       });
       check('Walk mode takes vertical scroll', walk);
       await page.click('#vr-walk');
-      await page.click('.vr-pill >> nth=0');
+      await page.click('.vr-pill >> nth=1');
       await page.waitForTimeout(1600);
       const play = await page.$('#vr-css .vr-card[data-id="paid"] .vr-play');
       await play.click();
@@ -279,6 +288,19 @@ async function open(browser, opts) {
       check(vp.width + 'px: monitors sit below the KPIs', m.mon > m.kpis, JSON.stringify(m));
     } else {
       check(vp.width + 'px: monitors sit below the KPIs, above the portrait', m.mon > m.kpis && m.portrait > m.monEnd, JSON.stringify(m));
+    }
+    if (await page.evaluate(() => !!document.querySelector('#vr-webgl canvas'))) {
+      await page.evaluate(() => document.getElementById('work').scrollIntoView({ behavior: 'instant' }));
+      await page.waitForTimeout(500);
+      const nav = await page.evaluate(() => {
+        const r = (s) => document.querySelector(s).getBoundingClientRect();
+        const p = r('#vr-prev'), n = r('#vr-next'), c = r('#vr-count'), d = r('#vr-dock'), v = r('#vr-view');
+        return { pw: p.width, ph: p.height, nw: n.width, nh: n.height, sides: p.right <= c.left && n.left >= c.right, inView: p.left >= 0 && n.right <= innerWidth, aboveDock: v.bottom <= d.top + 1 };
+      });
+      check(vp.width + 'px: arrows flank the counter, tappable size, above the dock', nav.pw >= 44 && nav.ph >= 44 && nav.nw >= 44 && nav.nh >= 44 && nav.sides && nav.inView && nav.aboveDock, JSON.stringify(nav));
+      if (vp.width < 500) await page.tap('#vr-next'); else await page.click('#vr-next');
+      await page.waitForTimeout(200);
+      check(vp.width + 'px: next arrow moves to case 2', (await page.textContent('#vr-count')) === '2/5');
     }
     check(vp.width + 'px: no console errors', errors.length === 0, errors.join(' | '));
     await ctx.close();
