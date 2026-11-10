@@ -73,12 +73,33 @@ body.is-sheet .vr-section { display: none; }
 
 /* Editorial stack */
 .ph-title {
-  font-family: var(--serif, "Instrument Serif", Georgia, serif);
-  font-weight: 400;
-  font-size: clamp(52px, 6.2vw, 86px);
-  line-height: 0.96;
-  letter-spacing: -0.02em;
-  margin: 0 0 12px;
+  position: relative;
+  font-family: var(--sans, "Instrument Sans", "Helvetica Neue", Arial, sans-serif);
+  font-weight: 700;
+  font-stretch: 78%;
+  font-size: clamp(40px, 5.6vw, 84px);
+  line-height: 0.86;
+  letter-spacing: -0.045em;
+  text-transform: uppercase;
+  text-wrap: balance;
+  color: #f3f6fc;
+  margin: 0 0 14px;
+}
+.ph-title-text { position: relative; z-index: 1; display: block; }
+/* The same soft light as the "Let's scale" heading: drifts on its own, follows the pointer */
+.ph-title-glow {
+  position: absolute;
+  left: var(--gx, 50%);
+  top: var(--gy, 50%);
+  width: 5.2em;
+  height: 1.9em;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 0;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.7) 0%, rgba(186, 230, 253, 0.5) 30%, rgba(56, 189, 248, 0.18) 55%, rgba(56, 189, 248, 0) 74%);
+  filter: blur(18px);
+  mix-blend-mode: screen;
+  opacity: 0.9;
 }
 .ph-eyebrow {
   font-family: var(--mono, ui-monospace, Menlo, monospace);
@@ -401,7 +422,7 @@ body.is-sheet .vr-section { display: none; }
 
 /* Short laptop screens: tighten so the hero still fits one screen */
 @media (min-width: 1180px) and (max-height: 820px) {
-  .ph-title { font-size: clamp(48px, 5.4vw, 72px); }
+  .ph-title { font-size: clamp(46px, 4.8vw, 72px); }
   .ph-hook { margin-bottom: 16px; }
   .ph-scan { --scan-size: 104px; margin: 10px 0; }
   .ph-bio { margin-bottom: 12px; }
@@ -421,7 +442,7 @@ body.is-sheet .vr-section { display: none; }
 /* Very short desktop windows */
 @media (min-width: 1180px) and (max-height: 700px) {
   .ph-stage { padding-top: 10px; padding-bottom: 10px; }
-  .ph-title { font-size: clamp(42px, 4.4vw, 56px); margin-bottom: 8px; }
+  .ph-title { font-size: clamp(38px, 3.9vw, 54px); margin-bottom: 8px; }
   .ph-eyebrow { margin-bottom: 10px; }
   .ph-hook { font-size: clamp(18px, 1.7vw, 22px); margin-bottom: 12px; }
   .ph-kpi { padding: 9px 8px; }
@@ -488,7 +509,7 @@ body.is-sheet .vr-section { display: none; }
     text-align: center;
   }
   .ph-top, .ph-bottom { display: contents; }
-  .ph-title { order: 1; }
+  .ph-title { order: 1; font-size: clamp(48px, 15vw, 76px); }
   .ph-scan { order: 2; margin: 6px 0 20px; }
   .ph-eyebrow { order: 3; }
   .ph-hook { order: 4; }
