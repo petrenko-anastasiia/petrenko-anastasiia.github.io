@@ -306,10 +306,25 @@ async function open(browser, opts) {
     check('demo: a ghost cursor appears when the word search is in view', await waitOk(page, () => document.getElementById('sm-ghost').classList.contains('is-on'), 5000));
     check('demo: the cursor selects PRODUCTION', await waitOk(page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'PRODUCTION'), 10000));
     check('demo: then the cursor selects the next word (META)', await waitOk(page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'META'), 8000));
+    check('demo: keeps going until all 10 tools are found', await waitOk(page, () => document.getElementById('sm-progress').textContent === 'All 10 found', 40000));
     check('demo: no letters are lit up or blink orange on their own', await page.evaluate(() => document.querySelectorAll('.sm-tile.is-hinted').length === 0));
-    check('demo: the cursor leaves afterwards', await waitOk(page, () => !document.getElementById('sm-ghost').classList.contains('is-on'), 12000));
+    check('demo: leaves the bonus word for the visitor', await page.evaluate(() => ![...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'ROAS')));
+    check('demo: the cursor leaves afterwards', await waitOk(page, () => !document.getElementById('sm-ghost').classList.contains('is-on'), 5000));
     check('no console errors (demo)', errors.length === 0, errors.join(' | '));
     await ctx.close();
+
+    const third = await open(browser);
+    await third.page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
+    await waitOk(third.page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'PRODUCTION'), 8000);
+    await third.page.evaluate(() => window.scrollTo(0, 0));
+    await third.page.waitForTimeout(800);
+    const paused = await third.page.evaluate(() => document.querySelectorAll('.sm-cap').length);
+    await third.page.waitForTimeout(2500);
+    const still = await third.page.evaluate(() => document.querySelectorAll('.sm-cap').length);
+    check('demo: pauses while the grid is off screen', paused === still, paused + ' -> ' + still);
+    await third.page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
+    check('demo: picks up where it left off when you come back', await waitOk(third.page, () => document.querySelectorAll('.sm-cap').length > 3, 8000));
+    await third.ctx.close();
 
     const second = await open(browser);
     await second.page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
