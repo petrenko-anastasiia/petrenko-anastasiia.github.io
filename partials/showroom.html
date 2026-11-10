@@ -5,12 +5,17 @@
     <div class="vr-webgl" id="vr-webgl"></div>
     <div class="vr-css" id="vr-css"></div>
     <div class="vr-bars" aria-hidden="true"><i></i><i></i></div>
+    <div class="vr-ghost" id="vr-ghost" aria-hidden="true">
+      <i class="vr-ghost-ripple"></i>
+      <svg viewBox="0 0 24 24"><path d="M3 2l16 9.5-7 1.8 4 7.2-3 1.6-4-7.2-5 5z" fill="#fff" stroke="#0b0e14" stroke-width="1.2" stroke-linejoin="round"/></svg>
+    </div>
 
     <div class="vr-hud-top">
       <div class="vr-heading">
         <h2 class="vr-title" id="vr-title">Recent works</h2>
         <p class="vr-help" id="vr-help">Swipe sideways or drag to look around. WASD to walk. Click a pedestal to go to it.</p>
         <button type="button" class="vr-mode-btn" id="vr-walk" aria-pressed="false">Walk mode: off</button>
+        <button type="button" class="vr-mode-btn" id="vr-tour">Play tour</button>
       </div>
       <div class="vr-radar">
         <canvas id="vr-radar" width="120" height="92" aria-hidden="true"></canvas>
