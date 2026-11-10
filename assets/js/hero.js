@@ -325,4 +325,49 @@
       card.style.removeProperty('--rx');
     });
   });
+
+  /* ---------- Title light: drifts behind the title, follows the pointer over the title block ---------- */
+  var glow = $('#ph-title-glow');
+  var titleEl = $('#ph-title');
+  var topEl = $('.ph-top');
+  if (glow && titleEl && topEl) {
+    var gtx = 0.5, gty = 0.5, ggx = 0.5, ggy = 0.5;
+    var gHover = false, gRaf = 0, gVisible = true;
+    var paintGlow = function () {
+      glow.style.setProperty('--gx', (ggx * 100).toFixed(1) + '%');
+      glow.style.setProperty('--gy', (ggy * 100).toFixed(1) + '%');
+    };
+    var glowFrame = function (ts) {
+      if (!gVisible || reduced() || document.hidden) { gRaf = 0; return; }
+      if (!gHover) {
+        var t = ts * 0.0007;
+        gtx = 0.5 + 0.3 * Math.sin(t);
+        gty = 0.5 + 0.12 * Math.cos(t * 1.6);
+      }
+      ggx += (gtx - ggx) * 0.08;
+      ggy += (gty - ggy) * 0.08;
+      paintGlow();
+      gRaf = requestAnimationFrame(glowFrame);
+    };
+    var startGlow = function () {
+      if (reduced()) { ggx = 0.5; ggy = 0.5; paintGlow(); return; }
+      if (!gRaf) gRaf = requestAnimationFrame(glowFrame);
+    };
+    topEl.addEventListener('pointermove', function (e) {
+      if (e.pointerType === 'touch' || reduced()) return;
+      var r = titleEl.getBoundingClientRect();
+      gHover = true;
+      gtx = Math.min(1.1, Math.max(-0.1, (e.clientX - r.left) / Math.max(r.width, 1)));
+      gty = Math.min(1.3, Math.max(-0.3, (e.clientY - r.top) / Math.max(r.height, 1)));
+    });
+    topEl.addEventListener('pointerleave', function () { gHover = false; });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (entries) {
+        gVisible = entries[0].isIntersecting;
+        if (gVisible) startGlow();
+      }).observe(root);
+    }
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) startGlow(); });
+    startGlow();
+  }
 })();
