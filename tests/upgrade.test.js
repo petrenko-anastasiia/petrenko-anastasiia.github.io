@@ -56,6 +56,18 @@ async function open(browser, opts) {
 
     await page.waitForTimeout(1100);
     const kpiText = await page.$$eval('.ph-kpi-value', (els) => els.map((e) => e.textContent));
+    const titleStyle = await page.evaluate(() => { const h = document.getElementById('ph-title'); const cs = getComputedStyle(h); return { family: cs.fontFamily, weight: cs.fontWeight, stretch: cs.fontStretch, upper: cs.textTransform, glow: !!document.getElementById('ph-title-glow') }; });
+    check('title: condensed bold uppercase, like the contact heading', /Instrument Sans/.test(titleStyle.family) && titleStyle.weight === '700' && titleStyle.stretch === '78%' && titleStyle.upper === 'uppercase' && titleStyle.glow, JSON.stringify(titleStyle));
+    const glowX = () => page.evaluate(() => parseFloat(document.getElementById('ph-title-glow').style.getPropertyValue('--gx')));
+    const gA = await glowX();
+    await page.waitForTimeout(1200);
+    const gB = await glowX();
+    check('title: the light drifts on its own', Math.abs(gB - gA) > 0.5, gA + ' -> ' + gB);
+    const tPos = await page.evaluate(() => { const r = document.getElementById('ph-title').getBoundingClientRect(); return { x: r.left + 20, y: r.top + r.height / 2 }; });
+    await page.mouse.move(tPos.x, tPos.y);
+    await page.waitForTimeout(900);
+    const gC = await glowX();
+    check('title: the light follows the pointer', gC < 20, String(gC));
     check('KPI count-up lands on final values', kpiText.join('|') === '−54%|$471K|~75%', kpiText.join('|'));
 
     await page.click('.ph-kpi[data-kpi="rev"]');
