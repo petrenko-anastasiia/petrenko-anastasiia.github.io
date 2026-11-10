@@ -382,6 +382,12 @@
   .vr-section.is-flat .vr-card-media { width: 100%; height: 220px; }
 }
 
+@media (hover: none) and (pointer: coarse) {
+  #vr-walk { display: none; }
+  .vr-mode-btn + .vr-mode-btn { margin-left: 0; }
+  .vr-help { margin-top: 8px; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .vr-bars i, .vr-card, .vr-pill, .vr-hud-top, .vr-foot, .vr-arrow { transition: none !important; }
   .vr-ghost { transition: opacity 0.2s; }

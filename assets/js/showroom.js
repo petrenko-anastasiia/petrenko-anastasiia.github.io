@@ -541,6 +541,13 @@
   /* ---------- Walk mode ---------- */
   var walkMode = false;
   var walkBtn = document.getElementById('vr-walk');
+  // Touchscreens: no keyboard or wheel to walk with, so shorter instructions and no Walk button
+  var touchMQ = window.matchMedia('(hover: none) and (pointer: coarse)');
+  var helpEl = document.getElementById('vr-help');
+  var HELP_DESK = helpEl ? helpEl.textContent : '';
+  function setHelp() { if (helpEl) helpEl.textContent = touchMQ.matches ? 'Swipe to look around. Tap a pool of light to go there.' : HELP_DESK; }
+  setHelp();
+  if (touchMQ.addEventListener) touchMQ.addEventListener('change', setHelp);
   function setWalk(on) {
     walkMode = on;
     walkBtn.setAttribute('aria-pressed', String(on));

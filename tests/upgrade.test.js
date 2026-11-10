@@ -288,6 +288,16 @@ async function open(browser, opts) {
         const p = r('#vr-prev'), n = r('#vr-next'), c = r('#vr-count'), d = r('#vr-dock'), v = r('#vr-view');
         return { pw: p.width, ph: p.height, nw: n.width, nh: n.height, sides: p.right <= c.left && n.left >= c.right, inView: p.left >= 0 && n.right <= innerWidth, aboveDock: v.bottom <= d.top + 1 };
       });
+      if (vp.width < 500) {
+        await page.waitForFunction(() => !document.getElementById('work').classList.contains('is-intro'), null, { timeout: 6000 }).catch(() => {});
+        await page.waitForTimeout(900);
+        const fit = await page.evaluate(() => {
+          const hud = Math.max(...[...document.querySelectorAll('.vr-heading > *, .vr-radar')].filter((e) => getComputedStyle(e).display !== 'none').map((e) => e.getBoundingClientRect().bottom));
+          const card = document.querySelector('.vr-card.is-focused').getBoundingClientRect();
+          return { hud: Math.round(hud), cardTop: Math.round(card.top), walk: getComputedStyle(document.getElementById('vr-walk')).display };
+        });
+        check(vp.width + 'px: title area clears the card; no Walk button on touch', fit.hud <= fit.cardTop && fit.walk === 'none', JSON.stringify(fit));
+      }
       check(vp.width + 'px: arrows flank the counter, tappable size, above the dock', nav.pw >= 44 && nav.ph >= 44 && nav.nw >= 44 && nav.nh >= 44 && nav.sides && nav.inView && nav.aboveDock, JSON.stringify(nav));
       if (vp.width < 500) await page.tap('#vr-next'); else await page.click('#vr-next');
       await page.waitForTimeout(200);
