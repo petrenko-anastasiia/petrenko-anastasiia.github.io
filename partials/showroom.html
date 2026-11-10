@@ -24,8 +24,12 @@
     </div>
 
     <div class="vr-foot">
-      <p class="vr-count" id="vr-count">1/5</p>
-      <a class="vr-view" id="vr-view" href="#paid"><span id="vr-view-text" aria-hidden="true">[ VIEW CASE ]</span></a>
+      <div class="vr-nav">
+        <button type="button" class="vr-arrow vr-arrow--prev" id="vr-prev" aria-label="Previous case"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button>
+        <p class="vr-count" id="vr-count">1/5</p>
+        <button type="button" class="vr-arrow vr-arrow--next" id="vr-next" aria-label="Next case"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button>
+      </div>
+      <a class="vr-view" id="vr-view" href="#ap-growth-case-study"><span id="vr-view-text" aria-hidden="true">[ VIEW CASE ]</span></a>
     </div>
 
     <nav class="vr-dock" id="vr-dock" aria-label="Go to a case"></nav>
@@ -33,39 +37,7 @@
   </div>
 
   <div class="vr-cards" id="vr-cards">
-    <article class="vr-card" data-id="paid" data-label="Paid social" data-angle="-64" data-accent="blue">
-      <div class="vr-card-text">
-        <p class="vr-card-tag">Meta &amp; TikTok ads</p>
-        <h3 class="vr-card-title">Paid social</h3>
-        <p class="vr-card-stat"><strong>−54%</strong> CPA on Meta in 6 weeks</p>
-        <p class="vr-card-desc">Ad sets split by hook type, 8–10 new variants a week. Budget moved to the product-demo hook: CPA ~$48 → ~$22.</p>
-        <div class="vr-card-actions">
-          <button type="button" class="vr-play" aria-pressed="false">Play</button>
-          <a class="vr-open" href="#paid">Open case</a>
-        </div>
-      </div>
-      <div class="vr-card-media">
-        <video muted loop playsinline preload="none" poster="assets/img/argo-video-poster.jpg" data-src="assets/video/argo-loop.mp4" aria-label="Product-demo hook example: ARGŌ golden body oil"></video>
-      </div>
-    </article>
-
-    <article class="vr-card" data-id="hooklab" data-label="Hook Lab" data-angle="-32" data-accent="violet">
-      <div class="vr-card-text">
-        <p class="vr-card-tag">AI production, no shoot</p>
-        <h3 class="vr-card-title">Hook Lab</h3>
-        <p class="vr-card-stat"><strong>6</strong> pieces, one hook type each</p>
-        <p class="vr-card-desc">Macro reveals, question hooks, scene switches and outcome claims, made with ComfyUI, Higgsfield, Nano Banana and Veo.</p>
-        <div class="vr-card-actions">
-          <button type="button" class="vr-play" aria-pressed="false">Play</button>
-          <a class="vr-open" href="#hooklab">Open Hook Lab</a>
-        </div>
-      </div>
-      <div class="vr-card-media">
-        <video muted loop playsinline preload="none" poster="assets/img/outfit-transition.jpg" data-src="assets/video/outfit-loop.mp4" aria-label="Hook Lab: outfit transition"></video>
-      </div>
-    </article>
-
-    <article class="vr-card" data-id="growth" data-label="$471K Growth case" data-angle="0" data-accent="violet">
+    <article class="vr-card" data-id="growth" data-label="$471K Growth case" data-angle="-64" data-accent="violet">
       <div class="vr-card-text">
         <p class="vr-card-tag">Subscription business</p>
         <h3 class="vr-card-title">Growth case</h3>
@@ -83,6 +55,38 @@
           <div><dt>Chargebacks</dt><dd>0%</dd></div>
           <div><dt>Creator roster, first 3 months</dt><dd>$126K</dd></div>
         </dl>
+      </div>
+    </article>
+
+    <article class="vr-card" data-id="paid" data-label="Paid social" data-angle="-32" data-accent="blue">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">Meta &amp; TikTok ads</p>
+        <h3 class="vr-card-title">Paid social</h3>
+        <p class="vr-card-stat"><strong>−54%</strong> CPA on Meta in 6 weeks</p>
+        <p class="vr-card-desc">Ad sets split by hook type, 8–10 new variants a week. Budget moved to the product-demo hook: CPA ~$48 → ~$22.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="#paid">Open case</a>
+        </div>
+      </div>
+      <div class="vr-card-media">
+        <video muted loop playsinline preload="none" poster="assets/img/argo-video-poster.jpg" data-src="assets/video/argo-loop.mp4" aria-label="Product-demo hook example: ARGŌ golden body oil"></video>
+      </div>
+    </article>
+
+    <article class="vr-card" data-id="hooklab" data-label="Hook Lab" data-angle="0" data-accent="violet">
+      <div class="vr-card-text">
+        <p class="vr-card-tag">AI production, no shoot</p>
+        <h3 class="vr-card-title">Hook Lab</h3>
+        <p class="vr-card-stat"><strong>6</strong> pieces, one hook type each</p>
+        <p class="vr-card-desc">Macro reveals, question hooks, scene switches and outcome claims, made with ComfyUI, Higgsfield, Nano Banana and Veo.</p>
+        <div class="vr-card-actions">
+          <button type="button" class="vr-play" aria-pressed="false">Play</button>
+          <a class="vr-open" href="#hooklab">Open Hook Lab</a>
+        </div>
+      </div>
+      <div class="vr-card-media">
+        <video muted loop playsinline preload="none" poster="assets/img/outfit-transition.jpg" data-src="assets/video/outfit-loop.mp4" aria-label="Hook Lab: outfit transition"></video>
       </div>
     </article>
 
