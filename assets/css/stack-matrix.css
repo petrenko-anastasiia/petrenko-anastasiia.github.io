@@ -117,9 +117,7 @@
 .sm-tile.is-cursor { box-shadow: 0 0 0 2px var(--ap-accent-soft, #7dd3fc); color: #e2e8f0; }
 .sm-tile.is-miss { animation: sm-miss 0.38s ease; }
 @keyframes sm-miss { 20%, 60% { transform: translateX(-3px); border-color: rgba(248, 113, 113, 0.7); } 40%, 80% { transform: translateX(3px); border-color: rgba(248, 113, 113, 0.7); } }
-.sm-tile.is-hinted { animation: sm-hint 0.9s ease-in-out infinite; }
 .sm-tile.is-dimmed { opacity: 0.22; }
-@keyframes sm-hint { 50% { color: #fff7e0; border-color: #f59e0b; box-shadow: inset 0 0 14px rgba(245, 158, 11, 0.6), 0 0 16px rgba(245, 158, 11, 0.5); } }
 
 /* Capsules sit under the letters; letters show through */
 .sm-caps { position: absolute; inset: 0; z-index: 0; pointer-events: none; }
@@ -181,8 +179,6 @@
 .sm-ghost.is-down .sm-ghost-ripple { animation: sm-ripple 0.6s ease-out; }
 @keyframes sm-ripple { 0% { opacity: 0.9; transform: scale(0.3); } 100% { opacity: 0; transform: scale(1.4); } }
 .sm-tally { display: flex; align-items: center; gap: 12px; }
-.sm-hint-text { margin: 12px 0 0; font-size: 13px; line-height: 1.45; color: #fcd34d; }
-.sm-hint-text:empty { display: none; }
 .sm-progress { margin: 0; font-size: 13px; color: #cbd5e1; font-variant-numeric: tabular-nums; }
 
 .sm-foot {
@@ -199,17 +195,6 @@
 .sm-legend span { display: inline-flex; align-items: center; gap: 6px; }
 .sm-egg { display: flex; align-items: center; gap: 10px; margin: 0; }
 .sm-egg.is-found #sm-egg-status { color: #fcd34d; }
-.sm-hint {
-  appearance: none;
-  padding: 3px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(245, 158, 11, 0.4);
-  background: rgba(245, 158, 11, 0.1);
-  color: #fcd34d;
-  font: inherit;
-  font-size: 12px;
-  cursor: pointer;
-}
 
 /* Proof-of-work card: follows the pointer on hover, pins on click/tap */
 .sm-card {
@@ -286,5 +271,4 @@
   .sm-ghost, .sm-ghost svg { transition: opacity 0.2s; }
   .sm-ghost.is-down .sm-ghost-ripple { animation: none; }
   .sm-cap:hover, .sm-cap.is-active, .sm-card { transform: none !important; }
-  .sm-tile.is-hinted { animation: none; color: #fde68a; border-color: #f59e0b; box-shadow: inset 0 0 12px rgba(245, 158, 11, 0.45); }
 }
