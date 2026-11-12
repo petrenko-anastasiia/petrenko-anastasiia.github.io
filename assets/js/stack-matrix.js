@@ -377,7 +377,7 @@
     if (!hit) setSelection(null);
   }
   window.addEventListener('pointerup', endDrag);
-  window.addEventListener('pointercancel', function () { drag = null; });
+  window.addEventListener('pointercancel', function () { if (drag && !tapStart) setSelection(null); drag = null; });
 
   // Keyboard: arrows move a cursor, Enter/Space marks first then last letter
   var cursor = [0, 0];
@@ -502,8 +502,8 @@
     var w = nextTool();
     if (!w) { endDemo(); return; }
     ghostAt(wordCells(w)[0]);
-    dWait(token, 650, function () {
-      demoSelect(w, token, function () { demoRun(token); }, 250);
+    dWait(token, 450, function () {
+      demoSelect(w, token, function () { demoRun(token); }, 200);
     });
   }
 
@@ -544,29 +544,69 @@
     }, 10000);
   }
 
-  // Real input from the visitor: stop the demo, never start it later, reset the nudge timer
+  // Real input from the visitor (a tap, a click, a drag across letters, or keys):
+  // stop the demo and leave the grid to them. Scrolling past the grid is not input.
   function onStackInput() {
     window.clearTimeout(startTimer);
     if (demoOn) stopDemo(); else ghostHide();
     tookOver = true;
     scheduleNudge();
   }
-  ['pointerdown', 'touchstart', 'keydown'].forEach(function (type) {
-    section.addEventListener(type, onStackInput, { passive: true, capture: true });
+  var touchDown = false;
+  section.addEventListener('pointerdown', function (e) {
+    touchDown = true;
+    // a finger on the letters may be the start of a drag: pause the demo so the two don't fight
+    if (demoOn && board.contains(e.target)) stopDemo();
+  }, { passive: true, capture: true });
+  window.addEventListener('pointercancel', function () {
+    if (!touchDown) return;
+    touchDown = false;
+    // the browser took the touch for scrolling: carry on with the demo
+    if (!tookOver && stackVisible && !demoOn) {
+      window.clearTimeout(startTimer);
+      startTimer = window.setTimeout(startDemo, 250);
+    }
   });
+  window.addEventListener('pointerup', function () {
+    if (!touchDown) return;
+    touchDown = false;
+    onStackInput();
+  }, true);
+  section.addEventListener('keydown', onStackInput, true);
+
+  // Back to the starting grid (HIGGSFIELD only), done off screen so the run can play again
+  function resetBoard() {
+    if (pinned) unpin(false);
+    setSelection(null);
+    tapStart = null;
+    WORDS.forEach(function (w) {
+      if (w.word === 'HIGGSFIELD' || !found[w.word]) return;
+      found[w.word] = false;
+      wordCells(w).forEach(function (rc) { tiles[rc[0]][rc[1]].classList.remove('is-word'); });
+    });
+    for (var i = caps.length - 1; i >= 0; i--) {
+      if (!found[caps[i].w.word]) { caps[i].el.parentNode.removeChild(caps[i].el); caps.splice(i, 1); }
+    }
+    // a letter shared with a word still on the board keeps its highlight
+    caps.forEach(function (c) { wordCells(c.w).forEach(function (rc) { tiles[rc[0]][rc[1]].classList.add('is-word'); }); });
+    revealBtn.hidden = false;
+    updateProgress();
+    layout();
+  }
 
   if ('IntersectionObserver' in window) {
     new IntersectionObserver(function (entries) {
       var en = entries[0];
       stackVisible = en.isIntersecting;
-      if (en.isIntersecting && en.intersectionRatio >= 0.6 && !tookOver && !demoOn) {
+      if (en.isIntersecting && en.intersectionRatio >= 0.3 && !tookOver && !demoOn) {
         window.clearTimeout(startTimer);
-        startTimer = window.setTimeout(startDemo, 600);
+        startTimer = window.setTimeout(startDemo, 150);
       } else if (!en.isIntersecting) {
         window.clearTimeout(startTimer);
         stopDemo();
+        if (!tookOver) resetBoard();    // scroll back and the whole run plays again
       }
-    }, { threshold: [0, 0.6] }).observe(document.getElementById('sm-frame'));
+    }, { threshold: [0, 0.3] }).observe(document.getElementById('sm-frame'));
   }
 
   // HIGGSFIELD is found from the start, as the example

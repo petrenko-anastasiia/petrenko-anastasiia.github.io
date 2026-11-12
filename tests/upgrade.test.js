@@ -325,26 +325,42 @@ async function open(browser, opts) {
 
     const third = await open(browser);
     await third.page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
-    await waitOk(third.page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'PRODUCTION'), 8000);
+    check('demo: starts soon after the grid scrolls in', await waitOk(third.page, () => document.getElementById('sm-ghost').classList.contains('is-on'), 1200));
+    await waitOk(third.page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'META'), 6000);
+    // a finger that scrolls the page (the browser cancels the pointer) is not taking over
+    await third.page.evaluate(() => {
+      document.querySelector('.sm-tile').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, button: 0, pointerType: 'touch', pointerId: 7 }));
+      window.dispatchEvent(new PointerEvent('pointercancel', { pointerId: 7 }));
+    });
+    check('demo: scrolling with a finger over the grid does not stop it', await waitOk(third.page, () => document.querySelectorAll('.sm-cap').length >= 4, 8000));
     await third.page.evaluate(() => window.scrollTo(0, 0));
-    await third.page.waitForTimeout(800);
-    const paused = await third.page.evaluate(() => document.querySelectorAll('.sm-cap').length);
-    await third.page.waitForTimeout(2500);
-    const still = await third.page.evaluate(() => document.querySelectorAll('.sm-cap').length);
-    check('demo: pauses while the grid is off screen', paused === still, paused + ' -> ' + still);
+    await third.page.waitForTimeout(600);
+    const reset = await third.page.evaluate(() => [...document.querySelectorAll('.sm-cap')].map((c) => c.textContent).join() + ' | ' + document.getElementById('sm-progress').textContent);
+    check('demo: resets to HIGGSFIELD once the grid is off screen', reset === 'HIGGSFIELD | 1 of 10 found', reset);
+    await third.page.waitForTimeout(1500);
+    check('demo: does not run while off screen', (await third.page.evaluate(() => document.querySelectorAll('.sm-cap').length)) === 1);
     await third.page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
-    check('demo: picks up where it left off when you come back', await waitOk(third.page, () => document.querySelectorAll('.sm-cap').length > 3, 8000));
+    check('demo: plays again from the start when you scroll back', await waitOk(third.page, () => [...document.querySelectorAll('.sm-cap')].some((c) => c.textContent === 'META'), 4000));
+    check('demo: and runs through all ten again', await waitOk(third.page, () => document.getElementById('sm-progress').textContent === 'All 10 found', 30000));
     await third.ctx.close();
 
     const second = await open(browser);
     await second.page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
     await waitOk(second.page, () => document.getElementById('sm-ghost').classList.contains('is-on'), 5000);
-    await second.page.waitForTimeout(900);   // mid-drag across PRODUCTION
-    await second.page.evaluate(() => document.getElementById('stack').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true })));
+    await second.page.waitForTimeout(750);   // mid-drag across META
+    await second.page.evaluate(() => {
+      document.getElementById('stack').dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerId: 9 }));
+      window.dispatchEvent(new PointerEvent('pointerup', { pointerId: 9 }));
+    });
     await second.page.waitForTimeout(300);
     const cut = await second.page.evaluate(() => ({ ghost: document.getElementById('sm-ghost').classList.contains('is-on'), selecting: document.querySelectorAll('.sm-tile.is-selecting').length,
       caps: [...document.querySelectorAll('.sm-cap')].map((c) => c.textContent).join() }));
-    check('demo: touching anything stops it and clears the selection', !cut.ghost && cut.selecting === 0 && cut.caps === 'HIGGSFIELD', JSON.stringify(cut));
+    check('demo: a tap stops it and clears the selection', !cut.ghost && cut.selecting === 0 && cut.caps === 'HIGGSFIELD', JSON.stringify(cut));
+    await second.page.evaluate(() => window.scrollTo(0, 0));
+    await second.page.waitForTimeout(400);
+    await second.page.evaluate(() => document.getElementById('stack').scrollIntoView({ behavior: 'instant' }));
+    await second.page.waitForTimeout(2000);
+    check('demo: after a tap it stays off, even on the way back', (await second.page.evaluate(() => [...document.querySelectorAll('.sm-cap')].map((c) => c.textContent).join())) === 'HIGGSFIELD');
     await second.ctx.close();
   }
 
